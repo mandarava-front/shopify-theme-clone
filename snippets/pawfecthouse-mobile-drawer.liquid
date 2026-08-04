@@ -1,0 +1,355 @@
+{% comment %}
+  Pawfecthouse-inspired mobile navigation. Featured cards, menu cards and
+  utility links are configured as blocks on the Header section.
+{% endcomment %}
+
+{%- liquid
+  assign mobile_feature_count = 0
+  assign mobile_menu_card_count = 0
+  assign mobile_utility_count = 0
+  assign mobile_social_count = 0
+
+  for block in section.blocks
+    case block.type
+      when 'mobile_feature_card'
+        assign mobile_feature_count = mobile_feature_count | plus: 1
+      when 'mobile_menu_card'
+        assign mobile_menu_card_count = mobile_menu_card_count | plus: 1
+      when 'mobile_utility_link'
+        assign mobile_utility_count = mobile_utility_count | plus: 1
+      when 'mobile_social_link'
+        assign mobile_social_count = mobile_social_count | plus: 1
+    endcase
+  endfor
+-%}
+
+<header-drawer
+  class="pawfecthouse-header-drawer"
+  data-breakpoint="tablet"
+  style="
+    --pawfect-drawer-width: {{ section.settings.pawfecthouse_mobile_menu_width }}vw;
+    --pawfect-drawer-background: {{ section.settings.pawfecthouse_mobile_menu_background }};
+    --pawfect-drawer-surface: {{ section.settings.pawfecthouse_mobile_menu_surface }};
+    --pawfect-drawer-text: {{ section.settings.pawfecthouse_mobile_menu_text }};
+    --pawfect-drawer-accent: {{ section.settings.pawfecthouse_mobile_menu_accent }};
+    --pawfect-drawer-divider: {{ section.settings.pawfecthouse_mobile_menu_divider }};
+  "
+>
+  <details id="Pawfecthouse-Details-menu-drawer-container-{{ section.id }}" class="menu-drawer-container">
+    <summary
+      class="header__icon header__icon--menu header__icon--summary link focus-inset"
+      aria-label="{{ 'sections.header.menu' | t }}"
+      aria-controls="Pawfecthouse-menu-drawer-{{ section.id }}"
+    >
+      <span>
+        {{- 'icon-hamburger.svg' | inline_asset_content -}}
+        {{- 'icon-close.svg' | inline_asset_content -}}
+      </span>
+    </summary>
+
+    <div
+      id="Pawfecthouse-menu-drawer-{{ section.id }}"
+      class="menu-drawer motion-reduce pawfecthouse-menu-drawer"
+      aria-labelledby="Pawfecthouse-menu-title-{{ section.id }}"
+    >
+      <div class="menu-drawer__inner-container pawfecthouse-menu-drawer__inner">
+        <div class="pawfecthouse-menu-drawer__header">
+          <span id="Pawfecthouse-menu-title-{{ section.id }}" class="pawfecthouse-menu-drawer__title">
+            {{- section.settings.pawfecthouse_mobile_menu_title | escape -}}
+          </span>
+          <button
+            type="button"
+            class="pawfecthouse-menu-drawer__close link focus-inset"
+            aria-label="{{ 'accessibility.close' | t }}"
+            data-menu-drawer-close
+          >
+            <span class="svg-wrapper" aria-hidden="true">{{- 'pfh-icon-close.svg' | inline_asset_content -}}</span>
+          </button>
+        </div>
+
+        <div class="menu-drawer__navigation-container pawfecthouse-menu-drawer__body">
+          <nav class="menu-drawer__navigation" aria-label="{{ 'sections.header.menu' | t }}">
+            {%- if mobile_feature_count > 0 -%}
+              <ul class="pawfecthouse-menu-grid pawfecthouse-menu-grid--featured list-unstyled" role="list">
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'mobile_feature_card' -%}
+                    {%- assign card_link = block.settings.link | default: routes.all_products_collection_url -%}
+                    <li {{ block.shopify_attributes }}>
+                      <a
+                        href="{{ card_link }}"
+                        class="pawfecthouse-menu-card pawfecthouse-menu-card--featured focus-inset"
+                        style="--pawfect-card-background: {{ block.settings.background_color }}; --pawfect-card-text: {{ block.settings.text_color }};"
+                      >
+                        {%- if block.settings.image != blank -%}
+                          {{
+                            block.settings.image
+                            | image_url: width: 120
+                            | image_tag:
+                              class: 'pawfecthouse-menu-card__image',
+                              widths: '60, 90, 120',
+                              sizes: '38px',
+                              loading: 'lazy',
+                              alt: ''
+                          }}
+                        {%- else -%}
+                          <img
+                            src="{{ block.settings.icon_asset | asset_url }}"
+                            class="pawfecthouse-menu-card__image"
+                            alt=""
+                            width="42"
+                            height="42"
+                            loading="lazy"
+                          >
+                        {%- endif -%}
+                        <span>{{ block.settings.title | escape }}</span>
+                      </a>
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+
+            <ul class="pawfecthouse-menu-grid pawfecthouse-menu-grid--navigation list-unstyled has-submenu" role="list">
+              {%- if mobile_menu_card_count > 0 -%}
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'mobile_menu_card' -%}
+                    {%- assign card_link = block.settings.link | default: routes.all_products_collection_url -%}
+                    <li {{ block.shopify_attributes }}>
+                      {%- if block.settings.sub_menu != blank and block.settings.sub_menu.links != blank -%}
+                        <details id="Pawfecthouse-menu-card-{{ block.id }}">
+                          <summary
+                            class="pawfecthouse-menu-card menu-drawer__menu-item focus-inset"
+                            style="--pawfect-card-background: {{ block.settings.background_color }}; --pawfect-card-text: {{ block.settings.text_color }};"
+                          >
+                            {%- if block.settings.image != blank -%}
+                              {{
+                                block.settings.image
+                                | image_url: width: 120
+                                | image_tag:
+                                  class: 'pawfecthouse-menu-card__image',
+                                  widths: '60, 90, 120',
+                                  sizes: '38px',
+                                  loading: 'lazy',
+                                  alt: ''
+                              }}
+                            {%- else -%}
+                              <img
+                                src="{{ block.settings.icon_asset | asset_url }}"
+                                class="pawfecthouse-menu-card__image"
+                                alt=""
+                                width="60"
+                                height="60"
+                                loading="lazy"
+                              >
+                            {%- endif -%}
+                            <span>{{ block.settings.title | escape }}</span>
+                            <span class="pawfecthouse-menu-card__chevron" aria-hidden="true">
+                              {{- 'icon-arrow.svg' | inline_asset_content -}}
+                            </span>
+                          </summary>
+                          <div
+                            class="menu-drawer__submenu has-submenu motion-reduce pawfecthouse-menu-submenu"
+                            tabindex="-1"
+                          >
+                            <div class="menu-drawer__inner-submenu">
+                              <button class="menu-drawer__close-button link link--text focus-inset" aria-expanded="true">
+                                <span class="svg-wrapper" aria-hidden="true">
+                                  {{- 'icon-arrow.svg' | inline_asset_content -}}
+                                </span>
+                                {{ block.settings.title | escape }}
+                              </button>
+                              <ul class="menu-drawer__menu list-menu" role="list" tabindex="-1">
+                                {%- if block.settings.link != blank -%}
+                                  <li>
+                                    <a href="{{ block.settings.link }}" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
+                                      View all {{ block.settings.title | escape }}
+                                    </a>
+                                  </li>
+                                {%- endif -%}
+                                {%- for childlink in block.settings.sub_menu.links -%}
+                                  <li>
+                                    {%- if childlink.links == blank -%}
+                                      <a
+                                        href="{{ childlink.url }}"
+                                        class="menu-drawer__menu-item link link--text list-menu__item focus-inset{% if childlink.current %} menu-drawer__menu-item--active{% endif %}"
+                                        {% if childlink.current %}aria-current="page"{% endif %}
+                                      >
+                                        {{ childlink.title | escape }}
+                                      </a>
+                                    {%- else -%}
+                                      <details id="Pawfecthouse-submenu-{{ block.id }}-{{ childlink.handle }}">
+                                        <summary class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
+                                          {{ childlink.title | escape }}
+                                          <span class="svg-wrapper" aria-hidden="true">
+                                            {{- 'icon-arrow.svg' | inline_asset_content -}}
+                                          </span>
+                                        </summary>
+                                        <div class="menu-drawer__submenu motion-reduce pawfecthouse-menu-submenu">
+                                          <button class="menu-drawer__close-button link link--text focus-inset" aria-expanded="true">
+                                            <span class="svg-wrapper" aria-hidden="true">
+                                              {{- 'icon-arrow.svg' | inline_asset_content -}}
+                                            </span>
+                                            {{ childlink.title | escape }}
+                                          </button>
+                                          <ul class="menu-drawer__menu list-menu" role="list" tabindex="-1">
+                                            {%- for grandchildlink in childlink.links -%}
+                                              <li>
+                                                <a
+                                                  href="{{ grandchildlink.url }}"
+                                                  class="menu-drawer__menu-item link link--text list-menu__item focus-inset{% if grandchildlink.current %} menu-drawer__menu-item--active{% endif %}"
+                                                  {% if grandchildlink.current %}aria-current="page"{% endif %}
+                                                >
+                                                  {{ grandchildlink.title | escape }}
+                                                </a>
+                                              </li>
+                                            {%- endfor -%}
+                                          </ul>
+                                        </div>
+                                      </details>
+                                    {%- endif -%}
+                                  </li>
+                                {%- endfor -%}
+                              </ul>
+                            </div>
+                          </div>
+                        </details>
+                      {%- else -%}
+                        <a
+                          href="{{ card_link }}"
+                          class="pawfecthouse-menu-card focus-inset"
+                          style="--pawfect-card-background: {{ block.settings.background_color }}; --pawfect-card-text: {{ block.settings.text_color }};"
+                        >
+                          {%- if block.settings.image != blank -%}
+                            {{
+                              block.settings.image
+                              | image_url: width: 120
+                              | image_tag:
+                                class: 'pawfecthouse-menu-card__image',
+                                widths: '60, 90, 120',
+                                sizes: '38px',
+                                loading: 'lazy',
+                                alt: ''
+                            }}
+                          {%- else -%}
+                            <img
+                              src="{{ block.settings.icon_asset | asset_url }}"
+                              class="pawfecthouse-menu-card__image"
+                              alt=""
+                              width="60"
+                              height="60"
+                              loading="lazy"
+                            >
+                          {%- endif -%}
+                          <span>{{ block.settings.title | escape }}</span>
+                        </a>
+                      {%- endif -%}
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- else -%}
+                {%- for link in section.settings.menu.links -%}
+                  {%- liquid
+                    assign fallback_icon = 'pfh_menu-icon-occasions.svg'
+                    case forloop.index
+                      when 2
+                        assign fallback_icon = 'pfh_menu-icon-interests.svg'
+                      when 3
+                        assign fallback_icon = 'pfh_menu-icon-recipients.svg'
+                      when 4
+                        assign fallback_icon = 'pfh_menu-icon-home.svg'
+                      when 5
+                        assign fallback_icon = 'pfh_menu-icon-apparel.svg'
+                      when 6
+                        assign fallback_icon = 'pfh_menu-icon-accessories.svg'
+                      when 7
+                        assign fallback_icon = 'pfh_menu-icon-drinkware.svg'
+                      when 8
+                        assign fallback_icon = 'pfh_menu-icon-outdoor.svg'
+                    endcase
+                  -%}
+                  <li>
+                    <a href="{{ link.url }}" class="pawfecthouse-menu-card focus-inset">
+                      <img src="{{ fallback_icon | asset_url }}" class="pawfecthouse-menu-card__image" alt="" width="60" height="60" loading="lazy">
+                      <span>{{ link.title | escape }}</span>
+                    </a>
+                  </li>
+                {%- endfor -%}
+              {%- endif -%}
+            </ul>
+          </nav>
+
+          <div class="pawfecthouse-menu-drawer__footer">
+            {%- if mobile_utility_count > 0 -%}
+              <ul class="pawfecthouse-menu-utilities list-unstyled" role="list">
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'mobile_utility_link' -%}
+                    {%- assign utility_link = block.settings.link | default: routes.root_url -%}
+                    <li {{ block.shopify_attributes }}>
+                      <a href="{{ utility_link }}" class="pawfecthouse-menu-utility focus-inset">
+                        <span>{{ block.settings.title | escape }}</span>
+                        <span class="svg-wrapper" aria-hidden="true">{{- 'pfh-icon-chevron-right.svg' | inline_asset_content -}}</span>
+                      </a>
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+
+            {%- if section.settings.pawfecthouse_mobile_menu_show_social -%}
+              <ul class="pawfecthouse-menu-social list-unstyled" role="list">
+                {%- if mobile_social_count > 0 -%}
+                  {%- for block in section.blocks -%}
+                    {%- if block.type == 'mobile_social_link' and block.settings.link != blank -%}
+                      {%- liquid
+                        assign social_icon = 'pfh-icon-facebook.svg'
+                        assign social_label = block.settings.platform | capitalize
+                        case block.settings.platform
+                          when 'youtube'
+                            assign social_icon = 'pfh-icon-youtube.svg'
+                            assign social_label = 'YouTube'
+                          when 'instagram'
+                            assign social_icon = 'pfh-icon-instagram.svg'
+                            assign social_label = 'Instagram'
+                          when 'tiktok'
+                            assign social_icon = 'pfh-icon-tiktok.svg'
+                            assign social_label = 'TikTok'
+                          when 'twitter'
+                            assign social_icon = 'icon-twitter.svg'
+                            assign social_label = 'X / Twitter'
+                        endcase
+                        if block.settings.accessibility_label != blank
+                          assign social_label = block.settings.accessibility_label
+                        endif
+                      -%}
+                      <li {{ block.shopify_attributes }}>
+                        <a href="{{ block.settings.link }}" target="_blank" rel="me noopener noreferrer" class="focus-inset" aria-label="{{ social_label | escape }}">
+                          <span class="svg-wrapper" aria-hidden="true">{{- social_icon | inline_asset_content -}}</span>
+                        </a>
+                      </li>
+                    {%- endif -%}
+                  {%- endfor -%}
+                {%- else -%}
+                  {%- if settings.social_facebook_link != blank -%}
+                    <li><a href="{{ settings.social_facebook_link }}" target="_blank" rel="me noopener noreferrer" class="focus-inset" aria-label="{{ 'general.social.links.facebook' | t }}"><span class="svg-wrapper" aria-hidden="true">{{- 'pfh-icon-facebook.svg' | inline_asset_content -}}</span></a></li>
+                  {%- endif -%}
+                  {%- if settings.social_youtube_link != blank -%}
+                    <li><a href="{{ settings.social_youtube_link }}" target="_blank" rel="me noopener noreferrer" class="focus-inset" aria-label="{{ 'general.social.links.youtube' | t }}"><span class="svg-wrapper" aria-hidden="true">{{- 'pfh-icon-youtube.svg' | inline_asset_content -}}</span></a></li>
+                  {%- endif -%}
+                  {%- if settings.social_instagram_link != blank -%}
+                    <li><a href="{{ settings.social_instagram_link }}" target="_blank" rel="me noopener noreferrer" class="focus-inset" aria-label="{{ 'general.social.links.instagram' | t }}"><span class="svg-wrapper" aria-hidden="true">{{- 'pfh-icon-instagram.svg' | inline_asset_content -}}</span></a></li>
+                  {%- endif -%}
+                  {%- if settings.social_tiktok_link != blank -%}
+                    <li><a href="{{ settings.social_tiktok_link }}" target="_blank" rel="me noopener noreferrer" class="focus-inset" aria-label="{{ 'general.social.links.tiktok' | t }}"><span class="svg-wrapper" aria-hidden="true">{{- 'pfh-icon-tiktok.svg' | inline_asset_content -}}</span></a></li>
+                  {%- endif -%}
+                  {%- if settings.social_twitter_link != blank -%}
+                    <li><a href="{{ settings.social_twitter_link }}" target="_blank" rel="me noopener noreferrer" class="focus-inset" aria-label="{{ 'general.social.links.twitter' | t }}"><span class="svg-wrapper" aria-hidden="true">{{- 'icon-twitter.svg' | inline_asset_content -}}</span></a></li>
+                  {%- endif -%}
+                {%- endif -%}
+              </ul>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  </details>
+</header-drawer>

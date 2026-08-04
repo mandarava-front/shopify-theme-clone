@@ -1,6 +1,11 @@
 <link rel="stylesheet" href="{{ 'component-list-menu.css' | asset_url }}" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="{{ 'component-search.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
+{%- if section.settings.enable_pawfecthouse_mobile_menu -%}
+  {{- 'component-menu-drawer.css' | asset_url | stylesheet_tag -}}
+  {{- 'component-pawfecthouse-mobile-drawer.css' | asset_url | stylesheet_tag -}}
+{%- else -%}
+  <link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
+{%- endif -%}
 <link
   rel="stylesheet"
   href="{{ 'component-cart-notification.css' | asset_url }}"
@@ -138,8 +143,16 @@
   -%}
   <header class="header header--{{ section.settings.logo_position }} header--mobile-{{ section.settings.mobile_logo_position }} page-width{% if section.settings.menu_type_desktop == 'drawer' %} drawer-menu{% endif %}{% if section.settings.menu != blank %} header--has-menu{% endif %}{% if has_app_block %} header--has-app{% endif %}{% if social_links %} header--has-social{% endif %}{% if shop.customer_accounts_enabled %} header--has-account{% endif %}{% if localization_forms %} header--has-localizations{% endif %}">
     {%- liquid
+      if section.settings.enable_pawfecthouse_mobile_menu
+        render 'pawfecthouse-mobile-drawer'
+      endif
+
       if section.settings.menu != blank
-        render 'header-drawer'
+        if section.settings.enable_pawfecthouse_mobile_menu == false
+          render 'header-drawer'
+        elsif section.settings.menu_type_desktop == 'drawer'
+          render 'header-drawer', desktop_only: true
+        endif
       endif
 
       if section.settings.logo_position == 'top-center' or section.settings.menu == blank
@@ -483,7 +496,7 @@
 {
   "name": "t:sections.header.name",
   "class": "section-header",
-  "max_blocks": 3,
+  "max_blocks": 30,
   "settings": [
     {
       "type": "select",
@@ -531,6 +544,69 @@
       "id": "menu",
       "default": "main-menu",
       "label": "t:sections.header.settings.menu.label"
+    },
+    {
+      "type": "header",
+      "content": "Pawfecthouse mobile menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_pawfecthouse_mobile_menu",
+      "default": false,
+      "label": "Enable Pawfecthouse mobile menu"
+    },
+    {
+      "type": "text",
+      "id": "pawfecthouse_mobile_menu_title",
+      "default": "Menu",
+      "label": "Drawer title"
+    },
+    {
+      "type": "range",
+      "id": "pawfecthouse_mobile_menu_width",
+      "min": 75,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 92,
+      "label": "Drawer width"
+    },
+    {
+      "type": "color",
+      "id": "pawfecthouse_mobile_menu_background",
+      "default": "#f6f6fb",
+      "label": "Drawer background"
+    },
+    {
+      "type": "color",
+      "id": "pawfecthouse_mobile_menu_surface",
+      "default": "#ffffff",
+      "label": "Surface color"
+    },
+    {
+      "type": "color",
+      "id": "pawfecthouse_mobile_menu_text",
+      "default": "#202024",
+      "label": "Text color"
+    },
+    {
+      "type": "color",
+      "id": "pawfecthouse_mobile_menu_accent",
+      "default": "#0b8494",
+      "label": "Focus and hover color"
+    },
+    {
+      "type": "color",
+      "id": "pawfecthouse_mobile_menu_divider",
+      "default": "#eeeeff",
+      "label": "Divider color"
+    },
+    {
+      "type": "checkbox",
+      "id": "pawfecthouse_mobile_menu_show_social",
+      "default": true,
+      "label": "Show social links",
+      "info": "Add Mobile social link blocks below to choose the profiles, links, labels, and order shown in the mobile menu."
     },
     {
       "type": "url",
@@ -675,6 +751,164 @@
   "blocks": [
     {
       "type": "@app"
+    },
+    {
+      "type": "mobile_feature_card",
+      "name": "Mobile featured card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "default": "Featured",
+          "label": "Title"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Custom icon"
+        },
+        {
+          "type": "select",
+          "id": "icon_asset",
+          "label": "Built-in icon",
+          "default": "us-july-icon-summer.svg",
+          "options": [
+            { "value": "us-july-icon-summer.svg", "label": "Summer" },
+            { "value": "us-july-icon-b2c.svg", "label": "Back to school" },
+            { "value": "pfh_menu-icon-occasions.svg", "label": "Occasions" },
+            { "value": "pfh_menu-icon-interests.svg", "label": "Interests" },
+            { "value": "pfh_menu-icon-recipients.svg", "label": "Recipients" },
+            { "value": "pfh_menu-icon-home.svg", "label": "Home and living" },
+            { "value": "pfh_menu-icon-apparel.svg", "label": "Apparel" },
+            { "value": "pfh_menu-icon-accessories.svg", "label": "Accessories" },
+            { "value": "pfh_menu-icon-drinkware.svg", "label": "Drinkware" },
+            { "value": "pfh_menu-icon-outdoor.svg", "label": "Outdoor" }
+          ]
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "default": "#b3e2f6",
+          "label": "Background"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "default": "#062d8e",
+          "label": "Text"
+        }
+      ]
+    },
+    {
+      "type": "mobile_menu_card",
+      "name": "Mobile menu card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "default": "Collection",
+          "label": "Title"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Used when no submenu is selected and as the View all link in a submenu."
+        },
+        {
+          "type": "link_list",
+          "id": "sub_menu",
+          "label": "Submenu"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Custom icon"
+        },
+        {
+          "type": "select",
+          "id": "icon_asset",
+          "label": "Built-in icon",
+          "default": "pfh_menu-icon-occasions.svg",
+          "options": [
+            { "value": "pfh_menu-icon-occasions.svg", "label": "Occasions" },
+            { "value": "pfh_menu-icon-interests.svg", "label": "Interests" },
+            { "value": "pfh_menu-icon-recipients.svg", "label": "Recipients" },
+            { "value": "pfh_menu-icon-home.svg", "label": "Home and living" },
+            { "value": "pfh_menu-icon-apparel.svg", "label": "Apparel" },
+            { "value": "pfh_menu-icon-accessories.svg", "label": "Accessories" },
+            { "value": "pfh_menu-icon-drinkware.svg", "label": "Drinkware" },
+            { "value": "pfh_menu-icon-outdoor.svg", "label": "Outdoor" },
+            { "value": "us-july-icon-summer.svg", "label": "Summer" },
+            { "value": "us-july-icon-b2c.svg", "label": "Back to school" }
+          ]
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "default": "#ffffff",
+          "label": "Background"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "default": "#202024",
+          "label": "Text"
+        }
+      ]
+    },
+    {
+      "type": "mobile_utility_link",
+      "name": "Mobile utility link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "default": "Track Order",
+          "label": "Title"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    },
+    {
+      "type": "mobile_social_link",
+      "name": "Mobile social link",
+      "settings": [
+        {
+          "type": "select",
+          "id": "platform",
+          "label": "Platform",
+          "default": "facebook",
+          "options": [
+            { "value": "facebook", "label": "Facebook" },
+            { "value": "youtube", "label": "YouTube" },
+            { "value": "instagram", "label": "Instagram" },
+            { "value": "tiktok", "label": "TikTok" },
+            { "value": "twitter", "label": "X / Twitter" }
+          ]
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Profile link",
+          "info": "Leave blank to hide this social icon."
+        },
+        {
+          "type": "text",
+          "id": "accessibility_label",
+          "label": "Accessibility label",
+          "info": "Optional. Defaults to the selected platform name."
+        }
+      ]
     }
   ]
 }

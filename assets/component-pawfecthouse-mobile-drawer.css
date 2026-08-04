@@ -1,0 +1,359 @@
+@font-face {
+  font-family: 'Pawfect Poppins';
+  src: url('./pfh-poppins-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pawfect Poppins';
+  src: url('./pfh-poppins-medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pawfect Poppins';
+  src: url('./pfh-poppins-semibold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pawfect Poppins';
+  src: url('./pfh-poppins-bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+.pawfecthouse-header-drawer {
+  display: none;
+}
+
+@media screen and (max-width: 989px) {
+  .header-drawer--desktop-only {
+    display: none !important;
+  }
+
+  .pawfecthouse-header-drawer {
+    display: flex;
+    color: var(--pawfect-drawer-text);
+  }
+
+  .pawfecthouse-header-drawer > details > summary::before,
+  .pawfecthouse-header-drawer > details[open]:not(.menu-opening) > summary::before {
+    position: fixed;
+    inset: 0;
+    z-index: 3;
+    width: 100vw;
+    height: 100dvh;
+    background: rgb(0 0 0 / 50%);
+  }
+
+  .pawfecthouse-menu-drawer {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    z-index: 4;
+    width: min(var(--pawfect-drawer-width), 46rem);
+    height: 100dvh !important;
+    max-height: 100dvh;
+    color: var(--pawfect-drawer-text);
+    background: var(--pawfect-drawer-background);
+    font-family: 'Pawfect Poppins', sans-serif;
+    font-size: 1.5rem;
+    line-height: 2.4rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    filter: none;
+  }
+
+  .pawfecthouse-menu-drawer__inner {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    height: auto;
+    background: var(--pawfect-drawer-background);
+  }
+
+  .pawfecthouse-menu-drawer__header {
+    display: flex;
+    min-height: 5.1rem;
+    flex: 0 0 5.1rem;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: 0.4rem;
+    padding: 0.5rem 0.8rem 0.5rem 2rem;
+    border-bottom: 0.3rem solid var(--pawfect-drawer-divider);
+    background: var(--pawfect-drawer-surface);
+  }
+
+  .pawfecthouse-menu-drawer__title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .pawfecthouse-menu-drawer__close {
+    position: relative;
+    display: inline-flex;
+    width: 3.8rem;
+    height: 3.8rem;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    color: inherit;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .pawfecthouse-menu-drawer__close::before {
+    content: '';
+    position: absolute;
+    inset: -0.3rem;
+  }
+
+  .pawfecthouse-menu-drawer__close .svg-wrapper {
+    width: 2.8rem;
+    height: 2.8rem;
+  }
+
+  .pawfecthouse-menu-drawer__body {
+    display: flex;
+    min-height: 0;
+    flex: 1 1 auto;
+    flex-direction: column;
+    grid-template-rows: none;
+    margin-right: 0.4rem;
+    overflow: visible;
+  }
+
+  .pawfecthouse-menu-drawer .menu-drawer__navigation {
+    padding: 0;
+  }
+
+  .pawfecthouse-menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 0;
+    padding: 1.2rem;
+  }
+
+  .pawfecthouse-menu-grid--featured {
+    padding-bottom: 0;
+  }
+
+  .pawfecthouse-menu-grid--navigation {
+    padding-top: 1rem;
+  }
+
+  .pawfecthouse-menu-grid > li,
+  .pawfecthouse-menu-grid > li > details {
+    min-width: 0;
+    margin: 0;
+  }
+
+  .pawfecthouse-menu-card,
+  .pawfecthouse-menu-drawer .pawfecthouse-menu-card.menu-drawer__menu-item {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 6.7rem;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0;
+    padding: 0.4rem 0.3rem 0.4rem 0.8rem;
+    border: 0;
+    border-radius: 0.8rem;
+    color: var(--pawfect-card-text, var(--pawfect-drawer-text));
+    background: var(--pawfect-card-background, var(--pawfect-drawer-surface));
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 2.1rem;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    transition: filter 180ms ease, color 180ms ease;
+  }
+
+  .pawfecthouse-menu-card--featured {
+    font-weight: 600;
+  }
+
+  .pawfecthouse-menu-card:hover {
+    color: var(--pawfect-card-text, var(--pawfect-drawer-text));
+    filter: brightness(0.98);
+  }
+
+  .pawfecthouse-menu-card__image {
+    display: block;
+    width: 3.8rem;
+    height: 3.8rem;
+    flex: 0 0 3.8rem;
+    object-fit: contain;
+  }
+
+  .pawfecthouse-menu-card__chevron {
+    position: absolute;
+    right: 0.8rem;
+    bottom: 0.9rem;
+    display: inline-flex;
+    width: 1.4rem;
+    color: currentColor;
+  }
+
+  .pawfecthouse-menu-card__chevron svg {
+    width: 100%;
+    height: auto;
+  }
+
+  .pawfecthouse-menu-drawer .pawfecthouse-menu-submenu {
+    color: var(--pawfect-drawer-text);
+    background: var(--pawfect-drawer-surface);
+  }
+
+  .pawfecthouse-menu-drawer .menu-drawer__close-button {
+    min-height: 5.1rem;
+    margin: 0;
+    padding: 1.2rem 2rem;
+    border-bottom: 0.3rem solid var(--pawfect-drawer-divider);
+    color: var(--pawfect-drawer-text);
+    background: var(--pawfect-drawer-surface);
+    font-size: 1.6rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .pawfecthouse-menu-drawer .menu-drawer__menu-item:not(.pawfecthouse-menu-card) {
+    min-height: 4.8rem;
+    padding: 1.2rem 2rem;
+    color: var(--pawfect-drawer-text);
+    font-size: 1.5rem;
+  }
+
+  .pawfecthouse-menu-drawer .menu-drawer__menu-item:not(.pawfecthouse-menu-card):hover {
+    color: var(--pawfect-drawer-accent);
+  }
+
+  .pawfecthouse-menu-drawer__footer {
+    min-height: 0;
+    flex: 1 0 auto;
+    margin-top: 1rem;
+    padding-bottom: 2rem;
+    border-top: 0.3rem solid var(--pawfect-drawer-divider);
+    background: var(--pawfect-drawer-surface);
+  }
+
+  .pawfecthouse-menu-utilities {
+    margin: 0;
+    padding: 0;
+  }
+
+  .pawfecthouse-menu-utility {
+    position: relative;
+    display: flex;
+    height: 4.1rem;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem 0.6rem 0.8rem 1.2rem;
+    border-bottom: 0.1rem solid var(--pawfect-drawer-background);
+    color: var(--pawfect-drawer-text);
+    font-size: 1.5rem;
+    line-height: 2.4rem;
+    text-decoration: none;
+    transition: color 180ms ease;
+  }
+
+  .pawfecthouse-menu-utility:hover {
+    color: var(--pawfect-drawer-accent);
+  }
+
+  .pawfecthouse-menu-utility::before {
+    content: '';
+    position: absolute;
+    inset: -0.15rem 0;
+  }
+
+  .pawfecthouse-menu-utility .svg-wrapper {
+    width: 2.4rem;
+    height: 2.4rem;
+  }
+
+  .pawfecthouse-menu-social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin: 0;
+    padding: 1.5rem 1.2rem 1.3rem;
+  }
+
+  .pawfecthouse-menu-social li {
+    line-height: 0;
+  }
+
+  .pawfecthouse-menu-social a {
+    position: relative;
+    display: inline-flex;
+    width: 2.4rem;
+    height: 2.4rem;
+    align-items: center;
+    justify-content: center;
+    color: var(--pawfect-drawer-text);
+    transition: color 180ms ease, opacity 180ms ease;
+  }
+
+  .pawfecthouse-menu-social a::before {
+    content: '';
+    position: absolute;
+    inset: -1rem;
+  }
+
+  .pawfecthouse-menu-social a:hover {
+    color: var(--pawfect-drawer-accent);
+  }
+
+  .pawfecthouse-menu-social .svg-wrapper {
+    width: 2.4rem;
+    height: 2.4rem;
+  }
+
+  .pawfecthouse-header-drawer :focus-visible {
+    outline: 0.3rem solid var(--pawfect-drawer-accent);
+    outline-offset: -0.3rem;
+  }
+
+  @media screen and (max-width: 340px) {
+    .pawfecthouse-menu-card,
+    .pawfecthouse-menu-drawer .pawfecthouse-menu-card.menu-drawer__menu-item {
+      flex-direction: row;
+      align-items: center;
+      gap: 0;
+    }
+
+    .pawfecthouse-menu-card > span:not(.pawfecthouse-menu-card__chevron) {
+      min-width: 0;
+    }
+
+    .pawfecthouse-menu-card__image {
+      width: 2.8rem;
+      height: 2.8rem;
+      flex-basis: 2.8rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pawfecthouse-header-drawer *,
+    .pawfecthouse-header-drawer *::before,
+    .pawfecthouse-header-drawer *::after {
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
