@@ -1,0 +1,436 @@
+/* ============================================================
+   Macorner-style footer
+   - Newsletter band (10% OFF) on a warm beige surface
+   - Centered logo + Trustpilot + DMCA badge
+   - Four collapsible link columns
+   - Country selector + social icons + copyright
+   ============================================================ */
+
+.mc-footer {
+  background: #faf8f5;
+  color: #2d2831;
+}
+
+/* ---- Newsletter band ---- */
+.mc-footer__newsletter {
+  background: #e7ddd2;
+  padding: 4.4rem 1.5rem;
+}
+
+.mc-footer__newsletter-inner {
+  max-width: 76rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.mc-footer__newsletter-title {
+  margin: 0;
+  color: #2d2831;
+  font-family: 'Lora', Georgia, serif;
+  font-size: 3rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.mc-footer__newsletter-text {
+  margin: 1rem auto 2rem;
+  max-width: 60rem;
+  color: #4a4048;
+  font-size: 1.6rem;
+  line-height: 1.5;
+}
+
+.mc-footer__newsletter-form {
+  display: flex;
+  gap: 1rem;
+  align-items: stretch;
+  max-width: 62rem;
+  margin: 0 auto;
+}
+
+.mc-footer__newsletter-field {
+  flex: 1 1 auto;
+  min-height: 5.6rem;
+  padding: 0 2.2rem;
+  border: 0.1rem solid #b9ab9b;
+  border-radius: 99rem;
+  background: transparent;
+  color: #2d2831;
+  font-size: 1.6rem;
+}
+
+.mc-footer__newsletter-field::placeholder {
+  color: #7c7169;
+}
+
+.mc-footer__newsletter-field:focus {
+  outline: none;
+  border-color: #2d2831;
+  box-shadow: 0 0 0 0.2rem rgba(45, 40, 49, 0.15);
+}
+
+.mc-footer__newsletter-button {
+  flex: 0 0 auto;
+  min-width: 13rem;
+  padding: 0 2.6rem;
+  border: 0;
+  border-radius: 99rem;
+  background: #2d2831;
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 160ms ease;
+}
+
+.mc-footer__newsletter-button:hover {
+  background: #3f3944;
+}
+
+.mc-footer__newsletter-success {
+  margin: 1.2rem 0 0;
+  color: #1c7a4a;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.mc-footer__newsletter-error {
+  margin: 1.2rem 0 0;
+  color: #c0341d;
+  font-size: 1.4rem;
+}
+
+/* ---- Brand block ---- */
+.mc-footer__brand {
+  padding: 4rem 1.5rem 0;
+  text-align: center;
+}
+
+.mc-footer__logo {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 4.2rem;
+  font-weight: 600;
+  color: #f26a24;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.mc-footer__logo img {
+  display: inline-block;
+  max-height: 5rem;
+  width: auto;
+}
+
+.mc-footer__trust {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 2rem;
+  color: #2d2831;
+  font-size: 1.7rem;
+  text-decoration: none;
+}
+
+.mc-footer__trust-star {
+  color: #00b67a;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.mc-footer__trust strong {
+  font-weight: 700;
+}
+
+.mc-footer__trust u {
+  font-size: 1.5rem;
+}
+
+.mc-footer__dmca {
+  display: inline-flex;
+  margin-top: 1.8rem;
+}
+
+.mc-footer__dmca img {
+  height: 2rem;
+  width: auto;
+}
+
+.mc-footer__dmca-fallback {
+  display: inline-flex;
+  overflow: hidden;
+  border-radius: 0.3rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.mc-footer__dmca-fallback span:first-child {
+  background: #63b31d;
+  color: #fff;
+  padding: 0.4rem 0.7rem;
+}
+
+.mc-footer__dmca-fallback span:last-child {
+  background: #2d2831;
+  color: #fff;
+  padding: 0.4rem 0.7rem;
+}
+
+/* ---- Link columns ---- */
+/* ---- Link columns: single-column collapsible accordion (macorner style) ---- */
+.mc-footer__links {
+  max-width: 72rem;
+  margin: 3.2rem auto 0;
+  padding: 0 1.5rem;
+}
+
+.mc-footer__col {
+  border-bottom: 0.1rem solid rgba(45, 40, 49, 0.1);
+}
+
+.mc-footer__col:last-child {
+  border-bottom: 0;
+}
+
+.mc-footer__col-summary {
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 1.9rem 5rem 1.9rem 2rem;
+  margin: 0;
+  border-radius: 99rem;
+  list-style: none;
+  cursor: pointer;
+  color: #2d2831;
+  font-size: 1.7rem;
+  font-weight: 600;
+  transition: background 160ms ease;
+}
+
+.mc-footer__col-summary::-webkit-details-marker {
+  display: none;
+}
+
+.mc-footer__col-title {
+  display: block;
+}
+
+/* open section header gets the rounded beige pill highlight */
+.mc-footer__col[open] > .mc-footer__col-summary {
+  background: #e7ddd2;
+}
+
+/* chevron is absolutely pinned to the right edge of the row, so it never
+   moves with the label length */
+.mc-footer__col-summary .mc-footer__chevron {
+  position: absolute;
+  top: 50%;
+  right: 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-top: -0.75rem;
+  color: #2d2831;
+}
+
+/* rotate only the inner icon (in place) so the wrapper never moves and the
+   chevron stays pinned to the same x whether open or closed */
+.mc-footer__col-summary .mc-footer__chevron svg {
+  width: 100%;
+  height: 100%;
+  transform-origin: center center;
+  transition: transform 200ms ease;
+}
+
+.mc-footer__col[open] > .mc-footer__col-summary .mc-footer__chevron svg {
+  transform: rotate(180deg);
+}
+
+.mc-footer__col-list {
+  margin: 0;
+  padding: 1.4rem 0 1.2rem;
+  list-style: none;
+}
+
+.mc-footer__col-list li {
+  margin: 0 0 1.6rem;
+}
+
+.mc-footer__col-list li:last-child {
+  margin-bottom: 0;
+}
+
+.mc-footer__col-list a {
+  color: #57515a;
+  font-size: 1.55rem;
+  text-decoration: none;
+}
+
+.mc-footer__col-list a:hover {
+  color: #f26a24;
+  text-decoration: underline;
+}
+
+/* ---- Bottom bar ---- */
+.mc-footer__bottom {
+  padding: 2.8rem 1.5rem 3.6rem;
+  text-align: center;
+}
+
+/* Desktop: single horizontal row — localization left, social center,
+   copyright right (matches macorner). */
+@media screen and (min-width: 750px) {
+  .mc-footer__bottom {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 2rem;
+    max-width: 100rem;
+    margin: 0 auto;
+    padding: 2.4rem 1.5rem 3.2rem;
+    border-top: 0.1rem solid rgba(45, 40, 49, 0.1);
+    text-align: left;
+  }
+
+  .mc-footer__bottom .mc-footer__localization {
+    grid-column: 1;
+    justify-self: start;
+    margin-bottom: 0;
+  }
+
+  .mc-footer__bottom .mc-footer__social {
+    grid-column: 2;
+    margin-bottom: 0;
+  }
+
+  .mc-footer__bottom .mc-footer__copyright {
+    grid-column: 3;
+    justify-self: end;
+    text-align: right;
+  }
+
+  .mc-footer__bottom .mc-footer__policies {
+    justify-content: flex-end;
+  }
+}
+
+.mc-footer__localization {
+  display: inline-flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.mc-footer__localization .localization-form__select {
+  min-height: 4rem;
+}
+
+.mc-footer__social {
+  display: flex;
+  justify-content: center;
+  gap: 2.4rem;
+  margin: 0 0 2rem;
+  padding: 0;
+  list-style: none;
+}
+
+.mc-footer__social a {
+  display: inline-flex;
+  color: #2d2831;
+  transition: color 160ms ease;
+}
+
+.mc-footer__social a:hover {
+  color: #f26a24;
+}
+
+.mc-footer__social svg {
+  width: 2.2rem;
+  height: 2.2rem;
+}
+
+.mc-footer__copyright {
+  color: #6b6169;
+  font-size: 1.3rem;
+  line-height: 1.6;
+}
+
+.mc-footer__copyright a {
+  color: #6b6169;
+  text-decoration: none;
+}
+
+.mc-footer__copyright a:hover {
+  text-decoration: underline;
+}
+
+.mc-footer__policies {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem 1.4rem;
+  margin: 0.8rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ---- Desktop (>=750px): open multi-column layout, no accordion pills ---- */
+@media screen and (min-width: 750px) {
+  .mc-footer__links {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0 4rem;
+    margin-top: 4rem;
+    max-width: 100rem;
+  }
+
+  .mc-footer__col {
+    border-bottom: 0;
+  }
+
+  .mc-footer__col-summary {
+    width: 100%;
+    padding: 0 0 1.4rem;
+    margin: 0;
+    border-radius: 0;
+    background: transparent !important;
+    cursor: default;
+    pointer-events: none;
+    font-size: 1.6rem;
+  }
+
+  .mc-footer__col-summary .mc-footer__chevron {
+    display: none;
+  }
+
+  /* keep lists open on desktop regardless of the <details> state */
+  .mc-footer__col-list {
+    display: block !important;
+    padding: 0;
+  }
+
+  .mc-footer__col-list li {
+    margin-bottom: 1.2rem;
+  }
+}
+
+@media screen and (max-width: 599px) {
+  .mc-footer__newsletter-title {
+    font-size: 2.4rem;
+  }
+
+  .mc-footer__newsletter-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mc-footer__newsletter-button {
+    min-height: 5.2rem;
+  }
+
+  .mc-footer__logo {
+    font-size: 3.6rem;
+  }
+}

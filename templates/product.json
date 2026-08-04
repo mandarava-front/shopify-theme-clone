@@ -1,0 +1,157 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "vendor": {
+          "type": "text",
+          "settings": {
+            "text": "{{ product.vendor }}",
+            "text_style": "uppercase"
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "rating": {
+          "type": "rating",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "sales_proof": {
+          "type": "sales_proof",
+          "settings": {
+            "sales_text": "500+ bought in the past month",
+            "assurance_text": "Free shipping over $59 | 30-day money-back | Secure checkout"
+          }
+        },
+        "delivery_estimate": {
+          "type": "delivery_estimate",
+          "settings": {
+            "day_mode": "business",
+            "processing_min_days": 3,
+            "processing_max_days": 5,
+            "transit_min_days": 7,
+            "transit_max_days": 9,
+            "summary_prefix": "Arrives by",
+            "summary_suffix": "if you order today.",
+            "order_label": "Order placed",
+            "ship_label": "Order ships",
+            "delivery_label": "Delivered"
+          }
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "circle"
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {}
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": true
+          }
+        },
+        "secure_payment": {
+          "type": "secure_payment",
+          "settings": {
+            "heading": "Secure checkout"
+          }
+        },
+        "trust_message": {
+          "type": "trust_message",
+          "settings": {
+            "heading": "Shop with confidence",
+            "text": "<p>Add an accurate delivery, returns, or support statement.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "vendor",
+        "title",
+        "rating",
+        "price",
+        "sales_proof",
+        "delivery_estimate",
+        "variant_picker",
+        "quantity_selector",
+        "buy_buttons",
+        "secure_payment",
+        "trust_message",
+        "description"
+      ],
+      "settings": {
+        "show_breadcrumbs": true,
+        "breadcrumb_home_label": "Home",
+        "enable_sticky_info": true,
+        "color_scheme": "scheme-1",
+        "media_size": "small",
+        "constrain_to_viewport": true,
+        "media_fit": "contain",
+        "gallery_layout": "thumbnail_slider",
+        "mobile_thumbnails": "hide",
+        "media_position": "left",
+        "image_zoom": "lightbox",
+        "hide_variants": false,
+        "enable_video_looping": false,
+        "padding_top": 20,
+        "padding_bottom": 24
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "settings": {
+        "heading": "More Items to Consider",
+        "heading_size": "h2",
+        "products_to_show": 5,
+        "columns_desktop": 5,
+        "columns_mobile": "2",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "padding_top": 32,
+        "padding_bottom": 64
+      }
+    },
+    "disclosures": {
+      "type": "disclosures",
+      "settings": {
+        "padding_top": 36,
+        "padding_bottom": 0
+      }
+    }
+  },
+  "order": [
+    "main",
+    "disclosures",
+    "related-products"
+  ]
+}

@@ -1,0 +1,331 @@
+{{ 'component-cart.css' | asset_url | stylesheet_tag }}
+{{ 'cuszoo-cart.css' | asset_url | stylesheet_tag }}
+{{ 'component-totals.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-discounts.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div
+  class="gradient color-{{ section.settings.color_scheme }}{% if cart == empty %} is-empty{% endif %}"
+  id="main-cart-footer"
+  data-id="{{ section.id }}"
+>
+  <div class="page-width">
+    <div class="cart__footer isolate section-{{ section.id }}-padding">
+      {%- if settings.show_cart_note -%}
+        <cart-note class="cart__note field">
+          <label for="Cart-note">{{ 'sections.cart.note' | t }}</label>
+          <textarea
+            class="text-area field__input"
+            name="note"
+            form="cart"
+            id="Cart-note"
+            placeholder="{{ 'sections.cart.note' | t }}"
+          >{{ cart.note }}</textarea>
+        </cart-note>
+      {%- endif -%}
+
+      <div class="cart__blocks">
+        {% for block in section.blocks %}
+          {%- case block.type -%}
+            {%- when '@app' -%}
+              {% render block %}
+            {%- when 'subtotal' -%}
+              <div class="js-contents" {{ block.shopify_attributes }}>
+                <div>
+                  {%- if cart.cart_level_discount_applications.size > 0 -%}
+                    <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
+                      {%- for discount in cart.cart_level_discount_applications -%}
+                        <li class="discounts__discount discounts__discount--position">
+                          {{- 'icon-discount.svg' | inline_asset_content -}}
+                          {{ discount.title | escape }}
+                          (-{{ discount.total_allocated_amount | money }})
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  {%- endif -%}
+                </div>
+
+                <div class="totals">
+                  <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2>
+                  <p class="totals__total-value">{{ cart.total_price | money_with_currency }}</p>
+                </div>
+
+                <small class="tax-note caption-large rte">
+                  {%- if cart.duties_included and cart.taxes_included -%}
+                    {%- if shop.shipping_policy.body == blank -%}
+                      {{ 'sections.cart.duties_and_taxes_included_shipping_at_checkout_without_policy' | t }}
+                    {%- else -%}
+                      {{
+                        'sections.cart.duties_and_taxes_included_shipping_at_checkout_with_policy_html'
+                        | t: link: shop.shipping_policy.url
+                      }}
+                    {%- endif -%}
+                  {%- elsif cart.duties_included == false and cart.taxes_included -%}
+                    {%- if shop.shipping_policy.body == blank -%}
+                      {{ 'sections.cart.taxes_included_shipping_at_checkout_without_policy' | t }}
+                    {%- else -%}
+                      {{
+                        'sections.cart.taxes_included_shipping_at_checkout_with_policy_html'
+                        | t: link: shop.shipping_policy.url
+                      }}
+                    {%- endif -%}
+                  {%- elsif cart.duties_included and cart.taxes_included == false -%}
+                    {%- if shop.shipping_policy.body == blank -%}
+                      {{ 'sections.cart.duties_included_taxes_at_checkout_shipping_at_checkout_without_policy' | t }}
+                    {%- else -%}
+                      {{
+                        'sections.cart.duties_included_taxes_at_checkout_shipping_at_checkout_with_policy_html'
+                        | t: link: shop.shipping_policy.url
+                      }}
+                    {%- endif -%}
+                  {%- elsif cart.duties_included == false and cart.taxes_included == false -%}
+                    {%- if shop.shipping_policy.body == blank -%}
+                      {{ 'sections.cart.taxes_at_checkout_shipping_at_checkout_without_policy' | t }}
+                    {%- else -%}
+                      {{
+                        'sections.cart.taxes_at_checkout_shipping_at_checkout_with_policy_html'
+                        | t: link: shop.shipping_policy.url
+                      }}
+                    {%- endif -%}
+                  {%- endif -%}
+                </small>
+              </div>
+            {%- when 'buttons' -%}
+              <div class="cart__ctas" {{ block.shopify_attributes }}>
+                <button
+                  type="submit"
+                  id="checkout"
+                  class="cart__checkout-button button"
+                  name="checkout"
+                  {% if cart == empty %}
+                    disabled
+                  {% endif %}
+                  form="cart"
+                >
+                  {{ 'sections.cart.checkout' | t }}
+                </button>
+              </div>
+
+              {%- if additional_checkout_buttons -%}
+                <div class="cart__dynamic-checkout-buttons additional-checkout-buttons">
+                  {{ content_for_additional_checkout_buttons }}
+                </div>
+              {%- endif -%}
+            {%- when 'payment_methods' -%}
+              <div class="cuszoo-cart-payment" {{ block.shopify_attributes }}>
+                {%- if block.settings.secure_text != blank -%}
+                  <p class="cuszoo-cart-secure">
+                    <span class="svg-wrapper" aria-hidden="true">{{- 'icon-padlock.svg' | inline_asset_content -}}</span>
+                    {{ block.settings.secure_text | escape }}
+                  </p>
+                {%- endif -%}
+                {%- if block.settings.heading != blank -%}
+                  <p class="cuszoo-cart-payment__heading">{{ block.settings.heading | escape }}</p>
+                {%- endif -%}
+                {%- if shop.enabled_payment_types.size > 0 -%}
+                  <ul class="cuszoo-payment-list list-unstyled" role="list">
+                    {%- for type in shop.enabled_payment_types -%}
+                      <li>{{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}</li>
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              </div>
+            {%- when 'buyer_protection' -%}
+              <div class="cuszoo-buyer-protection" {{ block.shopify_attributes }}>
+                {%- if block.settings.heading != blank -%}
+                  <p class="cuszoo-buyer-protection__heading">{{ block.settings.heading | escape }}</p>
+                {%- endif -%}
+                <ul class="cuszoo-buyer-protection__list list-unstyled" role="list">
+                  {%- if block.settings.item_1_title != blank -%}
+                    <li>
+                      <span class="svg-wrapper" aria-hidden="true">{{- 'icon-checkmark.svg' | inline_asset_content -}}</span>
+                      <div>
+                        <strong>{{ block.settings.item_1_title | escape }}</strong>
+                        {%- if block.settings.item_1_text != blank -%}<span>{{ block.settings.item_1_text | escape }}</span>{%- endif -%}
+                      </div>
+                    </li>
+                  {%- endif -%}
+                  {%- if block.settings.item_2_title != blank -%}
+                    <li>
+                      <span class="svg-wrapper" aria-hidden="true">{{- 'icon-return.svg' | inline_asset_content -}}</span>
+                      <div>
+                        <strong>{{ block.settings.item_2_title | escape }}</strong>
+                        {%- if block.settings.item_2_text != blank -%}<span>{{ block.settings.item_2_text | escape }}</span>{%- endif -%}
+                      </div>
+                    </li>
+                  {%- endif -%}
+                </ul>
+              </div>
+            {%- when 'assurance' -%}
+              <div class="cuszoo-cart-assurance" {{ block.shopify_attributes }}>
+                <span class="svg-wrapper" aria-hidden="true">{{- 'icon-checkmark.svg' | inline_asset_content -}}</span>
+                <div>
+                  <strong>{{ block.settings.heading | escape }}</strong>
+                  {%- if block.settings.text != blank -%}
+                    <div class="rte">{{ block.settings.text }}</div>
+                  {%- endif -%}
+                  {%- if block.settings.link_label != blank and block.settings.link != blank -%}
+                    <a class="link underlined-link" href="{{ block.settings.link }}">{{ block.settings.link_label | escape }}</a>
+                  {%- endif -%}
+                </div>
+              </div>
+          {%- endcase -%}
+        {% endfor %}
+
+        <div id="cart-errors"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.main-cart-footer.name",
+  "class": "cart__footer-wrapper cuszoo-cart-footer-section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },    
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "subtotal",
+      "name": "t:sections.main-cart-footer.blocks.subtotal.name",
+      "limit": 1
+    },
+    {
+      "type": "buttons",
+      "name": "t:sections.main-cart-footer.blocks.buttons.name",
+      "limit": 1
+    },
+    {
+      "type": "payment_methods",
+      "name": "Payment methods",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "secure_text",
+          "default": "100% Secure Payment",
+          "label": "Secure payment line"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Payment Methods",
+          "label": "Heading"
+        }
+      ]
+    },
+    {
+      "type": "buyer_protection",
+      "name": "Buyer protection",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Buyer Protection",
+          "label": "Heading"
+        },
+        {
+          "type": "text",
+          "id": "item_1_title",
+          "default": "Full refund",
+          "label": "Item 1 title"
+        },
+        {
+          "type": "text",
+          "id": "item_1_text",
+          "default": "for faulty production. No question asked",
+          "label": "Item 1 text"
+        },
+        {
+          "type": "text",
+          "id": "item_2_title",
+          "default": "Full or Partial Refund",
+          "label": "Item 2 title"
+        },
+        {
+          "type": "text",
+          "id": "item_2_text",
+          "default": "if the item is not as described",
+          "label": "Item 2 text"
+        }
+      ]
+    },
+    {
+      "type": "assurance",
+      "name": "Assurance",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Purchase protection",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "default": "<p>Add an accurate returns, delivery, or support statement.</p>",
+          "label": "Text"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link label"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    },
+    {
+      "type": "@app"
+    }
+  ]
+}
+{% endschema %}

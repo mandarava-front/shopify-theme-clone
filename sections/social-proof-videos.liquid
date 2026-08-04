@@ -1,0 +1,181 @@
+{{ 'cuszoo-experience.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+  <social-proof-slider id="reviews" class="page-width section-{{ section.id }}-padding cuszoo-social-proof">
+    <div class="cuszoo-social-proof__header">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="cuszoo-section-heading {{ section.settings.heading_size }}">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subheading != blank -%}
+        <p>{{ section.settings.subheading | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="cuszoo-social-proof__slider">
+      <button class="cuszoo-social-proof__arrow cuszoo-social-proof__arrow--prev" type="button" aria-label="Previous video">
+        <span class="svg-wrapper">{{- 'icon-arrow.svg' | inline_asset_content -}}</span>
+      </button>
+      <div class="cuszoo-social-proof__rail" role="list" tabindex="0">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign card_product = block.settings.product
+            assign card_title = block.settings.title | default: card_product.title
+            assign card_link = block.settings.link | default: card_product.url | default: '#'
+            assign card_thumbnail = block.settings.thumbnail_url
+          -%}
+          <article class="cuszoo-video-card" role="listitem" {{ block.shopify_attributes }}>
+            <div class="cuszoo-video-card__media">
+              {%- if block.settings.video_url != blank -%}
+                <video
+                  autoplay
+                  muted
+                  loop
+                  playsinline
+                  preload="metadata"
+                  tabindex="0"
+                  {% if block.settings.poster_url != blank %}poster="{{ block.settings.poster_url }}"{% endif %}
+                  aria-label="{{ card_title | escape }}. Select to pause or play."
+                >
+                  <source src="{{ block.settings.video_url }}" type="video/mp4">
+                </video>
+              {%- else -%}
+                {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+
+              {%- unless block.settings.platform == 'none' -%}
+                <span class="cuszoo-video-card__platforms" aria-hidden="true">
+                  {%- if block.settings.platform contains 'youtube' -%}
+                    <span class="svg-wrapper">{{- 'icon-youtube.svg' | inline_asset_content -}}</span>
+                  {%- endif -%}
+                  {%- if block.settings.platform contains 'instagram' -%}
+                    <span class="svg-wrapper">{{- 'icon-instagram.svg' | inline_asset_content -}}</span>
+                  {%- endif -%}
+                  {%- if block.settings.platform contains 'tiktok' -%}
+                    <span class="svg-wrapper">{{- 'icon-tiktok.svg' | inline_asset_content -}}</span>
+                  {%- endif -%}
+                </span>
+              {%- endunless -%}
+
+              <a href="{{ card_link }}" class="cuszoo-video-card__overlay focus-inset">
+                {%- if card_thumbnail != blank -%}
+                  <img src="{{ card_thumbnail }}" alt="{{ card_title | escape }}" width="180" height="180" loading="lazy">
+                {%- elsif card_product.featured_image != blank -%}
+                  {{ card_product.featured_image | image_url: width: 180 | image_tag: loading: 'lazy', widths: '90, 120, 180', alt: card_title }}
+                {%- endif -%}
+                <strong>{{ card_title | escape }}</strong>
+              </a>
+            </div>
+          </article>
+        {%- endfor -%}
+      </div>
+      <button class="cuszoo-social-proof__arrow cuszoo-social-proof__arrow--next" type="button" aria-label="Next video">
+        <span class="svg-wrapper">{{- 'icon-arrow.svg' | inline_asset_content -}}</span>
+      </button>
+    </div>
+  </social-proof-slider>
+</div>
+
+<script>
+  if (!customElements.get('social-proof-slider')) {
+    customElements.define('social-proof-slider', class extends HTMLElement {
+      connectedCallback() {
+        this.rail = this.querySelector('.cuszoo-social-proof__rail');
+        this.querySelector('.cuszoo-social-proof__arrow--prev').addEventListener('click', () => this.scroll(-1));
+        this.querySelector('.cuszoo-social-proof__arrow--next').addEventListener('click', () => this.scroll(1));
+        this.querySelectorAll('video').forEach((video) => {
+          const toggle = () => video.paused ? video.play() : video.pause();
+          video.addEventListener('click', toggle);
+          video.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              toggle();
+            }
+          });
+        });
+      }
+
+      scroll(direction) {
+        const card = this.rail.querySelector('.cuszoo-video-card');
+        this.rail.scrollBy({ left: direction * (card.offsetWidth + 16), behavior: 'smooth' });
+      }
+    });
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Social proof videos",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Discover us on social media" },
+    { "type": "text", "id": "subheading", "label": "Subheading" },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" }
+      ],
+      "default": "h1"
+    },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Top padding", "default": 40 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Bottom padding", "default": 40 }
+  ],
+  "blocks": [
+    {
+      "type": "video",
+      "name": "Video product",
+      "settings": [
+        { "type": "url", "id": "video_url", "label": "MP4 video URL" },
+        { "type": "url", "id": "poster_url", "label": "Poster image URL" },
+        { "type": "url", "id": "thumbnail_url", "label": "Product thumbnail URL" },
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "text", "id": "title", "label": "Custom title" },
+        { "type": "url", "id": "link", "label": "Custom link" },
+        {
+          "type": "select",
+          "id": "platform",
+          "label": "Social icons",
+          "options": [
+            { "value": "youtube_tiktok", "label": "YouTube and TikTok" },
+            { "value": "instagram_tiktok", "label": "Instagram and TikTok" },
+            { "value": "tiktok", "label": "TikTok" },
+            { "value": "none", "label": "None" }
+          ],
+          "default": "instagram_tiktok"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Social proof videos",
+      "blocks": [
+        { "type": "video" },
+        { "type": "video" },
+        { "type": "video" },
+        { "type": "video" }
+      ]
+    }
+  ]
+}
+{% endschema %}

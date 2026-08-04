@@ -1,0 +1,26 @@
+{%- if block.settings.link != blank -%}
+  <a class="cuszoo-image-mosaic__item focus-inset" href="{{ block.settings.link }}" {{ block.shopify_attributes }}>
+{%- else -%}
+  <div class="cuszoo-image-mosaic__item" {{ block.shopify_attributes }}>
+{%- endif -%}
+  {%- if block.settings.image != blank -%}
+    {{
+      block.settings.image
+      | image_url: width: 1600
+      | image_tag:
+        widths: '360, 533, 720, 940, 1200, 1600',
+        sizes: sizes,
+        loading: loading,
+        alt: block.settings.alt
+    }}
+  {%- else -%}
+    {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+  {%- endif -%}
+  {%- if block.settings.label != blank -%}
+    <span class="cuszoo-image-mosaic__label">{{ block.settings.label | escape }}</span>
+  {%- endif -%}
+{%- if block.settings.link != blank -%}
+  </a>
+{%- else -%}
+  </div>
+{%- endif -%}

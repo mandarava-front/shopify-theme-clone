@@ -1,0 +1,299 @@
+{% comment %}theme-check-disable UndefinedObject{% endcomment %}
+{{ 'macorner-footer.css' | asset_url | stylesheet_tag }}
+{{ 'component-localization-form.css' | asset_url | stylesheet_tag }}
+{{ 'component-list-social.css' | asset_url | stylesheet_tag }}
+
+<footer class="mc-footer">
+  {%- if section.settings.newsletter_enable -%}
+    <div class="mc-footer__newsletter">
+      <div class="mc-footer__newsletter-inner">
+        {%- if section.settings.newsletter_heading != blank -%}
+          <h2 class="mc-footer__newsletter-title">{{ section.settings.newsletter_heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.newsletter_text != blank -%}
+          <p class="mc-footer__newsletter-text">{{ section.settings.newsletter_text }}</p>
+        {%- endif -%}
+        {%- form 'customer', id: 'ContactFooter', class: 'mc-footer__newsletter-form newsletter-form' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <input
+            id="NewsletterForm--{{ section.id }}"
+            type="email"
+            name="contact[email]"
+            class="mc-footer__newsletter-field"
+            value="{{ form.email }}"
+            aria-label="{{ 'newsletter.label' | t }}"
+            aria-required="true"
+            autocorrect="off"
+            autocapitalize="off"
+            autocomplete="email"
+            {% if form.errors %}
+              autofocus
+              aria-invalid="true"
+            {% endif %}
+            placeholder="{{ section.settings.newsletter_placeholder | default: 'Enter your email' }}"
+            required
+          >
+          <button type="submit" class="mc-footer__newsletter-button" name="commit">
+            {{ section.settings.newsletter_button_label | default: 'Subscribe' }}
+          </button>
+          {%- if form.posted_successfully? -%}
+            <p class="mc-footer__newsletter-success" role="status">{{ 'newsletter.success' | t }}</p>
+          {%- elsif form.errors -%}
+            <p class="mc-footer__newsletter-error" role="status">
+              {{- form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email -}}
+            </p>
+          {%- endif -%}
+        {%- endform -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  <div class="mc-footer__brand">
+    {%- if section.settings.logo != blank -%}
+      {%- assign logo_alt = section.settings.logo.alt | default: shop.name | escape -%}
+      <a href="{{ routes.root_url }}" class="mc-footer__logo" aria-label="{{ shop.name | escape }}">
+        {{
+          section.settings.logo
+          | image_url: width: 400
+          | image_tag: loading: 'lazy', alt: logo_alt, widths: '100, 200, 300, 400'
+        }}
+      </a>
+    {%- else -%}
+      <a href="{{ routes.root_url }}" class="mc-footer__logo">{{ shop.name }}</a>
+    {%- endif -%}
+
+    {%- if section.settings.trustpilot_url != blank -%}
+      <a href="{{ section.settings.trustpilot_url }}" class="mc-footer__trust" target="_blank" rel="noopener">
+        <span class="mc-footer__trust-star" aria-hidden="true">&#9733;</span>
+        <strong>Trustpilot</strong>
+        {%- if section.settings.trustpilot_reviews != blank -%}
+          <u>{{ section.settings.trustpilot_reviews }}</u>
+        {%- endif -%}
+      </a>
+    {%- endif -%}
+
+    {%- if section.settings.dmca_image != blank -%}
+      <span class="mc-footer__dmca">
+        {%- if section.settings.dmca_url != blank -%}
+          <a href="{{ section.settings.dmca_url }}" target="_blank" rel="noopener">
+            {{ section.settings.dmca_image | image_url: width: 300 | image_tag: loading: 'lazy', alt: 'DMCA Protected' }}
+          </a>
+        {%- else -%}
+          {{ section.settings.dmca_image | image_url: width: 300 | image_tag: loading: 'lazy', alt: 'DMCA Protected' }}
+        {%- endif -%}
+      </span>
+    {%- elsif section.settings.show_dmca_badge -%}
+      <span class="mc-footer__dmca">
+        <span class="mc-footer__dmca-fallback">
+          <span>DMCA</span><span>PROTECTED</span>
+        </span>
+      </span>
+    {%- endif -%}
+  </div>
+
+  {%- assign has_link_blocks = false -%}
+  {%- for block in section.blocks -%}
+    {%- if block.type == 'link_list' -%}
+      {%- assign has_link_blocks = true -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- if has_link_blocks -%}
+    <div class="mc-footer__links">
+      {%- assign link_block_index = 0 -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'link_list' and block.settings.menu != blank -%}
+          {%- assign link_block_index = link_block_index | plus: 1 -%}
+          <details
+            class="mc-footer__col"
+            data-mc-footer-col
+            {{ block.shopify_attributes }}
+          >
+            <summary class="mc-footer__col-summary">
+              <span class="mc-footer__col-title">{{ block.settings.heading | default: block.settings.menu.title }}</span>
+              <span class="svg-wrapper mc-footer__chevron" aria-hidden="true">
+                {{- 'icon-caret.svg' | inline_asset_content -}}
+              </span>
+            </summary>
+            <ul class="mc-footer__col-list">
+              {%- for link in block.settings.menu.links -%}
+                <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+              {%- endfor -%}
+            </ul>
+          </details>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  <div class="mc-footer__bottom">
+    {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
+      <div class="mc-footer__localization">
+        <localization-form>
+          {%- form 'localization', id: 'FooterCountryForm', class: 'localization-form' -%}
+            <div>
+              <h2 class="visually-hidden" id="FooterCountryLabel">{{ 'localization.country_label' | t }}</h2>
+              {%- render 'country-localization', localPosition: 'FooterCountry' -%}
+            </div>
+          {%- endform -%}
+        </localization-form>
+      </div>
+    {%- endif -%}
+
+    {%- liquid
+      assign has_social_icons = true
+      if settings.social_facebook_link == blank and settings.social_instagram_link == blank and settings.social_youtube_link == blank and settings.social_tiktok_link == blank and settings.social_twitter_link == blank and settings.social_pinterest_link == blank and settings.social_snapchat_link == blank and settings.social_tumblr_link == blank and settings.social_vimeo_link == blank
+        assign has_social_icons = false
+      endif
+    -%}
+    {%- if section.settings.show_social and has_social_icons -%}
+      {%- render 'social-icons', class: 'mc-footer__social' -%}
+    {%- endif -%}
+
+    <div class="mc-footer__copyright">
+      <span
+        >&copy; {{ 'now' | date: '%Y' }}, {{ shop.name | link_to: routes.root_url }}. All Rights Reserved.</span
+      >
+      <br>
+      <span>{{ powered_by_link }}</span>
+      {%- if section.settings.show_policy -%}
+        <ul class="mc-footer__policies">
+          {%- for policy in shop.policies -%}
+            {%- if policy != blank -%}
+              <li><a href="{{ policy.url }}">{{ policy.title | escape }}</a></li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "t:sections.footer.name",
+  "blocks": [
+    {
+      "type": "link_list",
+      "name": "t:sections.footer.blocks.link_list.name",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "Quick links",
+          "label": "t:sections.footer.blocks.link_list.settings.heading.label"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "default": "footer",
+          "label": "t:sections.footer.blocks.link_list.settings.menu.label"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Newsletter"
+    },
+    {
+      "type": "checkbox",
+      "id": "newsletter_enable",
+      "default": true,
+      "label": "t:sections.footer.settings.newsletter_enable.label"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "newsletter_heading",
+      "default": "Unlock Your 10% OFF!",
+      "label": "Newsletter heading"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_text",
+      "default": "Join us for free gift inspiration, extra savings, and alerts on our latest drops.",
+      "label": "Newsletter text"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_placeholder",
+      "default": "Enter your email",
+      "label": "Email placeholder"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_button_label",
+      "default": "Subscribe",
+      "label": "Button label"
+    },
+    {
+      "type": "header",
+      "content": "Brand"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image (leave empty to use shop name)"
+    },
+    {
+      "type": "text",
+      "id": "trustpilot_url",
+      "label": "Trustpilot link URL"
+    },
+    {
+      "type": "text",
+      "id": "trustpilot_reviews",
+      "default": "13,578 reviews",
+      "label": "Trustpilot reviews label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dmca_badge",
+      "default": true,
+      "label": "Show DMCA badge (fallback)"
+    },
+    {
+      "type": "image_picker",
+      "id": "dmca_image",
+      "label": "DMCA badge image (optional)"
+    },
+    {
+      "type": "text",
+      "id": "dmca_url",
+      "label": "DMCA link URL"
+    },
+    {
+      "type": "header",
+      "content": "Bottom bar"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "default": true,
+      "label": "t:sections.footer.settings.show_social.label",
+      "info": "t:sections.footer.settings.show_social.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_country_selector",
+      "default": true,
+      "label": "t:sections.footer.settings.enable_country_selector.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_policy",
+      "default": true,
+      "label": "t:sections.footer.settings.show_policy.label"
+    }
+  ],
+  "default": {
+    "blocks": [
+      { "type": "link_list" },
+      { "type": "link_list" },
+      { "type": "link_list" },
+      { "type": "link_list" }
+    ]
+  }
+}
+{% endschema %}

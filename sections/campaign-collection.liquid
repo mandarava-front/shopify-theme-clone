@@ -1,0 +1,112 @@
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-rating.css' | asset_url | stylesheet_tag }}
+{{ 'campaign-collection.css' | asset_url | stylesheet_tag }}
+
+<div class="cuszoo-campaign" style="--campaign-background: {{ section.settings.background }};">
+  <div class="page-width cuszoo-campaign__inner">
+    <div class="cuszoo-campaign__banner">
+      <div class="cuszoo-campaign__media">
+        {%- if section.settings.image != blank -%}
+          {{ section.settings.image | image_url: width: 1400 | image_tag: widths: '600, 900, 1200, 1400', sizes: '(min-width: 750px) 42vw, 100vw', loading: 'lazy', alt: section.settings.heading }}
+        {%- elsif section.settings.external_image_url != blank -%}
+          <img src="{{ section.settings.external_image_url }}" alt="{{ section.settings.heading | escape }}" width="1200" height="900" loading="lazy">
+        {%- else -%}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        {%- endif -%}
+      </div>
+      <div class="cuszoo-campaign__content">
+        <h2>{{ section.settings.heading | escape }}</h2>
+        {%- if section.settings.text != blank -%}
+          <p>{{ section.settings.text | escape }}</p>
+        {%- endif -%}
+        {%- if section.blocks.size > 0 -%}
+          <div class="cuszoo-campaign__chips" aria-label="{{ section.settings.heading | escape }} categories">
+            {%- for block in section.blocks -%}
+              <a href="{{ block.settings.link | default: section.settings.collection.url | default: routes.all_products_collection_url }}" class="cuszoo-campaign__chip" {{ block.shopify_attributes }}>
+                {{ block.settings.label | escape }}
+              </a>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+        <a href="{{ section.settings.link | default: section.settings.collection.url | default: routes.all_products_collection_url }}" class="cuszoo-campaign__see-all">
+          {{ section.settings.link_label | escape }}
+          <span aria-hidden="true">&rsaquo;</span>
+        </a>
+      </div>
+    </div>
+
+    <ul class="cuszoo-campaign__products" role="list">
+      {%- assign skip_card_product_styles = false -%}
+      {%- if section.settings.collection.products.size > 0 -%}
+        {%- for product in section.settings.collection.products limit: section.settings.products_to_show -%}
+          <li>
+            {% render 'card-product',
+              card_product: product,
+              media_aspect_ratio: 'square',
+              image_shape: 'default',
+              lazy_load: true,
+              show_secondary_image: true,
+              show_vendor: false,
+              show_rating: true,
+              skip_styles: skip_card_product_styles,
+              section_id: section.id,
+              quick_add: 'none',
+              product_view_context: 'collection'
+            %}
+          </li>
+          {%- assign skip_card_product_styles = true -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- for index in (1..6) -%}
+          <li>
+            {%- assign placeholder_index = index | modulo: 4 | plus: 1 -%}
+            {%- assign placeholder = 'product-apparel-' | append: placeholder_index -%}
+            {% render 'card-product', placeholder_image: placeholder, media_aspect_ratio: 'square' %}
+          </li>
+        {%- endfor -%}
+      {%- endif -%}
+    </ul>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Campaign collection",
+  "tag": "section",
+  "class": "section section--campaign-collection",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Campaign image" },
+    { "type": "url", "id": "external_image_url", "label": "External image URL" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Personalized Gifts" },
+    { "type": "text", "id": "text", "label": "Description", "default": "Made from the moments that matter." },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "range", "id": "products_to_show", "label": "Products to show", "min": 2, "max": 6, "step": 1, "default": 6 },
+    { "type": "color", "id": "background", "label": "Banner background", "default": "#eef2e6" },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "See all" },
+    { "type": "url", "id": "link", "label": "Link" }
+  ],
+  "blocks": [
+    {
+      "type": "chip",
+      "name": "Category chip",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Best sellers" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "max_blocks": 5,
+  "presets": [
+    {
+      "name": "Campaign collection",
+      "blocks": [
+        { "type": "chip" },
+        { "type": "chip" },
+        { "type": "chip" }
+      ]
+    }
+  ]
+}
+{% endschema %}

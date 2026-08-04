@@ -1,0 +1,164 @@
+.cuszoo-campaign {
+  background: #faf8f5;
+}
+
+.cuszoo-campaign__inner {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.cuszoo-campaign__banner {
+  display: grid;
+  min-height: 29rem;
+  grid-template-columns: minmax(0, 42%) minmax(0, 1fr);
+  overflow: hidden;
+  border-radius: 0.6rem;
+  background: var(--campaign-background);
+}
+
+.cuszoo-campaign__media {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.cuszoo-campaign__media img,
+.cuszoo-campaign__media svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cuszoo-campaign__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 4rem;
+  color: #2d2831;
+  text-align: center;
+}
+
+.cuszoo-campaign__content h2 {
+  margin: 0;
+  font-family: 'Lora', Georgia, serif;
+  font-size: 3.6rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.cuszoo-campaign__content p {
+  margin: 0.8rem 0 1.6rem;
+  font-size: 1.4rem;
+}
+
+.cuszoo-campaign__chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.8rem;
+}
+
+.cuszoo-campaign__chip,
+.cuszoo-campaign__see-all {
+  display: inline-flex;
+  min-height: 3.4rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.4rem;
+  border: 0.1rem solid rgba(45, 40, 49, 0.62);
+  border-radius: 99rem;
+  color: #2d2831;
+  font-size: 1.2rem;
+  font-weight: 500;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.cuszoo-campaign__chip:first-child {
+  background: #2d2831;
+  color: #fff;
+}
+
+.cuszoo-campaign__chip:hover,
+.cuszoo-campaign__see-all:hover {
+  border-color: #f26a24;
+  color: #f26a24;
+}
+
+.cuszoo-campaign__see-all {
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.cuszoo-campaign__see-all span {
+  font-size: 1.8rem;
+}
+
+.cuszoo-campaign__products {
+  display: grid;
+  margin: 1.2rem 0 0;
+  padding: 0;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1.2rem;
+  list-style: none;
+}
+
+.cuszoo-campaign__products .card .card__inner .card__media {
+  border-radius: 0.4rem;
+}
+
+.cuszoo-campaign__products .card__information {
+  padding-top: 0.8rem;
+}
+
+.cuszoo-campaign__products .card__heading {
+  font-size: 1.3rem;
+  line-height: 1.35;
+}
+
+.cuszoo-campaign__products .price {
+  margin-top: 0.6rem;
+  font-size: 1.3rem;
+}
+
+.cuszoo-campaign__products .price-item--sale {
+  color: #f26a24;
+}
+
+.cuszoo-campaign__products .rating-star {
+  --color-rating-star: #f26a24;
+}
+
+@media screen and (max-width: 749px) {
+  .cuszoo-campaign__inner {
+    padding-top: 1.6rem;
+    padding-bottom: 1.6rem;
+  }
+
+  .cuszoo-campaign__banner {
+    display: block;
+    min-height: 0;
+  }
+
+  .cuszoo-campaign__media {
+    aspect-ratio: 1.55;
+  }
+
+  .cuszoo-campaign__content {
+    padding: 2rem 1.4rem;
+  }
+
+  .cuszoo-campaign__content h2 {
+    font-size: 2.8rem;
+  }
+
+  .cuszoo-campaign__products {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem 0.8rem;
+  }
+
+  .cuszoo-campaign__products .card__heading,
+  .cuszoo-campaign__products .price {
+    font-size: 1.2rem;
+  }
+}

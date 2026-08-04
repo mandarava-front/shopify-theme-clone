@@ -1,0 +1,225 @@
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-slider.css' | asset_url | stylesheet_tag }}
+{{ 'template-collection.css' | asset_url | stylesheet_tag }}
+{{ 'cuszoo-home.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'cuszoo-collection-tabs.js' | asset_url }}" defer="defer"></script>
+
+{%- if section.settings.quick_add == 'standard' -%}
+  {{ 'quick-add.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+  <cuszoo-collection-tabs class="page-width section-{{ section.id }}-padding">
+    {%- if section.settings.title != blank -%}
+      <h2 class="cuszoo-section-heading inline-richtext {{ section.settings.heading_size }}">{{ section.settings.title }}</h2>
+    {%- endif -%}
+
+    <div class="cuszoo-tabs__list" role="tablist" aria-label="{{ section.settings.title | escape }}">
+      {%- for block in section.blocks -%}
+        {%- assign tab_label = block.settings.label | default: block.settings.collection.title | default: 'Collection' -%}
+        <button
+          class="cuszoo-tabs__tab"
+          id="Tab-{{ section.id }}-{{ forloop.index }}"
+          type="button"
+          role="tab"
+          aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+          aria-controls="Panel-{{ section.id }}-{{ forloop.index }}"
+          tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
+          {{ block.shopify_attributes }}
+        >
+          {{ tab_label | escape }}
+        </button>
+      {%- endfor -%}
+    </div>
+
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign tab_collection = block.settings.collection
+        assign product_limit = block.settings.products_to_show
+        assign products_to_display = tab_collection.products.size | at_most: product_limit
+        if tab_collection.products.size == 0
+          assign products_to_display = product_limit
+        endif
+        assign show_tab_slider = false
+        if section.settings.mobile_layout == 'slider' and products_to_display > 2
+          assign show_tab_slider = true
+        endif
+        assign tab_index = forloop.index
+      -%}
+      <div
+        class="cuszoo-tabs__panel"
+        id="Panel-{{ section.id }}-{{ forloop.index }}"
+        role="tabpanel"
+        aria-labelledby="Tab-{{ section.id }}-{{ forloop.index }}"
+        {% unless forloop.first %}hidden{% endunless %}
+      >
+        <slider-component>
+          <ul
+            id="Slider-{{ section.id }}-{{ forloop.index }}"
+            class="grid product-grid contains-card contains-card--product grid--{{ section.settings.columns_desktop }}-col-desktop grid--2-col-tablet-down cuszoo-mobile-products{% if show_tab_slider %} slider slider--tablet grid--peek cuszoo-mobile-products--slider{% else %} cuszoo-mobile-products--grid{% endif %}"
+            role="list"
+            aria-label="{{ block.settings.label | default: tab_collection.title | escape }}"
+          >
+            {%- if tab_collection.products.size > 0 -%}
+              {%- for product in tab_collection.products limit: product_limit -%}
+                <li
+                  id="Slide-{{ section.id }}-{{ tab_index }}-{{ forloop.index }}"
+                  class="grid__item{% if show_tab_slider %} slider__slide{% endif %}"
+                >
+                  {% render 'card-product',
+                    card_product: product,
+                    media_aspect_ratio: section.settings.image_ratio,
+                    image_shape: 'default',
+                    lazy_load: true,
+                    show_secondary_image: section.settings.show_secondary_image,
+                    show_vendor: section.settings.show_vendor,
+                    show_rating: section.settings.show_rating,
+                    section_id: block.id,
+                    quick_add: section.settings.quick_add,
+                    product_view_context: 'collection'
+                  %}
+                </li>
+              {%- endfor -%}
+            {%- else -%}
+              {%- for i in (1..products_to_display) -%}
+                <li
+                  id="Slide-{{ section.id }}-{{ tab_index }}-{{ forloop.index }}"
+                  class="grid__item{% if show_tab_slider %} slider__slide{% endif %}"
+                >
+                  {%- assign placeholder_index = forloop.index0 | modulo: 4 | plus: 1 -%}
+                  {%- assign placeholder_image = 'product-apparel-' | append: placeholder_index -%}
+                  {% render 'card-product', media_aspect_ratio: section.settings.image_ratio, placeholder_image: placeholder_image %}
+                </li>
+              {%- endfor -%}
+            {%- endif -%}
+          </ul>
+
+          {%- if show_tab_slider -%}
+            <div class="slider-buttons">
+              <button type="button" class="slider-button slider-button--prev" name="previous" aria-label="{{ 'general.slider.previous_slide' | t }}" aria-controls="Slider-{{ section.id }}-{{ forloop.index }}">
+                <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+              </button>
+              <div class="slider-counter caption">
+                <span class="slider-counter--current">1</span>
+                <span aria-hidden="true"> / </span>
+                <span class="visually-hidden">{{ 'general.slider.of' | t }}</span>
+                <span class="slider-counter--total">{{ products_to_display }}</span>
+              </div>
+              <button type="button" class="slider-button slider-button--next" name="next" aria-label="{{ 'general.slider.next_slide' | t }}" aria-controls="Slider-{{ section.id }}-{{ forloop.index }}">
+                <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+              </button>
+            </div>
+          {%- endif -%}
+        </slider-component>
+
+        {%- if section.settings.show_view_all and tab_collection != blank -%}
+          <div class="cuszoo-tabs__view-all">
+            <a class="button button--secondary" href="{{ tab_collection.url }}">{{ 'sections.featured_collection.view_all' | t }}</a>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </cuszoo-collection-tabs>
+</div>
+
+{% schema %}
+{
+  "name": "Tabbed collections",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "inline_richtext", "id": "title", "label": "Heading", "default": "Curated choices" },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" }
+      ],
+      "default": "h2"
+    },
+    { "type": "range", "id": "columns_desktop", "label": "Desktop columns", "min": 2, "max": 6, "step": 1, "default": 4 },
+    {
+      "type": "select",
+      "id": "mobile_layout",
+      "label": "Mobile layout",
+      "options": [
+        { "value": "grid_2", "label": "Two-column grid" },
+        { "value": "slider", "label": "Horizontal slider" }
+      ],
+      "default": "grid_2"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Product image ratio",
+      "options": [
+        { "value": "adapt", "label": "Adapt to image" },
+        { "value": "portrait", "label": "Portrait" },
+        { "value": "square", "label": "Square" }
+      ],
+      "default": "square"
+    },
+    { "type": "checkbox", "id": "show_secondary_image", "label": "Show second image on hover", "default": true },
+    { "type": "checkbox", "id": "show_vendor", "label": "Show vendor", "default": false },
+    { "type": "checkbox", "id": "show_rating", "label": "Show rating", "default": true },
+    {
+      "type": "select",
+      "id": "quick_add",
+      "label": "Quick add",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "standard", "label": "Standard" }
+      ],
+      "default": "none"
+    },
+    { "type": "checkbox", "id": "show_view_all", "label": "Show view all button", "default": true },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" },
+    { "type": "header", "content": "Section spacing" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Top padding", "default": 24 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Bottom padding", "default": 24 }
+  ],
+  "blocks": [
+    {
+      "type": "collection_tab",
+      "name": "Collection tab",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Tab label" },
+        { "type": "collection", "id": "collection", "label": "Collection" },
+        { "type": "range", "id": "products_to_show", "label": "Products to show", "min": 2, "max": 12, "step": 1, "default": 8 }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Tabbed collections",
+      "blocks": [
+        { "type": "collection_tab", "settings": { "label": "Best sellers" } },
+        { "type": "collection_tab", "settings": { "label": "New arrivals" } },
+        { "type": "collection_tab", "settings": { "label": "Gift ideas" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

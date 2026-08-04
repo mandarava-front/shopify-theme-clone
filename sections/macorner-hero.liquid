@@ -1,0 +1,117 @@
+{{ 'macorner-home.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'macorner-hero.js' | asset_url }}" defer="defer"></script>
+
+<hero-carousel class="macorner-hero" data-autoplay="{{ section.settings.autoplay }}">
+  <div class="macorner-hero__slides" aria-live="polite">
+    <article class="macorner-hero__slide is-active" data-hero-slide aria-hidden="false">
+      {%- if section.settings.desktop_image_1 != blank -%}
+        <picture>
+          {%- if section.settings.mobile_image_1 != blank -%}
+            <source media="(max-width: 749px)" srcset="{{ section.settings.mobile_image_1 | image_url: width: 900 }}">
+          {%- endif -%}
+          {{ section.settings.desktop_image_1 | image_url: width: 2400 | image_tag: widths: '1200, 1600, 2000, 2400', sizes: '100vw', fetchpriority: 'high', alt: '' }}
+        </picture>
+      {%- else -%}
+        <img src="{{ 'threadsgo-summer-hero.jpg' | asset_url }}" alt="" width="2000" height="620" fetchpriority="high">
+      {%- endif -%}
+      <div class="page-width macorner-hero__content">
+        <p class="macorner-hero__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+        <h1>{{ section.settings.heading | escape }}</h1>
+        <p class="macorner-hero__text">{{ section.settings.text | escape }}</p>
+        <a href="{{ section.settings.button_link | default: routes.all_products_collection_url }}" class="button macorner-hero__button">
+          {{ section.settings.button_label | escape }}
+        </a>
+      </div>
+    </article>
+    <article class="macorner-hero__slide" data-hero-slide aria-hidden="true">
+      {%- if section.settings.desktop_image_2 != blank -%}
+        <picture>
+          {%- if section.settings.mobile_image_2 != blank -%}
+            <source media="(max-width: 749px)" srcset="{{ section.settings.mobile_image_2 | image_url: width: 900 }}">
+          {%- endif -%}
+          {{ section.settings.desktop_image_2 | image_url: width: 2400 | image_tag: widths: '1200, 1600, 2000, 2400', sizes: '100vw', loading: 'lazy', alt: '' }}
+        </picture>
+      {%- else -%}
+        <img src="{{ 'threadsgo-pet-hero.jpg' | asset_url }}" alt="" width="2000" height="620" loading="lazy">
+      {%- endif -%}
+      <div class="page-width macorner-hero__content">
+        <p class="macorner-hero__eyebrow">{{ section.settings.eyebrow_2 | escape }}</p>
+        <h2>{{ section.settings.heading_2 | escape }}</h2>
+        <p class="macorner-hero__text">{{ section.settings.text_2 | escape }}</p>
+        <a href="{{ section.settings.button_link_2 | default: routes.all_products_collection_url }}" class="button macorner-hero__button">
+          {{ section.settings.button_label_2 | escape }}
+        </a>
+      </div>
+    </article>
+  </div>
+
+  <button class="macorner-hero__arrow macorner-hero__arrow--previous" type="button" data-hero-previous aria-label="Previous slide">
+    <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+  </button>
+  <button class="macorner-hero__arrow macorner-hero__arrow--next" type="button" data-hero-next aria-label="Next slide">
+    <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+  </button>
+
+  <div class="page-width macorner-hero__shortcuts" aria-label="Featured gift categories">
+    <a href="{{ section.settings.shortcut_link_1 | default: routes.all_products_collection_url }}" class="macorner-hero__shortcut">
+      <img src="{{ section.settings.image_1 }}" alt="Pet bracelets" width="180" height="180">
+      <span>{{ section.settings.shortcut_label_1 | escape }}</span>
+    </a>
+    <a href="{{ section.settings.shortcut_link_2 | default: routes.all_products_collection_url }}" class="macorner-hero__shortcut">
+      <img src="{{ section.settings.image_2 }}" alt="Pet necklaces" width="180" height="180">
+      <span>{{ section.settings.shortcut_label_2 | escape }}</span>
+    </a>
+    <a href="{{ section.settings.shortcut_link_3 | default: routes.all_products_collection_url }}" class="macorner-hero__shortcut">
+      <img src="{{ section.settings.image_3 }}" alt="Photo keepsakes" width="180" height="180">
+      <span>{{ section.settings.shortcut_label_3 | escape }}</span>
+    </a>
+    <a href="{{ section.settings.shortcut_link_4 | default: routes.all_products_collection_url }}" class="macorner-hero__shortcut">
+      <img src="{{ section.settings.image_4 }}" alt="Shop all personalized gifts" width="180" height="180">
+      <span>{{ section.settings.shortcut_label_4 | escape }}</span>
+    </a>
+  </div>
+
+  <div class="macorner-hero__dots" role="group" aria-label="Choose slide">
+    <button type="button" data-hero-dot="0" aria-label="Show slide 1" aria-current="true"></button>
+    <button type="button" data-hero-dot="1" aria-label="Show slide 2" aria-current="false"></button>
+  </div>
+</hero-carousel>
+
+{% schema %}
+{
+  "name": "Large campaign hero",
+  "tag": "section",
+  "class": "section section--macorner-hero",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "image_picker", "id": "desktop_image_1", "label": "Slide 1 desktop image" },
+    { "type": "image_picker", "id": "mobile_image_1", "label": "Slide 1 mobile image" },
+    { "type": "image_picker", "id": "desktop_image_2", "label": "Slide 2 desktop image" },
+    { "type": "image_picker", "id": "mobile_image_2", "label": "Slide 2 mobile image" },
+    { "type": "url", "id": "image_1", "label": "Shortcut image 1" },
+    { "type": "url", "id": "image_2", "label": "Shortcut image 2" },
+    { "type": "url", "id": "image_3", "label": "Shortcut image 3" },
+    { "type": "url", "id": "image_4", "label": "Shortcut image 4" },
+    { "type": "text", "id": "shortcut_label_1", "label": "Shortcut 1 label", "default": "Pet bracelets" },
+    { "type": "url", "id": "shortcut_link_1", "label": "Shortcut 1 link" },
+    { "type": "text", "id": "shortcut_label_2", "label": "Shortcut 2 label", "default": "Pet necklaces" },
+    { "type": "url", "id": "shortcut_link_2", "label": "Shortcut 2 link" },
+    { "type": "text", "id": "shortcut_label_3", "label": "Shortcut 3 label", "default": "Photo keepsakes" },
+    { "type": "url", "id": "shortcut_link_3", "label": "Shortcut 3 link" },
+    { "type": "text", "id": "shortcut_label_4", "label": "Shortcut 4 label", "default": "Shop all" },
+    { "type": "url", "id": "shortcut_link_4", "label": "Shortcut 4 link" },
+    { "type": "text", "id": "eyebrow", "label": "Slide 1 eyebrow", "default": "Bright gifts for sunny days" },
+    { "type": "text", "id": "heading", "label": "Slide 1 heading", "default": "Personalized Pet Gifts" },
+    { "type": "textarea", "id": "text", "label": "Slide 1 text", "default": "Turn a favorite photo into jewelry that keeps them close." },
+    { "type": "text", "id": "button_label", "label": "Slide 1 button", "default": "Explore now" },
+    { "type": "url", "id": "button_link", "label": "Slide 1 link" },
+    { "type": "text", "id": "eyebrow_2", "label": "Slide 2 eyebrow", "default": "Made for every pet person" },
+    { "type": "text", "id": "heading_2", "label": "Slide 2 heading", "default": "Wear Their Story" },
+    { "type": "textarea", "id": "text_2", "label": "Slide 2 text", "default": "A thoughtful gift created from the face you know by heart." },
+    { "type": "text", "id": "button_label_2", "label": "Slide 2 button", "default": "Shop pet gifts" },
+    { "type": "url", "id": "button_link_2", "label": "Slide 2 link" },
+    { "type": "checkbox", "id": "autoplay", "label": "Auto-rotate slides", "default": true }
+  ],
+  "presets": [{ "name": "Large campaign hero" }]
+}
+{% endschema %}

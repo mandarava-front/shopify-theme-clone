@@ -1,0 +1,72 @@
+{{ 'macorner-home.css' | asset_url | stylesheet_tag }}
+
+<div class="macorner-trust color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width macorner-home-padding">
+    <h2 class="macorner-home-heading">{{ section.settings.heading | escape }}</h2>
+    <div class="macorner-trust__grid" role="list">
+      {%- for block in section.blocks -%}
+        <div class="macorner-trust__item" role="listitem" {{ block.shopify_attributes }}>
+          <span class="macorner-trust__icon svg-wrapper" aria-hidden="true">
+            {%- case block.settings.icon -%}
+              {%- when 'truck' -%}{{- 'icon-truck.svg' | inline_asset_content -}}
+              {%- when 'lock' -%}{{- 'icon-lock.svg' | inline_asset_content -}}
+              {%- when 'heart' -%}{{- 'icon-heart.svg' | inline_asset_content -}}
+              {%- else -%}{{- 'icon-checkmark.svg' | inline_asset_content -}}
+            {%- endcase -%}
+          </span>
+          <div>
+            <strong>{{ block.settings.heading | escape }}</strong>
+            <p>{{ block.settings.text | escape }}</p>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Trust badges",
+  "tag": "section",
+  "class": "section section--trust-badges",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Shop With Confidence" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-2" }
+  ],
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "Badge",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "check", "label": "Check" },
+            { "value": "truck", "label": "Truck" },
+            { "value": "lock", "label": "Lock" },
+            { "value": "heart", "label": "Heart" }
+          ],
+          "default": "check"
+        },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Quality guaranteed" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Made carefully and checked before shipping." }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "Trust badges",
+      "blocks": [
+        { "type": "badge" },
+        { "type": "badge" },
+        { "type": "badge" },
+        { "type": "badge" }
+      ]
+    }
+  ]
+}
+{% endschema %}

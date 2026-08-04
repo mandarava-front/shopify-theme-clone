@@ -1,0 +1,255 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "large_hero": {
+      "type": "macorner-hero",
+      "settings": {
+        "image_1": "https://cdn.shopify.com/s/files/1/0769/8874/3879/files/2_a81b8ba2-3c20-400b-af6d-fd7536eab53c.jpg?v=1773373153",
+        "image_2": "https://cdn.shopify.com/s/files/1/0769/8874/3879/files/Pet-Cutout-Necklace_wear_dog.jpg?v=1773373155",
+        "image_3": "https://cdn.shopify.com/s/files/1/0769/8874/3879/files/Edited13_e6d9616b-644b-4b2f-bd29-de41f068b003.jpg?v=1773373159",
+        "image_4": "https://cdn.shopify.com/s/files/1/0769/8874/3879/files/PersonalizedPawprintNecklace-BoxGold.jpg?v=1773373160",
+        "shortcut_label_1": "Pet bracelets",
+        "shortcut_link_1": "/products/pet-face-bracelet",
+        "shortcut_label_2": "Pet necklaces",
+        "shortcut_link_2": "/products/pet-cutout-necklace",
+        "shortcut_label_3": "Photo keepsakes",
+        "shortcut_link_3": "/products/pet-face-necklace",
+        "shortcut_label_4": "Shop all",
+        "shortcut_link_4": "shopify://collections/all",
+        "eyebrow": "Bright gifts for sunny days",
+        "heading": "Personalized Pet Gifts",
+        "text": "Turn a favorite photo into jewelry that keeps them close.",
+        "button_label": "Explore now",
+        "button_link": "shopify://collections/all",
+        "eyebrow_2": "Made for every pet person",
+        "heading_2": "Wear Their Story",
+        "text_2": "A thoughtful gift created from the face you know by heart.",
+        "button_label_2": "Shop pet gifts",
+        "button_link_2": "shopify://collections/all",
+        "autoplay": true
+      }
+    },
+    "trending_finds": {
+      "type": "visual-link-grid",
+      "blocks": {
+        "find-1": { "type": "link", "settings": { "external_image_url": "https://cdn.shopify.com/s/files/1/0769/8874/3879/files/2_a81b8ba2-3c20-400b-af6d-fd7536eab53c.jpg?v=1773373153", "title": "Pet Bracelets", "link": "/products/pet-face-bracelet" } },
+        "find-2": { "type": "link", "settings": { "external_image_url": "https://cdn.shopify.com/s/files/1/0769/8874/3879/files/Pet-Cutout-Necklace_wear_dog.jpg?v=1773373155", "title": "Pet Necklaces", "link": "/products/pet-cutout-necklace" } },
+        "find-3": { "type": "link", "settings": { "external_image_url": "https://cdn.shopify.com/s/files/1/0769/8874/3879/files/5_edited.jpg?v=1773373152", "title": "Name Rings", "link": "/products/minimalistic-ring" } },
+        "find-4": { "type": "link", "settings": { "external_image_url": "https://cdn.shopify.com/s/files/1/0769/8874/3879/files/PersonalizedPawprintNecklace-BoxGold.jpg?v=1773373160", "title": "Pawprint Jewelry", "link": "/products/personalized-pawprint-necklace" } },
+        "find-5": { "type": "link", "settings": { "external_image_url": "https://cdn.shopify.com/s/files/1/0769/8874/3879/files/Edited13_e6d9616b-644b-4b2f-bd29-de41f068b003.jpg?v=1773373159", "title": "Gift Ready", "link": "/collections/all" } },
+        "find-6": { "type": "link", "settings": { "external_image_url": "https://cdn.shopify.com/s/files/1/0769/8874/3879/files/3.png?v=1773899936", "title": "Pet Rings", "link": "/products/personalized-pawprint-ring" } },
+        "find-7": { "type": "link", "settings": { "external_image_url": "https://cdn.shopify.com/s/files/1/0769/8874/3879/files/2_42ddfc1b-cd31-4ac0-aa46-b204a9996af3.jpg?v=1773373159", "title": "Memorial Gifts", "link": "/collections/all" } },
+        "find-8": { "type": "link", "settings": { "external_image_url": "https://cdn.shopify.com/s/files/1/0769/8874/3879/files/PersonalizedPawprintNecklace-Gold_de2b11da-508d-4cb9-a6fb-59c5d2d679e7.jpg?v=1773373160", "title": "Shop All", "link": "/collections/all" } }
+      },
+      "block_order": ["find-1", "find-2", "find-3", "find-4", "find-5", "find-6", "find-7", "find-8"],
+      "settings": {
+        "title": "Threadsgo's Trending Finds",
+        "subheading": "See what everyone is creating today. Personalized favorites updated regularly.",
+        "heading_size": "h2",
+        "columns_desktop": 6,
+        "enable_desktop_slider": true,
+        "mobile_layout": "slider",
+        "image_ratio": "square",
+        "color_scheme": "scheme-1",
+        "padding_top": 20,
+        "padding_bottom": 12
+      }
+    },
+    "trending_now": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Trending Now",
+        "heading_size": "h2",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "collection": "all",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "outline",
+        "enable_desktop_slider": false,
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": true,
+        "quick_add": "none",
+        "mobile_layout": "grid_2",
+        "padding_top": 12,
+        "padding_bottom": 20
+      }
+    },
+    "campaign_memorial": {
+      "type": "campaign-collection",
+      "blocks": {
+        "chip-1": { "type": "chip", "settings": { "label": "Pet memorials", "link": "/collections/all" } },
+        "chip-2": { "type": "chip", "settings": { "label": "Photo keepsakes", "link": "/collections/all" } },
+        "chip-3": { "type": "chip", "settings": { "label": "For pet parents", "link": "/collections/all" } }
+      },
+      "block_order": ["chip-1", "chip-2", "chip-3"],
+      "settings": {
+        "external_image_url": "https://cdn.shopify.com/s/files/1/0769/8874/3879/files/Edited13_e6d9616b-644b-4b2f-bd29-de41f068b003.jpg?v=1773373159",
+        "heading": "Pet Memorial Gifts",
+        "text": "Keep their memory close with a gift made from your favorite photo.",
+        "collection": "all",
+        "products_to_show": 6,
+        "background": "#e8eef3",
+        "link_label": "See all",
+        "link": "shopify://collections/all"
+      }
+    },
+    "campaign_jewelry": {
+      "type": "campaign-collection",
+      "blocks": {
+        "chip-1": { "type": "chip", "settings": { "label": "Necklaces", "link": "/collections/all" } },
+        "chip-2": { "type": "chip", "settings": { "label": "Bracelets", "link": "/collections/all" } },
+        "chip-3": { "type": "chip", "settings": { "label": "Rings", "link": "/collections/all" } }
+      },
+      "block_order": ["chip-1", "chip-2", "chip-3"],
+      "settings": {
+        "external_image_url": "https://cdn.shopify.com/s/files/1/0769/8874/3879/files/2_a81b8ba2-3c20-400b-af6d-fd7536eab53c.jpg?v=1773373153",
+        "heading": "Personalized Jewelry",
+        "text": "Small details, personal stories, and a piece made just for you.",
+        "collection": "all",
+        "products_to_show": 6,
+        "background": "#f3eadf",
+        "link_label": "See all",
+        "link": "shopify://collections/all"
+      }
+    },
+    "campaign_pet_lovers": {
+      "type": "campaign-collection",
+      "blocks": {
+        "chip-1": { "type": "chip", "settings": { "label": "Dog lovers", "link": "/collections/all" } },
+        "chip-2": { "type": "chip", "settings": { "label": "Cat lovers", "link": "/collections/all" } },
+        "chip-3": { "type": "chip", "settings": { "label": "Best sellers", "link": "/collections/all" } }
+      },
+      "block_order": ["chip-1", "chip-2", "chip-3"],
+      "settings": {
+        "external_image_url": "https://cdn.shopify.com/s/files/1/0769/8874/3879/files/Pet-Cutout-Necklace_wear_dog.jpg?v=1773373155",
+        "heading": "Gifts for Pet Lovers",
+        "text": "Bright, thoughtful gifts for the people who always have a pet story to share.",
+        "collection": "all",
+        "products_to_show": 6,
+        "background": "#edf0df",
+        "link_label": "See all",
+        "link": "shopify://collections/all"
+      }
+    },
+    "shop_by_recipient": {
+      "type": "visual-link-grid",
+      "blocks": {
+        "recipient-1": { "type": "link", "settings": { "external_image_url": "https://cdn.shopify.com/s/files/1/0769/8874/3879/files/PetFaceBracelet-Gold.jpg?v=1773373153", "title": "For Pet Lovers", "link": "/products/pet-face-bracelet" } },
+        "recipient-2": { "type": "link", "settings": { "external_image_url": "https://cdn.shopify.com/s/files/1/0769/8874/3879/files/PCN1Gold.png?v=1773373155", "title": "For Dog Moms", "link": "/products/pet-cutout-necklace" } },
+        "recipient-3": { "type": "link", "settings": { "external_image_url": "https://cdn.shopify.com/s/files/1/0769/8874/3879/files/g_f46e95c8-f7fa-4551-83a4-35b2369d2d95.jpg?v=1773373158", "title": "For Cat Lovers", "link": "/products/pet-face-necklace" } },
+        "recipient-4": { "type": "link", "settings": { "external_image_url": "https://cdn.shopify.com/s/files/1/0769/8874/3879/files/Edited13_e6d9616b-644b-4b2f-bd29-de41f068b003.jpg?v=1773373159", "title": "Memorial Gifts", "link": "/collections/all" } },
+        "recipient-5": { "type": "link", "settings": { "external_image_url": "https://cdn.shopify.com/s/files/1/0769/8874/3879/files/PersonalizedPawprintNecklace-Gold_de2b11da-508d-4cb9-a6fb-59c5d2d679e7.jpg?v=1773373160", "title": "For Her", "link": "/products/personalized-pawprint-necklace" } },
+        "recipient-6": { "type": "link", "settings": { "external_image_url": "https://cdn.shopify.com/s/files/1/0769/8874/3879/files/StackablePetBandRing-Gold_39019b53-30a8-4f17-b914-061b0b8b0ff6.jpg?v=1773373157", "title": "For You", "link": "/products/pet-band-ring" } }
+      },
+      "block_order": ["recipient-1", "recipient-2", "recipient-3", "recipient-4", "recipient-5", "recipient-6"],
+      "settings": {
+        "title": "Who Are You Shopping For Today?",
+        "heading_size": "h2",
+        "columns_desktop": 6,
+        "mobile_layout": "slider",
+        "image_ratio": "square",
+        "color_scheme": "scheme-2",
+        "padding_top": 20,
+        "padding_bottom": 16
+      }
+    },
+    "shop_by_occasions": {
+      "type": "visual-link-grid",
+      "blocks": {
+        "occasion-1": { "type": "link", "settings": { "external_image_url": "https://cdn.shopify.com/s/files/1/0769/8874/3879/files/5_edited.jpg?v=1773373152", "title": "Anniversary", "link": "/collections/all" } },
+        "occasion-2": { "type": "link", "settings": { "external_image_url": "https://cdn.shopify.com/s/files/1/0769/8874/3879/files/Edited13_e6d9616b-644b-4b2f-bd29-de41f068b003.jpg?v=1773373159", "title": "Pet Memorial", "link": "/collections/all" } },
+        "occasion-3": { "type": "link", "settings": { "external_image_url": "https://cdn.shopify.com/s/files/1/0769/8874/3879/files/1_0d1adbcf-2b09-4560-be67-38a793b6d308.jpg?v=1773373153", "title": "Birthday", "link": "/collections/all" } },
+        "occasion-4": { "type": "link", "settings": { "external_image_url": "https://cdn.shopify.com/s/files/1/0769/8874/3879/files/Edited13_e6d9616b-644b-4b2f-bd29-de41f068b003.jpg?v=1773373159", "title": "Christmas", "link": "/collections/all" } },
+        "occasion-5": { "type": "link", "settings": { "external_image_url": "https://cdn.shopify.com/s/files/1/0769/8874/3879/files/Pet-Cutout-Necklace_wear_cat.jpg?v=1773373155", "title": "Just Because", "link": "/collections/all" } },
+        "occasion-6": { "type": "link", "settings": { "external_image_url": "https://cdn.shopify.com/s/files/1/0769/8874/3879/files/PersonalizedPawprintNecklace-BoxGold.jpg?v=1773373160", "title": "Everyday Gifts", "link": "/collections/all" } }
+      },
+      "block_order": ["occasion-1", "occasion-2", "occasion-3", "occasion-4", "occasion-5", "occasion-6"],
+      "settings": {
+        "title": "Shop By Occasions",
+        "heading_size": "h2",
+        "columns_desktop": 6,
+        "mobile_layout": "slider",
+        "image_ratio": "square",
+        "color_scheme": "scheme-1",
+        "padding_top": 20,
+        "padding_bottom": 16
+      }
+    },
+    "social_proof_videos": {
+      "type": "social-proof-videos",
+      "blocks": {
+        "video-1": { "type": "video", "settings": { "video_url": "https://castmyphoto.com/cdn/shop/videos/c/vp/ea2704178ae244c088e956eb1d9fec30/ea2704178ae244c088e956eb1d9fec30.HD-1080p-4.8Mbps-79347760.mp4?v=0", "poster_url": "https://castmyphoto.com/cdn/shop/files/preview_images/ea2704178ae244c088e956eb1d9fec30.thumbnail.0000000000.jpg?v=1774344038&width=620", "thumbnail_url": "https://castmyphoto.com/cdn/shop/files/1_b60bb8ed-2088-4436-953a-48d273f0220d.png?v=1775540626&width=400", "title": "The Sorcerer's Apprentice boy portrait", "link": "https://castmyphoto.com/products/the-sorcerers-apprentice-boy-portrait", "platform": "youtube_tiktok" } },
+        "video-2": { "type": "video", "settings": { "video_url": "https://castmyphoto.com/cdn/shop/videos/c/vp/ba19b9b896844436b161887d6acdc2b4/ba19b9b896844436b161887d6acdc2b4.HD-1080p-7.2Mbps-79892540.mp4?v=0", "poster_url": "https://castmyphoto.com/cdn/shop/files/preview_images/ba19b9b896844436b161887d6acdc2b4.thumbnail.0000000000.jpg?v=1774948689&width=620", "thumbnail_url": "https://castmyphoto.com/cdn/shop/files/4_69a03abe-22b1-4b1a-8c87-29881626eaeb.png?v=1775540950&width=400", "title": "The Enchanted Princess girl portrait", "link": "https://castmyphoto.com/products/the-enchanted-princess-girl-portrait", "platform": "instagram_tiktok" } },
+        "video-3": { "type": "video", "settings": { "video_url": "https://castmyphoto.com/cdn/shop/videos/c/vp/62aa43120a0b442e94b8e6f80c666f97/62aa43120a0b442e94b8e6f80c666f97.HD-1080p-7.2Mbps-79595742.mp4?v=0", "poster_url": "https://castmyphoto.com/cdn/shop/files/preview_images/62aa43120a0b442e94b8e6f80c666f97.thumbnail.0000000000.jpg?v=1774580009&width=620", "thumbnail_url": "https://castmyphoto.com/cdn/shop/files/11_e065162e-4da6-4400-957a-7c4eb095f4ce.png?v=1775642021&width=400", "title": "The Mermaid Princess girl portrait", "link": "https://castmyphoto.com/products/the-mermaid-princess-girl-portrait", "platform": "instagram_tiktok" } },
+        "video-4": { "type": "video", "settings": { "video_url": "https://castmyphoto.com/cdn/shop/videos/c/vp/692301a413a04003995429a5752c248e/692301a413a04003995429a5752c248e.HD-1080p-7.2Mbps-79595878.mp4?v=0", "poster_url": "https://castmyphoto.com/cdn/shop/files/preview_images/692301a413a04003995429a5752c248e.thumbnail.0000000000.jpg?v=1774580119&width=620", "thumbnail_url": "https://castmyphoto.com/cdn/shop/files/1_dfcb4356-3345-4e46-a51c-6fbce12d734b.png?v=1775542525&width=400", "title": "The Brave Viking Shield-Maiden and Warrior Couple portrait", "link": "https://castmyphoto.com/products/the-brave-viking-shield-maiden-and-warrior-couple-portrait", "platform": "instagram_tiktok" } },
+        "video-5": { "type": "video", "settings": { "video_url": "https://castmyphoto.com/cdn/shop/videos/c/vp/fc42427042d04e56a085a091c927ff69/fc42427042d04e56a085a091c927ff69.HD-1080p-7.2Mbps-79595985.mp4?v=0", "poster_url": "https://castmyphoto.com/cdn/shop/files/preview_images/fc42427042d04e56a085a091c927ff69.thumbnail.0000000000.jpg?v=1774580279&width=620", "thumbnail_url": "https://castmyphoto.com/cdn/shop/files/12.png?v=1775642043&width=400", "title": "The Snow Queen Girl Portrait", "link": "https://castmyphoto.com/products/the-snow-queen-girl-portrait", "platform": "instagram_tiktok" } },
+        "video-6": { "type": "video", "settings": { "video_url": "https://castmyphoto.com/cdn/shop/videos/c/vp/dc09c8b6101a418c99fa8150366728c8/dc09c8b6101a418c99fa8150366728c8.HD-1080p-7.2Mbps-79595986.mp4?v=0", "poster_url": "https://castmyphoto.com/cdn/shop/files/preview_images/dc09c8b6101a418c99fa8150366728c8.thumbnail.0000000000.jpg?v=1774580286&width=620", "thumbnail_url": "https://castmyphoto.com/cdn/shop/files/6_dff11af4-e99d-4ddf-a191-729dd2b2e607.png?v=1775540490&width=400", "title": "The Crowned Monarch female portrait", "link": "https://castmyphoto.com/products/the-crowned-monarch-female-portrait", "platform": "instagram_tiktok" } }
+      },
+      "block_order": ["video-1", "video-2", "video-3", "video-4", "video-5", "video-6"],
+      "settings": {
+        "heading": "Happy Customers",
+        "subheading": "Real reactions to gifts made from favorite memories.",
+        "heading_size": "h1",
+        "color_scheme": "scheme-1",
+        "padding_top": 20,
+        "padding_bottom": 20
+      }
+    },
+    "trust_badges": {
+      "type": "cuszoo-trust-badges",
+      "blocks": {
+        "trust-1": { "type": "badge", "settings": { "icon": "truck", "heading": "On-time delivery", "text": "Clear production and shipping estimates before you order." } },
+        "trust-2": { "type": "badge", "settings": { "icon": "lock", "heading": "Secure photo privacy", "text": "Your personal photos are handled carefully and securely." } },
+        "trust-3": { "type": "badge", "settings": { "icon": "check", "heading": "Made with care", "text": "Every personalized piece is checked before it ships." } },
+        "trust-4": { "type": "badge", "settings": { "icon": "heart", "heading": "Helpful support", "text": "Real assistance when you need help with your order." } }
+      },
+      "block_order": ["trust-1", "trust-2", "trust-3", "trust-4"],
+      "settings": { "heading": "Shop With Confidence", "color_scheme": "scheme-2" }
+    },
+    "gift_finder": {
+      "type": "cuszoo-gift-finder",
+      "blocks": {
+        "gift-1": { "type": "link", "settings": { "heading": "For pet lovers", "text": "Photo jewelry and keepsakes", "link": "/collections/all" } },
+        "gift-2": { "type": "link", "settings": { "heading": "Memorial gifts", "text": "Keep their memory close", "link": "/collections/all" } },
+        "gift-3": { "type": "link", "settings": { "heading": "Personalized jewelry", "text": "Rings, necklaces and bracelets", "link": "/collections/all" } }
+      },
+      "block_order": ["gift-1", "gift-2", "gift-3"],
+      "settings": {
+        "eyebrow": "Need a little help?",
+        "heading": "Quick Gift Finder",
+        "link_label": "Shop all gifts",
+        "link": "shopify://collections/all",
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": [
+    "large_hero",
+    "trending_finds",
+    "trending_now",
+    "campaign_memorial",
+    "campaign_jewelry",
+    "campaign_pet_lovers",
+    "shop_by_recipient",
+    "shop_by_occasions",
+    "social_proof_videos",
+    "trust_badges",
+    "gift_finder"
+  ]
+}
