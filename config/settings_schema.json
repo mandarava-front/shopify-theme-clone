@@ -1435,6 +1435,44 @@
         "default": false
       },
       {
+        "type": "checkbox",
+        "id": "enable_tg_cart_drawer",
+        "label": "t:settings_schema.cart.settings.tg_cart_drawer.enable.label",
+        "info": "t:settings_schema.cart.settings.tg_cart_drawer.enable.info",
+        "default": false
+      },
+      {
+        "type": "number",
+        "id": "tg_cart_drawer_free_shipping_target",
+        "label": "t:settings_schema.cart.settings.tg_cart_drawer.target.label",
+        "info": "t:settings_schema.cart.settings.tg_cart_drawer.target.info",
+        "default": 75
+      },
+      {
+        "type": "text",
+        "id": "tg_cart_drawer_progress_message",
+        "label": "t:settings_schema.cart.settings.tg_cart_drawer.progress_message.label",
+        "default": "You're {{ amount }} away from free shipping"
+      },
+      {
+        "type": "text",
+        "id": "tg_cart_drawer_progress_complete_message",
+        "label": "t:settings_schema.cart.settings.tg_cart_drawer.progress_complete.label",
+        "default": "You've unlocked free shipping"
+      },
+      {
+        "type": "color",
+        "id": "tg_cart_drawer_progress_color",
+        "label": "t:settings_schema.cart.settings.tg_cart_drawer.progress_color.label",
+        "default": "#e5a400"
+      },
+      {
+        "type": "color",
+        "id": "tg_cart_drawer_progress_track_color",
+        "label": "t:settings_schema.cart.settings.tg_cart_drawer.progress_track.label",
+        "default": "#ececec"
+      },
+      {
         "type": "header",
         "content": "t:settings_schema.cart.settings.cart_drawer.header"
       },

@@ -5,6 +5,9 @@
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
 {{ 'component-discounts.css' | asset_url | stylesheet_tag }}
 {{ 'quantity-popover.css' | asset_url | stylesheet_tag }}
+{% if section.settings.enable_tg_cart_page_style %}
+  {{ 'tg-cart-page.css' | asset_url | stylesheet_tag }}
+{% endif %}
 
 {%- style -%}
   .section-{{ section.id }}-padding {
@@ -27,10 +30,16 @@
 <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
 
 <cart-items
-  class="gradient color-{{ section.settings.color_scheme }} isolate{% if cart == empty %} is-empty{% else %} section-{{ section.id }}-padding{% endif %}"
+  class="gradient color-{{ section.settings.color_scheme }} isolate{% if section.settings.enable_tg_cart_page_style %} tg-cart-page{% endif %}{% if cart == empty %} is-empty{% else %} section-{{ section.id }}-padding{% endif %}"
+  {% if section.settings.enable_tg_cart_page_style %}style="--tg_cart_page-accent: {{ section.settings.tg_cart_page_accent_color }}; --tg_cart_page-surface: {{ section.settings.tg_cart_page_surface_color }};"{% endif %}
   view-event-payload="{{ cart | standard_event_data: 'view', context: 'page' | escape }}"
 >
   <div class="page-width">
+    {% if section.settings.enable_tg_cart_page_style and section.settings.announcement_text != blank %}
+      <div class="tg-cart-page__announcement" role="status">
+        {{ section.settings.announcement_text | escape }}
+      </div>
+    {% endif %}
     <div class="title-wrapper-with-link">
       <h1 class="title title--primary">{{ 'sections.cart.title' | t }}</h1>
       <a href="{{ routes.all_products_collection_url }}" class="underlined-link">
@@ -39,7 +48,16 @@
     </div>
 
     <div class="cart__warnings">
-      <h1 class="cart__empty-text">{{ 'sections.cart.empty' | t }}</h1>
+      <h1 class="cart__empty-text">
+        {% if section.settings.enable_tg_cart_page_style and section.settings.empty_heading != blank %}
+          {{ section.settings.empty_heading | escape }}
+        {% else %}
+          {{ 'sections.cart.empty' | t }}
+        {% endif %}
+      </h1>
+      {% if section.settings.enable_tg_cart_page_style and section.settings.empty_text != blank %}
+        <p class="tg-cart-page__empty-text">{{ section.settings.empty_text | escape }}</p>
+      {% endif %}
       <a href="{{ routes.all_products_collection_url }}" class="button">
         {{ 'general.continue_shopping' | t }}
       </a>
@@ -474,6 +492,43 @@
   "name": "t:sections.main-cart-items.name",
   "class": "cuszoo-cart-items-section",
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_tg_cart_page_style",
+      "label": "t:sections.main-cart-items.tg_cart_page.enable.label",
+      "info": "t:sections.main-cart-items.tg_cart_page.enable.info",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "t:sections.main-cart-items.tg_cart_page.announcement.label",
+      "default": "Free shipping on orders over $75"
+    },
+    {
+      "type": "text",
+      "id": "empty_heading",
+      "label": "t:sections.main-cart-items.tg_cart_page.empty_heading.label",
+      "default": "Your cart is empty"
+    },
+    {
+      "type": "textarea",
+      "id": "empty_text",
+      "label": "t:sections.main-cart-items.tg_cart_page.empty_text.label",
+      "default": "Find something personal for someone special."
+    },
+    {
+      "type": "color",
+      "id": "tg_cart_page_accent_color",
+      "label": "t:sections.main-cart-items.tg_cart_page.accent.label",
+      "default": "#f4a62a"
+    },
+    {
+      "type": "color",
+      "id": "tg_cart_page_surface_color",
+      "label": "t:sections.main-cart-items.tg_cart_page.surface.label",
+      "default": "#fffaf2"
+    },
     {
       "type": "color_scheme",
       "id": "color_scheme",

@@ -1,0 +1,63 @@
+{{ 'tg-sections.css' | asset_url | stylesheet_tag }}
+{% assign faq_alt = section.settings.image_alt | default: 'FAQ carousel image' %}
+<script src="{{ 'tg-sections.js' | asset_url }}" defer="defer"></script>
+<section class="section tg-section tg-faq-section" style="--tg-background: {{ section.settings.background }}; --tg-text: {{ section.settings.text_color }}; --tg-muted: {{ section.settings.muted_color }}; --tg-border: {{ section.settings.border_color }};" data-tg-faq {{ section.shopify_attributes }}>
+  <div class="section__color-wrapper section--padding">
+    <div class="faq-two-column-container">
+      <div class="faq-two-column-wrapper">
+        {% if section.settings.heading != blank %}
+          <h2 class="faq-carousel__title faq-carousel__title--desktop">{{ section.settings.heading }}</h2>
+        {% endif %}
+
+        <div class="faq-two-column">
+          <div class="faq-left-column">
+            <div class="faq-carousel" data-carousel>
+              <div class="faq-carousel__container" data-carousel-container>
+                <div class="faq-carousel__slide">
+                  {% if section.settings.image != blank %}
+                    {{ section.settings.image | image_url: width: 1200 | image_tag: widths: '500, 800, 1200', loading: 'lazy', alt: faq_alt }}
+                  {% else %}
+                    {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-questions" itemscope itemtype="https://schema.org/FAQPage">
+            {% if section.settings.heading != blank %}
+              <h2 class="faq-carousel__title faq-carousel__title--mobile">{{ section.settings.heading }}</h2>
+            {% endif %}
+
+            {% for block in section.blocks %}
+              {% assign faq_is_open = false %}
+              {% if section.settings.open_item == forloop.index %}
+                {% assign faq_is_open = true %}
+              {% endif %}
+              {% assign faq_answer_id = 'faq-answer-' | append: section.id | append: '-' | append: block.id %}
+              <div class="faq-question-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" {{ block.shopify_attributes }}>
+                <button class="faq-question-toggle" type="button" aria-expanded="{{ faq_is_open }}" aria-controls="{{ faq_answer_id }}" itemprop="name">
+                  <span>{{ block.settings.question | escape }}</span>
+                  <span class="faq-question-icon-wrapper">
+                    <svg role="presentation" focusable="false" width="14" height="14" class="faq-question-icon" viewBox="0 0 14 14" aria-hidden="true">
+                      <path class="icon-horizontal" d="M1 7h12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                      <path class="icon-vertical" d="M7 1v12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                    </svg>
+                  </span>
+                </button>
+                <div id="{{ faq_answer_id }}" class="faq-question-content{% if faq_is_open %} active{% endif %}" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer"{% unless faq_is_open %} hidden{% endunless %}>
+                  <div class="faq-question-answer" itemprop="text">
+                    <p>{{ block.settings.answer | escape | newline_to_br }}</p>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% schema %}
+{"name":"t:tg.sections.faq.name","tag":"section","class":"section","settings":[{"type":"image_picker","id":"image","label":"t:tg.settings.image"},{"type":"text","id":"image_alt","label":"t:tg.settings.alt"},{"type":"inline_richtext","id":"heading","label":"t:tg.settings.heading","default":"FAQ"},{"type":"range","id":"open_item","label":"t:tg.settings.default_open_item","info":"0 keeps all questions closed.","min":0,"max":12,"step":1,"default":1},{"type":"color","id":"background","label":"t:tg.settings.background","default":"#ffffff"},{"type":"color","id":"text_color","label":"t:tg.settings.text_color","default":"#000000"},{"type":"color","id":"muted_color","label":"t:tg.settings.muted_color","default":"#000000"},{"type":"color","id":"border_color","label":"t:tg.settings.border_color","default":"#dedede"},{"type":"range","id":"padding_top","label":"t:tg.settings.padding_top","min":0,"max":160,"step":4,"unit":"px","default":80},{"type":"range","id":"padding_bottom","label":"t:tg.settings.padding_bottom","min":0,"max":160,"step":4,"unit":"px","default":80}],"blocks":[{"type":"faq","name":"t:tg.blocks.faq.name","settings":[{"type":"text","id":"question","label":"t:tg.settings.question","default":"Is customization free?"},{"type":"textarea","id":"t:tg.settings.answer","label":"t:tg.settings.answer","default":"Yes, all personalized customizations are included in the product price."}]}],"max_blocks":12,"presets":[{"name":"t:tg.sections.faq.name","blocks":[{"type":"faq"},{"type":"faq"},{"type":"faq"}]}]}
+{% endschema %}

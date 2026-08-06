@@ -1,0 +1,188 @@
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'tg-sections.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'tg-sections.js' | asset_url }}" defer="defer"></script>
+
+{%- assign tab_style = section.settings.tab_style | default: 'pills' -%}
+
+<section
+  class="tg-section tg-section--tabbed-collections{% if tab_style == 'tabs_nav' %} tg-tabs--tabs-nav{% endif %}"
+  style="--tg-background: {{ section.settings.background }}; --tg-text: {{ section.settings.text_color }}; --tg-accent: {{ section.settings.accent_color }}; --tg-tabs-underline-color: {{ section.settings.underline_color | default: section.settings.accent_color }}; --tg-button-text: {{ section.settings.button_text_color }}; --tg-columns: {{ section.settings.columns_desktop }}; padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;"
+  {{ section.shopify_attributes }}
+>
+  <tg-tabs class="tg-page-width tg-tabs" data-tab-style="{{ tab_style }}">
+    <header class="tg-tabs__header">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="tg-heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subheading != blank -%}
+        <p class="tg-subheading">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+    </header>
+
+    {%- if tab_style == 'tabs_nav' -%}
+      <tabs-nav class="tabs-nav tabs-nav--center tabs-nav--edge2edge" role="tablist" aria-label="{{ section.settings.heading | escape }}">
+        <scrollable-content class="tabs-nav__scroller">
+          <div class="tabs-nav__scroller-inner">
+            <div class="tabs-nav__item-list">
+              {%- for block in section.blocks -%}
+                {%- assign label = block.settings.label | default: block.settings.collection.title | default: 'Collection' -%}
+                <button
+                  class="tabs-nav__item heading heading--small"
+                  id="TgTab-{{ section.id }}-{{ forloop.index }}"
+                  type="button"
+                  role="tab"
+                  aria-controls="TgPanel-{{ section.id }}-{{ forloop.index }}"
+                  aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                  aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
+                  tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
+                  {{ block.shopify_attributes }}
+                >
+                  {{ label | escape }}
+                </button>
+              {%- endfor -%}
+            </div>
+            <span class="tabs-nav__position" aria-hidden="true"></span>
+          </div>
+        </scrollable-content>
+      </tabs-nav>
+    {%- else -%}
+      <div class="tg-tabs__list" role="tablist" aria-label="{{ section.settings.heading | escape }}">
+        {%- for block in section.blocks -%}
+          {%- assign label = block.settings.label | default: block.settings.collection.title | default: 'Collection' -%}
+          <button
+            class="tg-tabs__tab"
+            id="TgTab-{{ section.id }}-{{ forloop.index }}"
+            type="button"
+            role="tab"
+            aria-controls="TgPanel-{{ section.id }}-{{ forloop.index }}"
+            aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+            tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
+            {{ block.shopify_attributes }}
+          >
+            {{ label | escape }}
+          </button>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- for block in section.blocks -%}
+      {%- assign tab_collection = block.settings.collection -%}
+      {%- assign panel_class = 'tg-tabs__panel' -%}
+      {%- if tab_style == 'tabs_nav' -%}
+        {%- assign panel_class = panel_class | append: ' product-list product-list--center' -%}
+      {%- endif -%}
+      {%- if tab_style == 'tabs_nav' -%}
+        <product-list
+          class="{{ panel_class }}"
+          id="TgPanel-{{ section.id }}-{{ forloop.index }}"
+          role="tabpanel"
+          aria-labelledby="TgTab-{{ section.id }}-{{ forloop.index }}"
+          {% unless forloop.first %}hidden{% endunless %}
+        >
+      {%- else -%}
+        <div
+          class="{{ panel_class }}"
+          id="TgPanel-{{ section.id }}-{{ forloop.index }}"
+          role="tabpanel"
+          aria-labelledby="TgTab-{{ section.id }}-{{ forloop.index }}"
+          {% unless forloop.first %}hidden{% endunless %}
+        >
+      {%- endif -%}
+        {%- if tab_style == 'tabs_nav' -%}<div class="product-list__inner">{%- endif -%}
+        <ul class="tg-product-grid" role="list">
+          {%- if tab_collection != blank -%}
+            {%- for product in tab_collection.products limit: section.settings.products_to_show -%}
+              <li>
+                {% render 'card-product',
+                  card_product: product,
+                  media_aspect_ratio: section.settings.image_ratio,
+                  image_shape: 'default',
+                  show_secondary_image: section.settings.show_secondary_image,
+                  show_rating: section.settings.show_rating,
+                  lazy_load: true,
+                  section_id: block.id,
+                  quick_add: 'none',
+                  product_view_context: 'collection'
+                %}
+              </li>
+            {%- endfor -%}
+          {%- endif -%}
+        </ul>
+        {%- if section.settings.show_view_all and tab_collection != blank -%}
+          <div class="tg-tabs__footer">
+            <a class="tg-button" href="{{ tab_collection.url }}">{{ section.settings.button_label | escape }}</a>
+          </div>
+        {%- endif -%}
+        {%- if tab_style == 'tabs_nav' -%}</div>{%- endif -%}
+      {%- if tab_style == 'tabs_nav' -%}</product-list>{%- else -%}</div>{%- endif -%}
+    {%- endfor -%}
+  </tg-tabs>
+</section>
+
+{% schema %}
+{
+  "name": "t:tg.sections.tabs.name",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "inline_richtext", "id": "heading", "label": "t:tg.settings.heading", "default": "A Gift Only You Can Give" },
+    { "type": "text", "id": "subheading", "label": "t:tg.settings.subheading" },
+    {
+      "type": "select",
+      "id": "tab_style",
+      "label": "t:tg.settings.tab_style",
+      "options": [
+        { "value": "pills", "label": "t:tg.options.tab_style_pills" },
+        { "value": "tabs_nav", "label": "t:tg.options.tab_style_tabs_nav" }
+      ],
+      "default": "pills"
+    },
+    { "type": "range", "id": "products_to_show", "label": "t:tg.settings.products_to_show", "min": 2, "max": 12, "step": 1, "default": 8 },
+    { "type": "range", "id": "columns_desktop", "label": "t:tg.settings.desktop_columns", "min": 2, "max": 6, "step": 1, "default": 4 },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "t:tg.settings.image_ratio",
+      "options": [
+        { "value": "adapt", "label": "t:tg.options.adapt" },
+        { "value": "portrait", "label": "t:tg.options.portrait" },
+        { "value": "square", "label": "t:tg.options.square" }
+      ],
+      "default": "square"
+    },
+    { "type": "checkbox", "id": "show_secondary_image", "label": "t:tg.settings.show_secondary_image", "default": true },
+    { "type": "checkbox", "id": "show_rating", "label": "t:tg.settings.show_rating", "default": true },
+    { "type": "checkbox", "id": "show_view_all", "label": "t:tg.settings.show_view_all", "default": true },
+    { "type": "text", "id": "button_label", "label": "t:tg.settings.button_label", "default": "View more" },
+    { "type": "color", "id": "background", "label": "t:tg.settings.background", "default": "#fffaf1" },
+    { "type": "color", "id": "text_color", "label": "t:tg.settings.text_color", "default": "#18181e" },
+    { "type": "color", "id": "accent_color", "label": "t:tg.settings.accent_color", "default": "#ffb700" },
+    { "type": "color", "id": "underline_color", "label": "下划线颜色", "default": "#ffb700" },
+    { "type": "color", "id": "button_text_color", "label": "t:tg.settings.button_text_color", "default": "#ffffff" },
+    { "type": "range", "id": "padding_top", "label": "t:tg.settings.padding_top", "min": 0, "max": 140, "step": 4, "unit": "px", "default": 72 },
+    { "type": "range", "id": "padding_bottom", "label": "t:tg.settings.padding_bottom", "min": 0, "max": 140, "step": 4, "unit": "px", "default": 48 }
+  ],
+  "blocks": [
+    {
+      "type": "collection_tab",
+      "name": "t:tg.blocks.collection_tab.name",
+      "settings": [
+        { "type": "text", "id": "label", "label": "t:tg.settings.tab_label", "default": "Best sellers" },
+        { "type": "collection", "id": "collection", "label": "t:tg.settings.collection" }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "t:tg.sections.tabs.name",
+      "blocks": [
+        { "type": "collection_tab" },
+        { "type": "collection_tab" },
+        { "type": "collection_tab" }
+      ]
+    }
+  ]
+}
+{% endschema %}

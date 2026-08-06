@@ -1,0 +1,71 @@
+{%- liquid
+  assign card_product = product
+  assign card_title = title
+  assign card_link = link
+  assign card_image = image
+  assign card_secondary_image = secondary_image
+  assign card_badge = badge
+  assign card_price = price
+  assign card_compare_at_price = compare_at_price
+  assign card_reviews = reviews
+
+  if card_product != blank
+    if card_title == blank
+      assign card_title = card_product.title
+    endif
+    if card_link == blank
+      assign card_link = card_product.url
+    endif
+    if card_image == blank
+      assign card_image = card_product.featured_media
+    endif
+    if card_secondary_image == blank and card_product.media.size > 1
+      assign card_secondary_image = card_product.media[1]
+    endif
+    if card_badge == blank and card_product.compare_at_price > card_product.price
+      assign card_badge = 'Sale'
+    endif
+  endif
+
+  assign card_title = card_title | default: 'Product'
+  assign card_link = card_link | default: '#'
+-%}
+<li class="tg-featured-card-item" {{ shopify_attributes }}>
+  <article class="tg-featured-card">
+    <a class="tg-featured-card__media" href="{{ card_link }}" aria-label="{{ card_title | escape }}">
+      {%- if placeholder_image != blank -%}
+        {{ placeholder_image | placeholder_svg_tag: 'tg-featured-card__placeholder' }}
+      {%- elsif card_image != blank -%}
+        {{ card_image | image_url: width: 900 | image_tag: class: 'tg-featured-card__image tg-featured-card__image--primary', loading: 'lazy', alt: card_title }}
+        {%- if show_secondary_image and card_secondary_image != blank -%}
+          {{ card_secondary_image | image_url: width: 900 | image_tag: class: 'tg-featured-card__image tg-featured-card__image--secondary', loading: 'lazy', alt: card_title }}
+        {%- endif -%}
+      {%- else -%}
+        {{ 'product-apparel-1' | placeholder_svg_tag: 'tg-featured-card__placeholder' }}
+      {%- endif -%}
+      {%- if show_badge and card_badge != blank -%}
+        <span class="tg-featured-card__badge">{{ card_badge | escape }}</span>
+      {%- endif -%}
+    </a>
+    <div class="tg-featured-card__meta">
+      <a class="tg-featured-card__title" href="{{ card_link }}">{{ card_title | escape }}</a>
+      {%- if show_rating and card_reviews != blank -%}
+        <div class="tg-featured-card__reviews"><span aria-hidden="true">★★★★★</span> {{ card_reviews | escape }}</div>
+      {%- endif -%}
+      <div class="tg-featured-card__price">
+        <span>
+          {%- if card_price != blank -%}
+            {{ card_price | escape }}
+          {%- elsif card_product != blank -%}
+            {{ card_product.price | money }}
+          {%- endif -%}
+        </span>
+        {%- if card_compare_at_price != blank -%}
+          <del>{{ card_compare_at_price | escape }}</del>
+        {%- elsif card_product != blank and card_product.compare_at_price > card_product.price -%}
+          <del>{{ card_product.compare_at_price | money }}</del>
+        {%- endif -%}
+      </div>
+    </div>
+  </article>
+</li>

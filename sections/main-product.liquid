@@ -1,6 +1,6 @@
 <product-info
   id="MainProduct-{{ section.id }}"
-  class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}"
+  class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}{% if section.settings.enable_tg_product_style %} tg-product{% endif %}"
   data-section="{{ section.id }}"
   data-product-id="{{ product.id }}"
   data-update-url="true"
@@ -10,6 +10,7 @@
   {% endif %}
 >
   {{ 'section-main-product.css' | asset_url | stylesheet_tag }}
+  {{ 'tg-product.css' | asset_url | stylesheet_tag }}
   {{ 'cuszoo-product.css' | asset_url | stylesheet_tag }}
   {{ 'cuszoo-experience.css' | asset_url | stylesheet_tag }}
   {{ 'component-accordion.css' | asset_url | stylesheet_tag }}
@@ -43,6 +44,7 @@
 
   <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'tg-product.js' | asset_url }}" defer="defer"></script>
   {%- if product.quantity_price_breaks_configured? -%}
     <script src="{{ 'show-more.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
@@ -261,6 +263,59 @@
                       </ul>
                     {%- endif -%}
                   </div>
+                {%- when 'tg_product_personalize' -%}
+                  <fieldset class="tg-product__personalization" {{ block.shopify_attributes }}>
+                    {%- if block.settings.heading != blank -%}
+                      <legend>{{ block.settings.heading | escape }}</legend>
+                    {%- endif -%}
+                    {%- if block.settings.description != blank -%}
+                      <p>{{ block.settings.description | escape }}</p>
+                    {%- endif -%}
+                    {%- liquid
+                      assign property_name = block.settings.property_name | default: block.settings.label
+                      assign property_id = 'TgProductProperty-' | append: block.id | append: '-' | append: section.id
+                    -%}
+                    <label for="{{ property_id }}">{{ block.settings.label | escape }}{% if block.settings.required %}<span aria-hidden="true">*</span>{% endif %}</label>
+                    {%- if block.settings.field_type == 'select' -%}
+                      <select id="{{ property_id }}" name="properties[{{ property_name | escape }}]" form="{{ product_form_id }}" {% if block.settings.required %}required{% endif %}>
+                        {%- if block.settings.placeholder != blank -%}<option value="">{{ block.settings.placeholder | escape }}</option>{%- endif -%}
+                        {%- assign choices = block.settings.choices | split: '|' -%}
+                        {%- for choice in choices -%}
+                          {%- assign choice_value = choice | strip -%}
+                          {%- if choice_value != blank -%}<option value="{{ choice_value | escape }}">{{ choice_value | escape }}</option>{%- endif -%}
+                        {%- endfor -%}
+                      </select>
+                    {%- else -%}
+                      <input id="{{ property_id }}" type="text" name="properties[{{ property_name | escape }}]" form="{{ product_form_id }}" placeholder="{{ block.settings.placeholder | escape }}" maxlength="{{ block.settings.max_length }}" {% if block.settings.required %}required{% endif %}>
+                    {%- endif -%}
+                    {%- if block.settings.help_text != blank -%}<small>{{ block.settings.help_text | escape }}</small>{%- endif -%}
+                  </fieldset>
+                {%- when 'tg_product_addon' -%}
+                  {%- assign addon_product = block.settings.product -%}
+                  {%- if addon_product != blank and addon_product.selected_or_first_available_variant != blank -%}
+                    {%- assign addon_variant_id = block.settings.variant_id | default: addon_product.selected_or_first_available_variant.id -%}
+                    <div
+                      class="tg-product__addon"
+                      data-tg-addon
+                      data-variant-id="{{ addon_variant_id }}"
+                      data-title="{{ addon_product.title | escape }}"
+                      data-error-message="{{ block.settings.error_message | escape }}"
+                      {{ block.shopify_attributes }}
+                    >
+                      {%- if block.settings.heading != blank -%}<strong>{{ block.settings.heading | escape }}</strong>{%- endif -%}
+                      <label>
+                        <input type="checkbox" data-tg-addon-toggle {% unless addon_product.selected_or_first_available_variant.available %}disabled{% endunless %}>
+                        {%- if addon_product.featured_image != blank -%}
+                          {{ addon_product.featured_image | image_url: width: 160 | image_tag: widths: '80, 120, 160', sizes: '72px', loading: 'lazy', alt: addon_product.title }}
+                        {%- endif -%}
+                        <span>
+                          <b>{{ addon_product.title | escape }}</b>
+                          <span>{{ addon_product.selected_or_first_available_variant.price | money }}</span>
+                          {%- if block.settings.description != blank -%}<small>{{ block.settings.description | escape }}</small>{%- endif -%}
+                        </span>
+                      </label>
+                    </div>
+                  {%- endif -%}
                 {%- when 'description' -%}
                   {%- if product.description != blank -%}
                     <div class="product__description rte quick-add-hidden" {{ block.shopify_attributes }}>
@@ -998,6 +1053,42 @@
           "info": "Each item shows with a checkmark. Separate items with a vertical bar.",
           "default": "Free shipping over $59 | 30-day money-back | Secure checkout"
         }
+      ]
+    },
+    {
+      "type": "tg_product_personalize",
+      "name": "t:sections.tg_product.personalization.name",
+      "settings": [
+        { "type": "text", "id": "heading", "default": "Personalize your item", "label": "t:sections.tg_product.personalization.heading.label" },
+        { "type": "text", "id": "description", "label": "t:sections.tg_product.personalization.description.label" },
+        { "type": "text", "id": "label", "default": "Enter name", "label": "t:sections.tg_product.personalization.label.label" },
+        { "type": "text", "id": "property_name", "label": "t:sections.tg_product.personalization.property_name.label", "info": "t:sections.tg_product.personalization.property_name.info" },
+        {
+          "type": "select",
+          "id": "field_type",
+          "default": "text",
+          "label": "t:sections.tg_product.personalization.field_type.label",
+          "options": [
+            { "value": "text", "label": "t:sections.tg_product.personalization.field_type.options.text" },
+            { "value": "select", "label": "t:sections.tg_product.personalization.field_type.options.select" }
+          ]
+        },
+        { "type": "textarea", "id": "choices", "label": "t:sections.tg_product.personalization.choices.label", "info": "t:sections.tg_product.personalization.choices.info" },
+        { "type": "text", "id": "placeholder", "label": "t:sections.tg_product.personalization.placeholder.label" },
+        { "type": "range", "id": "max_length", "min": 1, "max": 100, "step": 1, "default": 12, "label": "t:sections.tg_product.personalization.max_length.label" },
+        { "type": "checkbox", "id": "required", "default": false, "label": "t:sections.tg_product.personalization.required.label" },
+        { "type": "text", "id": "help_text", "label": "t:sections.tg_product.personalization.help_text.label" }
+      ]
+    },
+    {
+      "type": "tg_product_addon",
+      "name": "t:sections.tg_product.addon.name",
+      "settings": [
+        { "type": "text", "id": "heading", "default": "Add-on combo service", "label": "t:sections.tg_product.addon.heading.label" },
+        { "type": "product", "id": "product", "label": "t:sections.tg_product.addon.product.label", "info": "t:sections.tg_product.addon.product.info" },
+        { "type": "text", "id": "variant_id", "label": "t:sections.tg_product.addon.variant_id.label", "info": "t:sections.tg_product.addon.variant_id.info" },
+        { "type": "text", "id": "description", "label": "t:sections.tg_product.addon.description.label" },
+        { "type": "text", "id": "error_message", "default": "The add-on could not be added. Please try again.", "label": "t:sections.tg_product.addon.error_message.label" }
       ]
     },
     {
@@ -2384,6 +2475,17 @@
     }
   ],
   "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.tg_product.appearance.heading"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_tg_product_style",
+      "default": false,
+      "label": "t:sections.tg_product.appearance.enable.label",
+      "info": "t:sections.tg_product.appearance.enable.info"
+    },
     {
       "type": "checkbox",
       "id": "show_breadcrumbs",

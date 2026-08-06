@@ -1,10 +1,14 @@
 <link rel="stylesheet" href="{{ 'component-list-menu.css' | asset_url }}" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="{{ 'component-search.css' | asset_url }}" media="print" onload="this.media='all'">
-{%- if section.settings.enable_pawfecthouse_mobile_menu -%}
+{%- if section.settings.enable_tg_header_mobile_menu -%}
   {{- 'component-menu-drawer.css' | asset_url | stylesheet_tag -}}
-  {{- 'component-pawfecthouse-mobile-drawer.css' | asset_url | stylesheet_tag -}}
+  {{- 'tg-header-mobile-menu.css' | asset_url | stylesheet_tag -}}
 {%- else -%}
   <link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
+{%- endif -%}
+{%- if section.settings.enable_tg_header_desktop -%}
+  {{- 'tg-header-desktop.css' | asset_url | stylesheet_tag -}}
+  <script src="{{ 'tg-header-desktop.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 <link
   rel="stylesheet"
@@ -141,14 +145,201 @@
       assign localization_forms = true
     endif
   -%}
-  <header class="header header--{{ section.settings.logo_position }} header--mobile-{{ section.settings.mobile_logo_position }} page-width{% if section.settings.menu_type_desktop == 'drawer' %} drawer-menu{% endif %}{% if section.settings.menu != blank %} header--has-menu{% endif %}{% if has_app_block %} header--has-app{% endif %}{% if social_links %} header--has-social{% endif %}{% if shop.customer_accounts_enabled %} header--has-account{% endif %}{% if localization_forms %} header--has-localizations{% endif %}">
+  {%- if section.settings.enable_tg_header_desktop -%}
     {%- liquid
-      if section.settings.enable_pawfecthouse_mobile_menu
-        render 'pawfecthouse-mobile-drawer'
+    assign tg_header_desktop_menu = section.settings.menu
+    assign tg_header_desktop_feature_count = 0
+    for block in section.blocks
+      if block.type == 'tg_header_desktop_feature'
+        assign tg_header_desktop_feature_count = tg_header_desktop_feature_count | plus: 1
+      endif
+    endfor
+    -%}
+    <tg-header-desktop
+      class="tg-header-desktop"
+      data-announcement-key="tg-desktop-announcement-{{ section.id }}"
+      data-announcement-dismissible="{{ section.settings.tg_header_desktop_announcement_dismissible }}"
+      style="
+        --tg-header-desktop-announcement-background: {{ section.settings.tg_header_desktop_announcement_background }};
+        --tg-header-desktop-announcement-text: {{ section.settings.tg_header_desktop_announcement_text }};
+        --tg-header-desktop-background: {{ section.settings.tg_header_desktop_background }};
+        --tg-header-desktop-text: {{ section.settings.tg_header_desktop_text }};
+        --tg-header-desktop-hover: {{ section.settings.tg_header_desktop_hover }};
+        --tg-header-desktop-border: {{ section.settings.tg_header_desktop_border }};
+        --tg-header-desktop-badge-background: {{ section.settings.tg_header_desktop_badge_background }};
+        --tg-header-desktop-badge-text: {{ section.settings.tg_header_desktop_badge_text }};
+        --tg-header-desktop-max-width: {{ section.settings.tg_header_desktop_max_width }}px;
+        --tg-header-desktop-logo-width: {{ section.settings.tg_header_desktop_logo_width }}px;
+        --tg-header-desktop-nav-gap: {{ section.settings.tg_header_desktop_nav_gap }}px;
+        --tg-header-desktop-nav-height: {{ section.settings.tg_header_desktop_nav_height }}px;
+        --tg-header-desktop-border-width: {{ section.settings.tg_header_desktop_border_width }}px;
+      "
+    >
+      {%- if section.settings.tg_header_desktop_show_announcement -%}
+        <div class="tg-header-desktop__announcement" data-tg-announcement>
+          <div class="tg-header-desktop__announcement-inner">
+            <p>{{ section.settings.tg_header_desktop_announcement_text_content | escape }}</p>
+            {%- if section.settings.tg_header_desktop_announcement_dismissible -%}
+              <button
+                class="tg-header-desktop__announcement-close focus-inset"
+                type="button"
+                data-tg-announcement-close
+                aria-label="{{ section.settings.tg_header_desktop_announcement_close_label | escape }}"
+              >
+                <span class="svg-wrapper" aria-hidden="true">{{- 'icon-close.svg' | inline_asset_content -}}</span>
+              </button>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      <nav class="tg-header-desktop__nav" aria-label="{{ 'sections.header.tg_header_desktop.navigation_label' | t }}">
+        <div class="tg-header-desktop__inner">
+          <a href="{{ routes.root_url }}" class="tg-header-desktop__logo focus-inset" aria-label="{{ shop.name | escape }}">
+            {%- if section.settings.tg_header_desktop_logo != blank -%}
+              {{
+                section.settings.tg_header_desktop_logo
+                | image_url: width: 480
+                | image_tag:
+                  widths: '120, 180, 240, 360, 480',
+                  sizes: 'var(--tg-header-desktop-logo-width)',
+                  preload: true,
+                  alt: section.settings.tg_header_desktop_logo.alt | default: shop.name
+              }}
+            {%- elsif settings.logo != blank -%}
+              {{
+                settings.logo
+                | image_url: width: 480
+                | image_tag:
+                  widths: '120, 180, 240, 360, 480',
+                  sizes: 'var(--tg-header-desktop-logo-width)',
+                  preload: true,
+                  alt: settings.logo.alt | default: shop.name
+              }}
+            {%- else -%}
+              <span>{{ section.settings.tg_header_desktop_logo_text | escape }}</span>
+            {%- endif -%}
+          </a>
+
+          <div class="tg-header-desktop__links" role="list">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'tg_header_desktop_feature' and block.settings.link != blank -%}
+                <a href="{{ block.settings.link }}" class="tg-header-desktop__link tg-header-desktop__link--feature focus-inset" {{ block.shopify_attributes }}>
+                  {%- if block.settings.image != blank -%}
+                    {{ block.settings.image | image_url: width: 72 | image_tag: widths: '36, 54, 72', sizes: '18px', loading: 'lazy', alt: '' }}
+                  {%- elsif block.settings.icon_asset == 'back_to_school' -%}
+                    <img src="{{ 'tg-menu-icon-back-to-school.svg' | asset_url }}" width="18" height="18" loading="lazy" alt="">
+                  {%- else -%}
+                    <img src="{{ 'tg-menu-icon-summer.svg' | asset_url }}" width="18" height="18" loading="lazy" alt="">
+                  {%- endif -%}
+                  <span>{{ block.settings.title | escape }}</span>
+                </a>
+              {%- endif -%}
+            {%- endfor -%}
+            {%- if tg_header_desktop_feature_count == 0 -%}
+              {%- for block in section.blocks -%}
+                {%- if block.type == 'mobile_feature_card' and block.settings.link != blank -%}
+                  <a href="{{ block.settings.link }}" class="tg-header-desktop__link tg-header-desktop__link--feature focus-inset">
+                    {%- if block.settings.image != blank -%}
+                      {{ block.settings.image | image_url: width: 72 | image_tag: widths: '36, 54, 72', sizes: '18px', loading: 'lazy', alt: '' }}
+                    {%- else -%}
+                      <img src="{{ block.settings.icon_asset | asset_url }}" width="18" height="18" loading="lazy" alt="">
+                    {%- endif -%}
+                    <span>{{ block.settings.title | escape }}</span>
+                  </a>
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
+            {%- for link in tg_header_desktop_menu.links -%}
+              <a
+                href="{{ link.url }}"
+                class="tg-header-desktop__link focus-inset{% if link.current %} tg-header-desktop__link--active{% endif %}"
+                {% if link.current %}aria-current="page"{% endif %}
+              >
+                <span>{{ link.title | escape }}</span>
+              </a>
+            {%- endfor -%}
+          </div>
+
+          {%- if section.settings.tg_header_desktop_show_utility_links or section.settings.tg_header_desktop_show_social_links -%}
+            <div class="tg-header-desktop__extras">
+              {%- if section.settings.tg_header_desktop_show_utility_links -%}
+                <div class="tg-header-desktop__utilities">
+                  {%- for block in section.blocks -%}
+                    {%- if block.type == 'tg_header_desktop_utility' and block.settings.link != blank -%}
+                      <a href="{{ block.settings.link }}" class="tg-header-desktop__utility focus-inset" {{ block.shopify_attributes }}>{{ block.settings.title | escape }}</a>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+              {%- if section.settings.tg_header_desktop_show_social_links -%}
+                <div class="tg-header-desktop__social" role="list">
+                  {%- for block in section.blocks -%}
+                    {%- if block.type == 'tg_header_desktop_social' and block.settings.link != blank -%}
+                      {%- liquid
+                        assign desktop_social_icon = 'tg-icon-facebook.svg'
+                        assign desktop_social_label = block.settings.platform | capitalize
+                        case block.settings.platform
+                          when 'youtube'
+                            assign desktop_social_icon = 'tg-icon-youtube.svg'
+                            assign desktop_social_label = 'YouTube'
+                          when 'instagram'
+                            assign desktop_social_icon = 'tg-icon-instagram.svg'
+                            assign desktop_social_label = 'Instagram'
+                          when 'tiktok'
+                            assign desktop_social_icon = 'tg-icon-tiktok.svg'
+                            assign desktop_social_label = 'TikTok'
+                          when 'twitter'
+                            assign desktop_social_icon = 'icon-twitter.svg'
+                            assign desktop_social_label = 'X / Twitter'
+                        endcase
+                        if block.settings.accessibility_label != blank
+                          assign desktop_social_label = block.settings.accessibility_label
+                        endif
+                      -%}
+                      <a href="{{ block.settings.link }}" target="_blank" rel="me noopener noreferrer" class="focus-inset" aria-label="{{ desktop_social_label | escape }}" {{ block.shopify_attributes }}>
+                        <span class="svg-wrapper" aria-hidden="true">{{- desktop_social_icon | inline_asset_content -}}</span>
+                      </a>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+
+          <div class="tg-header-desktop__actions">
+            {%- if section.settings.tg_header_desktop_show_search -%}
+              <button type="button" class="tg-header-desktop__action focus-inset" data-tg-search-open aria-label="{{ section.settings.tg_header_desktop_search_open_label | escape }}" aria-expanded="false">
+                <span class="svg-wrapper" aria-hidden="true">{{- 'icon-search.svg' | inline_asset_content -}}</span>
+              </button>
+              <form class="tg-header-desktop__search" action="{{ routes.search_url }}" method="get" role="search" data-tg-search-form hidden>
+                <label class="visually-hidden" for="TgHeaderDesktopSearch-{{ section.id }}">{{ section.settings.tg_header_desktop_search_label | escape }}</label>
+                <input id="TgHeaderDesktopSearch-{{ section.id }}" type="search" name="q" placeholder="{{ section.settings.tg_header_desktop_search_placeholder | escape }}" data-tg-search-input>
+                <input type="hidden" name="options[prefix]" value="last">
+                <button type="submit" class="tg-header-desktop__search-submit focus-inset" aria-label="{{ section.settings.tg_header_desktop_search_label | escape }}"><span class="svg-wrapper" aria-hidden="true">{{- 'icon-search.svg' | inline_asset_content -}}</span></button>
+                <button type="button" class="tg-header-desktop__search-close focus-inset" data-tg-search-close aria-label="{{ section.settings.tg_header_desktop_search_close_label | escape }}"><span class="svg-wrapper" aria-hidden="true">{{- 'icon-close.svg' | inline_asset_content -}}</span></button>
+              </form>
+            {%- endif -%}
+            {%- if section.settings.tg_header_desktop_show_cart -%}
+              <a href="{{ routes.cart_url }}" class="tg-header-desktop__action tg-header-desktop__cart focus-inset" aria-label="{{ section.settings.tg_header_desktop_cart_label | escape }}">
+                <span class="svg-wrapper" aria-hidden="true">{{- 'icon-cart.svg' | inline_asset_content -}}</span>
+                <span class="tg-header-desktop__cart-count" aria-hidden="true" data-tg-cart-count>{% if cart.item_count < 100 %}{{ cart.item_count }}{% endif %}</span>
+                <span class="visually-hidden" data-tg-cart-count-label>{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+      </nav>
+    </tg-header-desktop>
+  {%- endif -%}
+  <header class="header header--{{ section.settings.logo_position }} header--mobile-{{ section.settings.mobile_logo_position }} page-width{% if section.settings.menu_type_desktop == 'drawer' %} drawer-menu{% endif %}{% if section.settings.menu != blank %} header--has-menu{% endif %}{% if has_app_block %} header--has-app{% endif %}{% if social_links %} header--has-social{% endif %}{% if shop.customer_accounts_enabled %} header--has-account{% endif %}{% if localization_forms %} header--has-localizations{% endif %}{% if section.settings.enable_tg_header_desktop %} header--tg-desktop-enabled{% endif %}">
+    {%- liquid
+      if section.settings.enable_tg_header_mobile_menu
+        render 'tg-header-mobile-menu'
       endif
 
       if section.settings.menu != blank
-        if section.settings.enable_pawfecthouse_mobile_menu == false
+        if section.settings.enable_tg_header_mobile_menu == false
           render 'header-drawer'
         elsif section.settings.menu_type_desktop == 'drawer'
           render 'header-drawer', desktop_only: true
@@ -547,76 +738,296 @@
     },
     {
       "type": "header",
-      "content": "Pawfecthouse mobile menu"
+      "content": "t:sections.header.tg_header_mobile.heading"
     },
     {
       "type": "checkbox",
-      "id": "enable_pawfecthouse_mobile_menu",
+      "id": "enable_tg_header_mobile_menu",
       "default": false,
-      "label": "Enable Pawfecthouse mobile menu"
+      "label": "t:sections.header.tg_header_mobile.enable.label",
+      "info": "t:sections.header.tg_header_mobile.enable.info"
     },
     {
       "type": "text",
-      "id": "pawfecthouse_mobile_menu_title",
+      "id": "tg_header_mobile_menu_title",
       "default": "Menu",
-      "label": "Drawer title"
+      "label": "t:sections.header.tg_header_mobile.title.label"
     },
     {
       "type": "range",
-      "id": "pawfecthouse_mobile_menu_width",
+      "id": "tg_header_mobile_menu_width",
       "min": 75,
       "max": 100,
       "step": 1,
       "unit": "%",
       "default": 92,
-      "label": "Drawer width"
+      "label": "t:sections.header.tg_header_mobile.width.label"
     },
     {
       "type": "color",
-      "id": "pawfecthouse_mobile_menu_background",
+      "id": "tg_header_mobile_menu_background",
       "default": "#f6f6fb",
-      "label": "Drawer background"
+      "label": "t:sections.header.tg_header_mobile.background.label"
     },
     {
       "type": "color",
-      "id": "pawfecthouse_mobile_menu_surface",
+      "id": "tg_header_mobile_menu_surface",
       "default": "#ffffff",
-      "label": "Surface color"
+      "label": "t:sections.header.tg_header_mobile.surface.label"
     },
     {
       "type": "color",
-      "id": "pawfecthouse_mobile_menu_text",
+      "id": "tg_header_mobile_menu_text",
       "default": "#202024",
-      "label": "Text color"
+      "label": "t:sections.header.tg_header_mobile.text.label"
     },
     {
       "type": "color",
-      "id": "pawfecthouse_mobile_menu_accent",
+      "id": "tg_header_mobile_menu_accent",
       "default": "#0b8494",
-      "label": "Focus and hover color"
+      "label": "t:sections.header.tg_header_mobile.accent.label"
     },
     {
       "type": "color",
-      "id": "pawfecthouse_mobile_menu_divider",
+      "id": "tg_header_mobile_menu_divider",
       "default": "#eeeeff",
-      "label": "Divider color"
+      "label": "t:sections.header.tg_header_mobile.divider.label"
     },
     {
       "type": "checkbox",
-      "id": "pawfecthouse_mobile_menu_show_social",
+      "id": "tg_header_mobile_menu_show_social",
       "default": true,
-      "label": "Show social links",
-      "info": "Add Mobile social link blocks below to choose the profiles, links, labels, and order shown in the mobile menu."
+      "label": "t:sections.header.tg_header_mobile.show_social.label",
+      "info": "t:sections.header.tg_header_mobile.show_social.info"
     },
     {
       "type": "url",
       "id": "mobile_track_order_link",
-      "label": "Mobile track order link"
+      "label": "t:sections.header.tg_header_mobile.track_order.label"
     },
     {
       "type": "url",
       "id": "mobile_reviews_link",
-      "label": "Mobile reviews link"
+      "label": "t:sections.header.tg_header_mobile.reviews.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.header.tg_header_desktop.heading"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_tg_header_desktop",
+      "default": false,
+      "label": "t:sections.header.tg_header_desktop.enable.label",
+      "info": "t:sections.header.tg_header_desktop.enable.info"
+    },
+    {
+      "type": "image_picker",
+      "id": "tg_header_desktop_logo",
+      "label": "t:sections.header.tg_header_desktop.logo_image.label",
+      "info": "t:sections.header.tg_header_desktop.logo_image.info"
+    },
+    {
+      "type": "text",
+      "id": "tg_header_desktop_logo_text",
+      "default": "Pawfect House",
+      "label": "t:sections.header.tg_header_desktop.logo_text.label",
+      "info": "t:sections.header.tg_header_desktop.logo_text.info"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.header.tg_header_desktop.announcement.heading"
+    },
+    {
+      "type": "checkbox",
+      "id": "tg_header_desktop_show_announcement",
+      "default": true,
+      "label": "t:sections.header.tg_header_desktop.announcement.show.label"
+    },
+    {
+      "type": "text",
+      "id": "tg_header_desktop_announcement_text_content",
+      "default": "Save 10% on orders of 2+ with code: PH2",
+      "label": "t:sections.header.tg_header_desktop.announcement.text.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "tg_header_desktop_announcement_dismissible",
+      "default": true,
+      "label": "t:sections.header.tg_header_desktop.announcement.dismissible.label",
+      "info": "t:sections.header.tg_header_desktop.announcement.dismissible.info"
+    },
+    {
+      "type": "text",
+      "id": "tg_header_desktop_announcement_close_label",
+      "default": "Close announcement",
+      "label": "t:sections.header.tg_header_desktop.announcement.close_label.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.header.tg_header_desktop.actions.heading"
+    },
+    {
+      "type": "checkbox",
+      "id": "tg_header_desktop_show_search",
+      "default": true,
+      "label": "t:sections.header.tg_header_desktop.actions.show_search.label"
+    },
+    {
+      "type": "text",
+      "id": "tg_header_desktop_search_placeholder",
+      "default": "Search...",
+      "label": "t:sections.header.tg_header_desktop.actions.search_placeholder.label"
+    },
+    {
+      "type": "text",
+      "id": "tg_header_desktop_search_label",
+      "default": "Search",
+      "label": "t:sections.header.tg_header_desktop.actions.search_label.label"
+    },
+    {
+      "type": "text",
+      "id": "tg_header_desktop_search_open_label",
+      "default": "Open search",
+      "label": "t:sections.header.tg_header_desktop.actions.search_open_label.label"
+    },
+    {
+      "type": "text",
+      "id": "tg_header_desktop_search_close_label",
+      "default": "Close search",
+      "label": "t:sections.header.tg_header_desktop.actions.search_close_label.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "tg_header_desktop_show_cart",
+      "default": true,
+      "label": "t:sections.header.tg_header_desktop.actions.show_cart.label"
+    },
+    {
+      "type": "text",
+      "id": "tg_header_desktop_cart_label",
+      "default": "Shopping cart",
+      "label": "t:sections.header.tg_header_desktop.actions.cart_label.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.header.tg_header_desktop.extras.heading"
+    },
+    {
+      "type": "checkbox",
+      "id": "tg_header_desktop_show_utility_links",
+      "default": false,
+      "label": "t:sections.header.tg_header_desktop.extras.show_utility_links.label",
+      "info": "t:sections.header.tg_header_desktop.extras.show_utility_links.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "tg_header_desktop_show_social_links",
+      "default": false,
+      "label": "t:sections.header.tg_header_desktop.extras.show_social_links.label",
+      "info": "t:sections.header.tg_header_desktop.extras.show_social_links.info"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.header.tg_header_desktop.appearance.heading"
+    },
+    {
+      "type": "color",
+      "id": "tg_header_desktop_announcement_background",
+      "default": "#0b8494",
+      "label": "t:sections.header.tg_header_desktop.appearance.announcement_background.label"
+    },
+    {
+      "type": "color",
+      "id": "tg_header_desktop_announcement_text",
+      "default": "#ffffff",
+      "label": "t:sections.header.tg_header_desktop.appearance.announcement_text.label"
+    },
+    {
+      "type": "color",
+      "id": "tg_header_desktop_background",
+      "default": "#ffffff",
+      "label": "t:sections.header.tg_header_desktop.appearance.background.label"
+    },
+    {
+      "type": "color",
+      "id": "tg_header_desktop_text",
+      "default": "#202024",
+      "label": "t:sections.header.tg_header_desktop.appearance.text.label"
+    },
+    {
+      "type": "color",
+      "id": "tg_header_desktop_hover",
+      "default": "#0b8494",
+      "label": "t:sections.header.tg_header_desktop.appearance.hover.label"
+    },
+    {
+      "type": "color",
+      "id": "tg_header_desktop_border",
+      "default": "#eef0f0",
+      "label": "t:sections.header.tg_header_desktop.appearance.border.label"
+    },
+    {
+      "type": "color",
+      "id": "tg_header_desktop_badge_background",
+      "default": "#0b8494",
+      "label": "t:sections.header.tg_header_desktop.appearance.badge_background.label"
+    },
+    {
+      "type": "color",
+      "id": "tg_header_desktop_badge_text",
+      "default": "#ffffff",
+      "label": "t:sections.header.tg_header_desktop.appearance.badge_text.label"
+    },
+    {
+      "type": "range",
+      "id": "tg_header_desktop_max_width",
+      "min": 960,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "default": 1440,
+      "label": "t:sections.header.tg_header_desktop.appearance.max_width.label"
+    },
+    {
+      "type": "range",
+      "id": "tg_header_desktop_logo_width",
+      "min": 80,
+      "max": 260,
+      "step": 4,
+      "unit": "px",
+      "default": 132,
+      "label": "t:sections.header.tg_header_desktop.appearance.logo_width.label"
+    },
+    {
+      "type": "range",
+      "id": "tg_header_desktop_nav_gap",
+      "min": 4,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 16,
+      "label": "t:sections.header.tg_header_desktop.appearance.nav_gap.label"
+    },
+    {
+      "type": "range",
+      "id": "tg_header_desktop_nav_height",
+      "min": 48,
+      "max": 96,
+      "step": 2,
+      "unit": "px",
+      "default": 64,
+      "label": "t:sections.header.tg_header_desktop.appearance.nav_height.label"
+    },
+    {
+      "type": "range",
+      "id": "tg_header_desktop_border_width",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "default": 1,
+      "label": "t:sections.header.tg_header_desktop.appearance.border_width.label"
     },
     {
       "type": "select",
@@ -754,159 +1165,239 @@
     },
     {
       "type": "mobile_feature_card",
-      "name": "Mobile featured card",
+      "name": "t:sections.header.tg_header_mobile.blocks.featured.name",
       "settings": [
         {
           "type": "text",
           "id": "title",
           "default": "Featured",
-          "label": "Title"
+          "label": "t:sections.header.tg_header_mobile.blocks.featured.title"
         },
         {
           "type": "url",
           "id": "link",
-          "label": "Link"
+          "label": "t:sections.header.tg_header_mobile.blocks.featured.link"
         },
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Custom icon"
+          "label": "t:sections.header.tg_header_mobile.blocks.featured.image"
         },
         {
           "type": "select",
           "id": "icon_asset",
-          "label": "Built-in icon",
-          "default": "us-july-icon-summer.svg",
+          "label": "t:sections.header.tg_header_mobile.blocks.featured.icon",
+          "default": "tg-menu-icon-summer.svg",
           "options": [
-            { "value": "us-july-icon-summer.svg", "label": "Summer" },
-            { "value": "us-july-icon-b2c.svg", "label": "Back to school" },
-            { "value": "pfh_menu-icon-occasions.svg", "label": "Occasions" },
-            { "value": "pfh_menu-icon-interests.svg", "label": "Interests" },
-            { "value": "pfh_menu-icon-recipients.svg", "label": "Recipients" },
-            { "value": "pfh_menu-icon-home.svg", "label": "Home and living" },
-            { "value": "pfh_menu-icon-apparel.svg", "label": "Apparel" },
-            { "value": "pfh_menu-icon-accessories.svg", "label": "Accessories" },
-            { "value": "pfh_menu-icon-drinkware.svg", "label": "Drinkware" },
-            { "value": "pfh_menu-icon-outdoor.svg", "label": "Outdoor" }
+            { "value": "tg-menu-icon-summer.svg", "label": "t:sections.header.tg_header_mobile.blocks.featured.options.summer" },
+            { "value": "tg-menu-icon-back-to-school.svg", "label": "t:sections.header.tg_header_mobile.blocks.featured.options.back_to_school" },
+            { "value": "tg-menu-icon-occasions.svg", "label": "t:sections.header.tg_header_mobile.blocks.featured.options.occasions" },
+            { "value": "tg-menu-icon-interests.svg", "label": "t:sections.header.tg_header_mobile.blocks.featured.options.interests" },
+            { "value": "tg-menu-icon-recipients.svg", "label": "t:sections.header.tg_header_mobile.blocks.featured.options.recipients" },
+            { "value": "tg-menu-icon-home.svg", "label": "t:sections.header.tg_header_mobile.blocks.featured.options.home" },
+            { "value": "tg-menu-icon-apparel.svg", "label": "t:sections.header.tg_header_mobile.blocks.featured.options.apparel" },
+            { "value": "tg-menu-icon-accessories.svg", "label": "t:sections.header.tg_header_mobile.blocks.featured.options.accessories" },
+            { "value": "tg-menu-icon-drinkware.svg", "label": "t:sections.header.tg_header_mobile.blocks.featured.options.drinkware" },
+            { "value": "tg-menu-icon-outdoor.svg", "label": "t:sections.header.tg_header_mobile.blocks.featured.options.outdoor" }
           ]
         },
         {
           "type": "color",
           "id": "background_color",
           "default": "#b3e2f6",
-          "label": "Background"
+          "label": "t:sections.header.tg_header_mobile.blocks.featured.background"
         },
         {
           "type": "color",
           "id": "text_color",
           "default": "#062d8e",
-          "label": "Text"
+          "label": "t:sections.header.tg_header_mobile.blocks.featured.text"
         }
       ]
     },
     {
       "type": "mobile_menu_card",
-      "name": "Mobile menu card",
+      "name": "t:sections.header.tg_header_mobile.blocks.menu.name",
       "settings": [
         {
           "type": "text",
           "id": "title",
           "default": "Collection",
-          "label": "Title"
+          "label": "t:sections.header.tg_header_mobile.blocks.menu.title"
         },
         {
           "type": "url",
           "id": "link",
-          "label": "Link",
-          "info": "Used when no submenu is selected and as the View all link in a submenu."
+          "label": "t:sections.header.tg_header_mobile.blocks.menu.link",
+          "info": "t:sections.header.tg_header_mobile.blocks.menu.link_info"
         },
         {
           "type": "link_list",
           "id": "sub_menu",
-          "label": "Submenu"
+          "label": "t:sections.header.tg_header_mobile.blocks.menu.sub_menu"
         },
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Custom icon"
+          "label": "t:sections.header.tg_header_mobile.blocks.menu.image"
         },
         {
           "type": "select",
           "id": "icon_asset",
-          "label": "Built-in icon",
-          "default": "pfh_menu-icon-occasions.svg",
+          "label": "t:sections.header.tg_header_mobile.blocks.menu.icon",
+          "default": "tg-menu-icon-occasions.svg",
           "options": [
-            { "value": "pfh_menu-icon-occasions.svg", "label": "Occasions" },
-            { "value": "pfh_menu-icon-interests.svg", "label": "Interests" },
-            { "value": "pfh_menu-icon-recipients.svg", "label": "Recipients" },
-            { "value": "pfh_menu-icon-home.svg", "label": "Home and living" },
-            { "value": "pfh_menu-icon-apparel.svg", "label": "Apparel" },
-            { "value": "pfh_menu-icon-accessories.svg", "label": "Accessories" },
-            { "value": "pfh_menu-icon-drinkware.svg", "label": "Drinkware" },
-            { "value": "pfh_menu-icon-outdoor.svg", "label": "Outdoor" },
-            { "value": "us-july-icon-summer.svg", "label": "Summer" },
-            { "value": "us-july-icon-b2c.svg", "label": "Back to school" }
+            { "value": "tg-menu-icon-occasions.svg", "label": "t:sections.header.tg_header_mobile.blocks.menu.options.occasions" },
+            { "value": "tg-menu-icon-interests.svg", "label": "t:sections.header.tg_header_mobile.blocks.menu.options.interests" },
+            { "value": "tg-menu-icon-recipients.svg", "label": "t:sections.header.tg_header_mobile.blocks.menu.options.recipients" },
+            { "value": "tg-menu-icon-home.svg", "label": "t:sections.header.tg_header_mobile.blocks.menu.options.home" },
+            { "value": "tg-menu-icon-apparel.svg", "label": "t:sections.header.tg_header_mobile.blocks.menu.options.apparel" },
+            { "value": "tg-menu-icon-accessories.svg", "label": "t:sections.header.tg_header_mobile.blocks.menu.options.accessories" },
+            { "value": "tg-menu-icon-drinkware.svg", "label": "t:sections.header.tg_header_mobile.blocks.menu.options.drinkware" },
+            { "value": "tg-menu-icon-outdoor.svg", "label": "t:sections.header.tg_header_mobile.blocks.menu.options.outdoor" },
+            { "value": "tg-menu-icon-summer.svg", "label": "t:sections.header.tg_header_mobile.blocks.menu.options.summer" },
+            { "value": "tg-menu-icon-back-to-school.svg", "label": "t:sections.header.tg_header_mobile.blocks.menu.options.back_to_school" }
           ]
         },
         {
           "type": "color",
           "id": "background_color",
           "default": "#ffffff",
-          "label": "Background"
+          "label": "t:sections.header.tg_header_mobile.blocks.menu.background"
         },
         {
           "type": "color",
           "id": "text_color",
           "default": "#202024",
-          "label": "Text"
+          "label": "t:sections.header.tg_header_mobile.blocks.menu.text"
         }
       ]
     },
     {
       "type": "mobile_utility_link",
-      "name": "Mobile utility link",
+      "name": "t:sections.header.tg_header_mobile.blocks.utility.name",
       "settings": [
         {
           "type": "text",
           "id": "title",
           "default": "Track Order",
-          "label": "Title"
+          "label": "t:sections.header.tg_header_mobile.blocks.utility.title"
         },
         {
           "type": "url",
           "id": "link",
-          "label": "Link"
+          "label": "t:sections.header.tg_header_mobile.blocks.utility.link"
         }
       ]
     },
     {
       "type": "mobile_social_link",
-      "name": "Mobile social link",
+      "name": "t:sections.header.tg_header_mobile.blocks.social.name",
       "settings": [
         {
           "type": "select",
           "id": "platform",
-          "label": "Platform",
+          "label": "t:sections.header.tg_header_mobile.blocks.social.platform",
           "default": "facebook",
           "options": [
-            { "value": "facebook", "label": "Facebook" },
-            { "value": "youtube", "label": "YouTube" },
-            { "value": "instagram", "label": "Instagram" },
-            { "value": "tiktok", "label": "TikTok" },
-            { "value": "twitter", "label": "X / Twitter" }
+            { "value": "facebook", "label": "t:sections.header.tg_header_mobile.blocks.social.options.facebook" },
+            { "value": "youtube", "label": "t:sections.header.tg_header_mobile.blocks.social.options.youtube" },
+            { "value": "instagram", "label": "t:sections.header.tg_header_mobile.blocks.social.options.instagram" },
+            { "value": "tiktok", "label": "t:sections.header.tg_header_mobile.blocks.social.options.tiktok" },
+            { "value": "twitter", "label": "t:sections.header.tg_header_mobile.blocks.social.options.twitter" }
           ]
         },
         {
           "type": "url",
           "id": "link",
-          "label": "Profile link",
-          "info": "Leave blank to hide this social icon."
+          "label": "t:sections.header.tg_header_mobile.blocks.social.link",
+          "info": "t:sections.header.tg_header_mobile.blocks.social.link_info"
         },
         {
           "type": "text",
           "id": "accessibility_label",
-          "label": "Accessibility label",
-          "info": "Optional. Defaults to the selected platform name."
+          "label": "t:sections.header.tg_header_mobile.blocks.social.accessibility_label",
+          "info": "t:sections.header.tg_header_mobile.blocks.social.accessibility_label_info"
+        }
+      ]
+    },
+    {
+      "type": "tg_header_desktop_feature",
+      "name": "t:sections.header.tg_header_desktop.blocks.feature.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "default": "Summer Picks",
+          "label": "t:sections.header.tg_header_desktop.blocks.feature.title.label"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.header.tg_header_desktop.blocks.feature.link.label"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.header.tg_header_desktop.blocks.feature.image.label"
+        },
+        {
+          "type": "select",
+          "id": "icon_asset",
+          "default": "summer",
+          "label": "t:sections.header.tg_header_desktop.blocks.feature.icon.label",
+          "options": [
+            { "value": "summer", "label": "t:sections.header.tg_header_desktop.blocks.feature.icon.options.summer" },
+            { "value": "back_to_school", "label": "t:sections.header.tg_header_desktop.blocks.feature.icon.options.back_to_school" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "tg_header_desktop_utility",
+      "name": "t:sections.header.tg_header_desktop.blocks.utility.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "default": "Gift Finder",
+          "label": "t:sections.header.tg_header_desktop.blocks.utility.title.label"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.header.tg_header_desktop.blocks.utility.link.label"
+        }
+      ]
+    },
+    {
+      "type": "tg_header_desktop_social",
+      "name": "t:sections.header.tg_header_desktop.blocks.social.name",
+      "settings": [
+        {
+          "type": "select",
+          "id": "platform",
+          "default": "facebook",
+          "label": "t:sections.header.tg_header_desktop.blocks.social.platform.label",
+          "options": [
+            { "value": "facebook", "label": "t:sections.header.tg_header_desktop.blocks.social.platform.options.facebook" },
+            { "value": "youtube", "label": "t:sections.header.tg_header_desktop.blocks.social.platform.options.youtube" },
+            { "value": "instagram", "label": "t:sections.header.tg_header_desktop.blocks.social.platform.options.instagram" },
+            { "value": "tiktok", "label": "t:sections.header.tg_header_desktop.blocks.social.platform.options.tiktok" },
+            { "value": "twitter", "label": "t:sections.header.tg_header_desktop.blocks.social.platform.options.twitter" }
+          ]
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.header.tg_header_desktop.blocks.social.link.label",
+          "info": "t:sections.header.tg_header_desktop.blocks.social.link.info"
+        },
+        {
+          "type": "text",
+          "id": "accessibility_label",
+          "label": "t:sections.header.tg_header_desktop.blocks.social.accessibility_label.label",
+          "info": "t:sections.header.tg_header_desktop.blocks.social.accessibility_label.info"
         }
       ]
     }

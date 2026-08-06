@@ -217,6 +217,10 @@
     }
   },
   "templates": {
+    "404": {
+      "title": "Siden finnes ikke",
+      "subtext": "404"
+    },
     "search": {
       "no_results": "Fant ingen resultater for «{{ terms }}». Kontroller stavemåten, eller bruk et annet ord.",
       "page": "Side",
@@ -260,10 +264,6 @@
         "error_heading": "Juster følgende:",
         "title": "Kontaktskjema"
       }
-    },
-    "404": {
-      "title": "Siden finnes ikke",
-      "subtext": "404"
     }
   },
   "sections": {
@@ -273,6 +273,9 @@
       "cart_count": {
         "one": "{{ count }} vare",
         "other": "{{ count }} varer"
+      },
+      "tg_header_desktop": {
+        "navigation_label": "primary navigation"
       }
     },
     "cart": {
@@ -527,6 +530,20 @@
       "send_on_label": "Send (valgfritt)",
       "expanded": "Utvidet skjema for gavekortmottaker",
       "collapsed": "Lukket skjema for gavekortmottaker"
+    }
+  },
+  "tg": {
+    "a11y": {
+      "previous": "Previous",
+      "next": "Next",
+      "play_video": "Play video",
+      "video_dialog": "Video player",
+      "close": "Close"
+    }
+  },
+  "tg_collection": {
+    "a11y": {
+      "breadcrumb": "Breadcrumb"
     }
   }
 }

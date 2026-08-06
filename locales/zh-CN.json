@@ -217,6 +217,10 @@
     }
   },
   "templates": {
+    "404": {
+      "title": "找不到页面",
+      "subtext": "404"
+    },
     "search": {
       "no_results": "未找到“{{ terms }}”的结果。请检查拼写或使用其他词或短语。",
       "results_with_count": {
@@ -260,10 +264,6 @@
         "error_heading": "请调整以下内容：",
         "title": "联系表"
       }
-    },
-    "404": {
-      "title": "找不到页面",
-      "subtext": "404"
     }
   },
   "sections": {
@@ -273,6 +273,9 @@
       "cart_count": {
         "one": "{{ count }} 件产品",
         "other": "{{ count }} 件产品"
+      },
+      "tg_header_desktop": {
+        "navigation_label": "主导航"
       }
     },
     "cart": {
@@ -527,6 +530,20 @@
       "send_on_label": "发送日期（可选）",
       "expanded": "礼品卡收件人表单已展开",
       "collapsed": "礼品卡收件人表单已折叠"
+    }
+  },
+  "tg": {
+    "a11y": {
+      "previous": "上一个",
+      "next": "下一个",
+      "play_video": "播放视频",
+      "video_dialog": "视频播放器",
+      "close": "关闭"
+    }
+  },
+  "tg_collection": {
+    "a11y": {
+      "breadcrumb": "面包屑导航"
     }
   }
 }

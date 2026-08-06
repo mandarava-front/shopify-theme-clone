@@ -261,6 +261,28 @@
             "label": "컬렉션",
             "info": "카트 서랍이 비어 있는 경우 표시됩니다"
           }
+        },
+        "tg_cart_drawer": {
+          "enable": {
+            "label": "Enable cart drawer",
+            "info": "Adds the optional free-shipping progress treatment to the native Ajax cart drawer."
+          },
+          "target": {
+            "label": "Free-shipping target",
+            "info": "Enter the target in the shop currency."
+          },
+          "progress_message": {
+            "label": "Progress message"
+          },
+          "progress_complete": {
+            "label": "Completed progress message"
+          },
+          "progress_color": {
+            "label": "Progress color"
+          },
+          "progress_track": {
+            "label": "Progress track color"
+          }
         }
       }
     },
@@ -994,6 +1016,274 @@
         "header__utilities": {
           "content": "유틸리티"
         }
+      },
+      "tg_header_desktop": {
+        "heading": "desktop header",
+        "navigation_label": "primary navigation",
+        "enable": {
+          "label": "Enable desktop header",
+          "info": "Replaces the standard header at 990px and wider. The mobile header and drawer remain unchanged."
+        },
+        "menu": {
+          "label": "Desktop navigation menu",
+          "info": "Uses the selected menu after featured links. Leave blank to use the main Header menu."
+        },
+        "logo_image": {
+          "label": "Desktop logo image",
+          "info": "Overrides the theme logo for this desktop header."
+        },
+        "logo_text": {
+          "label": "Logo text fallback",
+          "info": "Shown only when neither a desktop logo image nor the theme logo is set."
+        },
+        "announcement": {
+          "heading": "Announcement",
+          "show": {
+            "label": "Show announcement"
+          },
+          "text": {
+            "label": "Announcement text"
+          },
+          "dismissible": {
+            "label": "Allow visitors to dismiss the announcement",
+            "info": "Stores the dismissal for the current browser session."
+          },
+          "close_label": {
+            "label": "Close button label"
+          }
+        },
+        "actions": {
+          "heading": "Search and cart",
+          "show_search": {
+            "label": "Show search"
+          },
+          "search_placeholder": {
+            "label": "Search placeholder"
+          },
+          "search_label": {
+            "label": "Search field label"
+          },
+          "search_open_label": {
+            "label": "Open search button label"
+          },
+          "search_close_label": {
+            "label": "Close search button label"
+          },
+          "show_cart": {
+            "label": "Show cart"
+          },
+          "cart_label": {
+            "label": "Cart link label"
+          }
+        },
+        "extras": {
+          "heading": "Optional utility and social links",
+          "show_utility_links": {
+            "label": "Show utility links",
+            "info": "Add desktop utility link blocks to select their content and order."
+          },
+          "show_social_links": {
+            "label": "Show social links",
+            "info": "Add desktop social link blocks to select their profiles and order."
+          }
+        },
+        "appearance": {
+          "heading": "Appearance",
+          "announcement_background": {
+            "label": "Announcement background"
+          },
+          "announcement_text": {
+            "label": "Announcement text color"
+          },
+          "background": {
+            "label": "Navigation background"
+          },
+          "text": {
+            "label": "Navigation text color"
+          },
+          "hover": {
+            "label": "Hover and active color"
+          },
+          "border": {
+            "label": "Navigation border color"
+          },
+          "badge_background": {
+            "label": "Cart badge background"
+          },
+          "badge_text": {
+            "label": "Cart badge text color"
+          },
+          "max_width": {
+            "label": "Content maximum width"
+          },
+          "logo_width": {
+            "label": "Logo width"
+          },
+          "nav_gap": {
+            "label": "Navigation link spacing"
+          },
+          "nav_height": {
+            "label": "Navigation height"
+          },
+          "border_width": {
+            "label": "Navigation border width"
+          }
+        },
+        "blocks": {
+          "feature": {
+            "name": "desktop featured link",
+            "title": {
+              "label": "Label"
+            },
+            "link": {
+              "label": "Link"
+            },
+            "image": {
+              "label": "Custom icon"
+            },
+            "icon": {
+              "label": "Built-in icon",
+              "options": {
+                "summer": "Summer",
+                "back_to_school": "Back to school"
+              }
+            }
+          },
+          "utility": {
+            "name": "desktop utility link",
+            "title": {
+              "label": "Label"
+            },
+            "link": {
+              "label": "Link"
+            }
+          },
+          "social": {
+            "name": "desktop social link",
+            "platform": {
+              "label": "Platform",
+              "options": {
+                "facebook": "Facebook",
+                "youtube": "YouTube",
+                "instagram": "Instagram",
+                "tiktok": "TikTok",
+                "twitter": "X / Twitter"
+              }
+            },
+            "link": {
+              "label": "Profile link",
+              "info": "Leave blank to hide this social icon."
+            },
+            "accessibility_label": {
+              "label": "Accessibility label",
+              "info": "Optional. Defaults to the selected platform name."
+            }
+          }
+        }
+      },
+      "tg_header_mobile": {
+        "heading": "mobile menu",
+        "enable": {
+          "label": "Enable mobile menu",
+          "info": "Replaces the standard mobile drawer below 990px."
+        },
+        "title": {
+          "label": "Drawer title"
+        },
+        "width": {
+          "label": "Drawer width"
+        },
+        "background": {
+          "label": "Drawer background"
+        },
+        "surface": {
+          "label": "Surface color"
+        },
+        "text": {
+          "label": "Text color"
+        },
+        "accent": {
+          "label": "Focus and hover color"
+        },
+        "divider": {
+          "label": "Divider color"
+        },
+        "show_social": {
+          "label": "Show social links",
+          "info": "Add Mobile social link blocks to choose profiles, links, labels, and order."
+        },
+        "track_order": {
+          "label": "Mobile track order link"
+        },
+        "reviews": {
+          "label": "Mobile reviews link"
+        },
+        "blocks": {
+          "featured": {
+            "name": "Mobile featured card",
+            "title": "Title",
+            "link": "Link",
+            "image": "Custom icon",
+            "icon": "Built-in icon",
+            "background": "Background",
+            "text": "Text",
+            "options": {
+              "summer": "Summer",
+              "back_to_school": "Back to school",
+              "occasions": "Occasions",
+              "interests": "Interests",
+              "recipients": "Recipients",
+              "home": "Home and living",
+              "apparel": "Apparel",
+              "accessories": "Accessories",
+              "drinkware": "Drinkware",
+              "outdoor": "Outdoor"
+            }
+          },
+          "menu": {
+            "name": "Mobile menu card",
+            "title": "Title",
+            "link": "Link",
+            "link_info": "Used when no submenu is selected and as the View all link in a submenu.",
+            "sub_menu": "Submenu",
+            "image": "Custom icon",
+            "icon": "Built-in icon",
+            "background": "Background",
+            "text": "Text",
+            "options": {
+              "summer": "Summer",
+              "back_to_school": "Back to school",
+              "occasions": "Occasions",
+              "interests": "Interests",
+              "recipients": "Recipients",
+              "home": "Home and living",
+              "apparel": "Apparel",
+              "accessories": "Accessories",
+              "drinkware": "Drinkware",
+              "outdoor": "Outdoor"
+            }
+          },
+          "utility": {
+            "name": "Mobile utility link",
+            "title": "Title",
+            "link": "Link"
+          },
+          "social": {
+            "name": "Mobile social link",
+            "platform": "Platform",
+            "link": "Profile link",
+            "link_info": "Leave blank to hide this social icon.",
+            "accessibility_label": "Accessibility label",
+            "accessibility_label_info": "Optional. Defaults to the selected platform name.",
+            "options": {
+              "facebook": "Facebook",
+              "youtube": "YouTube",
+              "instagram": "Instagram",
+              "tiktok": "TikTok",
+              "twitter": "X / Twitter"
+            }
+          }
+        }
       }
     },
     "image-banner": {
@@ -1433,7 +1723,28 @@
       }
     },
     "main-cart-items": {
-      "name": "품목"
+      "name": "품목",
+      "tg_cart_page": {
+        "enable": {
+          "label": "Enable cart page styling",
+          "info": "Adds an optional cart-page empty state and announcement treatment while keeping native cart data."
+        },
+        "announcement": {
+          "label": "Announcement text"
+        },
+        "empty_heading": {
+          "label": "Empty cart heading"
+        },
+        "empty_text": {
+          "label": "Empty cart description"
+        },
+        "accent": {
+          "label": "Accent color"
+        },
+        "surface": {
+          "label": "Surface color"
+        }
+      }
     },
     "main-collection-banner": {
       "name": "컬렉션 배너",
@@ -3410,6 +3721,379 @@
           "label": "기본으로 열기"
         }
       }
+    },
+    "tg_product": {
+      "appearance": {
+        "heading": "product styling",
+        "enable": {
+          "label": "Enable product styling",
+          "info": "Applies the color treatment to the native product gallery, price, and add-to-cart button."
+        }
+      },
+      "personalization": {
+        "name": "personalization field",
+        "heading": {
+          "label": "Heading"
+        },
+        "description": {
+          "label": "Description"
+        },
+        "label": {
+          "label": "Field label"
+        },
+        "property_name": {
+          "label": "Cart property name",
+          "info": "Leave blank to use the field label. This name is shown on the cart and order."
+        },
+        "field_type": {
+          "label": "Field type",
+          "options": {
+            "text": "Text input",
+            "select": "Selection list"
+          }
+        },
+        "choices": {
+          "label": "Choices",
+          "info": "For a selection list, separate each option with a vertical bar (|)."
+        },
+        "placeholder": {
+          "label": "Placeholder"
+        },
+        "max_length": {
+          "label": "Maximum length"
+        },
+        "required": {
+          "label": "Require this field"
+        },
+        "help_text": {
+          "label": "Helper text"
+        }
+      },
+      "addon": {
+        "name": "add-on product",
+        "heading": {
+          "label": "Heading"
+        },
+        "product": {
+          "label": "Add-on product",
+          "info": "The selected product's first available variant is added with the main product when checked."
+        },
+        "variant_id": {
+          "label": "Add-on variant ID",
+          "info": "Optional. Enter a variant ID to add that variant instead of the selected product's first available variant."
+        },
+        "description": {
+          "label": "Description"
+        },
+        "error_message": {
+          "label": "Add-on error message"
+        }
+      },
+      "story": {
+        "name": "story",
+        "preset": {
+          "name": "story"
+        },
+        "heading": {
+          "label": "Heading"
+        },
+        "subheading": {
+          "label": "Introductory text"
+        },
+        "surface_color": {
+          "label": "Background color"
+        },
+        "text_color": {
+          "label": "Text color"
+        },
+        "accent_color": {
+          "label": "Accent color"
+        },
+        "padding_top": {
+          "label": "Top padding"
+        },
+        "padding_bottom": {
+          "label": "Bottom padding"
+        },
+        "blocks": {
+          "hero": {
+            "name": "Story hero"
+          },
+          "benefit": {
+            "name": "Benefit card"
+          },
+          "detail": {
+            "name": "Detail feature"
+          },
+          "occasion": {
+            "name": "Occasion card"
+          },
+          "good_to_know": {
+            "name": "Good to know"
+          },
+          "image": {
+            "label": "Image"
+          },
+          "heading": {
+            "label": "Heading"
+          },
+          "text": {
+            "label": "Text"
+          },
+          "button_label": {
+            "label": "Button label"
+          },
+          "button_link": {
+            "label": "Button link"
+          },
+          "eyebrow": {
+            "label": "Eyebrow"
+          }
+        }
+      }
+    }
+  },
+  "tg": {
+    "sections": {
+      "category": {
+        "name": "category rail"
+      },
+      "banner": {
+        "name": "image banner"
+      },
+      "steps": {
+        "name": "process steps"
+      },
+      "benefits": {
+        "name": "benefits"
+      },
+     "product_rail": {
+       "name": "product rail"
+     },
+      "featured_products": {
+        "name": "Tg products"
+      },
+     "split_promo": {
+        "name": "split promotion"
+      },
+      "tabs": {
+        "name": "Tg tabs"
+      },
+      "recipients": {
+        "name": "recipient grid"
+      },
+      "video_rail": {
+        "name": "video rail"
+      },
+      "faq": {
+        "name": "FAQ"
+      }
+    },
+    "blocks": {
+      "category": {
+        "name": "Category"
+      },
+      "step": {
+        "name": "Step"
+      },
+      "benefit": {
+        "name": "Benefit"
+      },
+      "collection_tab": {
+        "name": "Collection tab"
+      },
+      "recipient": {
+        "name": "Recipient"
+      },
+     "video": {
+       "name": "Video"
+     },
+      "featured_product": {
+        "name": "tg | Featured product"
+      },
+     "faq": {
+        "name": "FAQ item"
+      }
+    },
+    "settings": {
+      "heading": "Heading",
+      "heading_font_size": "Heading font size",
+      "heading_font_size_mobile": "Mobile heading font size",
+      "heading_color": "Heading color",
+      "heading_hover_color": "Heading hover color",
+      "title_font_size": "Title font size",
+      "title_font_size_mobile": "Mobile title font size",
+      "title_color": "Title color",
+      "title_hover_color": "Title hover color",
+      "text_font_size": "Text font size",
+      "text_font_size_mobile": "Mobile text font size",
+      "subheading": "Subheading",
+      "title": "Title",
+      "text": "Text",
+      "description": "Description",
+      "question": "Question",
+      "answer": "Answer",
+      "eyebrow": "Eyebrow",
+      "image": "Image",
+      "icon_or_image": "Icon or image",
+      "desktop_image": "Desktop image",
+      "mobile_image": "Mobile image",
+      "poster": "Poster image",
+      "alt": "Image alt text",
+      "link": "Link",
+      "collection": "Collection",
+      "product": "Product",
+      "tab_label": "Tab label",
+      "tab_style": "Tab navigation style",
+      "underline_color": "Underline color",
+      "video": "Shopify video",
+      "video_url": "MP4 video URL",
+      "background": "Background color",
+      "content_background": "Content background",
+      "text_color": "Text color",
+      "muted_color": "Muted text color",
+      "accent_color": "Accent color",
+      "button_color": "Button color",
+      "button_text_color": "Button text color",
+      "button_radius": "Button corner radius",
+      "button_min_height": "Button min height",
+      "button_padding_vertical": "Button vertical padding",
+      "button_padding_horizontal": "Button horizontal padding",
+      "button_font_size": "Button font size",
+      "nav_button_size": "Scroll button size",
+      "nav_button_radius": "Scroll button corner radius",
+      "nav_button_background": "Scroll button background",
+      "nav_button_hover_background": "Scroll button hover background",
+      "nav_button_border_color": "Scroll button border color",
+      "nav_button_arrow_color": "Scroll button arrow color",
+      "nav_button_hover_arrow_color": "Scroll button hover arrow color",
+      "border_color": "Border color",
+      "columns": "Columns",
+      "desktop_columns": "Desktop columns",
+      "mobile_columns": "Mobile columns",
+      "gap": "Gap",
+      "padding_top": "Top padding",
+      "padding_bottom": "Bottom padding",
+      "mobile_padding_top": "Mobile top padding",
+      "mobile_padding_bottom": "Mobile bottom padding",
+      "image_position": "Image position",
+      "image_shape": "Image shape",
+      "image_radius": "Image corner radius",
+      "image_margin_left": "Image left margin",
+      "image_margin_right": "Image right margin",
+      "image_ratio": "Product image ratio",
+      "card_radius": "Product card corner radius",
+      "products_to_show": "Products to show",
+      "show_secondary_image": "Show second image on hover",
+      "show_badges": "Show product badges",
+      "show_vendor": "Show vendor",
+      "show_rating": "Show rating",
+      "show_view_all": "Show view all button",
+      "button_label": "Button label",
+      "button_link": "Button link",
+      "reviews": "Review count text",
+      "compare_at_price": "Compare-at price override",
+      "price": "Price text override",
+      "badge": "Badge text",
+      "secondary_image": "Secondary image",
+      "product_image": "Product image override",
+      "product_link": "Product link override",
+      "product_title": "Product title override",
+      "star_color": "Rating star color",
+      "badge_text_color": "Badge text color",
+      "badge_background": "Badge background color",
+      "price_color": "Price color",
+      "show_numbers": "Show step numbers",
+      "show_arrows": "Show desktop step arrows",
+      "arrow_color": "Step arrow color",
+      "default_open_item": "Default open FAQ item"
+    },
+    "options": {
+      "left": "Left",
+      "right": "Right",
+      "circle": "Circle",
+      "square": "Square",
+      "adapt": "Adapt to image",
+      "portrait": "Portrait",
+      "tab_style_pills": "Pill buttons",
+      "tab_style_tabs_nav": "Underline tabs"
+    },
+    "info": {
+      "video_url": "Used only when a Shopify video is not selected.",
+      "collection_fallback": "Used only when no product blocks are added.",
+      "product_title_override": "Leave blank to use the selected product title.",
+      "product_link_override": "Leave blank to use the selected product URL.",
+      "price_override": "Leave blank to use the selected product price."
+    },
+    "a11y": {
+      "previous": "Previous",
+      "next": "Next",
+      "play_video": "Play video",
+      "video_dialog": "Video player",
+      "close": "Close"
+    }
+  },
+  "tg_collection": {
+    "sections": {
+      "header": {
+        "name": "Tg header"
+      },
+      "grid": {
+        "name": "Tg grid"
+      }
+    },
+    "settings": {
+      "title": "Title",
+      "description": "Description",
+      "home_label": "Home link label",
+      "show_breadcrumbs": "Show breadcrumbs",
+      "show_collection_description": "Show collection description",
+      "background": "Background color",
+      "text_color": "Text color",
+      "muted_color": "Muted text color",
+      "accent_color": "Accent color",
+      "border_color": "Border color",
+      "products_per_page": "Products per page",
+      "desktop_columns": "Desktop columns",
+      "mobile_columns": "Mobile columns",
+      "image_ratio": "Product image ratio",
+      "show_secondary_image": "Show second image on hover",
+      "show_vendor": "Show vendor",
+      "show_rating": "Show rating",
+      "quick_add": "Quick add",
+      "enable_filtering": "Enable filtering",
+      "enable_sorting": "Enable sorting",
+      "filter_type": "Filter layout",
+      "sort_label": "Sort label",
+      "facet_width": "Desktop filter width",
+      "layout_gap": "Filter and grid gap",
+      "column_gap": "Product column gap",
+      "row_gap": "Product row gap",
+      "card_radius": "Product card corner radius",
+      "empty_heading": "Empty state heading",
+      "empty_text": "Empty state text",
+      "empty_button_label": "Empty state button label",
+      "empty_link": "Empty state button link",
+      "padding_top": "Top padding",
+      "padding_bottom": "Bottom padding"
+    },
+    "options": {
+      "one_column": "One column",
+      "two_columns": "Two columns",
+      "adapt": "Adapt to image",
+      "portrait": "Portrait",
+      "square": "Square",
+      "none": "None",
+      "standard": "Standard",
+      "vertical": "Desktop sidebar",
+      "drawer": "Drawer",
+      "horizontal": "Horizontal"
+    },
+    "info": {
+      "title": "Leave blank to use the current collection title."
+    },
+    "a11y": {
+      "breadcrumb": "Breadcrumb"
     }
   }
 }

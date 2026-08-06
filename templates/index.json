@@ -64,30 +64,54 @@
       }
     },
     "trending_now": {
-      "type": "featured-collection",
+      "type": "tg-featured-products",
+      "blocks": {
+        "trending-product-1": { "type": "product" },
+        "trending-product-2": { "type": "product" },
+        "trending-product-3": { "type": "product" },
+        "trending-product-4": { "type": "product" },
+        "trending-product-5": { "type": "product" },
+        "trending-product-6": { "type": "product" },
+        "trending-product-7": { "type": "product" },
+        "trending-product-8": { "type": "product" }
+      },
+      "block_order": [
+        "trending-product-1",
+        "trending-product-2",
+        "trending-product-3",
+        "trending-product-4",
+        "trending-product-5",
+        "trending-product-6",
+        "trending-product-7",
+        "trending-product-8"
+      ],
       "settings": {
-        "title": "Trending Now",
-        "heading_size": "h2",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
         "collection": "all",
-        "products_to_show": 4,
+        "heading": "🎁 2026 Trending Now - Customer Favorites",
+        "subheading": "Shop our most-loved personalized gifts, perfect for every occasion!",
+        "products_to_show": 8,
         "columns_desktop": 4,
-        "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "outline",
-        "enable_desktop_slider": false,
-        "color_scheme": "scheme-1",
-        "image_ratio": "square",
-        "image_shape": "default",
+        "columns_mobile": 2,
         "show_secondary_image": true,
-        "show_vendor": false,
+        "show_badges": true,
         "show_rating": true,
-        "quick_add": "none",
-        "mobile_layout": "grid_2",
-        "padding_top": 12,
-        "padding_bottom": 20
+        "show_view_all": true,
+        "button_label": "VIEW MORE",
+        "button_link": "/collections/best-seller",
+        "card_radius": 4,
+        "background": "#f8f8ed",
+        "text_color": "#18181e",
+        "muted_color": "#707070",
+        "price_color": "#e18a00",
+        "badge_background": "#ffc400",
+        "badge_text_color": "#111111",
+        "star_color": "#ffb400",
+        "button_color": "#ffb700",
+        "button_text_color": "#ffffff",
+        "padding_top": 80,
+        "padding_bottom": 64,
+        "mobile_padding_top": 38,
+        "mobile_padding_bottom": 34
       }
     },
     "campaign_memorial": {
@@ -211,6 +235,53 @@
         "padding_bottom": 20
       }
     },
+    "interesting_strangers": {
+      "type": "tg-video-rail",
+      "settings": {
+        "heading": "MogCustom Interesting Strangers",
+        "background": "#ffffff",
+        "text_color": "#18181e",
+        "button_color": "#ffb700",
+        "button_text_color": "#ffffff",
+        "border_color": "#deded8",
+        "padding_top": 60,
+        "padding_bottom": 32
+      },
+      "blocks": {
+        "stranger-1": { "type": "video", "settings": { "video_url": "https://mogcustom.com/cdn/shop/videos/c/vp/9592028f24fb4d04976c0bc9e49a271f/9592028f24fb4d04976c0bc9e49a271f.HD-1080p-2.5Mbps-85767873.mp4?v=0", "poster_url": "https://mogcustom.com/cdn/shop/files/preview_images/9592028f24fb4d04976c0bc9e49a271f.thumbnail.0000000000.jpg?v=1780644393&width=700", "description": "Since 1946, he is not getting older. He is becoming a true legend.", "button_label": "SHOP NOW", "link": "https://mogcustom.com/products/custom-t-shirt-hoodie-personalized-fathers-day-birthday-gifts-for-dad-grandpa-family-yourself-just-a-little-iconic" } },
+        "stranger-2": { "type": "video", "settings": { "video_url": "https://mogcustom.com/cdn/shop/videos/c/vp/01a1370ad96340e58d19c82260726246/01a1370ad96340e58d19c82260726246.HD-1080p-2.5Mbps-85767870.mp4?v=0", "poster_url": "https://mogcustom.com/cdn/shop/files/preview_images/01a1370ad96340e58d19c82260726246.thumbnail.0000000000.jpg?v=1780644389&width=700", "description": "Every ride, a reminder he is loved. Safe driving starts with a smile.", "button_label": "SHOP NOW", "link": "https://mogcustom.com/products/fathers-day-gifts-drive-safe-daddy-i-love-you-fathers-day-gift-for-husband-dad-personalized-acrylic-photo-visor-clip" } },
+        "stranger-3": { "type": "video", "settings": { "video_url": "https://mogcustom.com/cdn/shop/videos/c/vp/6f17c8d084f6425a9794cde4ece8ac26/6f17c8d084f6425a9794cde4ece8ac26.HD-1080p-2.5Mbps-84351973.mp4?v=0", "poster_url": "https://mogcustom.com/cdn/shop/files/preview_images/6f17c8d084f6425a9794cde4ece8ac26.thumbnail.0000000000.jpg?v=1779085458&width=700", "description": "I absolutely love this design. It looks exactly like a bunch of rowdy students.", "button_label": "SHOP NOW", "link": "https://mogcustom.com/products/funny-seagulls-calling-teacher-personalized-shirt-funny-gift-for-teachers-appreciation-gift" } },
+        "stranger-4": { "type": "video", "settings": { "video_url": "https://mogcustom.com/cdn/shop/videos/c/vp/d46cd43504e1430b9caca3148433a1c8/d46cd43504e1430b9caca3148433a1c8.HD-1080p-7.2Mbps-84351257.mp4?v=0", "poster_url": "https://mogcustom.com/cdn/shop/files/preview_images/d46cd43504e1430b9caca3148433a1c8.thumbnail.0000000000.jpg?v=1779084630&width=700", "description": "For my sake, my dad even turned into a cute little princess.", "button_label": "SHOP NOW", "link": "https://mogcustom.com/products/outnumbered-by-girls-cute-goose-personalized-shirt-fathers-day-gift-for-husband-girl-dad" } },
+        "stranger-5": { "type": "video", "settings": { "video_url": "https://mogcustom.com/cdn/shop/videos/c/vp/2f403f19ab4146bb92e11bffa729fbd8/2f403f19ab4146bb92e11bffa729fbd8.HD-1080p-2.5Mbps-84350930.mp4?v=0", "poster_url": "https://mogcustom.com/cdn/shop/files/preview_images/2f403f19ab4146bb92e11bffa729fbd8.thumbnail.0000000000.jpg?v=1779084224&width=700", "description": "He officially shouldered the duty of becoming the Greatest Dad of All Time.", "button_label": "SHOP NOW", "link": "https://mogcustom.com/products/to-my-husband-the-only-thing-personalized-poster-fathers-day-gift-for-husband-dad" } },
+        "stranger-6": { "type": "video", "settings": { "video_url": "https://mogcustom.com/cdn/shop/videos/c/vp/c699b37b7e9a43699f8281180d25f6dc/c699b37b7e9a43699f8281180d25f6dc.HD-1080p-2.5Mbps-84343546.mp4?v=0", "poster_url": "https://mogcustom.com/cdn/shop/files/preview_images/c699b37b7e9a43699f8281180d25f6dc.thumbnail.0000000000.jpg?v=1779074324&width=700", "description": "Best shirt for teachers. I got several compliments.", "button_label": "SHOP NOW", "link": "https://mogcustom.com/products/funny-seagulls-calling-teacher-personalized-shirt-funny-gift-for-teachers-appreciation-gift" } },
+        "stranger-7": { "type": "video", "settings": { "video_url": "https://mogcustom.com/cdn/shop/videos/c/vp/3265bbe6e0204317a833a3f4f66ef39b/3265bbe6e0204317a833a3f4f66ef39b.HD-1080p-2.5Mbps-84342652.mp4?v=0", "poster_url": "https://mogcustom.com/cdn/shop/files/preview_images/3265bbe6e0204317a833a3f4f66ef39b.thumbnail.0000000000.jpg?v=1779073101&width=700", "description": "So cute. The kids I work with think it is funny.", "button_label": "SHOP NOW", "link": "https://mogcustom.com/products/funny-seagulls-calling-teacher-personalized-shirt-funny-gift-for-teachers-appreciation-gift" } }
+      },
+      "block_order": ["stranger-1", "stranger-2", "stranger-3", "stranger-4", "stranger-5", "stranger-6", "stranger-7"]
+    },
+    "service_benefits": {
+      "type": "tg-benefits",
+      "blocks": {
+        "benefit-1": { "type": "benefit", "settings": { "title": "On-Time Delivery", "title_font_size": 15, "title_font_size_mobile": 12, "title_color": "#18181e", "title_hover_color": "#e7a400", "text": "99.9% on-time delivery rate", "text_font_size": 13, "text_font_size_mobile": 10 } },
+        "benefit-2": { "type": "benefit", "settings": { "title": "45-Day Refund", "title_font_size": 15, "title_font_size_mobile": 12, "title_color": "#18181e", "title_hover_color": "#e7a400", "text": "Hassle-free returns within 45 days", "text_font_size": 13, "text_font_size_mobile": 10 } },
+        "benefit-3": { "type": "benefit", "settings": { "title": "Superior Quality", "title_font_size": 15, "title_font_size_mobile": 12, "title_color": "#18181e", "title_hover_color": "#e7a400", "text": "Made with premium materials", "text_font_size": 13, "text_font_size_mobile": 10 } },
+        "benefit-4": { "type": "benefit", "settings": { "title": "Holiday Support", "title_font_size": 15, "title_font_size_mobile": 12, "title_color": "#18181e", "title_hover_color": "#e7a400", "text": "Friendly, responsive support", "text_font_size": 13, "text_font_size_mobile": 10 } }
+      },
+      "block_order": ["benefit-1", "benefit-2", "benefit-3", "benefit-4"],
+      "settings": {
+        "heading": "Why Us For Summer Gifts?",
+        "heading_font_size": 30,
+        "heading_font_size_mobile": 18,
+        "heading_color": "#18181e",
+        "heading_hover_color": "#e7a400",
+        "columns": 4,
+        "background": "#f8f8ed",
+        "text_color": "#18181e",
+        "accent_color": "#e7a400",
+        "border_color": "#dedecf",
+        "padding_top": 48,
+        "padding_bottom": 36
+      }
+    },
     "trust_badges": {
       "type": "cuszoo-trust-badges",
       "blocks": {
@@ -249,6 +320,8 @@
     "shop_by_recipient",
     "shop_by_occasions",
     "social_proof_videos",
+    "interesting_strangers",
+    "service_benefits",
     "trust_badges",
     "gift_finder"
   ]

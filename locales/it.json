@@ -221,6 +221,10 @@
     }
   },
   "templates": {
+    "404": {
+      "title": "Pagina non trovata",
+      "subtext": "404"
+    },
     "search": {
       "no_results": "Nessun risultato per \"{{ terms }}\". Controlla l'ortografia o usa una parola o una frase diversa.",
       "page": "Pagina",
@@ -269,10 +273,6 @@
         "error_heading": "Correggi gli errori seguenti:",
         "title": "Modulo di contatto"
       }
-    },
-    "404": {
-      "title": "Pagina non trovata",
-      "subtext": "404"
     }
   },
   "sections": {
@@ -283,6 +283,9 @@
         "one": "{{ count }} articolo",
         "other": "{{ count }} articoli",
         "many": "{{ count }} articoli"
+      },
+      "tg_header_desktop": {
+        "navigation_label": "primary navigation"
       }
     },
     "cart": {
@@ -539,6 +542,20 @@
       "send_on_label": "Spedisci il giorno (opzionale)",
       "expanded": "Modulo destinatario del buono regalo espanso",
       "collapsed": "Modulo destinatario del buono regalo compresso"
+    }
+  },
+  "tg": {
+    "a11y": {
+      "previous": "Previous",
+      "next": "Next",
+      "play_video": "Play video",
+      "video_dialog": "Video player",
+      "close": "Close"
+    }
+  },
+  "tg_collection": {
+    "a11y": {
+      "breadcrumb": "Breadcrumb"
     }
   }
 }

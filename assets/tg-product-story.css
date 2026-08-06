@@ -1,0 +1,23 @@
+.tg-product-story { background: var(--tg-product-story-surface); color: var(--tg-product-story-text); }
+.tg-product-story__header { max-width: 76rem; margin: 0 auto 3.2rem; text-align: center; }
+.tg-product-story h2, .tg-product-story h3 { color: var(--tg-product-story-text); }
+.tg-product-story__header h2 { margin: 0 0 1rem; font-size: clamp(2.4rem, 3vw, 3.2rem); }
+.tg-product-story__blocks { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 2.4rem; }
+.tg-product-story__hero, .tg-product-story__detail { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); overflow: hidden; border-radius: 1.6rem; background: color-mix(in srgb, var(--tg-product-story-accent) 6%, var(--tg-product-story-surface)); }
+.tg-product-story__hero img, .tg-product-story__detail img { width: 100%; height: 100%; min-height: 30rem; object-fit: cover; }
+.tg-product-story__hero > div, .tg-product-story__detail > div { align-self: center; padding: clamp(2.4rem, 5vw, 6rem); }
+.tg-product-story__hero h3, .tg-product-story__detail h3 { margin: 0 0 1rem; font-size: clamp(2rem, 2.5vw, 3rem); }
+.tg-product-story__detail p { color: var(--tg-product-story-accent); font-weight: 700; }
+.tg-product-story__benefit { grid-column: span 4; overflow: hidden; border: 1px solid color-mix(in srgb, var(--tg-product-story-text) 14%, transparent); border-radius: 1rem; background: var(--tg-product-story-surface); text-align: center; }
+.tg-product-story__benefit img { width: 100%; aspect-ratio: 1.5; object-fit: cover; }
+.tg-product-story__benefit h3, .tg-product-story__benefit .rte { margin-right: 1.6rem; margin-left: 1.6rem; }
+.tg-product-story__benefit h3 { margin-top: 1.6rem; margin-bottom: 0.8rem; }
+.tg-product-story__benefit .rte { margin-bottom: 1.8rem; }
+.tg-product-story__occasion { grid-column: span 3; min-height: 20rem; padding: 2rem; border: 2px solid var(--tg-product-story-accent); border-radius: 1.4rem; text-align: center; }
+.tg-product-story__occasion img { width: 6.8rem; height: 6.8rem; margin-bottom: 1rem; object-fit: contain; }
+.tg-product-story__occasion h3 { margin: 0 0 0.8rem; font-size: 1.7rem; }
+.tg-product-story__know { grid-column: span 4; display: grid; grid-template-columns: 14rem minmax(0, 1fr); gap: 1.6rem; align-items: center; }
+.tg-product-story__know img { width: 14rem; height: 14rem; border: 2px solid var(--tg-product-story-text); border-radius: 1.6rem; object-fit: cover; }
+.tg-product-story__know h3 { margin: 0 0 0.6rem; font-size: 1.7rem; }
+@media screen and (max-width: 989px) { .tg-product-story__benefit { grid-column: span 6; } .tg-product-story__occasion { grid-column: span 6; } .tg-product-story__know { grid-column: span 6; } }
+@media screen and (max-width: 749px) { .tg-product-story__blocks { gap: 1.6rem; } .tg-product-story__hero, .tg-product-story__detail { grid-template-columns: 1fr; } .tg-product-story__hero img, .tg-product-story__detail img { min-height: 20rem; } .tg-product-story__benefit, .tg-product-story__occasion, .tg-product-story__know { grid-column: 1 / -1; } .tg-product-story__know { grid-template-columns: 11.2rem minmax(0, 1fr); } .tg-product-story__know img { width: 11.2rem; height: 11.2rem; } }

@@ -7,6 +7,9 @@
 
 {{ 'quantity-popover.css' | asset_url | stylesheet_tag }}
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
+{% if settings.enable_tg_cart_drawer %}
+  {{ 'tg-cart-drawer.css' | asset_url | stylesheet_tag }}
+{% endif %}
 
 <script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
@@ -17,7 +20,7 @@
   }
 </style>
 
-<cart-drawer class="drawer{% if cart == empty %} is-empty{% endif %}">
+<cart-drawer class="drawer{% if cart == empty %} is-empty{% endif %}{% if settings.enable_tg_cart_drawer %} tg-cart-drawer{% endif %}">
   <div id="CartDrawer" class="cart-drawer">
     <div id="CartDrawer-Overlay" class="cart-drawer__overlay"></div>
     <div
@@ -74,6 +77,35 @@
           </span>
         </button>
       </div>
+      {% if settings.enable_tg_cart_drawer and cart != empty and settings.tg_cart_drawer_free_shipping_target > 0 %}
+        {% assign tg_cart_drawer_progress_template = settings.tg_cart_drawer_progress_message | default: "You're {{ amount }} away from free shipping" %}
+        {% assign tg_cart_drawer_complete_template = settings.tg_cart_drawer_progress_complete_message | default: "You've unlocked free shipping" %}
+        {% assign tg_cart_drawer_progress_color = settings.tg_cart_drawer_progress_color | default: '#e5a400' %}
+        {% assign tg_cart_drawer_track_color = settings.tg_cart_drawer_progress_track_color | default: '#ececec' %}
+        {% assign tg_cart_drawer_target_cents = settings.tg_cart_drawer_free_shipping_target | times: 100 %}
+        {% assign tg_cart_drawer_remaining_cents = tg_cart_drawer_target_cents | minus: cart.total_price %}
+        {% if tg_cart_drawer_remaining_cents < 0 %}{% assign tg_cart_drawer_remaining_cents = 0 %}{% endif %}
+        {% assign tg_cart_drawer_progress = cart.total_price | times: 100.0 | divided_by: tg_cart_drawer_target_cents %}
+        {% if tg_cart_drawer_progress > 100 %}{% assign tg_cart_drawer_progress = 100 %}{% endif %}
+        <div
+          class="tg-cart-drawer__progress"
+          style="--tg_cart_drawer-progress: {{ tg_cart_drawer_progress }}%; --tg_cart_drawer-progress-color: {{ tg_cart_drawer_progress_color }}; --tg_cart_drawer-track-color: {{ tg_cart_drawer_track_color }};"
+          role="status"
+          aria-live="polite"
+        >
+          <p class="tg-cart-drawer__progress-message">
+            {% if tg_cart_drawer_remaining_cents > 0 %}
+              {% assign tg_cart_drawer_remaining_money = tg_cart_drawer_remaining_cents | money %}
+              {{ tg_cart_drawer_progress_template | replace: '{{ amount }}', tg_cart_drawer_remaining_money }}
+            {% else %}
+              {{ tg_cart_drawer_complete_template }}
+            {% endif %}
+          </p>
+          <div class="tg-cart-drawer__progress-track" aria-hidden="true">
+            <span class="tg-cart-drawer__progress-value"></span>
+          </div>
+        </div>
+      {% endif %}
       <cart-drawer-items
         view-event-payload="{{ cart | standard_event_data: 'view', context: 'dialog' | escape }}"
         view-event-trigger="manual"

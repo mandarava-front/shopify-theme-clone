@@ -1,0 +1,46 @@
+.tg-cart-drawer .drawer__inner {
+  background: #fff;
+  border-left: 1px solid rgba(18, 18, 18, .12);
+}
+
+.tg-cart-drawer__progress {
+  padding: 14px 24px 16px;
+  background: color-mix(in srgb, var(--tg_cart_drawer-track-color, #ececec) 34%, #fff);
+}
+
+.tg-cart-drawer__progress-message {
+  margin: 0 0 9px;
+  color: rgb(var(--color-foreground));
+  font-size: 1.3rem;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.tg-cart-drawer__progress-track {
+  position: relative;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--tg_cart_drawer-track-color, #ececec);
+}
+
+.tg-cart-drawer__progress-value {
+  display: block;
+  width: var(--tg_cart_drawer-progress, 0%);
+  height: 100%;
+  border-radius: inherit;
+  background: var(--tg_cart_drawer-progress-color, #e5a400);
+  transition: width .45s ease;
+}
+
+@media screen and (max-width: 749px) {
+  .tg-cart-drawer__progress {
+    padding-inline: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tg-cart-drawer__progress-value {
+    transition: none;
+  }
+}

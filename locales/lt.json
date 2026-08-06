@@ -225,6 +225,10 @@
     }
   },
   "templates": {
+    "404": {
+      "title": "Puslapis nerastas",
+      "subtext": "404"
+    },
     "search": {
       "no_results": "Nerasta jokių rezultatų pagal užklausą „{{ terms }}“. Patikrinkite rašybą arba vartokite kitą žodį ar frazę.",
       "page": "Puslapis",
@@ -278,10 +282,6 @@
         "error_heading": "Pakoreguokite toliau pateiktą informaciją.",
         "title": "Kontaktinė forma"
       }
-    },
-    "404": {
-      "title": "Puslapis nerastas",
-      "subtext": "404"
     }
   },
   "sections": {
@@ -293,6 +293,9 @@
         "other": "{{ count }} prekės (-ių)",
         "few": "{{ count }} prekės (-ių)",
         "many": "{{ count }} prekės (-ių)"
+      },
+      "tg_header_desktop": {
+        "navigation_label": "primary navigation"
       }
     },
     "cart": {
@@ -551,6 +554,20 @@
       "send_on_label": "Išsiuntimo data (pasirinktinai)",
       "expanded": "Išskleista dovanų kortelės gavėjo forma",
       "collapsed": "Suskleista dovanų kortelės gavėjo forma"
+    }
+  },
+  "tg": {
+    "a11y": {
+      "previous": "Previous",
+      "next": "Next",
+      "play_video": "Play video",
+      "video_dialog": "Video player",
+      "close": "Close"
+    }
+  },
+  "tg_collection": {
+    "a11y": {
+      "breadcrumb": "Breadcrumb"
     }
   }
 }

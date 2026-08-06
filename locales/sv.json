@@ -217,6 +217,10 @@
     }
   },
   "templates": {
+    "404": {
+      "title": "Sidan hittades inte",
+      "subtext": "404"
+    },
     "search": {
       "no_results": "Inga resultat hittades för \"{{ terms }}\". Kontrollera stavningen eller använd ett annat ord eller fras.",
       "results_with_count": {
@@ -260,10 +264,6 @@
         "error_heading": "Justera följande:",
         "title": "Kontaktformulär"
       }
-    },
-    "404": {
-      "title": "Sidan hittades inte",
-      "subtext": "404"
     }
   },
   "sections": {
@@ -273,6 +273,9 @@
       "cart_count": {
         "one": "{{ count }} artikel",
         "other": "{{ count }} artiklar"
+      },
+      "tg_header_desktop": {
+        "navigation_label": "primary navigation"
       }
     },
     "cart": {
@@ -527,6 +530,20 @@
       "send_on_label": "Skicka den (valfritt)",
       "expanded": "Mottagarformulär för presentkort öppnat",
       "collapsed": "Mottagarformulär för presentkort stängt"
+    }
+  },
+  "tg": {
+    "a11y": {
+      "previous": "Previous",
+      "next": "Next",
+      "play_video": "Play video",
+      "video_dialog": "Video player",
+      "close": "Close"
+    }
+  },
+  "tg_collection": {
+    "a11y": {
+      "breadcrumb": "Breadcrumb"
     }
   }
 }

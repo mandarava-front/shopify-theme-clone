@@ -45,7 +45,7 @@
             "title": "Summer Picks",
             "link": "/pages/summer-2026",
             "image": "",
-            "icon_asset": "us-july-icon-summer.svg",
+            "icon_asset": "tg-menu-icon-summer.svg",
             "background_color": "#b3e2f6",
             "text_color": "#062d8e"
           }
@@ -56,7 +56,7 @@
             "title": "Back To School",
             "link": "/pages/back-to-school-2026",
             "image": "",
-            "icon_asset": "us-july-icon-b2c.svg",
+            "icon_asset": "tg-menu-icon-back-to-school.svg",
             "background_color": "#d6f1d8",
             "text_color": "#054815"
           }
@@ -68,7 +68,7 @@
             "link": "/collections/occasions",
             "sub_menu": "",
             "image": "",
-            "icon_asset": "pfh_menu-icon-occasions.svg",
+            "icon_asset": "tg-menu-icon-occasions.svg",
             "background_color": "#ffffff",
             "text_color": "#202024"
           }
@@ -80,7 +80,7 @@
             "link": "/collections/interests",
             "sub_menu": "",
             "image": "",
-            "icon_asset": "pfh_menu-icon-interests.svg",
+            "icon_asset": "tg-menu-icon-interests.svg",
             "background_color": "#ffffff",
             "text_color": "#202024"
           }
@@ -92,7 +92,7 @@
             "link": "/collections/recipients",
             "sub_menu": "",
             "image": "",
-            "icon_asset": "pfh_menu-icon-recipients.svg",
+            "icon_asset": "tg-menu-icon-recipients.svg",
             "background_color": "#ffffff",
             "text_color": "#202024"
           }
@@ -104,7 +104,7 @@
             "link": "/collections/home-living",
             "sub_menu": "",
             "image": "",
-            "icon_asset": "pfh_menu-icon-home.svg",
+            "icon_asset": "tg-menu-icon-home.svg",
             "background_color": "#ffffff",
             "text_color": "#202024"
           }
@@ -116,7 +116,7 @@
             "link": "/collections/apparel",
             "sub_menu": "",
             "image": "",
-            "icon_asset": "pfh_menu-icon-apparel.svg",
+            "icon_asset": "tg-menu-icon-apparel.svg",
             "background_color": "#ffffff",
             "text_color": "#202024"
           }
@@ -128,7 +128,7 @@
             "link": "/collections/accessories",
             "sub_menu": "",
             "image": "",
-            "icon_asset": "pfh_menu-icon-accessories.svg",
+            "icon_asset": "tg-menu-icon-accessories.svg",
             "background_color": "#ffffff",
             "text_color": "#202024"
           }
@@ -140,7 +140,7 @@
             "link": "/collections/drinkware",
             "sub_menu": "",
             "image": "",
-            "icon_asset": "pfh_menu-icon-drinkware.svg",
+            "icon_asset": "tg-menu-icon-drinkware.svg",
             "background_color": "#ffffff",
             "text_color": "#202024"
           }
@@ -152,7 +152,7 @@
             "link": "/collections/outdoor",
             "sub_menu": "",
             "image": "",
-            "icon_asset": "pfh_menu-icon-outdoor.svg",
+            "icon_asset": "tg-menu-icon-outdoor.svg",
             "background_color": "#ffffff",
             "text_color": "#202024"
           }
@@ -182,7 +182,7 @@
           "type": "mobile_social_link",
           "settings": {
             "platform": "facebook",
-            "link": "https://www.facebook.com/thepawfecthouse",
+            "link": "https://www.facebook.com/thetg",
             "accessibility_label": "Pawfect House on Facebook"
           }
         },
@@ -190,7 +190,7 @@
           "type": "mobile_social_link",
           "settings": {
             "platform": "youtube",
-            "link": "https://www.youtube.com/@pawfecthouse_official",
+            "link": "https://www.youtube.com/@tg_official",
             "accessibility_label": "Pawfect House on YouTube"
           }
         },
@@ -198,7 +198,7 @@
           "type": "mobile_social_link",
           "settings": {
             "platform": "instagram",
-            "link": "https://www.instagram.com/pawfecthouse_official/?hl=en",
+            "link": "https://www.instagram.com/tg_official/?hl=en",
             "accessibility_label": "Pawfect House on Instagram"
           }
         },
@@ -206,7 +206,7 @@
           "type": "mobile_social_link",
           "settings": {
             "platform": "tiktok",
-            "link": "https://www.tiktok.com/@pawfecthouse_official",
+            "link": "https://www.tiktok.com/@tg_official",
             "accessibility_label": "Pawfect House on TikTok"
           }
         }
@@ -234,15 +234,15 @@
         "logo_position": "middle-left",
         "mobile_logo_position": "center",
         "menu": "threadsgo-preview-navigation",
-        "enable_pawfecthouse_mobile_menu": true,
-        "pawfecthouse_mobile_menu_title": "Menu",
-        "pawfecthouse_mobile_menu_width": 92,
-        "pawfecthouse_mobile_menu_background": "#f6f6fb",
-        "pawfecthouse_mobile_menu_surface": "#ffffff",
-        "pawfecthouse_mobile_menu_text": "#202024",
-        "pawfecthouse_mobile_menu_accent": "#0b8494",
-        "pawfecthouse_mobile_menu_divider": "#eeeeff",
-        "pawfecthouse_mobile_menu_show_social": true,
+        "enable_tg_header_mobile_menu": true,
+        "tg_header_mobile_menu_title": "Menu",
+        "tg_header_mobile_menu_width": 92,
+        "tg_header_mobile_menu_background": "#f6f6fb",
+        "tg_header_mobile_menu_surface": "#ffffff",
+        "tg_header_mobile_menu_text": "#202024",
+        "tg_header_mobile_menu_accent": "#0b8494",
+        "tg_header_mobile_menu_divider": "#eeeeff",
+        "tg_header_mobile_menu_show_social": true,
         "menu_type_desktop": "mega",
         "mobile_track_order_link": "/pages/track-order",
         "mobile_reviews_link": "/#reviews",

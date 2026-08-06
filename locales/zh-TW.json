@@ -217,6 +217,10 @@
     }
   },
   "templates": {
+    "404": {
+      "title": "找不到頁面",
+      "subtext": "404"
+    },
     "search": {
       "no_results": "找不到與「{{ terms }}」相符的結果。請檢查拼字或使用其他字詞。",
       "results_with_count": {
@@ -260,10 +264,6 @@
         "error_heading": "請調整以下內容：",
         "title": "聯絡表單"
       }
-    },
-    "404": {
-      "title": "找不到頁面",
-      "subtext": "404"
     }
   },
   "sections": {
@@ -273,6 +273,9 @@
       "cart_count": {
         "one": "{{ count }} 件商品",
         "other": "{{ count }} 件商品"
+      },
+      "tg_header_desktop": {
+        "navigation_label": "primary navigation"
       }
     },
     "cart": {
@@ -527,6 +530,20 @@
       "send_on_label": "發送時間 (選填)",
       "expanded": "禮品卡收件人表單已展開",
       "collapsed": "禮品卡收件人表單已收合"
+    }
+  },
+  "tg": {
+    "a11y": {
+      "previous": "Previous",
+      "next": "Next",
+      "play_video": "Play video",
+      "video_dialog": "Video player",
+      "close": "Close"
+    }
+  },
+  "tg_collection": {
+    "a11y": {
+      "breadcrumb": "Breadcrumb"
     }
   }
 }

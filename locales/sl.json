@@ -225,6 +225,10 @@
     }
   },
   "templates": {
+    "404": {
+      "title": "Strani ni mogoče najti",
+      "subtext": "404"
+    },
     "search": {
       "no_results": "Za »{{ terms }}« ni bil najden noben rezultat. Preverite črkovanje ali uporabite drugo besedo ali frazo.",
       "page": "Stran",
@@ -278,10 +282,6 @@
         "error_heading": "Prilagodite naslednje:",
         "title": "Obrazec za stik"
       }
-    },
-    "404": {
-      "title": "Strani ni mogoče najti",
-      "subtext": "404"
     }
   },
   "sections": {
@@ -293,6 +293,9 @@
         "other": "Št. elementov: {{ count }}",
         "few": "Št. elementov: {{ count }}",
         "two": "Št. elementov: {{ count }}"
+      },
+      "tg_header_desktop": {
+        "navigation_label": "primary navigation"
       }
     },
     "cart": {
@@ -551,6 +554,20 @@
       "send_on_label": "Pošlji na datum (izbirno)",
       "expanded": "Razširjen obrazec prejemnika darilnega bona",
       "collapsed": "Strnjen obrazec prejemnika darilnega bona"
+    }
+  },
+  "tg": {
+    "a11y": {
+      "previous": "Previous",
+      "next": "Next",
+      "play_video": "Play video",
+      "video_dialog": "Video player",
+      "close": "Close"
+    }
+  },
+  "tg_collection": {
+    "a11y": {
+      "breadcrumb": "Breadcrumb"
     }
   }
 }

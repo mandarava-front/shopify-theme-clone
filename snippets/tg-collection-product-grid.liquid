@@ -1,0 +1,14 @@
+<div class="collection">
+  <div class="loading-overlay gradient"></div>
+  <ul id="product-grid" data-id="{{ section.id }}" class="grid product-grid grid--{{ section.settings.columns_mobile }}-col-tablet-down grid--{{ section.settings.columns_desktop }}-col-desktop">
+    {%- assign skip_card_product_styles = false -%}
+    {%- for product in products -%}
+      {%- assign lazy_load = true -%}
+      {%- if forloop.index <= 2 -%}{%- assign lazy_load = false -%}{%- endif -%}
+      <li class="grid__item">
+        {% render 'card-product', card_product: product, media_aspect_ratio: section.settings.image_ratio, image_shape: 'default', show_secondary_image: section.settings.show_secondary_image, show_vendor: section.settings.show_vendor, show_rating: section.settings.show_rating, lazy_load: lazy_load, skip_styles: skip_card_product_styles, quick_add: section.settings.quick_add, section_id: section.id, product_view_context: 'collection' %}
+      </li>
+      {%- assign skip_card_product_styles = true -%}
+    {%- endfor -%}
+  </ul>
+</div>

@@ -275,6 +275,28 @@
             "label": "商品系列",
             "info": "當購物車導覽匣無商品時顯示"
           }
+        },
+        "tg_cart_drawer": {
+          "enable": {
+            "label": "tg | 啟用購物車導覽匣",
+            "info": "為原生 Ajax 購物車導覽匣加入可選的滿額免運進度提示。"
+          },
+          "target": {
+            "label": "免運目標金額",
+            "info": "請使用商店貨幣輸入目標金額。"
+          },
+          "progress_message": {
+            "label": "進度提示文字"
+          },
+          "progress_complete": {
+            "label": "達成後的進度文字"
+          },
+          "progress_color": {
+            "label": "進度顏色"
+          },
+          "progress_track": {
+            "label": "進度軌道顏色"
+          }
         }
       }
     },
@@ -994,6 +1016,274 @@
         "header__utilities": {
           "content": "公用事業"
         }
+      },
+      "tg_header_desktop": {
+        "heading": "tg | 桌面版導覽列",
+        "navigation_label": "primary navigation",
+        "enable": {
+          "label": "tg | 啟用桌面版導覽列",
+          "info": "Replaces the standard header at 990px and wider. The mobile header and drawer remain unchanged."
+        },
+        "menu": {
+          "label": "Desktop navigation menu",
+          "info": "Uses the selected menu after featured links. Leave blank to use the main Header menu."
+        },
+        "logo_image": {
+          "label": "Desktop logo image",
+          "info": "Overrides the theme logo for this desktop header."
+        },
+        "logo_text": {
+          "label": "Logo text fallback",
+          "info": "Shown only when neither a desktop logo image nor the theme logo is set."
+        },
+        "announcement": {
+          "heading": "Announcement",
+          "show": {
+            "label": "Show announcement"
+          },
+          "text": {
+            "label": "Announcement text"
+          },
+          "dismissible": {
+            "label": "Allow visitors to dismiss the announcement",
+            "info": "Stores the dismissal for the current browser session."
+          },
+          "close_label": {
+            "label": "Close button label"
+          }
+        },
+        "actions": {
+          "heading": "Search and cart",
+          "show_search": {
+            "label": "Show search"
+          },
+          "search_placeholder": {
+            "label": "Search placeholder"
+          },
+          "search_label": {
+            "label": "Search field label"
+          },
+          "search_open_label": {
+            "label": "Open search button label"
+          },
+          "search_close_label": {
+            "label": "Close search button label"
+          },
+          "show_cart": {
+            "label": "Show cart"
+          },
+          "cart_label": {
+            "label": "Cart link label"
+          }
+        },
+        "extras": {
+          "heading": "tg | 功能連結與社群媒體",
+          "show_utility_links": {
+            "label": "顯示功能連結",
+            "info": "新增「桌面版功能連結」區塊，以設定內容與順序。"
+          },
+          "show_social_links": {
+            "label": "顯示社群媒體連結",
+            "info": "新增「桌面版社群媒體連結」區塊，以設定個人頁面連結與順序。"
+          }
+        },
+        "appearance": {
+          "heading": "Appearance",
+          "announcement_background": {
+            "label": "Announcement background"
+          },
+          "announcement_text": {
+            "label": "Announcement text color"
+          },
+          "background": {
+            "label": "Navigation background"
+          },
+          "text": {
+            "label": "Navigation text color"
+          },
+          "hover": {
+            "label": "Hover and active color"
+          },
+          "border": {
+            "label": "Navigation border color"
+          },
+          "badge_background": {
+            "label": "Cart badge background"
+          },
+          "badge_text": {
+            "label": "Cart badge text color"
+          },
+          "max_width": {
+            "label": "Content maximum width"
+          },
+          "logo_width": {
+            "label": "Logo width"
+          },
+          "nav_gap": {
+            "label": "Navigation link spacing"
+          },
+          "nav_height": {
+            "label": "Navigation height"
+          },
+          "border_width": {
+            "label": "Navigation border width"
+          }
+        },
+        "blocks": {
+          "feature": {
+            "name": "tg | 桌面版特色導覽連結",
+            "title": {
+              "label": "Label"
+            },
+            "link": {
+              "label": "Link"
+            },
+            "image": {
+              "label": "Custom icon"
+            },
+            "icon": {
+              "label": "Built-in icon",
+              "options": {
+                "summer": "Summer",
+                "back_to_school": "Back to school"
+              }
+            }
+          },
+          "utility": {
+            "name": "tg | 桌面版功能連結",
+            "title": {
+              "label": "Label"
+            },
+            "link": {
+              "label": "Link"
+            }
+          },
+          "social": {
+            "name": "tg | 桌面版社群媒體連結",
+            "platform": {
+              "label": "Platform",
+              "options": {
+                "facebook": "Facebook",
+                "youtube": "YouTube",
+                "instagram": "Instagram",
+                "tiktok": "TikTok",
+                "twitter": "X / Twitter"
+              }
+            },
+            "link": {
+              "label": "Profile link",
+              "info": "Leave blank to hide this social icon."
+            },
+            "accessibility_label": {
+              "label": "Accessibility label",
+              "info": "Optional. Defaults to the selected platform name."
+            }
+          }
+        }
+      },
+      "tg_header_mobile": {
+        "heading": "tg | 行動版導覽選單",
+        "enable": {
+          "label": "tg | 啟用行動版導覽選單",
+          "info": "Replaces the standard mobile drawer below 990px."
+        },
+        "title": {
+          "label": "Drawer title"
+        },
+        "width": {
+          "label": "Drawer width"
+        },
+        "background": {
+          "label": "Drawer background"
+        },
+        "surface": {
+          "label": "Surface color"
+        },
+        "text": {
+          "label": "Text color"
+        },
+        "accent": {
+          "label": "Focus and hover color"
+        },
+        "divider": {
+          "label": "Divider color"
+        },
+        "show_social": {
+          "label": "顯示社群媒體連結",
+          "info": "新增「行動版社群媒體連結」區塊，以設定行動版選單中的個人頁面、連結、標籤與順序。"
+        },
+        "track_order": {
+          "label": "Mobile track order link"
+        },
+        "reviews": {
+          "label": "Mobile reviews link"
+        },
+        "blocks": {
+          "featured": {
+            "name": "tg | 行動版特色導覽卡片",
+            "title": "Title",
+            "link": "Link",
+            "image": "Custom icon",
+            "icon": "Built-in icon",
+            "background": "Background",
+            "text": "Text",
+            "options": {
+              "summer": "Summer",
+              "back_to_school": "Back to school",
+              "occasions": "Occasions",
+              "interests": "Interests",
+              "recipients": "Recipients",
+              "home": "Home and living",
+              "apparel": "Apparel",
+              "accessories": "Accessories",
+              "drinkware": "Drinkware",
+              "outdoor": "Outdoor"
+            }
+          },
+          "menu": {
+            "name": "tg | 行動版選單卡片",
+            "title": "Title",
+            "link": "Link",
+            "link_info": "Used when no submenu is selected and as the View all link in a submenu.",
+            "sub_menu": "Submenu",
+            "image": "Custom icon",
+            "icon": "Built-in icon",
+            "background": "Background",
+            "text": "Text",
+            "options": {
+              "summer": "Summer",
+              "back_to_school": "Back to school",
+              "occasions": "Occasions",
+              "interests": "Interests",
+              "recipients": "Recipients",
+              "home": "Home and living",
+              "apparel": "Apparel",
+              "accessories": "Accessories",
+              "drinkware": "Drinkware",
+              "outdoor": "Outdoor"
+            }
+          },
+          "utility": {
+            "name": "tg | 行動版功能連結",
+            "title": "Title",
+            "link": "Link"
+          },
+          "social": {
+            "name": "tg | 行動版社群媒體連結",
+            "platform": "Platform",
+            "link": "Profile link",
+            "link_info": "Leave blank to hide this social icon.",
+            "accessibility_label": "Accessibility label",
+            "accessibility_label_info": "Optional. Defaults to the selected platform name.",
+            "options": {
+              "facebook": "Facebook",
+              "youtube": "YouTube",
+              "instagram": "Instagram",
+              "tiktok": "TikTok",
+              "twitter": "X / Twitter"
+            }
+          }
+        }
       }
     },
     "image-banner": {
@@ -1433,7 +1723,28 @@
       }
     },
     "main-cart-items": {
-      "name": "商品"
+      "name": "商品",
+      "tg_cart_page": {
+        "enable": {
+          "label": "tg | 啟用購物車頁樣式",
+          "info": "Adds an optional cart-page empty state and announcement treatment while keeping native cart data."
+        },
+        "announcement": {
+          "label": "Announcement text"
+        },
+        "empty_heading": {
+          "label": "Empty cart heading"
+        },
+        "empty_text": {
+          "label": "Empty cart description"
+        },
+        "accent": {
+          "label": "Accent color"
+        },
+        "surface": {
+          "label": "Surface color"
+        }
+      }
     },
     "main-collection-banner": {
       "name": "商品系列橫幅",
@@ -3410,6 +3721,379 @@
           "label": "預設為開啟"
         }
       }
+    },
+    "tg_product": {
+      "appearance": {
+        "heading": "tg | 商品頁樣式",
+        "enable": {
+          "label": "tg | 啟用商品頁樣式",
+          "info": "Applies the color treatment to the native product gallery, price, and add-to-cart button."
+        }
+      },
+      "personalization": {
+        "name": "tg | 商品個人化欄位",
+        "heading": {
+          "label": "Heading"
+        },
+        "description": {
+          "label": "Description"
+        },
+        "label": {
+          "label": "Field label"
+        },
+        "property_name": {
+          "label": "Cart property name",
+          "info": "Leave blank to use the field label. This name is shown on the cart and order."
+        },
+        "field_type": {
+          "label": "Field type",
+          "options": {
+            "text": "Text input",
+            "select": "Selection list"
+          }
+        },
+        "choices": {
+          "label": "Choices",
+          "info": "For a selection list, separate each option with a vertical bar (|)."
+        },
+        "placeholder": {
+          "label": "Placeholder"
+        },
+        "max_length": {
+          "label": "Maximum length"
+        },
+        "required": {
+          "label": "Require this field"
+        },
+        "help_text": {
+          "label": "Helper text"
+        }
+      },
+      "addon": {
+        "name": "tg | 商品加購服務",
+        "heading": {
+          "label": "Heading"
+        },
+        "product": {
+          "label": "Add-on product",
+          "info": "The selected product's first available variant is added with the main product when checked."
+        },
+        "variant_id": {
+          "label": "Add-on variant ID",
+          "info": "Optional. Enter a variant ID to add that variant instead of the selected product's first available variant."
+        },
+        "description": {
+          "label": "Description"
+        },
+        "error_message": {
+          "label": "Add-on error message"
+        }
+      },
+      "story": {
+        "name": "tg | 商品故事模組",
+        "preset": {
+          "name": "tg | 商品故事模組"
+        },
+        "heading": {
+          "label": "Heading"
+        },
+        "subheading": {
+          "label": "Introductory text"
+        },
+        "surface_color": {
+          "label": "Background color"
+        },
+        "text_color": {
+          "label": "Text color"
+        },
+        "accent_color": {
+          "label": "Accent color"
+        },
+        "padding_top": {
+          "label": "Top padding"
+        },
+        "padding_bottom": {
+          "label": "Bottom padding"
+        },
+        "blocks": {
+          "hero": {
+            "name": "tg | 故事主視覺"
+          },
+          "benefit": {
+            "name": "tg | 賣點卡片"
+          },
+          "detail": {
+            "name": "tg | 細節賣點"
+          },
+          "occasion": {
+            "name": "tg | 情境卡片"
+          },
+          "good_to_know": {
+            "name": "tg | 溫馨提示"
+          },
+          "image": {
+            "label": "Image"
+          },
+          "heading": {
+            "label": "Heading"
+          },
+          "text": {
+            "label": "Text"
+          },
+          "button_label": {
+            "label": "Button label"
+          },
+          "button_link": {
+            "label": "Button link"
+          },
+          "eyebrow": {
+            "label": "Eyebrow"
+          }
+        }
+      }
+    }
+  },
+  "tg": {
+    "sections": {
+      "category": {
+        "name": "tg | 分類橫向捲動"
+      },
+      "banner": {
+        "name": "tg | 圖片橫幅"
+      },
+      "steps": {
+        "name": "tg | 客製流程步驟"
+      },
+      "benefits": {
+        "name": "tg | 服務優勢"
+      },
+     "product_rail": {
+       "name": "tg | 商品橫向捲動"
+     },
+      "featured_products": {
+        "name": "tg | 精選商品"
+      },
+     "split_promo": {
+        "name": "tg | 雙欄促銷橫幅"
+      },
+      "tabs": {
+        "name": "tg | 集合標籤頁"
+      },
+      "recipients": {
+        "name": "tg | 收禮對象網格"
+      },
+      "video_rail": {
+        "name": "tg | 影片橫向捲動"
+      },
+      "faq": {
+        "name": "tg | 常見問題"
+      }
+    },
+    "blocks": {
+      "category": {
+        "name": "tg | 分類卡片"
+      },
+      "step": {
+        "name": "tg | 流程步驟"
+      },
+      "benefit": {
+        "name": "tg | 服務優勢"
+      },
+      "collection_tab": {
+        "name": "tg | 集合標籤頁"
+      },
+      "recipient": {
+        "name": "tg | 收禮對象卡片"
+      },
+     "video": {
+       "name": "tg | 影片項目"
+     },
+      "featured_product": {
+        "name": "tg | 精選商品"
+      },
+     "faq": {
+        "name": "tg | 常見問題項目"
+      }
+    },
+    "settings": {
+      "heading": "Heading",
+      "heading_font_size": "標題字型大小",
+      "heading_font_size_mobile": "行動版標題字型大小",
+      "heading_color": "標題顏色",
+      "heading_hover_color": "標題暫留顏色",
+      "title_font_size": "名稱字型大小",
+      "title_font_size_mobile": "行動版名稱字型大小",
+      "title_color": "名稱顏色",
+      "title_hover_color": "名稱暫留顏色",
+      "text_font_size": "文案字型大小",
+      "text_font_size_mobile": "行動版文案字型大小",
+      "subheading": "Subheading",
+      "title": "Title",
+      "text": "Text",
+      "description": "Description",
+      "question": "Question",
+      "answer": "Answer",
+      "eyebrow": "Eyebrow",
+      "image": "Image",
+      "icon_or_image": "Icon or image",
+      "desktop_image": "Desktop image",
+      "mobile_image": "Mobile image",
+      "poster": "Poster image",
+      "alt": "Image alt text",
+      "link": "Link",
+      "collection": "Collection",
+      "product": "Product",
+      "tab_label": "Tab label",
+      "tab_style": "標籤導覽樣式",
+      "underline_color": "底線顏色",
+      "video": "Shopify video",
+      "video_url": "MP4 video URL",
+      "background": "Background color",
+      "content_background": "Content background",
+      "text_color": "Text color",
+      "muted_color": "Muted text color",
+      "accent_color": "Accent color",
+      "button_color": "Button color",
+      "button_text_color": "Button text color",
+      "button_radius": "按鈕圓角",
+      "button_min_height": "按鈕最小高度",
+      "button_padding_vertical": "按鈕垂直內邊距",
+      "button_padding_horizontal": "按鈕水平內邊距",
+      "button_font_size": "按鈕字號",
+      "nav_button_size": "滾動按鈕尺寸",
+      "nav_button_radius": "滾動按鈕圓角",
+      "nav_button_background": "滾動按鈕背景",
+      "nav_button_hover_background": "滾動按鈕暫留背景",
+      "nav_button_border_color": "滾動按鈕邊框顏色",
+      "nav_button_arrow_color": "滾動按鈕箭頭顏色",
+      "nav_button_hover_arrow_color": "滾動按鈕暫留箭頭顏色",
+      "border_color": "Border color",
+      "columns": "Columns",
+      "desktop_columns": "Desktop columns",
+      "mobile_columns": "行動版列數",
+      "gap": "Gap",
+      "padding_top": "Top padding",
+      "padding_bottom": "Bottom padding",
+      "mobile_padding_top": "行動版上內邊距",
+      "mobile_padding_bottom": "行動版下內邊距",
+      "image_position": "Image position",
+      "image_shape": "Image shape",
+      "image_radius": "Image corner radius",
+      "image_margin_left": "Image left margin",
+      "image_margin_right": "Image right margin",
+      "image_ratio": "Product image ratio",
+      "card_radius": "Product card corner radius",
+      "products_to_show": "Products to show",
+      "show_secondary_image": "Show second image on hover",
+      "show_badges": "顯示商品優惠標籤",
+      "show_vendor": "Show vendor",
+      "show_rating": "Show rating",
+      "show_view_all": "Show view all button",
+      "button_label": "Button label",
+      "button_link": "按鈕連結",
+      "reviews": "評論數量文案",
+      "compare_at_price": "劃線價覆蓋文案",
+      "price": "價格覆蓋文案",
+      "badge": "優惠標籤文案",
+      "secondary_image": "商品第二張圖片",
+      "product_image": "商品主圖覆蓋圖片",
+      "product_link": "商品連結覆蓋地址",
+      "product_title": "商品標題覆蓋文案",
+      "star_color": "評分星星顏色",
+      "badge_text_color": "優惠標籤文字顏色",
+      "badge_background": "優惠標籤背景色",
+      "price_color": "價格顏色",
+      "show_numbers": "Show step numbers",
+      "show_arrows": "顯示桌面端步驟箭頭",
+      "arrow_color": "步驟箭頭顏色",
+      "default_open_item": "Default open FAQ item"
+    },
+    "options": {
+      "left": "Left",
+      "right": "Right",
+      "circle": "Circle",
+      "square": "Square",
+      "adapt": "Adapt to image",
+      "portrait": "Portrait",
+      "tab_style_pills": "膠囊按鈕",
+      "tab_style_tabs_nav": "底線標籤"
+    },
+    "info": {
+      "video_url": "Used only when a Shopify video is not selected.",
+      "collection_fallback": "僅在未新增商品區塊時使用。",
+      "product_title_override": "留空則使用所選商品標題。",
+      "product_link_override": "留空則使用所選商品連結。",
+      "price_override": "留空則使用所選商品價格。"
+    },
+    "a11y": {
+      "previous": "Previous",
+      "next": "Next",
+      "play_video": "Play video",
+      "video_dialog": "Video player",
+      "close": "Close"
+    }
+  },
+  "tg_collection": {
+    "sections": {
+      "header": {
+        "name": "tg | 集合頁標題區"
+      },
+      "grid": {
+        "name": "tg | 集合商品網格"
+      }
+    },
+    "settings": {
+      "title": "Title",
+      "description": "Description",
+      "home_label": "Home link label",
+      "show_breadcrumbs": "Show breadcrumbs",
+      "show_collection_description": "Show collection description",
+      "background": "Background color",
+      "text_color": "Text color",
+      "muted_color": "Muted text color",
+      "accent_color": "Accent color",
+      "border_color": "Border color",
+      "products_per_page": "Products per page",
+      "desktop_columns": "Desktop columns",
+      "mobile_columns": "Mobile columns",
+      "image_ratio": "Product image ratio",
+      "show_secondary_image": "Show second image on hover",
+      "show_vendor": "Show vendor",
+      "show_rating": "Show rating",
+      "quick_add": "Quick add",
+      "enable_filtering": "Enable filtering",
+      "enable_sorting": "Enable sorting",
+      "filter_type": "Filter layout",
+      "sort_label": "Sort label",
+      "facet_width": "Desktop filter width",
+      "layout_gap": "Filter and grid gap",
+      "column_gap": "Product column gap",
+      "row_gap": "Product row gap",
+      "card_radius": "Product card corner radius",
+      "empty_heading": "Empty state heading",
+      "empty_text": "Empty state text",
+      "empty_button_label": "Empty state button label",
+      "empty_link": "Empty state button link",
+      "padding_top": "Top padding",
+      "padding_bottom": "Bottom padding"
+    },
+    "options": {
+      "one_column": "One column",
+      "two_columns": "Two columns",
+      "adapt": "Adapt to image",
+      "portrait": "Portrait",
+      "square": "Square",
+      "none": "None",
+      "standard": "Standard",
+      "vertical": "Desktop sidebar",
+      "drawer": "Drawer",
+      "horizontal": "Horizontal"
+    },
+    "info": {
+      "title": "Leave blank to use the current collection title."
+    },
+    "a11y": {
+      "breadcrumb": "Breadcrumb"
     }
   }
 }

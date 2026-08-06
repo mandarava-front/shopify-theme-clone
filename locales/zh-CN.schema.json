@@ -255,6 +255,28 @@
         "show_cart_note": {
           "label": "购物车备注"
         },
+        "tg_cart_drawer": {
+          "enable": {
+            "label": "tg | 启用购物车抽屉",
+            "info": "为原生 Ajax 购物车抽屉添加可选的满额免邮进度展示。"
+          },
+          "target": {
+            "label": "免邮目标金额",
+            "info": "请使用店铺货币填写目标金额。"
+          },
+          "progress_message": {
+            "label": "进度提示文案"
+          },
+          "progress_complete": {
+            "label": "达成后的进度文案"
+          },
+          "progress_color": {
+            "label": "进度颜色"
+          },
+          "progress_track": {
+            "label": "进度轨道颜色"
+          }
+        },
         "cart_drawer": {
           "header": "购物车抽屉",
           "collection": {
@@ -994,6 +1016,274 @@
         "header__utilities": {
           "content": "公共设施"
         }
+      },
+      "tg_header_desktop": {
+        "heading": "tg | 桌面端导航栏",
+        "navigation_label": "主导航",
+        "enable": {
+          "label": "tg | 启用桌面端导航栏",
+          "info": "在宽度 990px 及以上替换标准页头；移动端页头和抽屉菜单不受影响。"
+        },
+        "menu": {
+          "label": "桌面端导航菜单",
+          "info": "在特色链接后显示所选菜单；留空则使用 Header 主菜单。"
+        },
+        "logo_image": {
+          "label": "桌面端 Logo 图片",
+          "info": "覆盖此桌面端页头使用的主题 Logo。"
+        },
+        "logo_text": {
+          "label": "Logo 备用文字",
+          "info": "仅当未设置桌面端 Logo 图片和主题 Logo 时显示。"
+        },
+        "announcement": {
+          "heading": "公告栏",
+          "show": {
+            "label": "显示公告栏"
+          },
+          "text": {
+            "label": "公告文案"
+          },
+          "dismissible": {
+            "label": "允许访客关闭公告栏",
+            "info": "关闭状态会保留至当前浏览器会话结束。"
+          },
+          "close_label": {
+            "label": "关闭按钮标签"
+          }
+        },
+        "actions": {
+          "heading": "搜索和购物车",
+          "show_search": {
+            "label": "显示搜索"
+          },
+          "search_placeholder": {
+            "label": "搜索占位文案"
+          },
+          "search_label": {
+            "label": "搜索框标签"
+          },
+          "search_open_label": {
+            "label": "打开搜索按钮标签"
+          },
+          "search_close_label": {
+            "label": "关闭搜索按钮标签"
+          },
+          "show_cart": {
+            "label": "显示购物车"
+          },
+          "cart_label": {
+            "label": "购物车链接标签"
+          }
+        },
+        "extras": {
+          "heading": "tg | 功能链接与社交媒体",
+          "show_utility_links": {
+            "label": "显示功能链接",
+            "info": "添加“桌面端功能链接”区块，用于配置内容和顺序。"
+          },
+          "show_social_links": {
+            "label": "显示社交媒体链接",
+            "info": "添加“桌面端社交媒体链接”区块，用于配置主页链接和顺序。"
+          }
+        },
+        "appearance": {
+          "heading": "外观",
+          "announcement_background": {
+            "label": "公告栏背景"
+          },
+          "announcement_text": {
+            "label": "公告栏文字颜色"
+          },
+          "background": {
+            "label": "导航背景"
+          },
+          "text": {
+            "label": "导航文字颜色"
+          },
+          "hover": {
+            "label": "悬停和选中颜色"
+          },
+          "border": {
+            "label": "导航边框颜色"
+          },
+          "badge_background": {
+            "label": "购物车角标背景"
+          },
+          "badge_text": {
+            "label": "购物车角标文字颜色"
+          },
+          "max_width": {
+            "label": "内容最大宽度"
+          },
+          "logo_width": {
+            "label": "Logo 宽度"
+          },
+          "nav_gap": {
+            "label": "导航链接间距"
+          },
+          "nav_height": {
+            "label": "导航高度"
+          },
+          "border_width": {
+            "label": "导航边框宽度"
+          }
+        },
+        "blocks": {
+          "feature": {
+            "name": "tg | 桌面端特色导航链接",
+            "title": {
+              "label": "标签"
+            },
+            "link": {
+              "label": "链接"
+            },
+            "image": {
+              "label": "自定义图标"
+            },
+            "icon": {
+              "label": "内置图标",
+              "options": {
+                "summer": "夏日",
+                "back_to_school": "返校季"
+              }
+            }
+          },
+          "utility": {
+            "name": "tg | 桌面端功能链接",
+            "title": {
+              "label": "标签"
+            },
+            "link": {
+              "label": "链接"
+            }
+          },
+          "social": {
+            "name": "tg | 桌面端社交媒体链接",
+            "platform": {
+              "label": "平台",
+              "options": {
+                "facebook": "Facebook",
+                "youtube": "YouTube",
+                "instagram": "Instagram",
+                "tiktok": "TikTok",
+                "twitter": "X / Twitter"
+              }
+            },
+            "link": {
+              "label": "主页链接",
+              "info": "留空即可隐藏该社媒图标。"
+            },
+            "accessibility_label": {
+              "label": "无障碍标签",
+              "info": "可选。默认使用所选平台名称。"
+            }
+          }
+        }
+      },
+      "tg_header_mobile": {
+        "heading": "tg | 移动端导航菜单",
+        "enable": {
+          "label": "tg | 启用移动端导航菜单",
+          "info": "在 990px 以下替换标准移动端抽屉菜单。"
+        },
+        "title": {
+          "label": "抽屉标题"
+        },
+        "width": {
+          "label": "抽屉宽度"
+        },
+        "background": {
+          "label": "抽屉背景"
+        },
+        "surface": {
+          "label": "表面颜色"
+        },
+        "text": {
+          "label": "文字颜色"
+        },
+        "accent": {
+          "label": "焦点和悬停颜色"
+        },
+        "divider": {
+          "label": "分隔线颜色"
+        },
+        "show_social": {
+          "label": "显示社交媒体链接",
+          "info": "添加“移动端社交媒体链接”区块，用于配置移动端菜单中的主页、链接、标签和顺序。"
+        },
+        "track_order": {
+          "label": "移动端订单追踪链接"
+        },
+        "reviews": {
+          "label": "移动端评价链接"
+        },
+        "blocks": {
+          "featured": {
+            "name": "tg | 移动端特色导航卡片",
+            "title": "标题",
+            "link": "链接",
+            "image": "自定义图标",
+            "icon": "内置图标",
+            "background": "背景",
+            "text": "文字",
+            "options": {
+              "summer": "夏日",
+              "back_to_school": "返校季",
+              "occasions": "场合",
+              "interests": "兴趣",
+              "recipients": "收件人",
+              "home": "家居生活",
+              "apparel": "服饰",
+              "accessories": "配饰",
+              "drinkware": "饮具",
+              "outdoor": "户外"
+            }
+          },
+          "menu": {
+            "name": "tg | 移动端菜单卡片",
+            "title": "标题",
+            "link": "链接",
+            "link_info": "未选择子菜单时使用，也会作为子菜单中的查看全部链接。",
+            "sub_menu": "子菜单",
+            "image": "自定义图标",
+            "icon": "内置图标",
+            "background": "背景",
+            "text": "文字",
+            "options": {
+              "summer": "夏日",
+              "back_to_school": "返校季",
+              "occasions": "场合",
+              "interests": "兴趣",
+              "recipients": "收件人",
+              "home": "家居生活",
+              "apparel": "服饰",
+              "accessories": "配饰",
+              "drinkware": "饮具",
+              "outdoor": "户外"
+            }
+          },
+          "utility": {
+            "name": "tg | 移动端功能链接",
+            "title": "标题",
+            "link": "链接"
+          },
+          "social": {
+            "name": "tg | 移动端社交媒体链接",
+            "platform": "平台",
+            "link": "主页链接",
+            "link_info": "留空即可隐藏该社媒图标。",
+            "accessibility_label": "无障碍标签",
+            "accessibility_label_info": "可选。默认使用所选平台名称。",
+            "options": {
+              "facebook": "Facebook",
+              "youtube": "YouTube",
+              "instagram": "Instagram",
+              "tiktok": "TikTok",
+              "twitter": "X / Twitter"
+            }
+          }
+        }
       }
     },
     "image-banner": {
@@ -1433,7 +1723,28 @@
       }
     },
     "main-cart-items": {
-      "name": "商品"
+      "name": "商品",
+      "tg_cart_page": {
+        "enable": {
+          "label": "tg | 启用购物车页样式",
+          "info": "添加可选的购物车空状态和公告样式，同时保留原生购物车数据。"
+        },
+        "announcement": {
+          "label": "公告文案"
+        },
+        "empty_heading": {
+          "label": "空购物车标题"
+        },
+        "empty_text": {
+          "label": "空购物车描述"
+        },
+        "accent": {
+          "label": "强调色"
+        },
+        "surface": {
+          "label": "表面颜色"
+        }
+      }
     },
     "main-collection-banner": {
       "name": "产品系列横幅",
@@ -3410,6 +3721,379 @@
           "label": "默认展开"
         }
       }
+    },
+    "tg_product": {
+      "appearance": {
+        "heading": "tg | 商品页样式",
+        "enable": {
+          "label": "tg | 启用商品页样式",
+          "info": "将 的颜色风格应用到原生商品图库、价格和加购按钮。"
+        }
+      },
+      "personalization": {
+        "name": "tg | 商品个性化字段",
+        "heading": {
+          "label": "标题"
+        },
+        "description": {
+          "label": "说明"
+        },
+        "label": {
+          "label": "字段标签"
+        },
+        "property_name": {
+          "label": "购物车属性名称",
+          "info": "留空则使用字段标签。该名称会显示在购物车和订单中。"
+        },
+        "field_type": {
+          "label": "字段类型",
+          "options": {
+            "text": "文本输入",
+            "select": "选择列表"
+          }
+        },
+        "choices": {
+          "label": "选项",
+          "info": "选择列表请用竖线（|）分隔每个选项。"
+        },
+        "placeholder": {
+          "label": "占位文案"
+        },
+        "max_length": {
+          "label": "最大长度"
+        },
+        "required": {
+          "label": "设为必填字段"
+        },
+        "help_text": {
+          "label": "辅助说明"
+        }
+      },
+      "addon": {
+        "name": "tg | 商品附加服务",
+        "heading": {
+          "label": "标题"
+        },
+        "product": {
+          "label": "附加商品",
+          "info": "勾选后，所选商品的第一个可售变体会与主商品一起加入购物车。"
+        },
+        "variant_id": {
+          "label": "附加商品变体 ID",
+          "info": "可选。填写变体 ID 后，将添加该变体而非所选商品的第一个可售变体。"
+        },
+        "description": {
+          "label": "说明"
+        },
+        "error_message": {
+          "label": "附加商品错误文案"
+        }
+      },
+      "story": {
+        "name": "tg | 商品故事模块",
+        "preset": {
+          "name": "tg | 商品故事模块"
+        },
+        "heading": {
+          "label": "标题"
+        },
+        "subheading": {
+          "label": "引导文字"
+        },
+        "surface_color": {
+          "label": "背景颜色"
+        },
+        "text_color": {
+          "label": "文字颜色"
+        },
+        "accent_color": {
+          "label": "强调颜色"
+        },
+        "padding_top": {
+          "label": "顶部内边距"
+        },
+        "padding_bottom": {
+          "label": "底部内边距"
+        },
+        "blocks": {
+          "hero": {
+            "name": "tg | 故事主视觉"
+          },
+          "benefit": {
+            "name": "tg | 卖点卡片"
+          },
+          "detail": {
+            "name": "tg | 细节卖点"
+          },
+          "occasion": {
+            "name": "tg | 场景卡片"
+          },
+          "good_to_know": {
+            "name": "tg | 温馨提示"
+          },
+          "image": {
+            "label": "图片"
+          },
+          "heading": {
+            "label": "标题"
+          },
+          "text": {
+            "label": "文案"
+          },
+          "button_label": {
+            "label": "按钮文案"
+          },
+          "button_link": {
+            "label": "按钮链接"
+          },
+          "eyebrow": {
+            "label": "眉题"
+          }
+        }
+      }
+    }
+  },
+  "tg": {
+    "sections": {
+      "category": {
+        "name": "tg | 分类横向滚动"
+      },
+      "banner": {
+        "name": "tg | 图片横幅"
+      },
+      "steps": {
+        "name": "tg | 定制流程步骤"
+      },
+      "benefits": {
+        "name": "tg | 服务优势"
+      },
+     "product_rail": {
+       "name": "tg | 商品横向滚动"
+     },
+      "featured_products": {
+        "name": "tg | 精选商品"
+      },
+     "split_promo": {
+        "name": "tg | 双栏促销横幅"
+      },
+      "tabs": {
+        "name": "tg | 集合标签页"
+      },
+      "recipients": {
+        "name": "tg | 收礼对象网格"
+      },
+      "video_rail": {
+        "name": "tg | 视频横向滚动"
+      },
+      "faq": {
+        "name": "tg | 常见问题"
+      }
+    },
+    "blocks": {
+      "category": {
+        "name": "tg | 分类卡片"
+      },
+      "step": {
+        "name": "tg | 流程步骤"
+      },
+      "benefit": {
+        "name": "tg | 优势"
+      },
+      "collection_tab": {
+        "name": "tg | 集合标签页"
+      },
+      "recipient": {
+        "name": "tg | 收礼对象卡片"
+      },
+     "video": {
+       "name": "tg | 视频项"
+     },
+      "featured_product": {
+        "name": "tg | 精选商品"
+      },
+     "faq": {
+        "name": "tg | 常见问题条目"
+      }
+    },
+    "settings": {
+      "heading": "标题",
+      "heading_font_size": "标题字号",
+      "heading_font_size_mobile": "移动端标题字号",
+      "heading_color": "标题颜色",
+      "heading_hover_color": "标题悬停颜色",
+      "subheading": "副标题",
+      "title": "名称",
+      "title_font_size": "名称字号",
+      "title_font_size_mobile": "移动端名称字号",
+      "title_color": "名称颜色",
+      "title_hover_color": "名称悬停颜色",
+      "text": "文案",
+      "text_font_size": "文案字号",
+      "text_font_size_mobile": "移动端文案字号",
+      "description": "描述",
+      "question": "问题",
+      "answer": "答案",
+      "eyebrow": "眉题",
+      "image": "图片",
+      "icon_or_image": "图标或图片",
+      "desktop_image": "桌面端图片",
+      "mobile_image": "移动端图片",
+      "poster": "封面图片",
+      "alt": "图片替代文本",
+      "link": "链接",
+      "collection": "集合",
+      "product": "商品",
+      "tab_label": "标签名称",
+      "tab_style": "标签导航样式",
+      "underline_color": "下划线颜色",
+      "video": "Shopify 视频",
+      "video_url": "MP4 视频链接",
+      "background": "背景色",
+      "content_background": "内容背景色",
+      "text_color": "文字颜色",
+      "muted_color": "弱化文字颜色",
+      "accent_color": "强调色",
+      "button_color": "按钮颜色",
+      "button_text_color": "按钮文字颜色",
+      "button_radius": "按钮圆角",
+      "button_min_height": "按钮最小高度",
+      "button_padding_vertical": "按钮垂直内边距",
+      "button_padding_horizontal": "按钮水平内边距",
+      "button_font_size": "按钮字号",
+      "nav_button_size": "滚动按钮尺寸",
+      "nav_button_radius": "滚动按钮圆角",
+      "nav_button_background": "滚动按钮背景色",
+      "nav_button_hover_background": "滚动按钮悬停背景色",
+      "nav_button_border_color": "滚动按钮边框颜色",
+      "nav_button_arrow_color": "滚动按钮箭头颜色",
+      "nav_button_hover_arrow_color": "滚动按钮悬停箭头颜色",
+      "border_color": "边框颜色",
+      "columns": "列数",
+      "desktop_columns": "桌面端列数",
+      "mobile_columns": "移动端列数",
+      "gap": "间距",
+      "padding_top": "上内边距",
+      "padding_bottom": "下内边距",
+      "mobile_padding_top": "移动端上内边距",
+      "mobile_padding_bottom": "移动端下内边距",
+      "image_position": "图片位置",
+      "image_shape": "图片形状",
+      "image_radius": "图片圆角",
+      "image_margin_left": "图片左外边距",
+      "image_margin_right": "图片右外边距",
+      "image_ratio": "商品图片比例",
+      "card_radius": "商品卡片圆角",
+      "products_to_show": "显示商品数",
+      "show_secondary_image": "悬停显示第二张图片",
+      "show_badges": "显示商品优惠标签",
+      "show_vendor": "显示供应商",
+      "show_rating": "显示评分",
+      "show_view_all": "显示查看全部按钮",
+      "button_label": "按钮文案",
+      "show_numbers": "显示步骤编号",
+      "show_arrows": "显示桌面端步骤箭头",
+      "arrow_color": "步骤箭头颜色",
+      "button_link": "按钮链接",
+      "price_color": "价格颜色",
+      "badge_background": "优惠标签背景色",
+      "badge_text_color": "优惠标签文字颜色",
+      "star_color": "评分星星颜色",
+      "product_title": "商品标题覆盖文案",
+      "product_link": "商品链接覆盖地址",
+      "product_image": "商品主图覆盖图片",
+      "secondary_image": "商品第二张图片",
+      "badge": "优惠标签文案",
+      "price": "价格覆盖文案",
+      "compare_at_price": "划线价覆盖文案",
+      "reviews": "评论数量文案",
+      "default_open_item": "默认展开的 FAQ 条目"
+    },
+    "options": {
+      "left": "左侧",
+      "right": "右侧",
+      "circle": "圆形",
+      "square": "方形",
+      "adapt": "适应图片",
+      "portrait": "竖版",
+      "tab_style_pills": "胶囊按钮",
+      "tab_style_tabs_nav": "下划线标签"
+    },
+    "info": {
+      "video_url": "仅在未选择 Shopify 视频时使用。",
+      "collection_fallback": "仅在未添加商品区块时使用。",
+      "product_title_override": "留空则使用所选商品标题。",
+      "product_link_override": "留空则使用所选商品链接。",
+      "price_override": "留空则使用所选商品价格。"
+    },
+    "a11y": {
+      "previous": "上一个",
+      "next": "下一个",
+      "play_video": "播放视频",
+      "video_dialog": "视频播放器",
+      "close": "关闭"
+    }
+  },
+  "tg_collection": {
+    "sections": {
+      "header": {
+        "name": "tg | 集合页标题区"
+      },
+      "grid": {
+        "name": "tg | 集合商品网格"
+      }
+    },
+    "settings": {
+      "title": "标题",
+      "description": "描述",
+      "home_label": "首页链接文案",
+      "show_breadcrumbs": "显示面包屑",
+      "show_collection_description": "显示集合描述",
+      "background": "背景色",
+      "text_color": "文字颜色",
+      "muted_color": "弱化文字颜色",
+      "accent_color": "强调色",
+      "border_color": "边框颜色",
+      "products_per_page": "每页商品数",
+      "desktop_columns": "桌面端列数",
+      "mobile_columns": "移动端列数",
+      "image_ratio": "商品图片比例",
+      "show_secondary_image": "悬停显示第二张图片",
+      "show_vendor": "显示供应商",
+      "show_rating": "显示评分",
+      "quick_add": "快速加入购物车",
+      "enable_filtering": "启用筛选",
+      "enable_sorting": "启用排序",
+      "filter_type": "筛选布局",
+      "sort_label": "排序标签",
+      "facet_width": "桌面端筛选宽度",
+      "layout_gap": "筛选与网格间距",
+      "column_gap": "商品列间距",
+      "row_gap": "商品行间距",
+      "card_radius": "商品卡片圆角",
+      "empty_heading": "空状态标题",
+      "empty_text": "空状态文案",
+      "empty_button_label": "空状态按钮文案",
+      "empty_link": "空状态按钮链接",
+      "padding_top": "上内边距",
+      "padding_bottom": "下内边距"
+    },
+    "options": {
+      "one_column": "单列",
+      "two_columns": "双列",
+      "adapt": "适应图片",
+      "portrait": "竖版",
+      "square": "方形",
+      "none": "无",
+      "standard": "标准",
+      "vertical": "桌面端侧边栏",
+      "drawer": "抽屉",
+      "horizontal": "水平"
+    },
+    "info": {
+      "title": "留空时使用当前集合标题。"
+    },
+    "a11y": {
+      "breadcrumb": "面包屑导航"
     }
   }
 }

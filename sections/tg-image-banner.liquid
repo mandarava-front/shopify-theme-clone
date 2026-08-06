@@ -1,0 +1,14 @@
+{{ 'tg-sections.css' | asset_url | stylesheet_tag }}
+<section class="tg-section" style="--tg-background: {{ section.settings.background }}; padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;" {{ section.shopify_attributes }}>
+  <div class="tg-page-width">
+    <a class="tg-banner" href="{{ section.settings.link | default: routes.all_products_collection_url }}" style="--tg-banner-margin-left: {{ section.settings.image_margin_left }}px; --tg-banner-margin-right: {{ section.settings.image_margin_right }}px; --tg-banner-radius: {{ section.settings.image_radius }}px;">
+      <picture>
+        {%- if section.settings.mobile_image != blank -%}<source media="(max-width: 749px)" srcset="{{ section.settings.mobile_image | image_url: width: 900 }}">{%- endif -%}
+        {%- if section.settings.desktop_image != blank -%}{{ section.settings.desktop_image | image_url: width: 2200 | image_tag: widths: '750, 1100, 1500, 2200', loading: 'lazy', alt: section.settings.alt }}{%- else -%}{{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}{%- endif -%}
+      </picture>
+    </a>
+  </div>
+</section>
+{% schema %}
+{"name":"t:tg.sections.banner.name","tag":"section","class":"section","settings":[{"type":"image_picker","id":"desktop_image","label":"t:tg.settings.desktop_image"},{"type":"image_picker","id":"mobile_image","label":"t:tg.settings.mobile_image"},{"type":"text","id":"alt","label":"t:tg.settings.alt"},{"type":"url","id":"link","label":"t:tg.settings.link"},{"type":"range","id":"image_margin_left","label":"t:tg.settings.image_margin_left","min":0,"max":240,"step":4,"unit":"px","default":0},{"type":"range","id":"image_margin_right","label":"t:tg.settings.image_margin_right","min":0,"max":240,"step":4,"unit":"px","default":0},{"type":"range","id":"image_radius","label":"t:tg.settings.image_radius","min":0,"max":32,"step":2,"unit":"px","default":0},{"type":"color","id":"background","label":"t:tg.settings.background","default":"#ffffff"},{"type":"range","id":"padding_top","label":"t:tg.settings.padding_top","min":0,"max":120,"step":4,"unit":"px","default":0},{"type":"range","id":"padding_bottom","label":"t:tg.settings.padding_bottom","min":0,"max":120,"step":4,"unit":"px","default":0}],"presets":[{"name":"t:tg.sections.banner.name"}]}
+{% endschema %}
