@@ -1,0 +1,41 @@
+<aside class="tg-cart-protection">
+  <div class="tg-cart-protection__badge">
+    {%- if block.settings.badge_image != blank -%}
+      {{
+        block.settings.badge_image
+        | image_url: width: 160
+        | image_tag:
+          loading: 'lazy',
+          widths: '80, 120, 160',
+          sizes: '80px',
+          alt: block.settings.heading
+      }}
+    {%- else -%}
+      <svg class="tg-cart-protection__shield" viewBox="0 0 81 96" aria-hidden="true" focusable="false">
+        <path class="tg-cart-protection__shield-shadow" d="M40.5 1.8c10.4 8.7 22.8 14.2 37.7 17.1.6 30.6-5.4 56.9-37.7 75.2C8.2 75.8 2.2 49.5 2.8 18.9 17.7 16 30.1 10.5 40.5 1.8Z" />
+        <path class="tg-cart-protection__shield-body" d="M40.5 8.2c8.9 7.1 19.5 11.7 31.8 14.4.1 26.1-5.8 47.6-31.8 63.5-26-15.9-31.9-37.4-31.8-63.5 12.3-2.7 22.9-7.3 31.8-14.4Z" />
+        <path class="tg-cart-protection__shield-line" d="M40.5 14.2c7.4 5.7 16.1 9.5 25.9 11.9-.4 21.7-5.9 39.3-25.9 52.3-20-13-25.5-30.6-25.9-52.3 9.8-2.4 18.5-6.2 25.9-11.9Z" />
+        <path class="tg-cart-protection__shield-cart" d="M25 34h5l4 22h23l4-15H33m4 7h21M38 62a3 3 0 1 0 0 .1m17-.1a3 3 0 1 0 0 .1" />
+      </svg>
+    {%- endif -%}
+  </div>
+  <div class="tg-cart-protection__content">
+    {%- if block.settings.heading != blank -%}
+      <p class="tg-cart-protection__heading">{{ block.settings.heading | escape }}</p>
+    {%- endif -%}
+    <ul class="tg-cart-protection__list list-unstyled" role="list">
+      {%- if block.settings.item_1_title != blank -%}
+        <li>
+          <span class="svg-wrapper" aria-hidden="true">{{- 'icon-checkmark.svg' | inline_asset_content -}}</span>
+          <span><strong>{{ block.settings.item_1_title | escape }}</strong>{% if block.settings.item_1_text != blank %} {{ block.settings.item_1_text | escape }}{% endif %}</span>
+        </li>
+      {%- endif -%}
+      {%- if block.settings.item_2_title != blank -%}
+        <li>
+          <span class="svg-wrapper" aria-hidden="true">{{- 'icon-checkmark.svg' | inline_asset_content -}}</span>
+          <span><strong>{{ block.settings.item_2_title | escape }}</strong>{% if block.settings.item_2_text != blank %} {{ block.settings.item_2_text | escape }}{% endif %}</span>
+        </li>
+      {%- endif -%}
+    </ul>
+  </div>
+</aside>

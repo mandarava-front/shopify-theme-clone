@@ -18,6 +18,9 @@ if (!customElements.get('product-form')) {
       }
 
       onSubmitHandler(evt) {
+        // Accelerated checkout owns its submit flow; don't put the add-to-cart button into loading state.
+        if (evt.submitter?.closest('.shopify-payment-button')) return;
+
         evt.preventDefault();
         if (this.submitButton.getAttribute('aria-disabled') === 'true') return;
 

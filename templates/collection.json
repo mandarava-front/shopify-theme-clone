@@ -9,39 +9,60 @@
  */
 {
   "sections": {
-    "main-collection-banner": {
-      "type": "main-collection-banner",
+    "tg-collection-header": {
+      "type": "tg-collection-header",
       "settings": {
-        "show_breadcrumbs": true,
-        "breadcrumb_home_label": "Home",
-        "show_collection_description": true,
-        "show_collection_image": false,
-        "color_scheme": "scheme-1"
+        "show_breadcrumbs": false,
+        "home_label": "Home",
+        "title": "",
+        "show_description": false,
+        "description": "<p></p>",
+        "background": "#ffffff",
+        "text_color": "#18181e",
+        "muted_color": "#666666",
+        "accent_color": "#ffb700",
+        "padding_top": 20,
+        "padding_bottom": 0
       }
     },
-    "main-product-grid": {
-      "type": "main-collection-product-grid",
+    "tg-collection-grid": {
+      "type": "tg-collection-grid",
       "settings": {
-        "products_per_page": 20,
+        "products_per_page": 24,
         "columns_desktop": 4,
-        "color_scheme": "scheme-1",
+        "columns_mobile": "2",
         "image_ratio": "square",
-        "image_shape": "default",
         "show_secondary_image": true,
         "show_vendor": false,
-        "show_rating": false,
+        "show_rating": true,
         "quick_add": "none",
         "enable_filtering": true,
-        "filter_type": "drawer",
         "enable_sorting": true,
-        "columns_mobile": "2",
-        "padding_top": 0,
-        "padding_bottom": 64
+        "filter_type": "vertical",
+        "facet_width": 265,
+        "layout_gap": 40,
+        "column_gap": 24,
+        "row_gap": 48,
+        "card_radius": 4,
+        "background": "#ffffff",
+        "text_color": "#18181e",
+        "muted_color": "#666666",
+        "accent_color": "#ffb700",
+        "price_color": "#e18a00",
+        "price_currency_mode": "market",
+        "price_currency_label": "",
+        "border_color": "#d9d9d9",
+        "empty_heading": "No products found",
+        "empty_text": "Try clearing filters or browse all products.",
+        "empty_button_label": "Clear filters",
+        "empty_link": "",
+        "padding_top": 40,
+        "padding_bottom": 160
       }
     }
   },
   "order": [
-    "main-collection-banner",
-    "main-product-grid"
+    "tg-collection-header",
+    "tg-collection-grid"
   ]
 }

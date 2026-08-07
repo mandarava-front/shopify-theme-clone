@@ -1419,7 +1419,7 @@
             "label": "t:settings_schema.cart.settings.cart_type.notification.label"
           }
         ],
-        "default": "notification",
+        "default": "drawer",
         "label": "t:settings_schema.cart.settings.cart_type.label"
       },
       {
@@ -1439,38 +1439,97 @@
         "id": "enable_tg_cart_drawer",
         "label": "t:settings_schema.cart.settings.tg_cart_drawer.enable.label",
         "info": "t:settings_schema.cart.settings.tg_cart_drawer.enable.info",
-        "default": false
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "tg | Defaulterr 抽屉内容"
+      },
+      {
+        "type": "text",
+        "id": "tg_cart_drawer_item_label",
+        "label": "商品数量后缀",
+        "default": "items"
+      },
+      {
+        "type": "checkbox",
+        "id": "tg_cart_drawer_urgency_enabled",
+        "label": "显示限时提示",
+        "default": true
       },
       {
         "type": "number",
-        "id": "tg_cart_drawer_free_shipping_target",
-        "label": "t:settings_schema.cart.settings.tg_cart_drawer.target.label",
-        "info": "t:settings_schema.cart.settings.tg_cart_drawer.target.info",
-        "default": 75
+        "id": "tg_cart_drawer_urgency_minutes",
+        "label": "限时提示时长（分钟）",
+        "info": "倒计时仅保存在当前访客的浏览器会话中。",
+        "default": 50
       },
       {
         "type": "text",
-        "id": "tg_cart_drawer_progress_message",
-        "label": "t:settings_schema.cart.settings.tg_cart_drawer.progress_message.label",
-        "default": "You're {{ amount }} away from free shipping"
+        "id": "tg_cart_drawer_urgency_message",
+        "label": "限时提示文案",
+        "info": "保留 {{ time }}，系统会替换为倒计时时间。",
+        "default": "Hurry! You have {{ time }} minutes remaining"
       },
       {
         "type": "text",
-        "id": "tg_cart_drawer_progress_complete_message",
-        "label": "t:settings_schema.cart.settings.tg_cart_drawer.progress_complete.label",
-        "default": "You've unlocked free shipping"
+        "id": "tg_cart_drawer_product_label",
+        "label": "商品列表标题",
+        "default": "Product"
       },
       {
-        "type": "color",
-        "id": "tg_cart_drawer_progress_color",
-        "label": "t:settings_schema.cart.settings.tg_cart_drawer.progress_color.label",
-        "default": "#e5a400"
+        "type": "text",
+        "id": "tg_cart_drawer_price_label",
+        "label": "价格列表标题",
+        "default": "Price"
       },
       {
-        "type": "color",
-        "id": "tg_cart_drawer_progress_track_color",
-        "label": "t:settings_schema.cart.settings.tg_cart_drawer.progress_track.label",
-        "default": "#ececec"
+        "type": "checkbox",
+        "id": "tg_cart_drawer_benefits_enabled",
+        "label": "显示购物权益",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "tg_cart_drawer_benefits_heading",
+        "label": "购物权益标题",
+        "default": "Benefits"
+      },
+      {
+        "type": "text",
+        "id": "tg_cart_drawer_benefit_1",
+        "label": "权益 1 文案",
+        "default": "100% Satisfaction Guarantee"
+      },
+      {
+        "type": "text",
+        "id": "tg_cart_drawer_benefit_2",
+        "label": "权益 2 文案",
+        "default": "Fast Shipping"
+      },
+      {
+        "type": "text",
+        "id": "tg_cart_drawer_benefit_3",
+        "label": "权益 3 文案",
+        "default": "30 Day Return"
+      },
+      {
+        "type": "text",
+        "id": "tg_cart_drawer_benefit_4",
+        "label": "权益 4 文案",
+        "default": "Secure Checkout"
+      },
+      {
+        "type": "text",
+        "id": "tg_cart_drawer_benefit_5",
+        "label": "权益 5 文案",
+        "default": "Order Tracking"
+      },
+      {
+        "type": "text",
+        "id": "tg_cart_drawer_checkout_label",
+        "label": "结算按钮文案",
+        "default": "Check out"
       },
       {
         "type": "header",

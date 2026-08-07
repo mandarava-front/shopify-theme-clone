@@ -8,24 +8,24 @@ class CartDrawer extends HTMLElement {
   }
 
   setHeaderCartIconAccessibility() {
-    const cartLink = document.querySelector('#cart-icon-bubble');
-    if (!cartLink) return;
-
-    cartLink.setAttribute('role', 'button');
-    cartLink.setAttribute('aria-haspopup', 'dialog');
-    cartLink.addEventListener('click', (event) => {
-      event.preventDefault();
-      this.open(cartLink);
-    });
-    cartLink.addEventListener('keydown', (event) => {
-      if (event.code.toUpperCase() === 'SPACE') {
+    document.querySelectorAll('#cart-icon-bubble, .tg-header-desktop__cart').forEach((cartLink) => {
+      cartLink.setAttribute('role', 'button');
+      cartLink.setAttribute('aria-haspopup', 'dialog');
+      cartLink.addEventListener('click', (event) => {
         event.preventDefault();
         this.open(cartLink);
-      }
+      });
+      cartLink.addEventListener('keydown', (event) => {
+        if (event.code.toUpperCase() === 'SPACE') {
+          event.preventDefault();
+          this.open(cartLink);
+        }
+      });
     });
   }
 
   open(triggeredBy) {
+    this.initializeTgCartDrawer();
     if (this.classList.contains('active')) return;
     if (triggeredBy) this.setActiveElement(triggeredBy);
     const cartDrawerNote = this.querySelector('[id^="Details-"] summary');
@@ -61,6 +61,52 @@ class CartDrawer extends HTMLElement {
     document.body.classList.remove('overflow-hidden');
   }
 
+  initializeTgCartDrawer() {
+    window.TgCartAddons?.syncDrawer();
+
+    const urgency = this.querySelector('[data-tg-cart-urgency]');
+    if (!urgency) {
+      window.clearInterval(this.tgCartDrawerUrgencyTimer);
+      this.tgCartDrawerUrgencyTimer = null;
+      return;
+    }
+
+    const countdownValue = urgency.querySelector('[data-tg-cart-urgency-value]');
+    if (!countdownValue) return;
+
+    const minutes = Math.max(1, Number(urgency.dataset.tgCartUrgencyMinutes) || 50);
+    const storageKey = `tg-cart-drawer-urgency-${window.location.host}`;
+    let expiresAt;
+
+    try {
+      expiresAt = Number(window.sessionStorage.getItem(storageKey));
+      if (!expiresAt || expiresAt <= Date.now()) {
+        expiresAt = Date.now() + minutes * 60 * 1000;
+        window.sessionStorage.setItem(storageKey, String(expiresAt));
+      }
+    } catch {
+      expiresAt = Date.now() + minutes * 60 * 1000;
+    }
+
+    const updateCountdown = () => {
+      const remainingSeconds = Math.max(0, Math.ceil((expiresAt - Date.now()) / 1000));
+      const remainingMinutes = Math.floor(remainingSeconds / 60);
+      const seconds = String(remainingSeconds % 60).padStart(2, '0');
+      countdownValue.textContent = `${remainingMinutes}:${seconds}`;
+
+      if (remainingSeconds === 0) {
+        window.clearInterval(this.tgCartDrawerUrgencyTimer);
+        this.tgCartDrawerUrgencyTimer = null;
+      }
+    };
+
+    window.clearInterval(this.tgCartDrawerUrgencyTimer);
+    updateCountdown();
+    if (this.tgCartDrawerUrgencyTimer !== null) {
+      this.tgCartDrawerUrgencyTimer = window.setInterval(updateCountdown, 1000);
+    }
+  }
+
   setSummaryAccessibility(cartDrawerNote) {
     cartDrawerNote.setAttribute('role', 'button');
     cartDrawerNote.setAttribute('aria-expanded', 'false');
@@ -77,8 +123,9 @@ class CartDrawer extends HTMLElement {
   }
 
   renderContents(parsedState) {
-    this.querySelector('.drawer__inner').classList.contains('is-empty') &&
-      this.querySelector('.drawer__inner').classList.remove('is-empty');
+    // `is-empty` lives on the custom element, not on its inner panel. Leaving it
+    // behind after an AJAX add hides the drawer header through the base stylesheet.
+    this.classList.remove('is-empty');
     this.productId = parsedState.id;
     this.getSectionsToRender().forEach((section) => {
       const sectionElement = section.selector
@@ -88,6 +135,7 @@ class CartDrawer extends HTMLElement {
       if (!sectionElement) return;
       sectionElement.innerHTML = this.getSectionInnerHTML(parsedState.sections[section.id], section.selector);
     });
+    this.initializeTgCartDrawer();
 
     setTimeout(() => {
       this.querySelector('#CartDrawer-Overlay').addEventListener('click', this.close.bind(this));
@@ -100,7 +148,7 @@ class CartDrawer extends HTMLElement {
   }
 
   getSectionsToRender() {
-    return [
+    const sections = [
       {
         id: 'cart-drawer',
         selector: '#CartDrawer',
@@ -109,6 +157,16 @@ class CartDrawer extends HTMLElement {
         id: 'cart-icon-bubble',
       },
     ];
+
+    const cartFooter = document.getElementById('main-cart-footer');
+    if (cartFooter?.dataset.id) {
+      sections.push({
+        id: cartFooter.dataset.id,
+        selector: '.tg-cart-summary__blocks',
+      });
+    }
+
+    return sections;
   }
 
   getSectionDOM(html, selector = '.shopify-section') {
@@ -124,7 +182,7 @@ customElements.define('cart-drawer', CartDrawer);
 
 class CartDrawerItems extends CartItems {
   getSectionsToRender() {
-    return [
+    const sections = [
       {
         id: 'CartDrawer',
         section: 'cart-drawer',
@@ -136,6 +194,17 @@ class CartDrawerItems extends CartItems {
         selector: '.shopify-section',
       },
     ];
+
+    const cartFooter = document.getElementById('main-cart-footer');
+    if (cartFooter?.dataset.id) {
+      sections.push({
+        id: 'main-cart-footer',
+        section: cartFooter.dataset.id,
+        selector: '.tg-cart-summary__blocks',
+      });
+    }
+
+    return sections;
   }
 }
 

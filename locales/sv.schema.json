@@ -3730,43 +3730,90 @@
           "info": "Applies the color treatment to the native product gallery, price, and add-to-cart button."
         }
       },
-      "personalization": {
-        "name": "personalization field",
+      "breadcrumbs": {
+        "heading": "tg | Breadcrumbs",
+        "show": {
+          "label": "Show breadcrumbs"
+        },
+        "home_label": {
+          "label": "Home link label"
+        }
+      },
+      "delivery_estimate": {
+        "name": "tg | Delivery estimate",
+        "day_mode": {
+          "label": "Calculation mode",
+          "options": {
+            "business": "Business days (skip weekends)",
+            "calendar": "Calendar days"
+          }
+        },
+        "processing": {
+          "heading": "Processing time",
+          "min_days": {
+            "label": "Minimum days"
+          },
+          "max_days": {
+            "label": "Maximum days"
+          }
+        },
+        "transit": {
+          "heading": "Shipping time",
+          "min_days": {
+            "label": "Minimum days"
+          },
+          "max_days": {
+            "label": "Maximum days"
+          }
+        },
+        "copy": {
+          "heading": "Customer-facing text",
+          "summary_prefix": {
+            "label": "Arrival summary prefix"
+          },
+          "summary_suffix": {
+            "label": "Arrival summary suffix"
+          },
+          "order_label": {
+            "label": "Order step label"
+          },
+          "ship_label": {
+            "label": "Shipping step label"
+          },
+          "delivery_label": {
+            "label": "Delivery step label"
+          }
+        }
+      },
+      "sales_proof": {
+        "name": "tg | Sales and service assurance",
+        "sales_text": {
+          "label": "Sales count text"
+        },
+        "assurance_text": {
+          "label": "Service assurance items (separate with |)",
+          "info": "Each item includes a checkmark. Separate items with a vertical bar (|)."
+        }
+      },
+      "secure_payment": {
+        "name": "tg | Secure payment methods",
+        "heading": {
+          "label": "Heading"
+        }
+      },
+      "trust_message": {
+        "name": "tg | Trust message",
         "heading": {
           "label": "Heading"
         },
-        "description": {
-          "label": "Description"
+        "text": {
+          "label": "Text"
         },
-        "label": {
-          "label": "Field label"
+        "link_label": {
+          "label": "Link label"
         },
-        "property_name": {
-          "label": "Cart property name",
-          "info": "Leave blank to use the field label. This name is shown on the cart and order."
-        },
-        "field_type": {
-          "label": "Field type",
-          "options": {
-            "text": "Text input",
-            "select": "Selection list"
-          }
-        },
-        "choices": {
-          "label": "Choices",
-          "info": "For a selection list, separate each option with a vertical bar (|)."
-        },
-        "placeholder": {
-          "label": "Placeholder"
-        },
-        "max_length": {
-          "label": "Maximum length"
-        },
-        "required": {
-          "label": "Require this field"
-        },
-        "help_text": {
-          "label": "Helper text"
+        "link": {
+          "label": "Link"
         }
       },
       "addon": {
@@ -3850,6 +3897,67 @@
             "label": "Eyebrow"
           }
         }
+      },
+      "title": {
+        "name": "tg | Product title",
+        "enable": {
+          "label": "Use tg product title styling"
+        },
+        "desktop_size": {
+          "label": "Desktop title size"
+        },
+        "mobile_size": {
+          "label": "Mobile title size"
+        },
+        "font_weight": {
+          "label": "Font weight",
+          "options": {
+            "regular": "Regular",
+            "medium": "Medium",
+            "semibold": "Semibold",
+            "bold": "Bold"
+          }
+        },
+        "color": {
+          "label": "Title color"
+        }
+      },
+      "accordion": {
+        "name": "tg | Product information accordion",
+        "content_source": {
+          "label": "Content source",
+          "options": {
+            "custom": "Custom content",
+            "product_description": "Product description",
+            "page": "Page"
+          }
+        },
+        "open_by_default": {
+          "label": "Open by default"
+        }
+      },
+      "purchase_actions": {
+        "heading": "tg | Purchase actions",
+        "layout": {
+          "label": "Quantity and add-to-cart layout",
+          "info": "Inline layout is used when both Quantity selector and Buy buttons blocks are present.",
+          "options": {
+            "inline": "Inline",
+            "stacked": "Stacked"
+          }
+        },
+        "colors": {
+          "heading": "tg | Purchase button color scheme",
+          "background": {
+            "label": "Button background"
+          },
+          "text": {
+            "label": "Button text"
+          },
+          "hover": {
+            "label": "Button hover"
+          }
+        }
       }
     }
   },
@@ -3867,13 +3975,13 @@
       "benefits": {
         "name": "benefits"
       },
-     "product_rail": {
-       "name": "product rail"
-     },
+      "product_rail": {
+        "name": "product rail"
+      },
       "featured_products": {
         "name": "Tg products"
       },
-     "split_promo": {
+      "split_promo": {
         "name": "split promotion"
       },
       "tabs": {
@@ -3905,13 +4013,13 @@
       "recipient": {
         "name": "Recipient"
       },
-     "video": {
-       "name": "Video"
-     },
+      "video": {
+        "name": "Video"
+      },
       "featured_product": {
         "name": "tg | Featured product"
       },
-     "faq": {
+      "faq": {
         "name": "FAQ item"
       }
     },
@@ -4036,10 +4144,10 @@
   "tg_collection": {
     "sections": {
       "header": {
-        "name": "Tg header"
+        "name": "Tg | Collection header"
       },
       "grid": {
-        "name": "Tg grid"
+        "name": "Tg | Collection grid"
       }
     },
     "settings": {
@@ -4048,10 +4156,14 @@
       "home_label": "Home link label",
       "show_breadcrumbs": "Show breadcrumbs",
       "show_collection_description": "Show collection description",
+      "filter_label": "Filter button label",
       "background": "Background color",
       "text_color": "Text color",
       "muted_color": "Muted text color",
       "accent_color": "Accent color",
+      "price_color": "Price color",
+      "price_currency_mode": "Price filter currency",
+      "price_currency_label": "Custom currency unit",
       "border_color": "Border color",
       "products_per_page": "Products per page",
       "desktop_columns": "Desktop columns",
@@ -4087,10 +4199,13 @@
       "standard": "Standard",
       "vertical": "Desktop sidebar",
       "drawer": "Drawer",
-      "horizontal": "Horizontal"
+      "horizontal": "Horizontal",
+      "market_currency": "Follow current market currency",
+      "custom_currency": "Custom currency unit"
     },
     "info": {
-      "title": "Leave blank to use the current collection title."
+      "title": "Leave blank to use the current collection title.",
+      "price_currency_label": "Used only when Price filter currency is set to Custom currency unit."
     },
     "a11y": {
       "breadcrumb": "Breadcrumb"

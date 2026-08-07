@@ -5,6 +5,8 @@
   - block: {Object} passing the block information.
   - product_form_id: {String} product form id.
   - section_id: {String} id of section to which this snippet belongs.
+  - quantity_block: {Object} quantity selector block used by the inline layout (optional).
+  - inline_purchase_actions: {Boolean} render the quantity selector beside the add-to-cart button (optional).
   - show_pickup_availability: {Boolean} for the pickup availability. If true the pickup availability is rendered, false - not rendered (optional).
 
   Usage:
@@ -22,6 +24,7 @@
       if block.settings.show_dynamic_checkout and gift_card_recipient_feature_active == false
         assign show_dynamic_checkout = true
       endif
+
     -%}
 
     <product-form
@@ -60,7 +63,10 @@
           {%- render 'gift-card-recipient-form', product: product, form: form, section: section -%}
         {%- endif -%}
 
-        <div class="product-form__buttons">
+        <div
+          class="product-form__buttons tg-product__purchase-actions{% if inline_purchase_actions %} tg-product__purchase-row{% endif %}"
+          style="--tg-purchase-button-color: {{ section.settings.purchase_button_background.red }}, {{ section.settings.purchase_button_background.green }}, {{ section.settings.purchase_button_background.blue }}; --tg-purchase-button-text-color: {{ section.settings.purchase_button_text.red }}, {{ section.settings.purchase_button_text.green }}, {{ section.settings.purchase_button_text.blue }}; --tg-purchase-button-hover-color: {{ section.settings.purchase_button_hover.red }}, {{ section.settings.purchase_button_hover.green }}, {{ section.settings.purchase_button_hover.blue }};"
+        >
           {%- liquid
             assign check_against_inventory = true
             if product.selected_or_first_available_variant.inventory_management != 'shopify' or product.selected_or_first_available_variant.inventory_policy == 'continue'
@@ -70,6 +76,9 @@
               assign quantity_rule_soldout = true
             endif
           -%}
+          {%- if inline_purchase_actions -%}
+            {% render 'tg-product-quantity', block: quantity_block, product: product, product_form_id: product_form_id, section: section, inline_purchase_actions: true %}
+          {%- endif -%}
           <button
             id="ProductSubmitButton-{{ section_id }}"
             type="submit"

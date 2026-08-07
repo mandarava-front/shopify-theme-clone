@@ -123,6 +123,7 @@ class CartItems extends window.StandardEvents.createViewEventElement(HTMLElement
               targetElement.replaceWith(sourceElement);
             }
           }
+          document.querySelector('cart-drawer')?.initializeTgCartDrawer?.();
         })
         .catch((e) => {
           console.error(e);
@@ -134,6 +135,7 @@ class CartItems extends window.StandardEvents.createViewEventElement(HTMLElement
           const html = new DOMParser().parseFromString(responseText, 'text/html');
           const sourceQty = html.querySelector('cart-items');
           this.innerHTML = sourceQty.innerHTML;
+          window.TgCartPage?.initTimers(this);
         })
         .catch((e) => {
           console.error(e);
@@ -142,6 +144,11 @@ class CartItems extends window.StandardEvents.createViewEventElement(HTMLElement
   }
 
   getSectionsToRender() {
+    const cartFooter = document.getElementById('main-cart-footer');
+    const cartFooterSelector = cartFooter.querySelector('.tg-cart-summary__blocks')
+      ? '.tg-cart-summary__blocks'
+      : '.js-contents';
+
     return [
       {
         id: 'main-cart-items',
@@ -160,8 +167,8 @@ class CartItems extends window.StandardEvents.createViewEventElement(HTMLElement
       },
       {
         id: 'main-cart-footer',
-        section: document.getElementById('main-cart-footer').dataset.id,
-        selector: '.js-contents',
+        section: cartFooter.dataset.id,
+        selector: cartFooterSelector,
       },
     ];
   }
@@ -229,6 +236,7 @@ class CartItems extends window.StandardEvents.createViewEventElement(HTMLElement
               section.selector
             );
           });
+          cartDrawerWrapper?.initializeTgCartDrawer?.();
           const updatedValue = parsedState.items[line - 1] ? parsedState.items[line - 1].quantity : undefined;
           let message = '';
           if (items.length === parsedState.items.length && updatedValue !== parseInt(quantityElement.value)) {

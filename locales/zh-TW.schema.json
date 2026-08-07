@@ -3730,43 +3730,90 @@
           "info": "Applies the color treatment to the native product gallery, price, and add-to-cart button."
         }
       },
-      "personalization": {
-        "name": "tg | 商品個人化欄位",
-        "heading": {
-          "label": "Heading"
+      "breadcrumbs": {
+        "heading": "tg | 麵包屑導覽",
+        "show": {
+          "label": "顯示麵包屑導覽"
         },
-        "description": {
-          "label": "Description"
-        },
-        "label": {
-          "label": "Field label"
-        },
-        "property_name": {
-          "label": "Cart property name",
-          "info": "Leave blank to use the field label. This name is shown on the cart and order."
-        },
-        "field_type": {
-          "label": "Field type",
+        "home_label": {
+          "label": "首頁連結文案"
+        }
+      },
+      "delivery_estimate": {
+        "name": "tg | 預計送達",
+        "day_mode": {
+          "label": "日期計算方式",
           "options": {
-            "text": "Text input",
-            "select": "Selection list"
+            "business": "工作日（不含週末）",
+            "calendar": "自然日"
           }
         },
-        "choices": {
-          "label": "Choices",
-          "info": "For a selection list, separate each option with a vertical bar (|)."
+        "processing": {
+          "heading": "處理時間",
+          "min_days": {
+            "label": "最短天數"
+          },
+          "max_days": {
+            "label": "最長天數"
+          }
         },
-        "placeholder": {
-          "label": "Placeholder"
+        "transit": {
+          "heading": "運輸時間",
+          "min_days": {
+            "label": "最短天數"
+          },
+          "max_days": {
+            "label": "最長天數"
+          }
         },
-        "max_length": {
-          "label": "Maximum length"
+        "copy": {
+          "heading": "面向顧客的文案",
+          "summary_prefix": {
+            "label": "送達摘要前綴"
+          },
+          "summary_suffix": {
+            "label": "送達摘要後綴"
+          },
+          "order_label": {
+            "label": "下單步驟文案"
+          },
+          "ship_label": {
+            "label": "出貨步驟文案"
+          },
+          "delivery_label": {
+            "label": "送達步驟文案"
+          }
+        }
+      },
+      "sales_proof": {
+        "name": "tg | 銷量與服務保障",
+        "sales_text": {
+          "label": "銷量提示文案"
         },
-        "required": {
-          "label": "Require this field"
+        "assurance_text": {
+          "label": "服務保障項目（以 | 分隔）",
+          "info": "每個項目前方會顯示勾選圖示，請以直線（|）分隔各項。"
+        }
+      },
+      "secure_payment": {
+        "name": "tg | 安全付款方式",
+        "heading": {
+          "label": "標題"
+        }
+      },
+      "trust_message": {
+        "name": "tg | 信任提示",
+        "heading": {
+          "label": "標題"
         },
-        "help_text": {
-          "label": "Helper text"
+        "text": {
+          "label": "說明文案"
+        },
+        "link_label": {
+          "label": "連結文案"
+        },
+        "link": {
+          "label": "連結"
         }
       },
       "addon": {
@@ -3850,6 +3897,67 @@
             "label": "Eyebrow"
           }
         }
+      },
+      "title": {
+        "name": "tg | 商品標題",
+        "enable": {
+          "label": "啟用 tg 商品標題樣式"
+        },
+        "desktop_size": {
+          "label": "桌面版標題字級"
+        },
+        "mobile_size": {
+          "label": "行動版標題字級"
+        },
+        "font_weight": {
+          "label": "字重",
+          "options": {
+            "regular": "一般",
+            "medium": "中等",
+            "semibold": "半粗體",
+            "bold": "粗體"
+          }
+        },
+        "color": {
+          "label": "標題顏色"
+        }
+      },
+      "accordion": {
+        "name": "tg | 商品資訊手風琴",
+        "content_source": {
+          "label": "內容來源",
+          "options": {
+            "custom": "自訂內容",
+            "product_description": "商品 Description",
+            "page": "頁面"
+          }
+        },
+        "open_by_default": {
+          "label": "預設展開"
+        }
+      },
+      "purchase_actions": {
+        "heading": "tg | 購買操作",
+        "layout": {
+          "label": "數量與加入購物車版面",
+          "info": "只有同時存在「數量選擇器」和「購買按鈕」區塊時，同排版面才會生效。",
+          "options": {
+            "inline": "同一排",
+            "stacked": "堆疊"
+          }
+        },
+        "colors": {
+          "heading": "tg | 購買按鈕配色方案",
+          "background": {
+            "label": "按鈕背景色"
+          },
+          "text": {
+            "label": "按鈕文字顏色"
+          },
+          "hover": {
+            "label": "按鈕滑過顏色"
+          }
+        }
       }
     }
   },
@@ -3867,13 +3975,13 @@
       "benefits": {
         "name": "tg | 服務優勢"
       },
-     "product_rail": {
-       "name": "tg | 商品橫向捲動"
-     },
+      "product_rail": {
+        "name": "tg | 商品橫向捲動"
+      },
       "featured_products": {
         "name": "tg | 精選商品"
       },
-     "split_promo": {
+      "split_promo": {
         "name": "tg | 雙欄促銷橫幅"
       },
       "tabs": {
@@ -3905,13 +4013,13 @@
       "recipient": {
         "name": "tg | 收禮對象卡片"
       },
-     "video": {
-       "name": "tg | 影片項目"
-     },
+      "video": {
+        "name": "tg | 影片項目"
+      },
       "featured_product": {
         "name": "tg | 精選商品"
       },
-     "faq": {
+      "faq": {
         "name": "tg | 常見問題項目"
       }
     },
@@ -4036,10 +4144,10 @@
   "tg_collection": {
     "sections": {
       "header": {
-        "name": "tg | 集合頁標題區"
+        "name": "Tg | 集合頁標題區"
       },
       "grid": {
-        "name": "tg | 集合商品網格"
+        "name": "Tg | 集合商品網格"
       }
     },
     "settings": {
@@ -4048,10 +4156,14 @@
       "home_label": "Home link label",
       "show_breadcrumbs": "Show breadcrumbs",
       "show_collection_description": "Show collection description",
+      "filter_label": "Filter button label",
       "background": "Background color",
       "text_color": "Text color",
       "muted_color": "Muted text color",
       "accent_color": "Accent color",
+      "price_color": "Price color",
+      "price_currency_mode": "Price filter currency",
+      "price_currency_label": "Custom currency unit",
       "border_color": "Border color",
       "products_per_page": "Products per page",
       "desktop_columns": "Desktop columns",
@@ -4087,10 +4199,13 @@
       "standard": "Standard",
       "vertical": "Desktop sidebar",
       "drawer": "Drawer",
-      "horizontal": "Horizontal"
+      "horizontal": "Horizontal",
+      "market_currency": "Follow current market currency",
+      "custom_currency": "Custom currency unit"
     },
     "info": {
-      "title": "Leave blank to use the current collection title."
+      "title": "Leave blank to use the current collection title.",
+      "price_currency_label": "Used only when Price filter currency is set to Custom currency unit."
     },
     "a11y": {
       "breadcrumb": "Breadcrumb"

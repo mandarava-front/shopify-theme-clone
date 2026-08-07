@@ -8,5 +8,40 @@
   </div>
 </section>
 {% schema %}
-{"name":"t:tg_collection.sections.header.name","tag":"section","class":"section","settings":[{"type":"checkbox","id":"show_breadcrumbs","label":"t:tg_collection.settings.show_breadcrumbs","default":false},{"type":"text","id":"home_label","label":"t:tg_collection.settings.home_label","default":"Home"},{"type":"inline_richtext","id":"title","label":"t:tg_collection.settings.title","info":"t:tg_collection.info.title"},{"type":"checkbox","id":"show_description","label":"t:tg_collection.settings.show_collection_description","default":false},{"type":"richtext","id":"description","label":"t:tg_collection.settings.description"},{"type":"color","id":"background","label":"t:tg_collection.settings.background","default":"#ffffff"},{"type":"color","id":"text_color","label":"t:tg_collection.settings.text_color","default":"#18181e"},{"type":"color","id":"muted_color","label":"t:tg_collection.settings.muted_color","default":"#666666"},{"type":"color","id":"accent_color","label":"t:tg_collection.settings.accent_color","default":"#ffb700"},{"type":"range","id":"padding_top","label":"t:tg_collection.settings.padding_top","min":0,"max":120,"step":4,"unit":"px","default":20},{"type":"range","id":"padding_bottom","label":"t:tg_collection.settings.padding_bottom","min":0,"max":120,"step":4,"unit":"px","default":20}],"presets":[{"name":"t:tg_collection.sections.header.name"}]}
+{
+  "name": "t:tg_collection.sections.header.name",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "checkbox", "id": "show_breadcrumbs", "label": "t:tg_collection.settings.show_breadcrumbs", "default": false },
+    { "type": "text", "id": "home_label", "label": "t:tg_collection.settings.home_label", "default": "Home" },
+    { "type": "inline_richtext", "id": "title", "label": "t:tg_collection.settings.title", "info": "t:tg_collection.info.title" },
+    { "type": "checkbox", "id": "show_description", "label": "t:tg_collection.settings.show_collection_description", "default": false },
+    { "type": "richtext", "id": "description", "label": "t:tg_collection.settings.description" },
+    { "type": "color", "id": "background", "label": "t:tg_collection.settings.background", "default": "#ffffff" },
+    { "type": "color", "id": "text_color", "label": "t:tg_collection.settings.text_color", "default": "#18181e" },
+    { "type": "color", "id": "muted_color", "label": "t:tg_collection.settings.muted_color", "default": "#666666" },
+    { "type": "color", "id": "accent_color", "label": "t:tg_collection.settings.accent_color", "default": "#ffb700" },
+    { "type": "range", "id": "padding_top", "label": "t:tg_collection.settings.padding_top", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 20 },
+    { "type": "range", "id": "padding_bottom", "label": "t:tg_collection.settings.padding_bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 0 }
+  ],
+  "presets": [
+    {
+      "name": "集合页默认 - 集合页标题区",
+      "settings": {
+        "show_breadcrumbs": false,
+        "home_label": "Home",
+        "title": "",
+        "show_description": false,
+        "description": "<p></p>",
+        "background": "#ffffff",
+        "text_color": "#18181e",
+        "muted_color": "#666666",
+        "accent_color": "#ffb700",
+        "padding_top": 20,
+        "padding_bottom": 0
+      }
+    }
+  ]
+}
 {% endschema %}

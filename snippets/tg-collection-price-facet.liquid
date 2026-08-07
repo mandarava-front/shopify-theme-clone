@@ -1,0 +1,43 @@
+{%- liquid
+  assign tg_price_currency = localization.country.currency.symbol
+  if tg_price_currency == blank
+    assign tg_price_currency = cart.currency.symbol
+  endif
+  if price_currency_mode == 'custom' and price_currency_label != blank
+    assign tg_price_currency = price_currency_label
+  endif
+-%}
+
+<div class="tg-collection__price-inputs">
+  <label class="tg-collection__price-field" for="{{ id_prefix }}{{ filter.label | escape }}-GTE">
+    <span class="tg-collection__price-currency" aria-hidden="true">{{ tg_price_currency | escape }}</span>
+    <span class="visually-hidden">{{ 'products.facets.from' | t }}</span>
+    <input
+      name="{{ filter.min_value.param_name }}"
+      id="{{ id_prefix }}{{ filter.label | escape }}-GTE"
+      {% if filter.min_value.value %}value="{{ filter.min_value.value | money_without_currency | strip_html | escape }}"{% endif %}
+      type="text"
+      inputmode="decimal"
+      placeholder="{{ 'products.facets.from' | t }}"
+      data-pattern="\d| |,|\."
+      data-min="0"
+      data-max="{{ filter.range_max | money_without_currency | strip_html | escape }}"
+    >
+  </label>
+  <span class="tg-collection__price-separator" aria-hidden="true">{{ 'products.facets.to' | t }}</span>
+  <label class="tg-collection__price-field" for="{{ id_prefix }}{{ filter.label | escape }}-LTE">
+    <span class="tg-collection__price-currency" aria-hidden="true">{{ tg_price_currency | escape }}</span>
+    <span class="visually-hidden">{{ 'products.facets.to' | t }}</span>
+    <input
+      name="{{ filter.max_value.param_name }}"
+      id="{{ id_prefix }}{{ filter.label | escape }}-LTE"
+      {% if filter.max_value.value %}value="{{ filter.max_value.value | money_without_currency | strip_html | escape }}"{% endif %}
+      type="text"
+      inputmode="decimal"
+      placeholder="{{ 'products.facets.to' | t }}"
+      data-pattern="\d| |,|\."
+      data-min="0"
+      data-max="{{ filter.range_max | money_without_currency | strip_html | escape }}"
+    >
+  </label>
+</div>

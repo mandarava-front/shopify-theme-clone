@@ -1,0 +1,18 @@
+{%- liquid
+  assign tg_cart_promo_message = block.settings.message
+  if block.settings.minimum_item_count > cart.item_count and block.settings.incomplete_message != blank
+    assign tg_cart_promo_message = block.settings.incomplete_message
+  endif
+-%}
+
+{%- if tg_cart_promo_message != blank -%}
+  <aside class="tg-cart-promotion">
+    <p>{{ tg_cart_promo_message | escape }}</p>
+    {%- if block.settings.link_label != blank and block.settings.link != blank -%}
+      <a href="{{ block.settings.link }}" class="tg-cart-promotion__link">
+        {{ block.settings.link_label | escape }}
+        <span aria-hidden="true">&rarr;</span>
+      </a>
+    {%- endif -%}
+  </aside>
+{%- endif -%}

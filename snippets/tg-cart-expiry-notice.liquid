@@ -1,0 +1,23 @@
+{%- liquid
+  assign tg_cart_expiry_text = section.settings.tg_cart_expiry_text | default: 'Your cart will expire in [time].'
+  capture tg_cart_expiry_placeholder
+    echo '[time]'
+  endcapture
+  capture tg_cart_expiry_time
+    echo '<span class="tg-cart-expiry__time" data-tg-cart-timer-value></span>'
+  endcapture
+  assign tg_cart_expiry_message = tg_cart_expiry_text | escape | replace: tg_cart_expiry_placeholder, tg_cart_expiry_time
+-%}
+
+{%- if section.settings.enable_tg_cart_page_style and section.settings.tg_cart_expiry_enabled and cart != empty -%}
+  <div
+    class="tg-cart-expiry"
+    data-tg-cart-timer
+    data-tg-cart-timer-seconds="{{ section.settings.tg_cart_expiry_minutes | times: 60 }}"
+    data-tg-cart-timer-key="tg-cart-expiry-{{ cart.token | default: request.host | escape }}"
+    role="status"
+    aria-live="polite"
+  >
+    {{ tg_cart_expiry_message }}
+  </div>
+{%- endif -%}

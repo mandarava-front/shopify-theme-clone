@@ -12,6 +12,8 @@ class TgProductAddOnCart {
   }
 
   async onSubmit(event) {
+    if (event.submitter?.closest('.shopify-payment-button')) return;
+
     const addOns = this.selectedAddOns();
     if (!addOns.length) return;
 

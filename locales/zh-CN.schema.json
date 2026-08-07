@@ -1712,7 +1712,7 @@
       }
     },
     "main-cart-footer": {
-      "name": "小计",
+      "name": "Tg | 购物车摘要",
       "blocks": {
         "subtotal": {
           "name": "小计价格"
@@ -1723,27 +1723,17 @@
       }
     },
     "main-cart-items": {
-      "name": "商品",
+      "name": "Tg | 购物车商品",
       "tg_cart_page": {
         "enable": {
-          "label": "tg | 启用购物车页样式",
+          "label": "Tg | 启用购物车页样式",
           "info": "添加可选的购物车空状态和公告样式，同时保留原生购物车数据。"
         },
-        "announcement": {
-          "label": "公告文案"
-        },
-        "empty_heading": {
-          "label": "空购物车标题"
-        },
-        "empty_text": {
-          "label": "空购物车描述"
-        },
-        "accent": {
-          "label": "强调色"
-        },
-        "surface": {
-          "label": "表面颜色"
-        }
+        "announcement": { "label": "公告文案" },
+        "empty_heading": { "label": "空购物车标题" },
+        "empty_text": { "label": "空购物车描述" },
+        "accent": { "label": "强调色" },
+        "surface": { "label": "表面颜色" }
       }
     },
     "main-collection-banner": {
@@ -3727,46 +3717,93 @@
         "heading": "tg | 商品页样式",
         "enable": {
           "label": "tg | 启用商品页样式",
-          "info": "将 的颜色风格应用到原生商品图库、价格和加购按钮。"
+          "info": "将 tg 的颜色风格应用到原生商品图库、价格和加购按钮。"
         }
       },
-      "personalization": {
-        "name": "tg | 商品个性化字段",
+      "breadcrumbs": {
+        "heading": "tg | 面包屑导航",
+        "show": {
+          "label": "显示面包屑导航"
+        },
+        "home_label": {
+          "label": "首页链接文案"
+        }
+      },
+      "delivery_estimate": {
+        "name": "tg | 预计送达",
+        "day_mode": {
+          "label": "日期计算方式",
+          "options": {
+            "business": "工作日（不含周末）",
+            "calendar": "自然日"
+          }
+        },
+        "processing": {
+          "heading": "处理时间",
+          "min_days": {
+            "label": "最短天数"
+          },
+          "max_days": {
+            "label": "最长天数"
+          }
+        },
+        "transit": {
+          "heading": "运输时间",
+          "min_days": {
+            "label": "最短天数"
+          },
+          "max_days": {
+            "label": "最长天数"
+          }
+        },
+        "copy": {
+          "heading": "面向顾客的文案",
+          "summary_prefix": {
+            "label": "送达摘要前缀"
+          },
+          "summary_suffix": {
+            "label": "送达摘要后缀"
+          },
+          "order_label": {
+            "label": "下单步骤文案"
+          },
+          "ship_label": {
+            "label": "发货步骤文案"
+          },
+          "delivery_label": {
+            "label": "送达步骤文案"
+          }
+        }
+      },
+      "sales_proof": {
+        "name": "tg | 销量与服务保障",
+        "sales_text": {
+          "label": "销量提示文案"
+        },
+        "assurance_text": {
+          "label": "服务保障项（用 | 分隔）",
+          "info": "每项前会显示勾选图标，请使用竖线（|）分隔各项。"
+        }
+      },
+      "secure_payment": {
+        "name": "tg | 安全支付方式",
+        "heading": {
+          "label": "标题"
+        }
+      },
+      "trust_message": {
+        "name": "tg | 信任提示",
         "heading": {
           "label": "标题"
         },
-        "description": {
-          "label": "说明"
+        "text": {
+          "label": "说明文案"
         },
-        "label": {
-          "label": "字段标签"
+        "link_label": {
+          "label": "链接文案"
         },
-        "property_name": {
-          "label": "购物车属性名称",
-          "info": "留空则使用字段标签。该名称会显示在购物车和订单中。"
-        },
-        "field_type": {
-          "label": "字段类型",
-          "options": {
-            "text": "文本输入",
-            "select": "选择列表"
-          }
-        },
-        "choices": {
-          "label": "选项",
-          "info": "选择列表请用竖线（|）分隔每个选项。"
-        },
-        "placeholder": {
-          "label": "占位文案"
-        },
-        "max_length": {
-          "label": "最大长度"
-        },
-        "required": {
-          "label": "设为必填字段"
-        },
-        "help_text": {
-          "label": "辅助说明"
+        "link": {
+          "label": "链接"
         }
       },
       "addon": {
@@ -3850,6 +3887,67 @@
             "label": "眉题"
           }
         }
+      },
+      "title": {
+        "name": "tg | 商品标题",
+        "enable": {
+          "label": "启用 tg 商品标题样式"
+        },
+        "desktop_size": {
+          "label": "桌面端标题字号"
+        },
+        "mobile_size": {
+          "label": "移动端标题字号"
+        },
+        "font_weight": {
+          "label": "字重",
+          "options": {
+            "regular": "常规",
+            "medium": "中等",
+            "semibold": "半粗",
+            "bold": "粗体"
+          }
+        },
+        "color": {
+          "label": "标题颜色"
+        }
+      },
+      "accordion": {
+        "name": "tg | 商品信息手风琴",
+        "content_source": {
+          "label": "内容来源",
+          "options": {
+            "custom": "自定义内容",
+            "product_description": "商品 Description",
+            "page": "页面"
+          }
+        },
+        "open_by_default": {
+          "label": "默认展开"
+        }
+      },
+      "purchase_actions": {
+        "heading": "tg | 购买操作",
+        "layout": {
+          "label": "数量与加购布局",
+          "info": "仅当同时存在“数量选择器”和“购买按钮”区块时，同排布局才会生效。",
+          "options": {
+            "inline": "同一排",
+            "stacked": "堆叠"
+          }
+        },
+        "colors": {
+          "heading": "tg | 购买按钮配色方案",
+          "background": {
+            "label": "按钮背景色"
+          },
+          "text": {
+            "label": "按钮文字颜色"
+          },
+          "hover": {
+            "label": "按钮悬停颜色"
+          }
+        }
       }
     }
   },
@@ -3867,13 +3965,13 @@
       "benefits": {
         "name": "tg | 服务优势"
       },
-     "product_rail": {
-       "name": "tg | 商品横向滚动"
-     },
+      "product_rail": {
+        "name": "tg | 商品横向滚动"
+      },
       "featured_products": {
         "name": "tg | 精选商品"
       },
-     "split_promo": {
+      "split_promo": {
         "name": "tg | 双栏促销横幅"
       },
       "tabs": {
@@ -3905,13 +4003,13 @@
       "recipient": {
         "name": "tg | 收礼对象卡片"
       },
-     "video": {
-       "name": "tg | 视频项"
-     },
+      "video": {
+        "name": "tg | 视频项"
+      },
       "featured_product": {
         "name": "tg | 精选商品"
       },
-     "faq": {
+      "faq": {
         "name": "tg | 常见问题条目"
       }
     },
@@ -4036,10 +4134,10 @@
   "tg_collection": {
     "sections": {
       "header": {
-        "name": "tg | 集合页标题区"
+        "name": "Tg | 集合页标题区"
       },
       "grid": {
-        "name": "tg | 集合商品网格"
+        "name": "Tg | 集合商品网格"
       }
     },
     "settings": {
@@ -4048,10 +4146,14 @@
       "home_label": "首页链接文案",
       "show_breadcrumbs": "显示面包屑",
       "show_collection_description": "显示集合描述",
+      "filter_label": "筛选按钮文案",
       "background": "背景色",
       "text_color": "文字颜色",
       "muted_color": "弱化文字颜色",
       "accent_color": "强调色",
+      "price_color": "价格颜色",
+      "price_currency_mode": "价格筛选货币",
+      "price_currency_label": "自定义货币单位",
       "border_color": "边框颜色",
       "products_per_page": "每页商品数",
       "desktop_columns": "桌面端列数",
@@ -4087,10 +4189,13 @@
       "standard": "标准",
       "vertical": "桌面端侧边栏",
       "drawer": "抽屉",
-      "horizontal": "水平"
+      "horizontal": "水平",
+      "market_currency": "跟随当前市场货币",
+      "custom_currency": "自定义货币单位"
     },
     "info": {
-      "title": "留空时使用当前集合标题。"
+      "title": "留空时使用当前集合标题。",
+      "price_currency_label": "仅在“价格筛选货币”设为“自定义货币单位”时使用。"
     },
     "a11y": {
       "breadcrumb": "面包屑导航"

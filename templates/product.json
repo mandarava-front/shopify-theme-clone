@@ -21,7 +21,13 @@
         },
         "title": {
           "type": "title",
-          "settings": {}
+          "settings": {
+            "enable_tg_title_style": true,
+            "title_font_size": 16,
+            "title_font_size_mobile": 12,
+            "title_font_weight": "400",
+            "title_color": "#202024"
+          }
         },
         "rating": {
           "type": "rating",
@@ -86,9 +92,38 @@
             "link": ""
           }
         },
-        "description": {
-          "type": "description",
-          "settings": {}
+        "accordion_description": {
+          "type": "collapsible_tab",
+          "settings": {
+            "content_source": "product_description",
+            "open_by_default": false,
+            "heading": "Description",
+            "icon": "none",
+            "content": "",
+            "page": ""
+          }
+        },
+        "accordion_shipping": {
+          "type": "collapsible_tab",
+          "settings": {
+            "content_source": "custom",
+            "open_by_default": false,
+            "heading": "Shipping & Return",
+            "icon": "none",
+            "content": "<p>Add shipping and return information in the theme editor.</p>",
+            "page": ""
+          }
+        },
+        "accordion_guarantee": {
+          "type": "collapsible_tab",
+          "settings": {
+            "content_source": "custom",
+            "open_by_default": false,
+            "heading": "Satisfaction Guarantee",
+            "icon": "none",
+            "content": "<p>Add your satisfaction guarantee in the theme editor.</p>",
+            "page": ""
+          }
         }
       },
       "block_order": [
@@ -103,11 +138,18 @@
         "buy_buttons",
         "secure_payment",
         "trust_message",
-        "description"
+        "accordion_description",
+        "accordion_shipping",
+        "accordion_guarantee"
       ],
       "settings": {
+        "enable_tg_product_style": false,
         "show_breadcrumbs": true,
         "breadcrumb_home_label": "Home",
+        "purchase_actions_layout": "inline",
+        "purchase_button_background": "#ee860f",
+        "purchase_button_text": "#ffffff",
+        "purchase_button_hover": "#d97408",
         "enable_sticky_info": true,
         "color_scheme": "scheme-1",
         "media_size": "small",
@@ -121,6 +163,17 @@
         "enable_video_looping": false,
         "padding_top": 20,
         "padding_bottom": 24
+      }
+    },
+    "disclosures": {
+      "type": "disclosures",
+      "settings": {
+        "heading": "披露信息",
+        "heading_size": "h2",
+        "open_by_default": false,
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 0
       }
     },
     "related-products": {
@@ -139,13 +192,6 @@
         "show_rating": false,
         "padding_top": 32,
         "padding_bottom": 64
-      }
-    },
-    "disclosures": {
-      "type": "disclosures",
-      "settings": {
-        "padding_top": 36,
-        "padding_bottom": 0
       }
     }
   },

@@ -7,6 +7,9 @@
   - enable_sorting: {Boolean} Show sorting when true
   - filter_type: {String} Type of filter
   - paginate: {Object}
+  - price_facet_style: {String} Optional component-specific price field style
+  - price_currency_mode: {String} Optional currency unit mode for custom price fields
+  - price_currency_label: {String} Optional custom currency unit
 
   Usage:
   {% render 'facets', results: collection, enable_filtering: true, enable_sorting: true, filter_type: 'vertical', paginate: paginate %}
@@ -60,7 +63,7 @@
             {%- endif -%}
             {% comment %} Pills are right below the title for filter type vertical {% endcomment %}
             {%- if filter_type == 'vertical' -%}
-              <div class="active-facets active-facets-desktop">
+              <div class="active-facets active-facets-desktop{% if price_facet_style == 'tg_collection' %} tg-collection__active-facets{% endif %}">
                 <div class="active-facets-vertical-filter">
                   {%- unless results.filters == empty -%}
                     <h2
@@ -82,7 +85,11 @@
                     <facet-remove>
                       <a href="{{ value.url_to_remove }}" class="active-facets__button active-facets__button--light">
                         <span class="active-facets__button-inner button button--tertiary">
-                          {{ filter.label | escape }}: {{ value.label | escape }}
+                          {% if price_facet_style == 'tg_collection' %}
+                            {{ value.label | escape }}
+                          {% else %}
+                            {{ filter.label | escape }}: {{ value.label | escape }}
+                          {% endif %}
                           <span class="svg-wrapper">
                             {{- 'icon-close-small.svg' | inline_asset_content -}}
                           </span>
@@ -333,7 +340,11 @@
                         {%- endif -%}
                       </div>
                       <price-range class="facets__price">
-                        {% render 'price-facet', filter: filter, id_prefix: 'Filter-', filter_type: filter_type %}
+                        {% if price_facet_style == 'tg_collection' %}
+                          {% render 'tg-collection-price-facet', filter: filter, id_prefix: 'Filter-', price_currency_mode: price_currency_mode, price_currency_label: price_currency_label %}
+                        {% else %}
+                          {% render 'price-facet', filter: filter, id_prefix: 'Filter-', filter_type: filter_type %}
+                        {% endif %}
                       </price-range>
                     </div>
                   </details>
@@ -699,7 +710,11 @@
                           </p>
 
                           <price-range class="facets__price">
-                            {% render 'price-facet', filter: filter, id_prefix: 'Mobile-Filter-' %}
+                            {% if price_facet_style == 'tg_collection' %}
+                              {% render 'tg-collection-price-facet', filter: filter, id_prefix: 'Mobile-Filter-', price_currency_mode: price_currency_mode, price_currency_label: price_currency_label %}
+                            {% else %}
+                              {% render 'price-facet', filter: filter, id_prefix: 'Mobile-Filter-' %}
+                            {% endif %}
                           </price-range>
                           <div class="mobile-facets__footer">
                             <facet-remove class="mobile-facets__clear-wrapper">

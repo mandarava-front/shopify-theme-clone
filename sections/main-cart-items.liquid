@@ -1,12 +1,17 @@
 {{ 'component-cart.css' | asset_url | stylesheet_tag }}
-{{ 'cuszoo-cart.css' | asset_url | stylesheet_tag }}
 {{ 'component-cart-items.css' | asset_url | stylesheet_tag }}
 {{ 'component-totals.css' | asset_url | stylesheet_tag }}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
 {{ 'component-discounts.css' | asset_url | stylesheet_tag }}
 {{ 'quantity-popover.css' | asset_url | stylesheet_tag }}
 {% if section.settings.enable_tg_cart_page_style %}
+  {%- assign tg_cart_font_bold = section.settings.tg_cart_font | font_modify: 'weight', '700' -%}
+  {% style %}
+    {{ section.settings.tg_cart_font | font_face: font_display: 'swap' }}
+    {{ tg_cart_font_bold | font_face: font_display: 'swap' }}
+  {% endstyle %}
   {{ 'tg-cart-page.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'tg-cart-page.js' | asset_url }}" defer="defer"></script>
 {% endif %}
 
 {%- style -%}
@@ -31,19 +36,39 @@
 
 <cart-items
   class="gradient color-{{ section.settings.color_scheme }} isolate{% if section.settings.enable_tg_cart_page_style %} tg-cart-page{% endif %}{% if cart == empty %} is-empty{% else %} section-{{ section.id }}-padding{% endif %}"
-  {% if section.settings.enable_tg_cart_page_style %}style="--tg_cart_page-accent: {{ section.settings.tg_cart_page_accent_color }}; --tg_cart_page-surface: {{ section.settings.tg_cart_page_surface_color }};"{% endif %}
+  {% if section.settings.enable_tg_cart_page_style %}style="--tg-cart-accent: {{ section.settings.tg_cart_page_accent_color }}; --tg-cart-surface: {{ section.settings.tg_cart_page_surface_color }}; --tg-cart-card: {{ section.settings.tg_cart_page_card_color }}; --tg-cart-border: {{ section.settings.tg_cart_page_border_color }}; --tg-cart-text: {{ section.settings.tg_cart_page_text_color }}; --tg-cart-muted: {{ section.settings.tg_cart_page_muted_color }}; --tg-cart-radius: {{ section.settings.tg_cart_card_radius }}px; --tg-cart-font: {{ section.settings.tg_cart_font.family }}, {{ section.settings.tg_cart_font.fallback_families }};"{% endif %}
   view-event-payload="{{ cart | standard_event_data: 'view', context: 'page' | escape }}"
 >
   <div class="page-width">
-    {% if section.settings.enable_tg_cart_page_style and section.settings.announcement_text != blank %}
+    {% if section.settings.enable_tg_cart_page_style %}
+      {% render 'tg-cart-expiry-notice', section: section, cart: cart %}
+    {% endif %}
+    {% if section.settings.enable_tg_cart_page_style and section.settings.tg_cart_show_announcement and section.settings.announcement_text != blank %}
       <div class="tg-cart-page__announcement" role="status">
         {{ section.settings.announcement_text | escape }}
       </div>
     {% endif %}
-    <div class="title-wrapper-with-link">
-      <h1 class="title title--primary">{{ 'sections.cart.title' | t }}</h1>
-      <a href="{{ routes.all_products_collection_url }}" class="underlined-link">
-        {{- 'general.continue_shopping' | t -}}
+    <div class="title-wrapper-with-link tg-cart-page__header">
+      <h1 class="title title--primary">
+        {% if section.settings.enable_tg_cart_page_style and section.settings.tg_cart_title != blank %}
+          {{ section.settings.tg_cart_title | escape }}
+        {% else %}
+          {{ 'sections.cart.title' | t }}
+        {% endif %}
+        {% if section.settings.enable_tg_cart_page_style and section.settings.tg_cart_show_item_count %}
+          <span class="tg-cart-page__count">({{ cart.item_count }})</span>
+        {% endif %}
+      </h1>
+      <a
+        href="{% if section.settings.enable_tg_cart_page_style and section.settings.tg_cart_continue_link != blank %}{{ section.settings.tg_cart_continue_link }}{% else %}{{ routes.all_products_collection_url }}{% endif %}"
+        class="underlined-link tg-cart-page__continue"
+      >
+        <span class="tg-cart-inline-icon" aria-hidden="true">{{- 'icon-discount.svg' | inline_asset_content -}}</span>
+        {% if section.settings.enable_tg_cart_page_style and section.settings.tg_cart_continue_label != blank %}
+          {{ section.settings.tg_cart_continue_label | escape }}
+        {% else %}
+          {{ 'general.continue_shopping' | t }}
+        {% endif %}
       </a>
     </div>
 
@@ -70,15 +95,15 @@
       {%- endif -%}
     </div>
 
-    <form action="{{ routes.cart_url }}" class="cart__contents critical-hidden" method="post" id="cart">
-      <div class="cart__items" id="main-cart-items" data-id="{{ section.id }}">
+    <form action="{{ routes.cart_url }}" class="cart__contents tg-cart-page__form critical-hidden" method="post" id="cart">
+      <div class="cart__items tg-cart-items" id="main-cart-items" data-id="{{ section.id }}">
         <div class="js-contents">
           {%- if cart != empty -%}
-            <table class="cart-items">
+            <table class="cart-items tg-cart-items__table">
               <caption class="visually-hidden">
                 {{ 'sections.cart.title' | t }}
               </caption>
-              <thead>
+              <thead class="tg-cart-items__head">
                 <tr>
                   <th class="caption-with-letter-spacing" colspan="2" scope="col">
                     {{ 'sections.cart.headings.product' | t }}
@@ -102,35 +127,66 @@
               <tbody>
                 {%- for item in cart.items -%}
                   <tr
-                    class="cart-item {% if item.parent_relationship.parent != null %}cart-item__nested-line{% endif %}"
+                    class="cart-item tg-cart-item {% if item.parent_relationship.parent != null %}cart-item__nested-line{% endif %}"
                     id="CartItem-{{ item.index | plus: 1 }}"
                     {% if item.parent_relationship.parent != null %}
                       aria-label="{{- 'products.product.nested_label' | t: title: item.product.title, parent_title: item.parent_relationship.parent.title | escape -}}"
                     {% endif %}
                   >
-                    <td class="cart-item__media">
-                      {% if item.image %}
-                        {% comment %} Leave empty space due to a:empty CSS display: none rule {% endcomment %}
-                        <a href="{{ item.url }}" class="cart-item__link" aria-hidden="true" tabindex="-1"> </a>
-                        <div class="cart-item__image-container gradient {% if item.parent_relationship.parent == null %}global-media-settings{% endif %}">
+                    <td class="cart-item__media tg-cart-item__media">
+                      {%- liquid
+                        assign tg_cart_item_image = item.image
+                        if tg_cart_item_image == blank
+                          assign tg_cart_item_image = item.variant.image
+                        endif
+                        if tg_cart_item_image == blank
+                          assign tg_cart_item_image = item.product.featured_image
+                        endif
+                      -%}
+                      {% comment %} Keep a space inside the link because Dawn hides empty anchors. {% endcomment %}
+                      <a href="{{ item.url }}" class="cart-item__link" aria-hidden="true" tabindex="-1"> </a>
+                      <div class="cart-item__image-container tg-cart-item__image-container">
+                        {%- if tg_cart_item_image != blank -%}
                           <img
-                            src="{{ item.image | image_url: width: 300 }}"
-                            class="cart-item__image {% if item.parent_relationship.parent != null %}global-media-settings{% endif %}"
-                            alt="{{ item.image.alt | escape }}"
-                            loading="lazy"
-                            width="150"
-                            height="{{ 150 | divided_by: item.image.aspect_ratio | ceil }}"
+                            src="{{ tg_cart_item_image | image_url: width: 600 }}"
+                            srcset="{{ tg_cart_item_image | image_url: width: 180 }} 180w, {{ tg_cart_item_image | image_url: width: 360 }} 360w, {{ tg_cart_item_image | image_url: width: 600 }} 600w"
+                            sizes="(min-width: 990px) 168px, 104px"
+                            class="cart-item__image"
+                            alt="{{ tg_cart_item_image.alt | default: item.product.title | escape }}"
+                            {% if forloop.first %}
+                              loading="eager"
+                              fetchpriority="high"
+                            {% else %}
+                              loading="lazy"
+                            {% endif %}
+                            width="300"
+                            height="{{ 300 | divided_by: tg_cart_item_image.aspect_ratio | ceil }}"
                           >
-                        </div>
-                      {% endif %}
+                        {%- else -%}
+                          {{ 'product-1' | placeholder_svg_tag: 'tg-cart-item__placeholder placeholder-svg' }}
+                        {%- endif -%}
+                      </div>
+                      {%- if section.settings.tg_cart_show_preview and tg_cart_item_image != blank -%}
+                        <button
+                          class="tg-cart-item__preview button button--tertiary"
+                          type="button"
+                          data-tg-cart-preview
+                          data-tg-cart-preview-image="{{ tg_cart_item_image | image_url: width: 1600 }}"
+                          data-tg-cart-preview-alt="{{ tg_cart_item_image.alt | default: item.product.title | escape }}"
+                          aria-label="{{ section.settings.tg_cart_preview_label | default: 'Preview image' | escape }}: {{ item.product.title | escape }}"
+                        >
+                          <span class="tg-cart-inline-icon" aria-hidden="true">{{- 'icon-discount.svg' | inline_asset_content -}}</span>
+                          {{ section.settings.tg_cart_preview_label | default: 'Preview' | escape }}
+                        </button>
+                      {%- endif -%}
                     </td>
 
-                    <td class="cart-item__details">
-                      {%- if settings.show_vendor -%}
+                    <td class="cart-item__details tg-cart-item__details">
+                      {%- if settings.show_vendor and section.settings.tg_cart_show_vendor -%}
                         <p class="caption-with-letter-spacing">{{ item.product.vendor }}</p>
                       {%- endif -%}
 
-                      <div class="cart-item__title">
+                      <div class="cart-item__title tg-cart-item__title">
                         <a href="{{ item.url }}" class="cart-item__name h4 break">{{ item.product.title | escape }}</a>
                         {%- assign cart_disclosure_modal_id = 'CartDisclosureModal-cart-' | append: item.key | replace: ':', '-' -%}
                         {%- render 'cart-disclosure-indicator',
@@ -140,7 +196,7 @@
                       </div>
 
                       {%- if item.original_price != item.final_price -%}
-                        <div class="cart-item__discounted-prices">
+                        <div class="cart-item__discounted-prices tg-cart-item__unit-price">
                           <span class="visually-hidden">
                             {{ 'products.product.price.regular_price' | t }}
                           </span>
@@ -155,16 +211,17 @@
                           </strong>
                         </div>
                       {%- else -%}
-                        <div class="product-option">
+                        <div class="product-option tg-cart-item__unit-price">
                           {{ item.original_price | money }}
                         </div>
                       {%- endif -%}
 
-                      {%- if item.product.has_only_default_variant == false
-                        or item.properties.size != 0
-                        or item.selling_plan_allocation != null
-                      -%}
-                        <dl>
+                      {%- if section.settings.tg_cart_show_options -%}
+                        {%- if item.product.has_only_default_variant == false
+                          or item.properties.size != 0
+                          or item.selling_plan_allocation != null
+                        -%}
+                          <dl class="tg-cart-item__options">
                           {%- if item.product.has_only_default_variant == false -%}
                             {%- for option in item.options_with_values -%}
                               <div class="product-option">
@@ -191,9 +248,10 @@
                               </div>
                             {%- endif -%}
                           {%- endfor -%}
-                        </dl>
+                          </dl>
 
-                        <p class="product-option">{{ item.selling_plan_allocation.selling_plan.name }}</p>
+                          <p class="product-option">{{ item.selling_plan_allocation.selling_plan.name }}</p>
+                        {%- endif -%}
                       {%- endif -%}
 
                       <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
@@ -489,45 +547,181 @@
 
 {% schema %}
 {
-  "name": "t:sections.main-cart-items.name",
-  "class": "cuszoo-cart-items-section",
+  "name": "Tg | 购物车商品",
+  "class": "tg-cart-items-section",
   "settings": [
     {
       "type": "checkbox",
       "id": "enable_tg_cart_page_style",
-      "label": "t:sections.main-cart-items.tg_cart_page.enable.label",
-      "info": "t:sections.main-cart-items.tg_cart_page.enable.info",
+      "label": "Tg | Enable Prints10 cart / 启用 Prints10 购物车",
+      "info": "Tg | Keep Shopify cart updates / 保留 Shopify 原生购物车更新",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Tg | Cart heading / 购物车标题"
+    },
+    {
+      "type": "text",
+      "id": "tg_cart_title",
+      "label": "Tg | Cart title / 购物车标题",
+      "default": "Shopping Cart"
+    },
+    {
+      "type": "checkbox",
+      "id": "tg_cart_show_item_count",
+      "label": "Tg | Show item count / 显示商品数量",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "tg_cart_continue_label",
+      "label": "Tg | Continue shopping label / 继续购物文案",
+      "default": "Keep shopping"
+    },
+    {
+      "type": "url",
+      "id": "tg_cart_continue_link",
+      "label": "Tg | Continue shopping link / 继续购物链接"
+    },
+    {
+      "type": "header",
+      "content": "Tg | Cart expiry / 购物车倒计时"
+    },
+    {
+      "type": "checkbox",
+      "id": "tg_cart_expiry_enabled",
+      "label": "Tg | Show expiry notice / 显示倒计时提示",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "tg_cart_expiry_text",
+      "label": "Tg | Expiry message / 倒计时文案",
+      "info": "Tg | Use [time] for the timer / 使用 [time] 显示倒计时",
+      "default": "Your cart will expire in [time]."
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_expiry_minutes",
+      "min": 1,
+      "max": 60,
+      "step": 1,
+      "unit": "min",
+      "label": "Tg | Expiry duration / 倒计时时长",
+      "default": 10
+    },
+    {
+      "type": "checkbox",
+      "id": "tg_cart_show_announcement",
+      "label": "Tg | Show announcement / 显示公告",
       "default": false
     },
     {
       "type": "text",
       "id": "announcement_text",
-      "label": "t:sections.main-cart-items.tg_cart_page.announcement.label",
+      "label": "Tg | Announcement text / 公告文案",
       "default": "Free shipping on orders over $75"
+    },
+    {
+      "type": "header",
+      "content": "Tg | Cart item details / 商品信息"
+    },
+    {
+      "type": "checkbox",
+      "id": "tg_cart_show_vendor",
+      "label": "Tg | Show vendor / 显示供应商",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "tg_cart_show_options",
+      "label": "Tg | Show options / 显示变体和自定义选项",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "tg_cart_show_preview",
+      "label": "Tg | Show image preview / 显示图片预览",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "tg_cart_preview_label",
+      "label": "Tg | Preview label / 预览按钮文案",
+      "default": "Preview"
+    },
+    {
+      "type": "header",
+      "content": "Tg | Empty cart / 空购物车"
     },
     {
       "type": "text",
       "id": "empty_heading",
-      "label": "t:sections.main-cart-items.tg_cart_page.empty_heading.label",
+      "label": "Tg | Empty cart heading / 空购物车标题",
       "default": "Your cart is empty"
     },
     {
       "type": "textarea",
       "id": "empty_text",
-      "label": "t:sections.main-cart-items.tg_cart_page.empty_text.label",
+      "label": "Tg | Empty cart description / 空购物车描述",
       "default": "Find something personal for someone special."
+    },
+    {
+      "type": "header",
+      "content": "Tg | Cart appearance / 购物车外观"
+    },
+    {
+      "type": "font_picker",
+      "id": "tg_cart_font",
+      "label": "Tg | Cart font / 购物车字体",
+      "default": "poppins_n4"
     },
     {
       "type": "color",
       "id": "tg_cart_page_accent_color",
-      "label": "t:sections.main-cart-items.tg_cart_page.accent.label",
-      "default": "#f4a62a"
+      "label": "Tg | Accent color / 强调色",
+      "default": "#a50c43"
     },
     {
       "type": "color",
       "id": "tg_cart_page_surface_color",
-      "label": "t:sections.main-cart-items.tg_cart_page.surface.label",
-      "default": "#fffaf2"
+      "label": "Tg | Page background / 页面背景色",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "tg_cart_page_card_color",
+      "label": "Tg | Card background / 卡片背景色",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "tg_cart_page_border_color",
+      "label": "Tg | Border color / 边框颜色",
+      "default": "#e2e2e2"
+    },
+    {
+      "type": "color",
+      "id": "tg_cart_page_text_color",
+      "label": "Tg | Primary text color / 主文字颜色",
+      "default": "#15375f"
+    },
+    {
+      "type": "color",
+      "id": "tg_cart_page_muted_color",
+      "label": "Tg | Secondary text color / 次要文字颜色",
+      "default": "#858990"
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_card_radius",
+      "min": 0,
+      "max": 16,
+      "step": 2,
+      "unit": "px",
+      "label": "Tg | Card corner radius / 卡片圆角",
+      "default": 8
     },
     {
       "type": "color_scheme",
@@ -558,6 +752,40 @@
       "unit": "px",
       "label": "t:sections.all.padding.padding_bottom",
       "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "购物车默认 - 购物车商品",
+      "settings": {
+        "enable_tg_cart_page_style": true,
+        "tg_cart_title": "Shopping Cart",
+        "tg_cart_show_item_count": true,
+        "tg_cart_continue_label": "Keep shopping",
+        "tg_cart_continue_link": "",
+        "tg_cart_expiry_enabled": true,
+        "tg_cart_expiry_text": "Your cart will expire in [time].",
+        "tg_cart_expiry_minutes": 10,
+        "tg_cart_show_announcement": false,
+        "announcement_text": "Free shipping on orders over $75",
+        "tg_cart_show_vendor": true,
+        "tg_cart_show_options": true,
+        "tg_cart_show_preview": true,
+        "tg_cart_preview_label": "Preview",
+        "empty_heading": "Your cart is empty",
+        "empty_text": "Find something personal for someone special.",
+        "tg_cart_font": "poppins_n4",
+        "tg_cart_page_accent_color": "#a50c43",
+        "tg_cart_page_surface_color": "#ffffff",
+        "tg_cart_page_card_color": "#ffffff",
+        "tg_cart_page_border_color": "#e2e2e2",
+        "tg_cart_page_text_color": "#15375f",
+        "tg_cart_page_muted_color": "#858990",
+        "tg_cart_card_radius": 8,
+        "color_scheme": "scheme-1",
+        "padding_top": 0,
+        "padding_bottom": 24
+      }
     }
   ]
 }

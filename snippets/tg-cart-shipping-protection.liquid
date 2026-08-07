@@ -1,0 +1,82 @@
+{%- comment -%}
+  Renders the cart shipping-protection block for the cart summary or its cart-route drawer mirror.
+{%- endcomment -%}
+
+{%- liquid
+  assign tg_cart_protection_product = block.settings.product
+  assign tg_cart_protection_variant = tg_cart_protection_product.selected_or_first_available_variant
+  assign tg_cart_protection_line_key = blank
+  assign tg_cart_terms_accepted = false
+
+  if cart.attributes.tg_shipping_protection_terms_accepted == 'true'
+    assign tg_cart_terms_accepted = true
+  endif
+
+  if tg_cart_protection_variant != blank
+    for item in cart.items
+      if item.variant_id == tg_cart_protection_variant.id
+        assign tg_cart_protection_line_key = item.key
+        break
+      endif
+    endfor
+  endif
+-%}
+
+{%- if cart != empty and tg_cart_protection_variant != blank -%}
+  {%- assign tg_cart_protection_image = block.settings.image | default: tg_cart_protection_variant.featured_image | default: tg_cart_protection_product.featured_image -%}
+  <div
+    class="tg-cart-shipping-protection{% if surface == 'drawer' %} tg-cart-drawer__protection-card{% else %} tg-cart-summary__shipping-protection{% endif %}"
+    data-tg-cart-protection
+    style="--tg-cart-protection-surface: {{ block.settings.surface_color | default: '#ffffff' }}; --tg-cart-protection-border-width: {% if block.settings.show_border %}1px{% else %}0{% endif %}; --tg-cart-protection-border-color: {{ block.settings.border_color | default: '#cfc4e2' }}; --tg-cart-protection-radius: {{ block.settings.card_radius | default: 6 }}px; --tg-cart-protection-toggle-off: {{ block.settings.toggle_off_color | default: '#c8beff' }}; --tg-cart-protection-toggle-on: {{ block.settings.toggle_on_color | default: '#7055ff' }};"
+  >
+    <div class="tg-cart-shipping-protection__image{% if surface == 'drawer' %} tg-cart-drawer__protection-image{% endif %}">
+      {%- if tg_cart_protection_image != blank -%}
+        {{
+          tg_cart_protection_image
+          | image_url: width: 112
+          | image_tag:
+            loading: 'lazy',
+            widths: '56, 84, 112',
+            sizes: '56px',
+            alt: tg_cart_protection_image.alt | default: block.settings.title | default: tg_cart_protection_product.title
+        }}
+      {%- else -%}
+        <span class="svg-wrapper" aria-hidden="true">{{- 'icon-box.svg' | inline_asset_content -}}</span>
+      {%- endif -%}
+    </div>
+    <div class="tg-cart-shipping-protection__copy{% if surface == 'drawer' %} tg-cart-drawer__protection-copy{% endif %}">
+      <strong>{{ block.settings.title | default: 'Shipping Protection' | escape }}</strong>
+      {%- if block.settings.description != blank -%}
+        <span>{{ block.settings.description | escape }}</span>
+      {%- endif -%}
+    </div>
+    <div class="tg-cart-shipping-protection__control{% if surface == 'drawer' %} tg-cart-drawer__protection-control{% endif %}">
+      {%- if block.settings.show_price -%}
+        <strong>{{ tg_cart_protection_variant.price | money_with_currency }}</strong>
+      {%- endif -%}
+      <label class="tg-cart-shipping-protection__toggle{% if surface == 'drawer' %} tg-cart-drawer__toggle{% endif %}">
+        <span class="visually-hidden">{{ block.settings.toggle_label | default: 'Add shipping protection' | escape }}</span>
+        <input
+          type="checkbox"
+          data-tg-cart-protection-toggle
+          data-variant-id="{{ tg_cart_protection_variant.id }}"
+          data-line-key="{{ tg_cart_protection_line_key | escape }}"
+          {% if tg_cart_protection_line_key != blank %}
+            checked
+          {% endif %}
+          {% if tg_cart_protection_line_key == blank and tg_cart_protection_variant.available == false %}
+            disabled
+          {% endif %}
+        >
+        <span aria-hidden="true"></span>
+      </label>
+    </div>
+
+    {%- if block.settings.require_terms -%}
+      <label class="tg-cart-shipping-protection__terms{% if surface == 'drawer' %} tg-cart-drawer__terms{% endif %}">
+        <input type="checkbox" data-tg-cart-terms {% if tg_cart_terms_accepted %}checked{% endif %}>
+        <span>{{ block.settings.terms_label | default: 'I agree with the terms & conditions' | escape }}</span>
+      </label>
+    {%- endif -%}
+  </div>
+{%- endif -%}

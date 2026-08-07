@@ -1,0 +1,59 @@
+{%- comment -%}
+  Renders the cart free-shipping progress block for the cart summary or its cart-route drawer mirror.
+{%- endcomment -%}
+
+{%- liquid
+  assign tg_cart_shipping_target_cents = block.settings.target | times: 100
+  assign tg_cart_shipping_remaining_cents = tg_cart_shipping_target_cents | minus: cart.total_price
+  assign tg_cart_shipping_progress = 0
+
+  if tg_cart_shipping_remaining_cents < 0
+    assign tg_cart_shipping_remaining_cents = 0
+  endif
+
+  if tg_cart_shipping_target_cents > 0
+    assign tg_cart_shipping_progress = cart.total_price | times: 100.0 | divided_by: tg_cart_shipping_target_cents
+    if tg_cart_shipping_progress > 100
+      assign tg_cart_shipping_progress = 100
+    endif
+  endif
+
+  assign tg_cart_shipping_pending_message = block.settings.pending_message_template | default: "You're [amount] away from free shipping"
+  assign tg_cart_shipping_complete_message = block.settings.complete_message | default: "You've unlocked free shipping"
+-%}
+
+{%- if cart != empty and tg_cart_shipping_target_cents > 0 -%}
+  <div
+    class="tg-cart-free-shipping{% if surface == 'drawer' %} tg-cart-drawer__progress{% else %} tg-cart-summary__shipping-progress{% endif %}"
+    data-tg-cart-free-shipping
+    style="--tg-cart-free-shipping-progress: {{ tg_cart_shipping_progress }}%; --tg-cart-free-shipping-color: {{ block.settings.progress_color | default: '#7055ff' }}; --tg-cart-free-shipping-track: {{ block.settings.track_color | default: '#e2dfea' }}; --tg-cart-free-shipping-surface: {{ block.settings.surface_color | default: '#f5f5f5' }}; --tg-cart-free-shipping-border-width: {% if block.settings.show_border %}1px{% else %}0{% endif %}; --tg-cart-free-shipping-border-color: {{ block.settings.border_color | default: '#e2e2e2' }};"
+    role="status"
+    aria-live="polite"
+  >
+    <p class="tg-cart-free-shipping__message{% if surface == 'drawer' %} tg-cart-drawer__progress-message{% endif %}">
+      {%- if tg_cart_shipping_remaining_cents > 0 -%}
+        {%- capture tg_cart_shipping_remaining_money -%}{{- tg_cart_shipping_remaining_cents | money -}}{%- endcapture -%}
+        {%- if tg_cart_shipping_remaining_money == blank -%}
+          {%- assign tg_cart_shipping_remaining_money = tg_cart_shipping_remaining_cents | money_with_currency -%}
+        {%- endif -%}
+        {%- if tg_cart_shipping_pending_message contains '[amount]' -%}
+          {{- tg_cart_shipping_pending_message | escape | replace: '[amount]', tg_cart_shipping_remaining_money -}}
+        {%- else -%}
+          {{- tg_cart_shipping_pending_message | escape -}}
+        {%- endif -%}
+      {%- else -%}
+        {{- tg_cart_shipping_complete_message | escape -}}
+      {%- endif -%}
+    </p>
+    <div
+      class="tg-cart-free-shipping__track{% if surface == 'drawer' %} tg-cart-drawer__progress-track{% endif %}"
+      role="progressbar"
+      aria-label="Free shipping progress"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow="{{ tg_cart_shipping_progress | round }}"
+    >
+      <span class="tg-cart-free-shipping__value{% if surface == 'drawer' %} tg-cart-drawer__progress-value{% endif %}"></span>
+    </div>
+  </div>
+{%- endif -%}

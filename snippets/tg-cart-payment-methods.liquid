@@ -1,0 +1,18 @@
+<section class="tg-cart-payment">
+  {%- if block.settings.show_secure_line and block.settings.secure_text != blank -%}
+    <p class="tg-cart-payment__secure">
+      <span class="svg-wrapper" aria-hidden="true">{{- 'icon-padlock.svg' | inline_asset_content -}}</span>
+      {{ block.settings.secure_text | escape }}
+    </p>
+  {%- endif -%}
+  {%- if block.settings.heading != blank -%}
+    <p class="tg-cart-payment__heading">{{ block.settings.heading | escape }}</p>
+  {%- endif -%}
+  {%- if block.settings.show_payment_types and shop.enabled_payment_types.size > 0 -%}
+    <ul class="tg-cart-payment__list list-unstyled" role="list">
+      {%- for type in shop.enabled_payment_types -%}
+        <li>{{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}</li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+</section>

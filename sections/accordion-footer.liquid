@@ -1,0 +1,407 @@
+{{ 'macorner-accordion-footer.css' | asset_url | stylesheet_tag }}
+{{ 'component-localization-form.css' | asset_url | stylesheet_tag }}
+{{ 'component-list-social.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign has_section_social_links = false
+  if section.settings.social_facebook_link != blank or section.settings.social_instagram_link != blank or section.settings.social_youtube_link != blank or section.settings.social_tiktok_link != blank or section.settings.social_twitter_link != blank or section.settings.social_pinterest_link != blank or section.settings.social_snapchat_link != blank or section.settings.social_tumblr_link != blank or section.settings.social_vimeo_link != blank
+    assign has_section_social_links = true
+  endif
+
+  if has_section_social_links
+    assign social_facebook_link = section.settings.social_facebook_link
+    assign social_instagram_link = section.settings.social_instagram_link
+    assign social_youtube_link = section.settings.social_youtube_link
+    assign social_tiktok_link = section.settings.social_tiktok_link
+    assign social_twitter_link = section.settings.social_twitter_link
+    assign social_pinterest_link = section.settings.social_pinterest_link
+    assign social_snapchat_link = section.settings.social_snapchat_link
+    assign social_tumblr_link = section.settings.social_tumblr_link
+    assign social_vimeo_link = section.settings.social_vimeo_link
+  else
+    assign social_facebook_link = settings.social_facebook_link
+    assign social_instagram_link = settings.social_instagram_link
+    assign social_youtube_link = settings.social_youtube_link
+    assign social_tiktok_link = settings.social_tiktok_link
+    assign social_twitter_link = settings.social_twitter_link
+    assign social_pinterest_link = settings.social_pinterest_link
+    assign social_snapchat_link = settings.social_snapchat_link
+    assign social_tumblr_link = settings.social_tumblr_link
+    assign social_vimeo_link = settings.social_vimeo_link
+  endif
+
+  assign has_social_icons = true
+  if social_facebook_link == blank and social_instagram_link == blank and social_youtube_link == blank and social_tiktok_link == blank and social_twitter_link == blank and social_pinterest_link == blank and social_snapchat_link == blank and social_tumblr_link == blank and social_vimeo_link == blank
+    assign has_social_icons = false
+  endif
+  assign country_position = 'AccordionFooter' | append: section.id
+-%}
+
+<footer
+  class="mc-accordion-footer"
+  data-mc-accordion-footer
+  data-mc-accordion-single-open="{{ section.settings.single_open }}"
+>
+  <div class="mc-accordion-footer__inner page-width">
+    <div class="mc-accordion-footer__brand">
+      {%- if section.settings.logo != blank -%}
+        {%- assign logo_alt = section.settings.logo.alt | default: shop.name | escape -%}
+        <a href="{{ routes.root_url }}" class="mc-accordion-footer__logo" aria-label="{{ shop.name | escape }}">
+          {{
+            section.settings.logo
+            | image_url: width: 400
+            | image_tag: loading: 'lazy', alt: logo_alt, widths: '100, 200, 300, 400'
+          }}
+        </a>
+      {%- else -%}
+        <a href="{{ routes.root_url }}" class="mc-accordion-footer__logo">{{ shop.name }}</a>
+      {%- endif -%}
+
+      {%- if section.settings.trustpilot_url != blank -%}
+        <a href="{{ section.settings.trustpilot_url }}" class="mc-accordion-footer__trust" target="_blank" rel="noopener">
+          <span class="mc-accordion-footer__trust-star" aria-hidden="true">&#9733;</span>
+          <strong>Trustpilot</strong>
+          {%- if section.settings.trustpilot_reviews != blank -%}
+            <u>{{ section.settings.trustpilot_reviews }}</u>
+          {%- endif -%}
+        </a>
+      {%- endif -%}
+
+      {%- if section.settings.dmca_image != blank -%}
+        <span class="mc-accordion-footer__dmca">
+          {%- if section.settings.dmca_url != blank -%}
+            <a href="{{ section.settings.dmca_url }}" target="_blank" rel="noopener">
+              {{ section.settings.dmca_image | image_url: width: 300 | image_tag: loading: 'lazy', alt: 'DMCA Protected' }}
+            </a>
+          {%- else -%}
+            {{ section.settings.dmca_image | image_url: width: 300 | image_tag: loading: 'lazy', alt: 'DMCA Protected' }}
+          {%- endif -%}
+        </span>
+      {%- elsif section.settings.show_dmca_badge -%}
+        <span class="mc-accordion-footer__dmca">
+          <span class="mc-accordion-footer__dmca-fallback"><span>DMCA</span><span>PROTECTED</span></span>
+        </span>
+      {%- endif -%}
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="mc-accordion-footer__groups">
+        {%- for block in section.blocks -%}
+          {%- if block.settings.menu != blank -%}
+            <details
+              class="mc-accordion-footer__group"
+              data-mc-accordion-footer-group
+              {% if block.settings.open_by_default %}
+                open
+              {% endif %}
+              {{ block.shopify_attributes }}
+            >
+              <summary class="mc-accordion-footer__summary">
+                {{ block.settings.heading | default: block.settings.menu.title }}
+                <span class="svg-wrapper mc-accordion-footer__chevron" aria-hidden="true">
+                  {{- 'icon-caret.svg' | inline_asset_content -}}
+                </span>
+              </summary>
+              <ul class="mc-accordion-footer__links">
+                {%- for link in block.settings.menu.links -%}
+                  <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+                {%- endfor -%}
+              </ul>
+            </details>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    <div class="mc-accordion-footer__bottom">
+      {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
+        <div class="mc-accordion-footer__localization">
+          <localization-form>
+            {%- form 'localization', id: 'AccordionFooterCountryForm-' | append: section.id, class: 'localization-form' -%}
+              <div>
+                <h2 class="visually-hidden" id="{{ country_position }}Label">{{ 'localization.country_label' | t }}</h2>
+                {%- render 'country-localization', localPosition: country_position -%}
+              </div>
+            {%- endform -%}
+          </localization-form>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.show_social and has_social_icons -%}
+        <ul class="list-unstyled list-social mc-accordion-footer__social mc-accordion-footer__social--{{ section.settings.social_alignment }}" role="list">
+          {%- if social_facebook_link != blank -%}
+            <li class="list-social__item">
+              <a href="{{ social_facebook_link }}" class="link list-social__link" target="_blank" rel="noopener">
+                <span class="svg-wrapper">{{- 'icon-facebook.svg' | inline_asset_content -}}</span>
+                <span class="visually-hidden">{{ 'general.social.links.facebook' | t }}</span>
+              </a>
+            </li>
+          {%- endif -%}
+          {%- if social_instagram_link != blank -%}
+            <li class="list-social__item">
+              <a href="{{ social_instagram_link }}" class="link list-social__link" target="_blank" rel="noopener">
+                <span class="svg-wrapper">{{- 'icon-instagram.svg' | inline_asset_content -}}</span>
+                <span class="visually-hidden">{{ 'general.social.links.instagram' | t }}</span>
+              </a>
+            </li>
+          {%- endif -%}
+          {%- if social_youtube_link != blank -%}
+            <li class="list-social__item">
+              <a href="{{ social_youtube_link }}" class="link list-social__link" target="_blank" rel="noopener">
+                <span class="svg-wrapper">{{- 'icon-youtube.svg' | inline_asset_content -}}</span>
+                <span class="visually-hidden">{{ 'general.social.links.youtube' | t }}</span>
+              </a>
+            </li>
+          {%- endif -%}
+          {%- if social_tiktok_link != blank -%}
+            <li class="list-social__item">
+              <a href="{{ social_tiktok_link }}" class="link list-social__link" target="_blank" rel="noopener">
+                <span class="svg-wrapper">{{- 'icon-tiktok.svg' | inline_asset_content -}}</span>
+                <span class="visually-hidden">{{ 'general.social.links.tiktok' | t }}</span>
+              </a>
+            </li>
+          {%- endif -%}
+          {%- if social_twitter_link != blank -%}
+            <li class="list-social__item">
+              <a href="{{ social_twitter_link }}" class="link list-social__link" target="_blank" rel="noopener">
+                <span class="svg-wrapper">{{- 'icon-twitter.svg' | inline_asset_content -}}</span>
+                <span class="visually-hidden">{{ 'general.social.links.twitter' | t }}</span>
+              </a>
+            </li>
+          {%- endif -%}
+          {%- if social_pinterest_link != blank -%}
+            <li class="list-social__item">
+              <a href="{{ social_pinterest_link }}" class="link list-social__link" target="_blank" rel="noopener">
+                <span class="svg-wrapper">{{- 'icon-pinterest.svg' | inline_asset_content -}}</span>
+                <span class="visually-hidden">{{ 'general.social.links.pinterest' | t }}</span>
+              </a>
+            </li>
+          {%- endif -%}
+          {%- if social_snapchat_link != blank -%}
+            <li class="list-social__item">
+              <a href="{{ social_snapchat_link }}" class="link list-social__link" target="_blank" rel="noopener">
+                <span class="svg-wrapper">{{- 'icon-snapchat.svg' | inline_asset_content -}}</span>
+                <span class="visually-hidden">{{ 'general.social.links.snapchat' | t }}</span>
+              </a>
+            </li>
+          {%- endif -%}
+          {%- if social_tumblr_link != blank -%}
+            <li class="list-social__item">
+              <a href="{{ social_tumblr_link }}" class="link list-social__link" target="_blank" rel="noopener">
+                <span class="svg-wrapper">{{- 'icon-tumblr.svg' | inline_asset_content -}}</span>
+                <span class="visually-hidden">{{ 'general.social.links.tumblr' | t }}</span>
+              </a>
+            </li>
+          {%- endif -%}
+          {%- if social_vimeo_link != blank -%}
+            <li class="list-social__item">
+              <a href="{{ social_vimeo_link }}" class="link list-social__link" target="_blank" rel="noopener">
+                <span class="svg-wrapper">{{- 'icon-vimeo.svg' | inline_asset_content -}}</span>
+                <span class="visually-hidden">{{ 'general.social.links.vimeo' | t }}</span>
+              </a>
+            </li>
+          {%- endif -%}
+        </ul>
+      {%- endif -%}
+
+      <div class="mc-accordion-footer__copyright">
+        <span>&copy; {{ 'now' | date: '%Y' }}, {{ shop.name | link_to: routes.root_url }}. All Rights Reserved.</span>
+        <br>
+        <span>{{ powered_by_link }}</span>
+        {%- if section.settings.show_policy -%}
+          <ul class="mc-accordion-footer__policies">
+            {%- for policy in shop.policies -%}
+              {%- if policy != blank -%}
+                <li><a href="{{ policy.url }}">{{ policy.title | escape }}</a></li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="{{ 'macorner-accordion-footer.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "手风琴页脚",
+  "limit": 1,
+  "enabled_on": {
+    "groups": ["footer"]
+  },
+  "max_blocks": 8,
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "菜单分组",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "快速链接",
+          "label": "标题"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "default": "footer",
+          "label": "菜单"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_by_default",
+          "default": false,
+          "label": "默认展开"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "品牌"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo 图片"
+    },
+    {
+      "type": "text",
+      "id": "trustpilot_url",
+      "label": "Trustpilot 链接"
+    },
+    {
+      "type": "text",
+      "id": "trustpilot_reviews",
+      "default": "13,578 reviews",
+      "label": "Trustpilot 评价文案"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dmca_badge",
+      "default": true,
+      "label": "显示 DMCA 标识"
+    },
+    {
+      "type": "image_picker",
+      "id": "dmca_image",
+      "label": "DMCA 图片"
+    },
+    {
+      "type": "text",
+      "id": "dmca_url",
+      "label": "DMCA 链接"
+    },
+    {
+      "type": "header",
+      "content": "手风琴"
+    },
+    {
+      "type": "checkbox",
+      "id": "single_open",
+      "default": true,
+      "label": "一次仅展开一个菜单分组"
+    },
+    {
+      "type": "header",
+      "content": "社交媒体"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "default": true,
+      "label": "显示社交媒体图标"
+    },
+    {
+      "type": "select",
+      "id": "social_alignment",
+      "label": "社交媒体对齐方式",
+      "default": "center",
+      "options": [
+        { "value": "left", "label": "左对齐" },
+        { "value": "center", "label": "居中" },
+        { "value": "right", "label": "右对齐" }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": "填写下方任意链接后，将优先使用此组件的社交媒体配置；全部留空时使用主题设置中的社交媒体链接。"
+    },
+    {
+      "type": "text",
+      "id": "social_facebook_link",
+      "label": "Facebook 链接"
+    },
+    {
+      "type": "text",
+      "id": "social_instagram_link",
+      "label": "Instagram 链接"
+    },
+    {
+      "type": "text",
+      "id": "social_youtube_link",
+      "label": "YouTube 链接"
+    },
+    {
+      "type": "text",
+      "id": "social_tiktok_link",
+      "label": "TikTok 链接"
+    },
+    {
+      "type": "text",
+      "id": "social_twitter_link",
+      "label": "X（Twitter）链接"
+    },
+    {
+      "type": "text",
+      "id": "social_pinterest_link",
+      "label": "Pinterest 链接"
+    },
+    {
+      "type": "text",
+      "id": "social_snapchat_link",
+      "label": "Snapchat 链接"
+    },
+    {
+      "type": "text",
+      "id": "social_tumblr_link",
+      "label": "Tumblr 链接"
+    },
+    {
+      "type": "text",
+      "id": "social_vimeo_link",
+      "label": "Vimeo 链接"
+    },
+    {
+      "type": "header",
+      "content": "底部内容"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_country_selector",
+      "default": true,
+      "label": "显示国家/地区选择器"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_policy",
+      "default": true,
+      "label": "显示政策链接"
+    }
+  ],
+  "presets": [
+    {
+      "name": "手风琴页脚",
+      "blocks": [
+        { "type": "menu" },
+        { "type": "menu", "settings": { "open_by_default": true } },
+        { "type": "menu" },
+        { "type": "menu" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -20,6 +20,10 @@
   }
 </style>
 
+{%- liquid
+  assign tg_cart_drawer_item_label = settings.tg_cart_drawer_item_label | default: 'items'
+-%}
+
 <cart-drawer class="drawer{% if cart == empty %} is-empty{% endif %}{% if settings.enable_tg_cart_drawer %} tg-cart-drawer{% endif %}">
   <div id="CartDrawer" class="cart-drawer">
     <div id="CartDrawer-Overlay" class="cart-drawer__overlay"></div>
@@ -27,7 +31,7 @@
       class="drawer__inner gradient color-{{ settings.cart_color_scheme }}"
       role="dialog"
       aria-modal="true"
-      aria-label="{{ 'sections.cart.title' | t }}"
+      aria-labelledby="CartDrawer-Title"
       tabindex="-1"
     >
       {%- if cart == empty -%}
@@ -65,7 +69,11 @@
         </div>
       {%- endif -%}
       <div class="drawer__header">
-        <h2 class="drawer__heading">{{ 'sections.cart.title' | t }}</h2>
+        <h2 id="CartDrawer-Title" class="drawer__heading">
+          {{ 'sections.cart.title' | t }}
+          <span class="tg-cart-drawer__separator" aria-hidden="true">&bull;</span>
+          <span class="tg-cart-drawer__count">{{ cart.item_count }} {{ tg_cart_drawer_item_label | escape }}</span>
+        </h2>
         <button
           class="drawer__close"
           type="button"
@@ -77,35 +85,9 @@
           </span>
         </button>
       </div>
-      {% if settings.enable_tg_cart_drawer and cart != empty and settings.tg_cart_drawer_free_shipping_target > 0 %}
-        {% assign tg_cart_drawer_progress_template = settings.tg_cart_drawer_progress_message | default: "You're {{ amount }} away from free shipping" %}
-        {% assign tg_cart_drawer_complete_template = settings.tg_cart_drawer_progress_complete_message | default: "You've unlocked free shipping" %}
-        {% assign tg_cart_drawer_progress_color = settings.tg_cart_drawer_progress_color | default: '#e5a400' %}
-        {% assign tg_cart_drawer_track_color = settings.tg_cart_drawer_progress_track_color | default: '#ececec' %}
-        {% assign tg_cart_drawer_target_cents = settings.tg_cart_drawer_free_shipping_target | times: 100 %}
-        {% assign tg_cart_drawer_remaining_cents = tg_cart_drawer_target_cents | minus: cart.total_price %}
-        {% if tg_cart_drawer_remaining_cents < 0 %}{% assign tg_cart_drawer_remaining_cents = 0 %}{% endif %}
-        {% assign tg_cart_drawer_progress = cart.total_price | times: 100.0 | divided_by: tg_cart_drawer_target_cents %}
-        {% if tg_cart_drawer_progress > 100 %}{% assign tg_cart_drawer_progress = 100 %}{% endif %}
-        <div
-          class="tg-cart-drawer__progress"
-          style="--tg_cart_drawer-progress: {{ tg_cart_drawer_progress }}%; --tg_cart_drawer-progress-color: {{ tg_cart_drawer_progress_color }}; --tg_cart_drawer-track-color: {{ tg_cart_drawer_track_color }};"
-          role="status"
-          aria-live="polite"
-        >
-          <p class="tg-cart-drawer__progress-message">
-            {% if tg_cart_drawer_remaining_cents > 0 %}
-              {% assign tg_cart_drawer_remaining_money = tg_cart_drawer_remaining_cents | money %}
-              {{ tg_cart_drawer_progress_template | replace: '{{ amount }}', tg_cart_drawer_remaining_money }}
-            {% else %}
-              {{ tg_cart_drawer_complete_template }}
-            {% endif %}
-          </p>
-          <div class="tg-cart-drawer__progress-track" aria-hidden="true">
-            <span class="tg-cart-drawer__progress-value"></span>
-          </div>
-        </div>
-      {% endif %}
+      {%- if request.page_type == 'cart' -%}
+        <div data-tg-cart-drawer-progress-slot></div>
+      {%- endif -%}
       <cart-drawer-items
         view-event-payload="{{ cart | standard_event_data: 'view', context: 'dialog' | escape }}"
         view-event-trigger="manual"
@@ -121,6 +103,25 @@
         >
           <div id="CartDrawer-CartItems" class="drawer__contents js-contents">
             {%- if cart != empty -%}
+              {%- if settings.enable_tg_cart_drawer and settings.tg_cart_drawer_urgency_enabled -%}
+                {%- assign tg_cart_drawer_urgency_message = settings.tg_cart_drawer_urgency_message | default: 'Hurry! You have {{ time }} minutes remaining' -%}
+                {%- capture tg_cart_drawer_urgency_placeholder -%}{%- raw -%}{{ time }}{%- endraw -%}{%- endcapture -%}
+                {%- capture tg_cart_drawer_urgency_time -%}<strong data-tg-cart-urgency-value></strong>{%- endcapture -%}
+                <div
+                  class="tg-cart-drawer__urgency-row"
+                  data-tg-cart-urgency
+                  data-tg-cart-urgency-minutes="{{ settings.tg_cart_drawer_urgency_minutes | default: 50 }}"
+                  role="status"
+                  aria-live="polite"
+                >
+                  <span class="svg-wrapper" aria-hidden="true">{{- 'icon-cart.svg' | inline_asset_content -}}</span>
+                  <span>{{ tg_cart_drawer_urgency_message | replace: tg_cart_drawer_urgency_placeholder, tg_cart_drawer_urgency_time }}</span>
+                </div>
+              {%- endif -%}
+              <div class="tg-cart-drawer__column-labels" aria-hidden="true">
+                <span>{{ settings.tg_cart_drawer_product_label | default: 'Product' | escape }}</span>
+                <span>{{ settings.tg_cart_drawer_price_label | default: 'Price' | escape }}</span>
+              </div>
               <div class="drawer__cart-items-wrapper">
                 <table class="cart-items" role="table">
                   <thead role="rowgroup">
@@ -220,7 +221,7 @@
                             or item.properties.size != 0
                             or item.selling_plan_allocation != null
                           -%}
-                            <dl>
+                            <dl class="tg-cart-drawer__option-grid">
                               {%- if item.product.has_only_default_variant == false -%}
                                 {%- for option in item.options_with_values -%}
                                   <div class="product-option">
@@ -510,6 +511,43 @@
                   </tbody>
                 </table>
               </div>
+              {%- if settings.enable_tg_cart_drawer and settings.tg_cart_drawer_benefits_enabled -%}
+                <section class="tg-cart-drawer__benefits" aria-labelledby="TgCartDrawer-BenefitsTitle">
+                  <h3 id="TgCartDrawer-BenefitsTitle">{{ settings.tg_cart_drawer_benefits_heading | default: 'Benefits' | escape }}</h3>
+                  <ul role="list">
+                    {%- if settings.tg_cart_drawer_benefit_1 != blank -%}
+                      <li>
+                        <span class="svg-wrapper" aria-hidden="true">{{- 'icon-checkmark.svg' | inline_asset_content -}}</span>
+                        <span>{{ settings.tg_cart_drawer_benefit_1 | escape }}</span>
+                      </li>
+                    {%- endif -%}
+                    {%- if settings.tg_cart_drawer_benefit_2 != blank -%}
+                      <li>
+                        <span class="svg-wrapper" aria-hidden="true">{{- 'icon-truck.svg' | inline_asset_content -}}</span>
+                        <span>{{ settings.tg_cart_drawer_benefit_2 | escape }}</span>
+                      </li>
+                    {%- endif -%}
+                    {%- if settings.tg_cart_drawer_benefit_3 != blank -%}
+                      <li>
+                        <span class="svg-wrapper" aria-hidden="true">{{- 'icon-return.svg' | inline_asset_content -}}</span>
+                        <span>{{ settings.tg_cart_drawer_benefit_3 | escape }}</span>
+                      </li>
+                    {%- endif -%}
+                    {%- if settings.tg_cart_drawer_benefit_4 != blank -%}
+                      <li>
+                        <span class="svg-wrapper" aria-hidden="true">{{- 'icon-lock.svg' | inline_asset_content -}}</span>
+                        <span>{{ settings.tg_cart_drawer_benefit_4 | escape }}</span>
+                      </li>
+                    {%- endif -%}
+                    {%- if settings.tg_cart_drawer_benefit_5 != blank -%}
+                      <li>
+                        <span class="svg-wrapper" aria-hidden="true">{{- 'icon-stopwatch.svg' | inline_asset_content -}}</span>
+                        <span>{{ settings.tg_cart_drawer_benefit_5 | escape }}</span>
+                      </li>
+                    {%- endif -%}
+                  </ul>
+                </section>
+              {%- endif -%}
             {%- endif -%}
             <p id="CartDrawer-LiveRegionText" class="visually-hidden" role="status"></p>
             <p id="CartDrawer-LineItemStatus" class="visually-hidden" aria-hidden="true" role="status">
@@ -528,11 +566,11 @@
                 {{- 'icon-caret.svg' | inline_asset_content -}}
               </span>
             </summary>
-            <cart-note class="cart__note field">
+            <cart-note class="tg-cart-drawer__note">
               <label class="visually-hidden" for="CartDrawer-Note">{{ 'sections.cart.note' | t }}</label>
               <textarea
                 id="CartDrawer-Note"
-                class="text-area text-area--resize-vertical field__input"
+                class="tg-cart-drawer__note-input"
                 name="note"
                 placeholder="{{ 'sections.cart.note' | t }}"
               >{{ cart.note }}</textarea>
@@ -543,7 +581,7 @@
         <!-- Start blocks -->
         <!-- Subtotals -->
 
-        <div class="cart-drawer__footer" {{ block.shopify_attributes }}>
+        <div class="cart-drawer__footer">
           <div>
             {%- if cart.cart_level_discount_applications.size > 0 -%}
               <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
@@ -557,6 +595,18 @@
               </ul>
             {%- endif -%}
           </div>
+
+          {%- if settings.enable_tg_cart_drawer and shop.enabled_payment_types.size > 0 -%}
+            <ul class="tg-cart-drawer__payment-marks list-unstyled" role="list" aria-label="{{ 'sections.footer.payment' | t }}">
+              {%- for type in shop.enabled_payment_types -%}
+                <li>{{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}</li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+
+          {%- if request.page_type == 'cart' -%}
+            <div data-tg-cart-drawer-protection-slot></div>
+          {%- endif -%}
 
           <div class="totals" role="status">
             <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2>
@@ -606,18 +656,23 @@
 
         <!-- CTAs -->
 
-        <div class="cart__ctas" {{ block.shopify_attributes }}>
+        <div class="cart__ctas">
           <button
             type="submit"
             id="CartDrawer-Checkout"
             class="cart__checkout-button button"
             name="checkout"
             form="CartDrawer-Form"
+            data-tg-cart-checkout
             {% if cart == empty %}
               disabled
             {% endif %}
           >
-            {{ 'sections.cart.checkout' | t }}
+            {%- if settings.enable_tg_cart_drawer -%}
+              {{ settings.tg_cart_drawer_checkout_label | default: 'Check out' | escape }} - {{ cart.total_price | money_with_currency }}
+            {%- else -%}
+              {{ 'sections.cart.checkout' | t }}
+            {%- endif -%}
           </button>
         </div>
       </div>

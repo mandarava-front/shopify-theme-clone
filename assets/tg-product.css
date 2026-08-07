@@ -1,4 +1,3 @@
-.tg-product__personalization,
 .tg-product__addon {
   margin: 1.6rem 0;
   padding: 1.4rem;
@@ -8,7 +7,6 @@
   color: #202024;
 }
 
-.tg-product__personalization legend,
 .tg-product__addon > strong {
   display: block;
   margin: 0 0 0.8rem;
@@ -18,49 +16,12 @@
   line-height: 1.4;
 }
 
-.tg-product__personalization > p,
-.tg-product__personalization small,
 .tg-product__addon small {
   display: block;
   margin: 0 0 0.8rem;
   color: #555;
   font-size: 1.2rem;
   line-height: 1.5;
-}
-
-.tg-product__personalization > label {
-  display: block;
-  margin-bottom: 0.6rem;
-  font-size: 1.3rem;
-  font-weight: 600;
-}
-
-.tg-product__personalization > label span {
-  color: #e33;
-}
-
-.tg-product__personalization input,
-.tg-product__personalization select {
-  width: 100%;
-  min-height: 4.4rem;
-  padding: 0.8rem 1.1rem;
-  border: 1px solid #d9d9d9;
-  border-radius: 0.5rem;
-  background: #fff;
-  color: #202024;
-  font: inherit;
-}
-
-.tg-product__personalization input:focus-visible,
-.tg-product__personalization select:focus-visible {
-  outline: 2px solid #0b8494;
-  outline-offset: 2px;
-}
-
-.tg-product__personalization input + small,
-.tg-product__personalization select + small {
-  margin-top: 0.7rem;
-  margin-bottom: 0;
 }
 
 .tg-product__addon > label {
@@ -123,17 +84,7 @@
   color: #ef3c2f;
 }
 
-.tg-product .product-form__submit {
-  border-radius: 1.2rem;
-  background: #ee860f;
-}
-
-.tg-product .product-form__submit:not([disabled]):hover {
-  background: #d97408;
-}
-
 @media screen and (max-width: 749px) {
-  .tg-product__personalization,
   .tg-product__addon {
     padding: 1.2rem;
   }

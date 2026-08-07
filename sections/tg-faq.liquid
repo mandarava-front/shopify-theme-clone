@@ -59,5 +59,43 @@
   </div>
 </section>
 {% schema %}
-{"name":"t:tg.sections.faq.name","tag":"section","class":"section","settings":[{"type":"image_picker","id":"image","label":"t:tg.settings.image"},{"type":"text","id":"image_alt","label":"t:tg.settings.alt"},{"type":"inline_richtext","id":"heading","label":"t:tg.settings.heading","default":"FAQ"},{"type":"range","id":"open_item","label":"t:tg.settings.default_open_item","info":"0 keeps all questions closed.","min":0,"max":12,"step":1,"default":1},{"type":"color","id":"background","label":"t:tg.settings.background","default":"#ffffff"},{"type":"color","id":"text_color","label":"t:tg.settings.text_color","default":"#000000"},{"type":"color","id":"muted_color","label":"t:tg.settings.muted_color","default":"#000000"},{"type":"color","id":"border_color","label":"t:tg.settings.border_color","default":"#dedede"},{"type":"range","id":"padding_top","label":"t:tg.settings.padding_top","min":0,"max":160,"step":4,"unit":"px","default":80},{"type":"range","id":"padding_bottom","label":"t:tg.settings.padding_bottom","min":0,"max":160,"step":4,"unit":"px","default":80}],"blocks":[{"type":"faq","name":"t:tg.blocks.faq.name","settings":[{"type":"text","id":"question","label":"t:tg.settings.question","default":"Is customization free?"},{"type":"textarea","id":"t:tg.settings.answer","label":"t:tg.settings.answer","default":"Yes, all personalized customizations are included in the product price."}]}],"max_blocks":12,"presets":[{"name":"t:tg.sections.faq.name","blocks":[{"type":"faq"},{"type":"faq"},{"type":"faq"}]}]}
+{"name":"t:tg.sections.faq.name","tag":"section","class":"section","settings":[{"type":"image_picker","id":"image","label":"t:tg.settings.image"},{"type":"text","id":"image_alt","label":"t:tg.settings.alt"},{"type":"inline_richtext","id":"heading","label":"t:tg.settings.heading","default":"FAQ"},{"type":"range","id":"open_item","label":"t:tg.settings.default_open_item","info":"0 keeps all questions closed.","min":0,"max":12,"step":1,"default":1},{"type":"color","id":"background","label":"t:tg.settings.background","default":"#ffffff"},{"type":"color","id":"text_color","label":"t:tg.settings.text_color","default":"#000000"},{"type":"color","id":"muted_color","label":"t:tg.settings.muted_color","default":"#000000"},{"type":"color","id":"border_color","label":"t:tg.settings.border_color","default":"#dedede"},{"type":"range","id":"padding_top","label":"t:tg.settings.padding_top","min":0,"max":160,"step":4,"unit":"px","default":80},{"type":"range","id":"padding_bottom","label":"t:tg.settings.padding_bottom","min":0,"max":160,"step":4,"unit":"px","default":80}],"blocks":[{"type":"faq","name":"t:tg.blocks.faq.name","settings":[{"type":"text","id":"question","label":"t:tg.settings.question","default":"Is customization free?"},{"type":"textarea","id":"t:tg.settings.answer","label":"t:tg.settings.answer","default":"Yes, all personalized customizations are included in the product price."}]}],"max_blocks":12,"presets": [
+  {
+    "name": "首页默认 - 常见问题",
+    "settings": {
+      "image_alt": "",
+      "heading": "FAQ",
+      "open_item": 1,
+      "background": "#ffffff",
+      "text_color": "#000000",
+      "muted_color": "#000000",
+      "border_color": "#dedede",
+      "padding_top": 80,
+      "padding_bottom": 80
+    },
+    "blocks": [
+      {
+        "type": "faq",
+        "settings": {
+          "question": "Is customization free?",
+          "t:tg.settings.answer": "Yes, all personalized customizations are included in the product price."
+        }
+      },
+      {
+        "type": "faq",
+        "settings": {
+          "question": "Is customization free?",
+          "t:tg.settings.answer": "Yes, all personalized customizations are included in the product price."
+        }
+      },
+      {
+        "type": "faq",
+        "settings": {
+          "question": "Is customization free?",
+          "t:tg.settings.answer": "Yes, all personalized customizations are included in the product price."
+        }
+      }
+    ]
+  }
+]}
 {% endschema %}

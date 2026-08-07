@@ -1,8 +1,32 @@
 {{ 'component-cart.css' | asset_url | stylesheet_tag }}
-{{ 'cuszoo-cart.css' | asset_url | stylesheet_tag }}
 {{ 'component-totals.css' | asset_url | stylesheet_tag }}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
 {{ 'component-discounts.css' | asset_url | stylesheet_tag }}
+{% if section.settings.enable_tg_cart_page_style %}
+  {%- assign tg_cart_font_bold = section.settings.tg_cart_font | font_modify: 'weight', '700' -%}
+  {% style %}
+    {{ section.settings.tg_cart_font | font_face: font_display: 'swap' }}
+    {{ tg_cart_font_bold | font_face: font_display: 'swap' }}
+  {% endstyle %}
+  {{ 'tg-cart-page.css' | asset_url | stylesheet_tag }}
+{% endif %}
+<script src="{{ 'tg-cart-addons.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign tg_cart_protection_requires_terms = false
+  assign tg_cart_terms_accepted = false
+
+  if cart.attributes.tg_shipping_protection_terms_accepted == 'true'
+    assign tg_cart_terms_accepted = true
+  endif
+
+  for block in section.blocks
+    if block.type == 'shipping_protection' and block.settings.product != blank and block.settings.require_terms
+      assign tg_cart_protection_requires_terms = true
+      break
+    endif
+  endfor
+-%}
 
 {%- style -%}
   .section-{{ section.id }}-padding {
@@ -19,14 +43,15 @@
 {%- endstyle -%}
 
 <div
-  class="gradient color-{{ section.settings.color_scheme }}{% if cart == empty %} is-empty{% endif %}"
+  class="gradient color-{{ section.settings.color_scheme }}{% if section.settings.enable_tg_cart_page_style %} tg-cart-footer{% if section.settings.tg_cart_summary_sticky %} tg-cart-footer--sticky{% endif %}{% endif %}{% if cart == empty %} is-empty{% endif %}"
   id="main-cart-footer"
   data-id="{{ section.id }}"
+  {% if section.settings.enable_tg_cart_page_style %}style="--tg-cart-accent: {{ section.settings.tg_cart_page_accent_color }}; --tg-cart-surface: {{ section.settings.tg_cart_page_surface_color }}; --tg-cart-card: {{ section.settings.tg_cart_page_card_color }}; --tg-cart-summary-surface: {{ section.settings.tg_cart_summary_surface_color }}; --tg-cart-border: {{ section.settings.tg_cart_page_border_color }}; --tg-cart-text: {{ section.settings.tg_cart_page_text_color }}; --tg-cart-muted: {{ section.settings.tg_cart_page_muted_color }}; --tg-cart-radius: {{ section.settings.tg_cart_card_radius }}px; --tg-cart-summary-width: {{ section.settings.tg_cart_summary_width }}px; --tg-cart-font: {{ section.settings.tg_cart_font.family }}, {{ section.settings.tg_cart_font.fallback_families }};"{% endif %}
 >
   <div class="page-width">
-    <div class="cart__footer isolate section-{{ section.id }}-padding">
-      {%- if settings.show_cart_note -%}
-        <cart-note class="cart__note field">
+    <div class="cart__footer tg-cart-summary isolate section-{{ section.id }}-padding">
+      {%- if settings.show_cart_note and section.settings.tg_cart_show_note -%}
+        <cart-note class="cart__note tg-cart-summary__note field">
           <label for="Cart-note">{{ 'sections.cart.note' | t }}</label>
           <textarea
             class="text-area field__input"
@@ -38,13 +63,25 @@
         </cart-note>
       {%- endif -%}
 
-      <div class="cart__blocks">
+      <div class="cart__blocks tg-cart-summary__blocks">
+        <div class="tg-cart-summary__primary">
         {% for block in section.blocks %}
-          {%- case block.type -%}
-            {%- when '@app' -%}
+          {%- unless block.type == 'buyer_protection' -%}
+            {%- if block.type == '@app' -%}
               {% render block %}
-            {%- when 'subtotal' -%}
-              <div class="js-contents" {{ block.shopify_attributes }}>
+            {%- else -%}
+              <div
+                class="tg-cart-summary__block{% if block.settings.enable_custom_spacing %} tg-cart-summary__block--custom-spacing{% endif %}"
+                style="--tg-cart-block-margin-top: {{ block.settings.margin_top | default: 0 }}px; --tg-cart-block-margin-bottom: {{ block.settings.margin_bottom | default: 0 }}px;"
+                {{ block.shopify_attributes }}
+              >
+              {%- case block.type -%}
+                {%- when 'promotion' -%}
+                  {% render 'tg-cart-promotion', block: block, cart: cart %}
+                {%- when 'free_shipping_progress' -%}
+                  {% render 'tg-cart-free-shipping', block: block, cart: cart, surface: 'page' %}
+                {%- when 'subtotal' -%}
+                  <div class="js-contents tg-cart-summary__totals">
                 <div>
                   {%- if cart.cart_level_discount_applications.size > 0 -%}
                     <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
@@ -59,12 +96,22 @@
                   {%- endif -%}
                 </div>
 
-                <div class="totals">
-                  <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2>
+                <div class="totals tg-cart-summary__total-row">
+                  <h2 class="totals__total">
+                    {% if block.settings.label != blank %}
+                      {{ block.settings.label | escape }}
+                    {% else %}
+                      {{ 'sections.cart.estimated_total' | t }}
+                    {% endif %}
+                  </h2>
                   <p class="totals__total-value">{{ cart.total_price | money_with_currency }}</p>
                 </div>
 
-                <small class="tax-note caption-large rte">
+                {% if block.settings.show_tax_note %}
+                  <small class="tax-note tg-cart-summary__tax-note caption-large rte">
+                  {% if block.settings.custom_tax_note != blank %}
+                    {{ block.settings.custom_tax_note | escape }}
+                  {% else %}
                   {%- if cart.duties_included and cart.taxes_included -%}
                     {%- if shop.shipping_policy.body == blank -%}
                       {{ 'sections.cart.duties_and_taxes_included_shipping_at_checkout_without_policy' | t }}
@@ -102,91 +149,105 @@
                       }}
                     {%- endif -%}
                   {%- endif -%}
-                </small>
-              </div>
-            {%- when 'buttons' -%}
-              <div class="cart__ctas" {{ block.shopify_attributes }}>
+                  {% endif %}
+                  </small>
+                {% endif %}
+                  </div>
+                {%- when 'buttons' -%}
+                  <div class="cart__ctas tg-cart-summary__ctas">
                 <button
                   type="submit"
                   id="checkout"
                   class="cart__checkout-button button"
                   name="checkout"
+                  data-tg-cart-checkout
                   {% if cart == empty %}
+                    disabled
+                  {% elsif tg_cart_protection_requires_terms and tg_cart_terms_accepted == false %}
                     disabled
                   {% endif %}
                   form="cart"
                 >
-                  {{ 'sections.cart.checkout' | t }}
+                  {% if block.settings.checkout_label != blank %}
+                    {{ block.settings.checkout_label | escape }}
+                  {% else %}
+                    {{ 'sections.cart.checkout' | t }}
+                  {% endif %}
                 </button>
-              </div>
+                  </div>
 
-              {%- if additional_checkout_buttons -%}
-                <div class="cart__dynamic-checkout-buttons additional-checkout-buttons">
-                  {{ content_for_additional_checkout_buttons }}
-                </div>
-              {%- endif -%}
-            {%- when 'payment_methods' -%}
-              <div class="cuszoo-cart-payment" {{ block.shopify_attributes }}>
-                {%- if block.settings.secure_text != blank -%}
-                  <p class="cuszoo-cart-secure">
-                    <span class="svg-wrapper" aria-hidden="true">{{- 'icon-padlock.svg' | inline_asset_content -}}</span>
-                    {{ block.settings.secure_text | escape }}
-                  </p>
-                {%- endif -%}
-                {%- if block.settings.heading != blank -%}
-                  <p class="cuszoo-cart-payment__heading">{{ block.settings.heading | escape }}</p>
-                {%- endif -%}
-                {%- if shop.enabled_payment_types.size > 0 -%}
-                  <ul class="cuszoo-payment-list list-unstyled" role="list">
-                    {%- for type in shop.enabled_payment_types -%}
-                      <li>{{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}</li>
-                    {%- endfor -%}
-                  </ul>
-                {%- endif -%}
+                  {%- if additional_checkout_buttons and block.settings.show_dynamic_checkout -%}
+                    <div
+                      class="cart__dynamic-checkout-buttons additional-checkout-buttons{% if tg_cart_protection_requires_terms and tg_cart_terms_accepted == false %} is-disabled{% endif %}"
+                      data-tg-cart-dynamic-checkout
+                      {% if tg_cart_protection_requires_terms and tg_cart_terms_accepted == false %}
+                        aria-hidden="true"
+                        inert
+                      {% endif %}
+                    >
+                      {{ content_for_additional_checkout_buttons }}
+                    </div>
+                  {%- endif -%}
+                {%- when 'payment_methods' -%}
+                  {% render 'tg-cart-payment-methods', block: block %}
+                {%- when 'shipping_protection' -%}
+                  {% render 'tg-cart-shipping-protection', block: block, cart: cart, surface: 'page' %}
+                {%- when 'assurance' -%}
+                  <div class="tg-cart-assurance">
+                    <span class="svg-wrapper" aria-hidden="true">{{- 'icon-checkmark.svg' | inline_asset_content -}}</span>
+                    <div>
+                      <strong>{{ block.settings.heading | escape }}</strong>
+                      {%- if block.settings.text != blank -%}
+                        <div class="rte">{{ block.settings.text }}</div>
+                      {%- endif -%}
+                      {%- if block.settings.link_label != blank and block.settings.link != blank -%}
+                        <a class="link underlined-link" href="{{ block.settings.link }}">{{ block.settings.link_label | escape }}</a>
+                      {%- endif -%}
+                    </div>
+                  </div>
+              {%- endcase -%}
               </div>
-            {%- when 'buyer_protection' -%}
-              <div class="cuszoo-buyer-protection" {{ block.shopify_attributes }}>
-                {%- if block.settings.heading != blank -%}
-                  <p class="cuszoo-buyer-protection__heading">{{ block.settings.heading | escape }}</p>
-                {%- endif -%}
-                <ul class="cuszoo-buyer-protection__list list-unstyled" role="list">
-                  {%- if block.settings.item_1_title != blank -%}
-                    <li>
-                      <span class="svg-wrapper" aria-hidden="true">{{- 'icon-checkmark.svg' | inline_asset_content -}}</span>
-                      <div>
-                        <strong>{{ block.settings.item_1_title | escape }}</strong>
-                        {%- if block.settings.item_1_text != blank -%}<span>{{ block.settings.item_1_text | escape }}</span>{%- endif -%}
-                      </div>
-                    </li>
-                  {%- endif -%}
-                  {%- if block.settings.item_2_title != blank -%}
-                    <li>
-                      <span class="svg-wrapper" aria-hidden="true">{{- 'icon-return.svg' | inline_asset_content -}}</span>
-                      <div>
-                        <strong>{{ block.settings.item_2_title | escape }}</strong>
-                        {%- if block.settings.item_2_text != blank -%}<span>{{ block.settings.item_2_text | escape }}</span>{%- endif -%}
-                      </div>
-                    </li>
-                  {%- endif -%}
-                </ul>
-              </div>
-            {%- when 'assurance' -%}
-              <div class="cuszoo-cart-assurance" {{ block.shopify_attributes }}>
-                <span class="svg-wrapper" aria-hidden="true">{{- 'icon-checkmark.svg' | inline_asset_content -}}</span>
-                <div>
-                  <strong>{{ block.settings.heading | escape }}</strong>
-                  {%- if block.settings.text != blank -%}
-                    <div class="rte">{{ block.settings.text }}</div>
-                  {%- endif -%}
-                  {%- if block.settings.link_label != blank and block.settings.link != blank -%}
-                    <a class="link underlined-link" href="{{ block.settings.link }}">{{ block.settings.link_label | escape }}</a>
-                  {%- endif -%}
-                </div>
-              </div>
-          {%- endcase -%}
+            {%- endif -%}
+          {%- endunless -%}
         {% endfor %}
 
         <div id="cart-errors"></div>
+        </div>
+
+        {% for block in section.blocks %}
+          {%- if block.type == 'buyer_protection' -%}
+            <div
+              class="tg-cart-summary__block{% if block.settings.enable_custom_spacing %} tg-cart-summary__block--custom-spacing{% endif %}"
+              style="--tg-cart-block-margin-top: {{ block.settings.margin_top | default: 0 }}px; --tg-cart-block-margin-bottom: {{ block.settings.margin_bottom | default: 0 }}px;"
+              {{ block.shopify_attributes }}
+            >
+              {% render 'tg-cart-buyer-protection', block: block %}
+            </div>
+          {%- endif -%}
+        {% endfor %}
+
+        {%- if section.settings.tg_cart_show_continue_link -%}
+          <a
+            class="tg-cart-summary__continue"
+            href="{% if section.settings.tg_cart_continue_link != blank %}{{ section.settings.tg_cart_continue_link }}{% else %}{{ routes.all_products_collection_url }}{% endif %}"
+          >
+            <span class="tg-cart-inline-icon" aria-hidden="true">{{- 'icon-discount.svg' | inline_asset_content -}}</span>
+            {{ section.settings.tg_cart_continue_label | default: 'Keep shopping' | escape }}
+          </a>
+        {%- endif -%}
+
+        {%- if request.page_type == 'cart' -%}
+          <template data-tg-cart-drawer-addons-template>
+            {%- for block in section.blocks -%}
+              {%- case block.type -%}
+                {%- when 'free_shipping_progress' -%}
+                  {% render 'tg-cart-free-shipping', block: block, cart: cart, surface: 'drawer' %}
+                {%- when 'shipping_protection' -%}
+                  {% render 'tg-cart-shipping-protection', block: block, cart: cart, surface: 'drawer' %}
+              {%- endcase -%}
+            {%- endfor -%}
+          </template>
+        {%- endif -%}
       </div>
     </div>
   </div>
@@ -194,9 +255,120 @@
 
 {% schema %}
 {
-  "name": "t:sections.main-cart-footer.name",
-  "class": "cart__footer-wrapper cuszoo-cart-footer-section",
+  "name": "Tg | 购物车结算",
+  "class": "cart__footer-wrapper tg-cart-footer-section",
+  "enabled_on": {
+    "templates": ["cart"]
+  },
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_tg_cart_page_style",
+      "label": "Tg | Enable Prints10 summary / 启用 Prints10 摘要",
+      "info": "Tg | Keep Shopify checkout and cart updates / 保留 Shopify 原生结账和更新",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "tg_cart_show_note",
+      "label": "Tg | Show cart note / 显示购物车备注",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "tg_cart_show_continue_link",
+      "label": "Tg | Show continue shopping link / 显示继续购物链接",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "tg_cart_continue_label",
+      "label": "Tg | Continue shopping label / 继续购物文案",
+      "default": "Keep shopping"
+    },
+    {
+      "type": "url",
+      "id": "tg_cart_continue_link",
+      "label": "Tg | Continue shopping link / 继续购物链接"
+    },
+    {
+      "type": "checkbox",
+      "id": "tg_cart_summary_sticky",
+      "label": "Tg | Sticky summary on desktop / 桌面端固定摘要卡",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_summary_width",
+      "min": 340,
+      "max": 560,
+      "step": 10,
+      "unit": "px",
+      "label": "Tg | Summary width / 摘要卡宽度",
+      "default": 480
+    },
+    {
+      "type": "header",
+      "content": "Tg | Summary appearance / 摘要卡外观"
+    },
+    {
+      "type": "font_picker",
+      "id": "tg_cart_font",
+      "label": "Tg | Cart font / 购物车字体",
+      "default": "poppins_n4"
+    },
+    {
+      "type": "color",
+      "id": "tg_cart_page_accent_color",
+      "label": "Tg | Accent color / 强调色",
+      "default": "#a50c43"
+    },
+    {
+      "type": "color",
+      "id": "tg_cart_page_surface_color",
+      "label": "Tg | Page background / 页面背景色",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "tg_cart_page_card_color",
+      "label": "Tg | Item card background / 商品区背景色",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "tg_cart_summary_surface_color",
+      "label": "Tg | Summary background / 摘要卡背景色",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "tg_cart_page_border_color",
+      "label": "Tg | Border color / 边框颜色",
+      "default": "#e2e2e2"
+    },
+    {
+      "type": "color",
+      "id": "tg_cart_page_text_color",
+      "label": "Tg | Primary text color / 主文字颜色",
+      "default": "#15375f"
+    },
+    {
+      "type": "color",
+      "id": "tg_cart_page_muted_color",
+      "label": "Tg | Secondary text color / 次要文字颜色",
+      "default": "#858990"
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_card_radius",
+      "min": 0,
+      "max": 16,
+      "step": 2,
+      "unit": "px",
+      "label": "Tg | Card corner radius / 卡片圆角",
+      "default": 8
+    },
     {
       "type": "color_scheme",
       "id": "color_scheme",
@@ -230,74 +402,535 @@
   ],
   "blocks": [
     {
+      "type": "free_shipping_progress",
+      "name": "Tg | 满额免运费进度",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "number",
+          "id": "target",
+          "label": "免运费门槛金额",
+          "info": "填写 0 时不显示该组件。金额使用店铺当前货币。",
+          "default": 75
+        },
+        {
+          "type": "text",
+          "id": "pending_message_template",
+          "label": "未达标文案（使用 [amount]）",
+          "info": "保留 [amount]，系统会替换为距离免运费还差的金额。",
+          "default": "You're [amount] away from free shipping"
+        },
+        {
+          "type": "text",
+          "id": "complete_message",
+          "label": "达标文案",
+          "default": "You've unlocked free shipping"
+        },
+        {
+          "type": "color",
+          "id": "progress_color",
+          "label": "进度条颜色",
+          "default": "#7055ff"
+        },
+        {
+          "type": "color",
+          "id": "track_color",
+          "label": "进度条背景颜色",
+          "default": "#e2dfea"
+        },
+        {
+          "type": "color",
+          "id": "surface_color",
+          "label": "组件背景颜色",
+          "default": "#f5f5f5"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_border",
+          "label": "显示组件边框",
+          "default": false
+        },
+        {
+          "type": "color",
+          "id": "border_color",
+          "label": "组件边框颜色",
+          "default": "#e2e2e2"
+        },
+        {
+          "type": "header",
+          "content": "区块间距"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_custom_spacing",
+          "label": "自定义上下外边距",
+          "info": "启用后会覆盖此区块当前的默认外边距。",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "margin_top",
+          "min": 0,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "label": "上方外边距",
+          "default": 24
+        },
+        {
+          "type": "range",
+          "id": "margin_bottom",
+          "min": 0,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "label": "下方外边距",
+          "default": 0
+        }
+      ]
+    },
+    {
       "type": "subtotal",
-      "name": "t:sections.main-cart-footer.blocks.subtotal.name",
-      "limit": 1
-    },
-    {
-      "type": "buttons",
-      "name": "t:sections.main-cart-footer.blocks.buttons.name",
-      "limit": 1
-    },
-    {
-      "type": "payment_methods",
-      "name": "Payment methods",
+      "name": "Tg | 小计",
       "limit": 1,
       "settings": [
         {
           "type": "text",
+          "id": "label",
+          "label": "Tg | Total label / 合计标签",
+          "default": "Subtotal"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_tax_note",
+          "label": "Tg | Show tax and shipping note / 显示税费和配送说明",
+          "default": false
+        },
+        {
+          "type": "textarea",
+          "id": "custom_tax_note",
+          "label": "Tg | Custom tax and shipping note / 自定义税费和配送说明"
+        },
+        {
+          "type": "header",
+          "content": "区块间距"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_custom_spacing",
+          "label": "自定义上下外边距",
+          "info": "启用后会覆盖此区块当前的默认外边距。",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "margin_top",
+          "min": 0,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "label": "上方外边距",
+          "default": 24
+        },
+        {
+          "type": "range",
+          "id": "margin_bottom",
+          "min": 0,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "label": "下方外边距",
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "buttons",
+      "name": "Tg | 结账按钮",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "checkout_label",
+          "label": "Tg | Checkout button label / 结账按钮文案",
+          "default": "Proceed to checkout"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_dynamic_checkout",
+          "label": "Tg | Show accelerated checkout / 显示快捷结账按钮",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "区块间距"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_custom_spacing",
+          "label": "自定义上下外边距",
+          "info": "启用后会覆盖此区块当前的默认外边距。",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "margin_top",
+          "min": 0,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "label": "上方外边距",
+          "default": 24
+        },
+        {
+          "type": "range",
+          "id": "margin_bottom",
+          "min": 0,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "label": "下方外边距",
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "promotion",
+      "name": "Tg | 促销提示",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "message",
+          "label": "Tg | Promotion message / 促销文案",
+          "default": "More items can unlock your next offer."
+        },
+        {
+          "type": "range",
+          "id": "minimum_item_count",
+          "min": 0,
+          "max": 20,
+          "step": 1,
+          "label": "Tg | Minimum item count / 最低商品数量",
+          "default": 0
+        },
+        {
+          "type": "text",
+          "id": "incomplete_message",
+          "label": "Tg | Below-minimum message / 未达到数量时的文案"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Tg | Link label / 链接文案",
+          "default": "Shop more"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Tg | Link / 链接"
+        },
+        {
+          "type": "header",
+          "content": "区块间距"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_custom_spacing",
+          "label": "自定义上下外边距",
+          "info": "启用后会覆盖此区块当前的默认外边距。",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "margin_top",
+          "min": 0,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "label": "上方外边距",
+          "default": 24
+        },
+        {
+          "type": "range",
+          "id": "margin_bottom",
+          "min": 0,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "label": "下方外边距",
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "payment_methods",
+      "name": "Tg | 支付方式",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_secure_line",
+          "label": "Tg | Show secure payment line / 显示安全支付提示",
+          "default": true
+        },
+        {
+          "type": "text",
           "id": "secure_text",
           "default": "100% Secure Payment",
-          "label": "Secure payment line"
+          "label": "Tg | Secure payment text / 安全支付文案"
         },
         {
           "type": "text",
           "id": "heading",
           "default": "Payment Methods",
-          "label": "Heading"
+          "label": "Tg | Payment heading / 支付方式标题"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_payment_types",
+          "label": "Tg | Show enabled payment methods / 显示已启用的支付方式",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "区块间距"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_custom_spacing",
+          "label": "自定义上下外边距",
+          "info": "启用后会覆盖此区块当前的默认外边距。",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "margin_top",
+          "min": 0,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "label": "上方外边距",
+          "default": 24
+        },
+        {
+          "type": "range",
+          "id": "margin_bottom",
+          "min": 0,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "label": "下方外边距",
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "shipping_protection",
+      "name": "Tg | 运费险与条款",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "运费险商品",
+          "info": "选择真实商品后，用户可在购物车中加入或移除该商品。"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "运费险标识图",
+          "info": "优先于运费险商品图显示，建议使用透明背景的方形或横向标识图。"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "标题",
+          "default": "Shipping Protection"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "说明",
+          "default": "Protection against loss, theft, and damage."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_price",
+          "label": "显示运费险价格",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "toggle_label",
+          "label": "开关无障碍标签",
+          "default": "Add shipping protection"
+        },
+        {
+          "type": "header",
+          "content": "卡片外观"
+        },
+        {
+          "type": "color",
+          "id": "surface_color",
+          "label": "卡片背景颜色",
+          "default": "#ffffff"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_border",
+          "label": "显示卡片边框",
+          "default": true
+        },
+        {
+          "type": "color",
+          "id": "border_color",
+          "label": "卡片边框颜色",
+          "default": "#cfc4e2"
+        },
+        {
+          "type": "range",
+          "id": "card_radius",
+          "min": 0,
+          "max": 16,
+          "step": 1,
+          "unit": "px",
+          "label": "卡片圆角",
+          "default": 6
+        },
+        {
+          "type": "color",
+          "id": "toggle_off_color",
+          "label": "开关关闭颜色",
+          "default": "#c8beff"
+        },
+        {
+          "type": "color",
+          "id": "toggle_on_color",
+          "label": "开关开启颜色",
+          "default": "#7055ff"
+        },
+        {
+          "type": "checkbox",
+          "id": "require_terms",
+          "label": "结账前要求同意条款",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "terms_label",
+          "label": "条款确认文案",
+          "default": "I agree with the terms & conditions"
+        },
+        {
+          "type": "header",
+          "content": "区块间距"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_custom_spacing",
+          "label": "自定义上下外边距",
+          "info": "启用后会覆盖此区块当前的默认外边距。",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "margin_top",
+          "min": 0,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "label": "上方外边距",
+          "default": 24
+        },
+        {
+          "type": "range",
+          "id": "margin_bottom",
+          "min": 0,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "label": "下方外边距",
+          "default": 0
         }
       ]
     },
     {
       "type": "buyer_protection",
-      "name": "Buyer protection",
+      "name": "Tg | 购物保障",
       "limit": 1,
       "settings": [
+        {
+          "type": "image_picker",
+          "id": "badge_image",
+          "label": "Tg | Protection badge image / 保障徽章图片"
+        },
         {
           "type": "text",
           "id": "heading",
           "default": "Buyer Protection",
-          "label": "Heading"
+          "label": "Tg | Protection heading / 保障标题"
         },
         {
           "type": "text",
           "id": "item_1_title",
           "default": "Full refund",
-          "label": "Item 1 title"
+          "label": "Tg | Protection item 1 title / 保障项 1 标题"
         },
         {
           "type": "text",
           "id": "item_1_text",
           "default": "for faulty production. No question asked",
-          "label": "Item 1 text"
+          "label": "Tg | Protection item 1 text / 保障项 1 内容"
         },
         {
           "type": "text",
           "id": "item_2_title",
           "default": "Full or Partial Refund",
-          "label": "Item 2 title"
+          "label": "Tg | Protection item 2 title / 保障项 2 标题"
         },
         {
           "type": "text",
           "id": "item_2_text",
           "default": "if the item is not as described",
-          "label": "Item 2 text"
+          "label": "Tg | Protection item 2 text / 保障项 2 内容"
+        },
+        {
+          "type": "header",
+          "content": "区块间距"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_custom_spacing",
+          "label": "自定义上下外边距",
+          "info": "启用后会覆盖此区块当前的默认外边距。",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "margin_top",
+          "min": 0,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "label": "上方外边距",
+          "default": 24
+        },
+        {
+          "type": "range",
+          "id": "margin_bottom",
+          "min": 0,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "label": "下方外边距",
+          "default": 0
         }
       ]
     },
     {
       "type": "assurance",
-      "name": "Assurance",
+      "name": "Tg | 服务保障",
       "settings": [
         {
           "type": "text",
@@ -320,11 +953,136 @@
           "type": "url",
           "id": "link",
           "label": "Link"
+        },
+        {
+          "type": "header",
+          "content": "区块间距"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_custom_spacing",
+          "label": "自定义上下外边距",
+          "info": "启用后会覆盖此区块当前的默认外边距。",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "margin_top",
+          "min": 0,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "label": "上方外边距",
+          "default": 24
+        },
+        {
+          "type": "range",
+          "id": "margin_bottom",
+          "min": 0,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "label": "下方外边距",
+          "default": 0
         }
       ]
     },
     {
       "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "购物车默认 - 购物车结算",
+      "settings": {
+        "enable_tg_cart_page_style": true,
+        "tg_cart_show_note": false,
+        "tg_cart_show_continue_link": true,
+        "tg_cart_continue_label": "Keep shopping",
+        "tg_cart_continue_link": "",
+        "tg_cart_summary_sticky": true,
+        "tg_cart_summary_width": 480,
+        "tg_cart_font": "poppins_n4",
+        "tg_cart_page_accent_color": "#a50c43",
+        "tg_cart_page_surface_color": "#ffffff",
+        "tg_cart_page_card_color": "#ffffff",
+        "tg_cart_summary_surface_color": "#f5f5f5",
+        "tg_cart_page_border_color": "#e2e2e2",
+        "tg_cart_page_text_color": "#15375f",
+        "tg_cart_page_muted_color": "#858990",
+        "tg_cart_card_radius": 8,
+        "color_scheme": "scheme-1",
+        "padding_top": 20,
+        "padding_bottom": 40
+      },
+      "blocks": [
+        {
+          "type": "free_shipping_progress",
+          "settings": {
+            "target": 75,
+            "pending_message_template": "You're [amount] away from free shipping",
+            "complete_message": "You've unlocked free shipping",
+            "progress_color": "#7055ff",
+            "track_color": "#e2dfea",
+            "surface_color": "#F5F5F5",
+            "show_border": false,
+            "border_color": "#e2e2e2"
+          }
+        },
+        {
+          "type": "promotion",
+          "settings": {
+            "message": "Your 10% OFF is applied!",
+            "minimum_item_count": 2,
+            "incomplete_message": "Add 1 more item to get 10% OFF!",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        {
+          "type": "subtotal",
+          "settings": {
+            "label": "Subtotal",
+            "show_tax_note": false,
+            "custom_tax_note": ""
+          }
+        },
+        {
+          "type": "buttons",
+          "settings": {
+            "checkout_label": "CHECKOUT",
+            "show_dynamic_checkout": false
+          }
+        },
+        {
+          "type": "payment_methods",
+          "settings": {
+            "show_secure_line": true,
+            "secure_text": "100% Secure Payment",
+            "heading": "Payment Methods",
+            "show_payment_types": true
+          }
+        },
+        {
+          "type": "shipping_protection",
+          "settings": {
+            "product": "100-pcs-solace-ringe-heisser-verkauf",
+            "image": "shopify://shop_images/product-default_8d15c8a6-1953-4f7c-8a6e-0081885c921c.png",
+            "title": "Shipping Protection",
+            "description": "Protection against loss, theft, and damage.",
+            "show_price": true,
+            "toggle_label": "Add shipping protection",
+            "surface_color": "#ffffff",
+            "show_border": true,
+            "border_color": "#cfc4e2",
+            "card_radius": 6,
+            "toggle_off_color": "#c8beff",
+            "toggle_on_color": "#7055ff",
+            "require_terms": false,
+            "terms_label": "I agree with the terms & conditions"
+          }
+        }
+      ]
     }
   ]
 }
