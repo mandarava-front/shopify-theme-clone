@@ -99,7 +99,7 @@
 .tg-collection-grid .price__sale .price-item--regular { color: #898989; font-size: 1.2rem; font-weight: 400; }
 .tg-collection-grid .rating { margin-top: .7rem; font-size: 1.1rem; line-height: 1.4rem; }
 .tg-collection-grid .rating-star { --percent: 100%; color: var(--mcc-accent); }
-.tg-collection-grid .card__badge { top: .9rem; left: .8rem; border-radius: .2rem; background: var(--mcc-accent); color: #18181e; font-size: 1.1rem; font-weight: 700; }
+.tg-collection-grid .card__badge { top: .9rem; left: .8rem; border-radius: .2rem; color: #18181e; font-size: 1.1rem; font-weight: 700; }
 .tg-collection-grid .media--hover-effect > img + img { opacity: 0; transition: opacity .3s ease; }
 .tg-collection-grid .card-wrapper:hover .media--hover-effect > img:first-child,
 .tg-collection-grid .card-wrapper:focus-within .media--hover-effect > img:first-child { opacity: 0; transform: none; }

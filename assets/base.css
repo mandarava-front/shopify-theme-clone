@@ -1385,7 +1385,7 @@ shopify-accelerated-checkout-cart {
 }
 
 .button.loading > .loading__spinner .spinner {
-  width: fit-content;
+  width: 100%;
 }
 
 .button.loading > .loading__spinner .path {
@@ -3526,6 +3526,9 @@ details-disclosure > details {
 }
 
 .spinner {
+  display: block;
+  width: 100%;
+  height: auto;
   animation: rotator 1.4s linear infinite;
 }
 

@@ -220,8 +220,15 @@
                     {%- endif -%}
                   </p>
                 {%- when 'delivery_estimate' -%}
+                  {%- liquid
+                    assign delivery_summary_icon = block.settings.summary_icon | default: 'truck'
+                    assign delivery_order_icon = block.settings.order_icon | default: 'checkmark'
+                    assign delivery_ship_icon = block.settings.ship_icon | default: 'truck'
+                    assign delivery_arrival_icon = block.settings.arrival_icon | default: 'box'
+                  -%}
                   <tg-delivery-estimate
                     class="tg-delivery-estimate"
+                    style="--tg-delivery-icon-background: {{ block.settings.icon_background_color | default: '#c9f2f8' }}; --tg-delivery-icon-color: {{ block.settings.svg_icon_color | default: '#087edb' }}; --tg-delivery-timeline-color: {{ block.settings.icon_line_color | default: '#18bfe5' }};"
                     data-day-mode="{{ block.settings.day_mode }}"
                     data-processing-min="{{ block.settings.processing_min_days }}"
                     data-processing-max="{{ block.settings.processing_max_days }}"
@@ -230,7 +237,7 @@
                     {{ block.shopify_attributes }}
                   >
                     <p class="tg-delivery-estimate__summary">
-                      <span class="svg-wrapper" aria-hidden="true">{{- 'icon-truck.svg' | inline_asset_content -}}</span>
+                      <span class="svg-wrapper" aria-hidden="true">{{- delivery_summary_icon | prepend: 'icon-' | append: '.svg' | inline_asset_content -}}</span>
                       <span>
                         {{ block.settings.summary_prefix | escape }}
                         <strong data-delivery-range>Calculating...</strong>
@@ -239,17 +246,17 @@
                     </p>
                     <ol class="tg-delivery-estimate__steps">
                       <li class="tg-delivery-estimate__step">
-                        <span class="tg-delivery-estimate__icon">{{- 'icon-checkmark.svg' | inline_asset_content -}}</span>
+                        <span class="tg-delivery-estimate__icon">{{- delivery_order_icon | prepend: 'icon-' | append: '.svg' | inline_asset_content -}}</span>
                         <strong data-order-date></strong>
                         <small>{{ block.settings.order_label | escape }}</small>
                       </li>
                       <li class="tg-delivery-estimate__step">
-                        <span class="tg-delivery-estimate__icon">{{- 'icon-truck.svg' | inline_asset_content -}}</span>
+                        <span class="tg-delivery-estimate__icon">{{- delivery_ship_icon | prepend: 'icon-' | append: '.svg' | inline_asset_content -}}</span>
                         <strong data-ship-range></strong>
                         <small>{{ block.settings.ship_label | escape }}</small>
                       </li>
                       <li class="tg-delivery-estimate__step">
-                        <span class="tg-delivery-estimate__icon">{{- 'icon-box.svg' | inline_asset_content -}}</span>
+                        <span class="tg-delivery-estimate__icon">{{- delivery_arrival_icon | prepend: 'icon-' | append: '.svg' | inline_asset_content -}}</span>
                         <strong data-delivery-step-range></strong>
                         <small>{{ block.settings.delivery_label | escape }}</small>
                       </li>
@@ -852,7 +859,15 @@
         { "type": "text", "id": "summary_suffix", "label": "t:sections.tg_product.delivery_estimate.copy.summary_suffix.label", "default": "if you order today." },
         { "type": "text", "id": "order_label", "label": "t:sections.tg_product.delivery_estimate.copy.order_label.label", "default": "Order placed" },
         { "type": "text", "id": "ship_label", "label": "t:sections.tg_product.delivery_estimate.copy.ship_label.label", "default": "Order ships" },
-        { "type": "text", "id": "delivery_label", "label": "t:sections.tg_product.delivery_estimate.copy.delivery_label.label", "default": "Delivered" }
+        { "type": "text", "id": "delivery_label", "label": "t:sections.tg_product.delivery_estimate.copy.delivery_label.label", "default": "Delivered" },
+        { "type": "header", "content": "Tg | Delivery icons / 预计送达图标" },
+        { "type": "select", "id": "summary_icon", "label": "Tg | Summary icon / 摘要图标", "options": [{ "value": "checkmark", "label": "Checkmark / 勾选" }, { "value": "truck", "label": "Truck / 货车" }, { "value": "box", "label": "Package / 包裹" }, { "value": "map-pin", "label": "Location / 地址" }, { "value": "plane", "label": "Plane / 飞机" }, { "value": "stopwatch", "label": "Stopwatch / 秒表" }, { "value": "return", "label": "Return / 退货" }, { "value": "heart", "label": "Heart / 爱心" }, { "value": "star", "label": "Star / 星星" }], "default": "truck" },
+        { "type": "select", "id": "order_icon", "label": "Tg | Order step icon / 下单步骤图标", "options": [{ "value": "checkmark", "label": "Checkmark / 勾选" }, { "value": "truck", "label": "Truck / 货车" }, { "value": "box", "label": "Package / 包裹" }, { "value": "map-pin", "label": "Location / 地址" }, { "value": "plane", "label": "Plane / 飞机" }, { "value": "stopwatch", "label": "Stopwatch / 秒表" }, { "value": "return", "label": "Return / 退货" }, { "value": "heart", "label": "Heart / 爱心" }, { "value": "star", "label": "Star / 星星" }], "default": "checkmark" },
+        { "type": "select", "id": "ship_icon", "label": "Tg | Shipping step icon / 发货步骤图标", "options": [{ "value": "checkmark", "label": "Checkmark / 勾选" }, { "value": "truck", "label": "Truck / 货车" }, { "value": "box", "label": "Package / 包裹" }, { "value": "map-pin", "label": "Location / 地址" }, { "value": "plane", "label": "Plane / 飞机" }, { "value": "stopwatch", "label": "Stopwatch / 秒表" }, { "value": "return", "label": "Return / 退货" }, { "value": "heart", "label": "Heart / 爱心" }, { "value": "star", "label": "Star / 星星" }], "default": "truck" },
+        { "type": "select", "id": "arrival_icon", "label": "Tg | Delivery step icon / 送达步骤图标", "options": [{ "value": "checkmark", "label": "Checkmark / 勾选" }, { "value": "truck", "label": "Truck / 货车" }, { "value": "box", "label": "Package / 包裹" }, { "value": "map-pin", "label": "Location / 地址" }, { "value": "plane", "label": "Plane / 飞机" }, { "value": "stopwatch", "label": "Stopwatch / 秒表" }, { "value": "return", "label": "Return / 退货" }, { "value": "heart", "label": "Heart / 爱心" }, { "value": "star", "label": "Star / 星星" }], "default": "box" },
+        { "type": "color", "id": "icon_background_color", "label": "Tg | Icon background color / 图标背景色", "default": "#c9f2f8" },
+        { "type": "color", "id": "svg_icon_color", "label": "Tg | SVG icon line color / SVG 图标线条颜色", "default": "#087edb" },
+        { "type": "color", "id": "icon_line_color", "label": "Tg | Dotted line color / 流程虚线颜色", "default": "#18bfe5" }
       ]
     },
     {

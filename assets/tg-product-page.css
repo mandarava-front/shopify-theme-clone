@@ -425,7 +425,7 @@
 
 .tg-delivery-estimate__summary .svg-wrapper {
   flex: 0 0 2.2rem;
-  color: #087edb;
+  color: var(--tg-delivery-icon-color, #087edb);
 }
 
 .tg-delivery-estimate__steps {
@@ -444,7 +444,7 @@
   top: 1.5rem;
   right: 16%;
   left: 16%;
-  border-top: 0.1rem dashed #18bfe5;
+  border-top: 0.1rem dashed var(--tg-delivery-timeline-color, #18bfe5);
 }
 
 .tg-delivery-estimate__step {
@@ -459,9 +459,14 @@
   height: 3.2rem;
   margin: 0 auto 0.8rem;
   border-radius: 50%;
-  background: #c9f2f8;
-  color: #087edb;
+  background: var(--tg-delivery-icon-background, #c9f2f8);
+  color: var(--tg-delivery-icon-color, #087edb);
   place-items: center;
+}
+
+.tg-delivery-estimate__summary .svg-wrapper svg,
+.tg-delivery-estimate__icon svg {
+  fill: currentColor;
 }
 
 .tg-delivery-estimate__icon svg {
