@@ -133,6 +133,16 @@
   padding: 1rem 1.6rem;
 }
 
+[data-template='product'] .product-form__input--pill input[type='radio'] + label {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 4.2rem;
+  padding: 0 1.6rem;
+  line-height: 1.2;
+}
+
 [data-template='product'] .product-form__input input[type='radio']:checked + label {
   background: #102a43;
   border-color: #102a43;

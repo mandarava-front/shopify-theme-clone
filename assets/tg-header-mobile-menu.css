@@ -41,7 +41,144 @@
 
   .tg-header-mobile-menu-host {
     display: flex;
+    grid-area: left-icons;
+    align-items: center;
+    justify-self: start;
     color: var(--tg-header-mobile-menu-text);
+  }
+
+  .header--tg-mobile-menu-enabled {
+    grid-template-columns: 4.4rem minmax(0, 1fr) auto;
+  }
+
+  .header--tg-mobile-menu-enabled .header__heading,
+  .header--tg-mobile-menu-enabled .header__heading-link {
+    min-width: 0;
+  }
+
+  .header--tg-mobile-menu-enabled .header__heading-link {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .header--tg-mobile-menu-enabled .header__heading-logo-wrapper {
+    max-width: 100%;
+  }
+
+  .header--tg-mobile-menu-enabled .header__icons {
+    padding-right: 0;
+  }
+
+  .header--tg-mobile-menu-enabled > .header__search {
+    display: none;
+  }
+
+  .header--tg-mobile-menu-enabled .header__icons > .header__search {
+    display: inline-flex;
+  }
+
+  .tg-header-mobile-search {
+    display: none;
+  }
+
+  .header.header--tg-mobile-search-row {
+    grid-template-areas:
+      'left-icons heading icons'
+      'search search search';
+    row-gap: var(--tg-header-mobile-search-top-spacing, 0.6rem);
+    padding-bottom: var(--tg-header-mobile-search-bottom-spacing, 1.2rem);
+  }
+
+  .header--tg-mobile-search-row .tg-header-mobile-search {
+    display: block;
+    grid-area: search;
+    min-width: 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  .header--tg-mobile-search-row .tg-header-mobile-search predictive-search {
+    display: block;
+    position: relative;
+  }
+
+  .header--tg-mobile-search-row .tg-header-mobile-search .field__input {
+    height: calc(3.8rem - (var(--inputs-border-width) * 2));
+    min-height: calc(3.8rem - (var(--inputs-border-width) * 2));
+    margin: var(--inputs-border-width);
+    padding: 0 4.6rem 0 1.6rem;
+    border-radius: 99rem;
+    color: rgb(var(--color-foreground));
+    font-size: var(--tg-header-mobile-search-font-size, 14px);
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 1.4;
+  }
+
+  .header--tg-mobile-search-row .tg-header-mobile-search .field__label {
+    right: 4.6rem;
+    top: 50%;
+    left: calc(1.6rem + var(--inputs-border-width));
+    overflow: hidden;
+    color: var(--tg-header-mobile-search-placeholder-color, #737379);
+    font-size: var(--tg-header-mobile-search-font-size, 14px);
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 1.4;
+    text-overflow: ellipsis;
+    transform: translateY(-50%);
+    transition: top var(--duration-short) ease, transform var(--duration-short) ease, font-size var(--duration-short) ease,
+      color var(--duration-short) ease;
+    white-space: nowrap;
+  }
+
+  .header--tg-mobile-search-row .tg-header-mobile-search .field__input:focus,
+  .header--tg-mobile-search-row .tg-header-mobile-search .field__input:not(:placeholder-shown),
+  .header--tg-mobile-search-row .tg-header-mobile-search .field__input:-webkit-autofill {
+    padding: 1.3rem 4.6rem 0.3rem 1.6rem;
+  }
+
+  .header--tg-mobile-search-row .tg-header-mobile-search .field__input:focus ~ .field__label,
+  .header--tg-mobile-search-row .tg-header-mobile-search .field__input:not(:placeholder-shown) ~ .field__label,
+  .header--tg-mobile-search-row .tg-header-mobile-search .field__input:-webkit-autofill ~ .field__label {
+    top: calc(0.2rem + var(--inputs-border-width));
+    left: calc(1.6rem + var(--inputs-border-width));
+    color: rgba(var(--color-foreground), 0.78);
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 1.1;
+    transform: none;
+  }
+
+  .header--tg-mobile-search-row .tg-header-mobile-search .field::before,
+  .header--tg-mobile-search-row .tg-header-mobile-search .field::after {
+    border-radius: 99rem;
+  }
+
+  .header--tg-mobile-search-row .tg-header-mobile-search .field__button {
+    width: 3.8rem;
+    height: 3.8rem;
+  }
+
+  .header--tg-mobile-search-row .tg-header-mobile-search .search__button {
+    top: 0;
+    right: 0;
+  }
+
+  .header--tg-mobile-search-row .tg-header-mobile-search .reset__button {
+    right: 3.8rem;
+  }
+
+  .header--tg-mobile-search-row .tg-header-mobile-search .search__button .svg-wrapper,
+  .header--tg-mobile-search-row .tg-header-mobile-search .search__button svg {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .header--tg-mobile-search-row .header__icons > .header__search {
+    display: none;
   }
 
   .tg-header-mobile-menu-host > details[open] > summary::before {

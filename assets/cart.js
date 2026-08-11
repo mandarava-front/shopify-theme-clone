@@ -264,7 +264,10 @@ class CartItems extends window.StandardEvents.createViewEventElement(HTMLElement
         publish(PUB_SUB_EVENTS.cartUpdate, { source: 'cart-items', cartData: parsedState, variantId: variantId });
       })
       .catch((e) => {
-        this.querySelectorAll('.loading__spinner').forEach((overlay) => overlay.classList.add('hidden'));
+        this.querySelectorAll('.loading__spinner').forEach((overlay) => {
+          overlay.classList.add('hidden');
+          overlay.hidden = true;
+        });
         const errors = document.getElementById('cart-errors') || document.getElementById('CartDrawer-CartErrors');
         if (errors) errors.textContent = window.cartStrings.error;
         this.dispatchCartErrorEvent(window.cartStrings.error, 'SERVICE_UNAVAILABLE');
@@ -336,7 +339,10 @@ class CartItems extends window.StandardEvents.createViewEventElement(HTMLElement
     const cartItemElements = this.querySelectorAll(`#CartItem-${line} .loading__spinner`);
     const cartDrawerItemElements = this.querySelectorAll(`#CartDrawer-Item-${line} .loading__spinner`);
 
-    [...cartItemElements, ...cartDrawerItemElements].forEach((overlay) => overlay.classList.remove('hidden'));
+    [...cartItemElements, ...cartDrawerItemElements].forEach((overlay) => {
+      overlay.hidden = false;
+      overlay.classList.remove('hidden');
+    });
 
     document.activeElement.blur();
     this.lineItemStatusElement.setAttribute('aria-hidden', false);
@@ -349,8 +355,14 @@ class CartItems extends window.StandardEvents.createViewEventElement(HTMLElement
     const cartItemElements = this.querySelectorAll(`#CartItem-${line} .loading__spinner`);
     const cartDrawerItemElements = this.querySelectorAll(`#CartDrawer-Item-${line} .loading__spinner`);
 
-    cartItemElements.forEach((overlay) => overlay.classList.add('hidden'));
-    cartDrawerItemElements.forEach((overlay) => overlay.classList.add('hidden'));
+    cartItemElements.forEach((overlay) => {
+      overlay.classList.add('hidden');
+      overlay.hidden = true;
+    });
+    cartDrawerItemElements.forEach((overlay) => {
+      overlay.classList.add('hidden');
+      overlay.hidden = true;
+    });
   }
 }
 

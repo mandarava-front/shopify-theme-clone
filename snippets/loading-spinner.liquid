@@ -5,8 +5,11 @@
 
   Usage:
   {% render 'loading-spinner' %}
+
+  To avoid an unstyled first-paint flash:
+  {% render 'loading-spinner', initially_hidden: true %}
 {% endcomment %}
 
-<div class="{% if class %}{{ class }}{% else %}loading__spinner hidden{% endif %}">
+<div class="{% if class %}{{ class }}{% else %}loading__spinner hidden{% endif %}"{% if initially_hidden %} hidden{% endif %}>
   {{ 'loading-spinner.svg' | inline_asset_content }}
 </div>
