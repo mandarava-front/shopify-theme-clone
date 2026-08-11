@@ -147,11 +147,14 @@
   -%}
   {%- if section.settings.enable_tg_header_desktop -%}
     {%- liquid
-    assign tg_header_desktop_menu = section.settings.menu
-    assign tg_header_desktop_feature_count = 0
+    assign tg_header_desktop_utility_count = 0
+    assign tg_header_desktop_navigation_count = 0
     for block in section.blocks
-      if block.type == 'tg_header_desktop_feature'
-        assign tg_header_desktop_feature_count = tg_header_desktop_feature_count | plus: 1
+      if block.type == 'tg_header_desktop_utility'
+        assign tg_header_desktop_utility_count = tg_header_desktop_utility_count | plus: 1
+      endif
+      if block.type == 'tg_pc_nav_item' and block.settings.title != blank
+        assign tg_header_desktop_navigation_count = tg_header_desktop_navigation_count | plus: 1
       endif
     endfor
     -%}
@@ -170,9 +173,11 @@
         --tg-header-desktop-badge-text: {{ section.settings.tg_header_desktop_badge_text }};
         --tg-header-desktop-max-width: {{ section.settings.tg_header_desktop_max_width }}px;
         --tg-header-desktop-logo-width: {{ section.settings.tg_header_desktop_logo_width }}px;
-        --tg-header-desktop-nav-gap: {{ section.settings.tg_header_desktop_nav_gap }}px;
         --tg-header-desktop-nav-height: {{ section.settings.tg_header_desktop_nav_height }}px;
-        --tg-header-desktop-border-width: {{ section.settings.tg_header_desktop_border_width }}px;
+        --tg-header-desktop-nav-gap: {{ section.settings.tg_header_desktop_menu_gap }}px;
+        --tg-header-desktop-border-width: {{ section.settings.tg_header_desktop_menu_border_width }}px;
+        --tg-header-desktop-panel-width: {{ section.settings.tg_header_desktop_menu_panel_width }}%;
+        --tg-header-desktop-panel-columns: {{ section.settings.tg_header_desktop_menu_panel_columns }};
       "
     >
       {%- if section.settings.tg_header_desktop_show_announcement -%}
@@ -194,7 +199,8 @@
       {%- endif -%}
 
       <nav class="tg-header-desktop__nav" aria-label="{{ 'sections.header.tg_header_desktop.navigation_label' | t }}">
-        <div class="tg-header-desktop__inner">
+        <div class="tg-header-desktop__top">
+          <div class="tg-header-desktop__inner tg-header-desktop__top-inner">
           <a href="{{ routes.root_url }}" class="tg-header-desktop__logo focus-inset" aria-label="{{ shop.name | escape }}">
             {%- if section.settings.tg_header_desktop_logo != blank -%}
               {{
@@ -221,104 +227,69 @@
             {%- endif -%}
           </a>
 
-          <div class="tg-header-desktop__links" role="list">
-            {%- for block in section.blocks -%}
-              {%- if block.type == 'tg_header_desktop_feature' and block.settings.link != blank -%}
-                <a href="{{ block.settings.link }}" class="tg-header-desktop__link tg-header-desktop__link--feature focus-inset" {{ block.shopify_attributes }}>
-                  {%- if block.settings.image != blank -%}
-                    {{ block.settings.image | image_url: width: 72 | image_tag: widths: '36, 54, 72', sizes: '18px', loading: 'lazy', alt: '' }}
-                  {%- elsif block.settings.icon_asset == 'back_to_school' -%}
-                    <img src="{{ 'tg-menu-icon-back-to-school.svg' | asset_url }}" width="18" height="18" loading="lazy" alt="">
-                  {%- else -%}
-                    <img src="{{ 'tg-menu-icon-summer.svg' | asset_url }}" width="18" height="18" loading="lazy" alt="">
-                  {%- endif -%}
-                  <span>{{ block.settings.title | escape }}</span>
-                </a>
-              {%- endif -%}
-            {%- endfor -%}
-            {%- if tg_header_desktop_feature_count == 0 -%}
-              {%- for block in section.blocks -%}
-                {%- if block.type == 'mobile_feature_card' and block.settings.link != blank -%}
-                  <a href="{{ block.settings.link }}" class="tg-header-desktop__link tg-header-desktop__link--feature focus-inset">
-                    {%- if block.settings.image != blank -%}
-                      {{ block.settings.image | image_url: width: 72 | image_tag: widths: '36, 54, 72', sizes: '18px', loading: 'lazy', alt: '' }}
-                    {%- else -%}
-                      <img src="{{ block.settings.icon_asset | asset_url }}" width="18" height="18" loading="lazy" alt="">
-                    {%- endif -%}
-                    <span>{{ block.settings.title | escape }}</span>
-                  </a>
-                {%- endif -%}
-              {%- endfor -%}
-            {%- endif -%}
-            {%- for link in tg_header_desktop_menu.links -%}
-              <a
-                href="{{ link.url }}"
-                class="tg-header-desktop__link focus-inset{% if link.current %} tg-header-desktop__link--active{% endif %}"
-                {% if link.current %}aria-current="page"{% endif %}
-              >
-                <span>{{ link.title | escape }}</span>
-              </a>
-            {%- endfor -%}
-          </div>
-
-          {%- if section.settings.tg_header_desktop_show_utility_links or section.settings.tg_header_desktop_show_social_links -%}
-            <div class="tg-header-desktop__extras">
-              {%- if section.settings.tg_header_desktop_show_utility_links -%}
-                <div class="tg-header-desktop__utilities">
-                  {%- for block in section.blocks -%}
-                    {%- if block.type == 'tg_header_desktop_utility' and block.settings.link != blank -%}
-                      <a href="{{ block.settings.link }}" class="tg-header-desktop__utility focus-inset" {{ block.shopify_attributes }}>{{ block.settings.title | escape }}</a>
-                    {%- endif -%}
-                  {%- endfor -%}
-                </div>
-              {%- endif -%}
-              {%- if section.settings.tg_header_desktop_show_social_links -%}
-                <div class="tg-header-desktop__social" role="list">
-                  {%- for block in section.blocks -%}
-                    {%- if block.type == 'tg_header_desktop_social' and block.settings.link != blank -%}
-                      {%- liquid
-                        assign desktop_social_icon = 'tg-icon-facebook.svg'
-                        assign desktop_social_label = block.settings.platform | capitalize
-                        case block.settings.platform
-                          when 'youtube'
-                            assign desktop_social_icon = 'tg-icon-youtube.svg'
-                            assign desktop_social_label = 'YouTube'
-                          when 'instagram'
-                            assign desktop_social_icon = 'tg-icon-instagram.svg'
-                            assign desktop_social_label = 'Instagram'
-                          when 'tiktok'
-                            assign desktop_social_icon = 'tg-icon-tiktok.svg'
-                            assign desktop_social_label = 'TikTok'
-                          when 'twitter'
-                            assign desktop_social_icon = 'icon-twitter.svg'
-                            assign desktop_social_label = 'X / Twitter'
-                        endcase
-                        if block.settings.accessibility_label != blank
-                          assign desktop_social_label = block.settings.accessibility_label
-                        endif
-                      -%}
-                      <a href="{{ block.settings.link }}" target="_blank" rel="me noopener noreferrer" class="focus-inset" aria-label="{{ desktop_social_label | escape }}" {{ block.shopify_attributes }}>
-                        <span class="svg-wrapper" aria-hidden="true">{{- desktop_social_icon | inline_asset_content -}}</span>
-                      </a>
-                    {%- endif -%}
-                  {%- endfor -%}
-                </div>
-              {%- endif -%}
-            </div>
-          {%- endif -%}
-
-          <div class="tg-header-desktop__actions">
-            {%- if section.settings.tg_header_desktop_show_search -%}
-              <button type="button" class="tg-header-desktop__action focus-inset" data-tg-search-open aria-label="{{ section.settings.tg_header_desktop_search_open_label | escape }}" aria-expanded="false">
-                <span class="svg-wrapper" aria-hidden="true">{{- 'icon-search.svg' | inline_asset_content -}}</span>
-              </button>
-              <form class="tg-header-desktop__search" action="{{ routes.search_url }}" method="get" role="search" data-tg-search-form hidden>
+          {%- if section.settings.tg_header_desktop_show_search -%}
+            <form class="tg-header-desktop__search" action="{{ routes.search_url }}" method="get" role="search">
                 <label class="visually-hidden" for="TgHeaderDesktopSearch-{{ section.id }}">{{ section.settings.tg_header_desktop_search_label | escape }}</label>
                 <input id="TgHeaderDesktopSearch-{{ section.id }}" type="search" name="q" placeholder="{{ section.settings.tg_header_desktop_search_placeholder | escape }}" data-tg-search-input>
                 <input type="hidden" name="options[prefix]" value="last">
                 <button type="submit" class="tg-header-desktop__search-submit focus-inset" aria-label="{{ section.settings.tg_header_desktop_search_label | escape }}"><span class="svg-wrapper" aria-hidden="true">{{- 'icon-search.svg' | inline_asset_content -}}</span></button>
-                <button type="button" class="tg-header-desktop__search-close focus-inset" data-tg-search-close aria-label="{{ section.settings.tg_header_desktop_search_close_label | escape }}"><span class="svg-wrapper" aria-hidden="true">{{- 'icon-close.svg' | inline_asset_content -}}</span></button>
-              </form>
+            </form>
+          {%- endif -%}
+
+          <div class="tg-header-desktop__top-actions">
+            {%- if section.settings.tg_header_desktop_show_utility_links -%}
+              <div class="tg-header-desktop__utilities">
+                {%- if tg_header_desktop_utility_count > 0 -%}
+                  {%- for block in section.blocks -%}
+                    {%- if block.type == 'tg_header_desktop_utility' and block.settings.link != blank -%}
+                      {%- assign desktop_utility_icon = block.settings.icon_asset | default: 'gift' -%}
+                      <a href="{{ block.settings.link }}" class="tg-header-desktop__utility focus-inset" {{ block.shopify_attributes }}>
+                        <span class="svg-wrapper" aria-hidden="true">{{- desktop_utility_icon | prepend: 'tg-icon-' | append: '.svg' | inline_asset_content -}}</span>
+                        <span>{{ block.settings.title | escape }}</span>
+                      </a>
+                    {%- endif -%}
+                  {%- endfor -%}
+                {%- else -%}
+                  {%- for block in section.blocks -%}
+                    {%- if block.type == 'mobile_utility_link' and block.settings.link != blank -%}
+                      {%- liquid
+                        assign desktop_utility_title = block.settings.title | downcase
+                        assign desktop_utility_icon = 'gift'
+                        if desktop_utility_title contains 'track'
+                          assign desktop_utility_icon = 'track-order'
+                        elsif desktop_utility_title contains 'review'
+                          assign desktop_utility_icon = 'reviews'
+                        endif
+                      -%}
+                      <a href="{{ block.settings.link }}" class="tg-header-desktop__utility focus-inset">
+                        <span class="svg-wrapper" aria-hidden="true">{{- desktop_utility_icon | prepend: 'tg-icon-' | append: '.svg' | inline_asset_content -}}</span>
+                        <span>{{ block.settings.title | escape }}</span>
+                      </a>
+                    {%- endif -%}
+                  {%- endfor -%}
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+
+            {%- if section.settings.tg_header_desktop_show_social_links -%}
+              <div class="tg-header-desktop__social" role="list">
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'tg_header_desktop_social' and block.settings.link != blank -%}
+                    {%- assign desktop_social_icon = block.settings.platform | default: 'instagram' -%}
+                    <a
+                      href="{{ block.settings.link }}"
+                      class="tg-header-desktop__social-link focus-inset"
+                      aria-label="{{ block.settings.accessibility_label | default: desktop_social_icon | escape }}"
+                      role="listitem"
+                      target="_blank"
+                      rel="me noopener noreferrer"
+                      {{ block.shopify_attributes }}
+                    >
+                      <span class="svg-wrapper" aria-hidden="true">{{- desktop_social_icon | prepend: 'icon-' | append: '.svg' | inline_asset_content -}}</span>
+                    </a>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
             {%- endif -%}
             {%- if section.settings.tg_header_desktop_show_cart -%}
               <a href="{{ routes.cart_url }}" class="tg-header-desktop__action tg-header-desktop__cart focus-inset" aria-label="{{ section.settings.tg_header_desktop_cart_label | escape }}">
@@ -328,7 +299,112 @@
               </a>
             {%- endif -%}
           </div>
+          </div>
         </div>
+
+        {%- if tg_header_desktop_navigation_count > 0 -%}
+          <div class="tg-header-desktop__menu-row">
+            <div class="tg-header-desktop__inner">
+              <div class="tg-header-desktop__menu-links" role="list">
+                {%- for nav_item in section.blocks -%}
+                  {%- if nav_item.type == 'tg_pc_nav_item' and nav_item.settings.title != blank -%}
+                    {%- liquid
+                      assign has_desktop_submenu = false
+                      if nav_item.settings.enable_dropdown
+                        assign is_current_desktop_nav = false
+                        assign has_current_desktop_group = false
+                        for nav_content_item in section.blocks
+                          if nav_content_item.id == nav_item.id
+                            assign is_current_desktop_nav = true
+                          elsif is_current_desktop_nav
+                            if nav_content_item.type == 'tg_pc_nav_item'
+                              break
+                            elsif nav_content_item.type == 'tg_pc_nav_group' and nav_content_item.settings.title != blank
+                              assign has_current_desktop_group = true
+                            elsif nav_content_item.type == 'tg_pc_nav_link' and has_current_desktop_group and nav_content_item.settings.title != blank and nav_content_item.settings.link != blank
+                              assign has_desktop_submenu = true
+                              break
+                            endif
+                          endif
+                        endfor
+                      endif
+                    -%}
+
+                    {%- if has_desktop_submenu -%}
+                      {%- assign desktop_panel_id = 'TgDesktopHeaderPanel-' | append: section.id | append: '-' | append: nav_item.id -%}
+                      <header-menu class="tg-header-desktop__menu-disclosure" {{ nav_item.shopify_attributes }}>
+                        <details id="TgDesktopHeaderMenu-{{ section.id }}-{{ nav_item.id }}">
+                          <summary
+                            class="tg-header-desktop__menu-link focus-inset"
+                            aria-controls="{{ desktop_panel_id }}"
+                            aria-haspopup="true"
+                            style="--tg-header-desktop-nav-item-color: {{ nav_item.settings.text_color }}; --tg-header-desktop-nav-item-weight: {{ nav_item.settings.font_weight }}; --tg-header-desktop-nav-item-size: {{ nav_item.settings.font_size }}px;"
+                          >
+                            {{ nav_item.settings.title | escape }}
+                          </summary>
+                          <div id="{{ desktop_panel_id }}" class="tg-header-desktop__menu-panel" aria-label="{{ nav_item.settings.title | escape }}">
+                            <div class="tg-header-desktop__menu-panel-grid" role="list">
+                              {%- assign is_current_desktop_nav = false -%}
+                              {%- for nav_content_item in section.blocks -%}
+                                {%- if nav_content_item.id == nav_item.id -%}
+                                  {%- assign is_current_desktop_nav = true -%}
+                                {%- elsif is_current_desktop_nav -%}
+                                  {%- if nav_content_item.type == 'tg_pc_nav_item' -%}
+                                    {%- break -%}
+                                  {%- elsif nav_content_item.type == 'tg_pc_nav_group' and nav_content_item.settings.title != blank -%}
+                                    <div
+                                      class="tg-header-desktop__menu-panel-column"
+                                      role="listitem"
+                                      style="--tg-header-desktop-group-color: {{ nav_content_item.settings.text_color }}; --tg-header-desktop-group-weight: {{ nav_content_item.settings.font_weight }}; --tg-header-desktop-group-size: {{ nav_content_item.settings.font_size }}px;"
+                                      {{ nav_content_item.shopify_attributes }}
+                                    >
+                                      <span class="tg-header-desktop__menu-panel-title">{{ nav_content_item.settings.title | escape }}</span>
+                                      <ul class="tg-header-desktop__menu-panel-list" role="list">
+                                        {%- assign is_current_desktop_group = false -%}
+                                        {%- for nav_group_link in section.blocks -%}
+                                          {%- if nav_group_link.id == nav_content_item.id -%}
+                                            {%- assign is_current_desktop_group = true -%}
+                                          {%- elsif is_current_desktop_group -%}
+                                            {%- if nav_group_link.type == 'tg_pc_nav_item' or nav_group_link.type == 'tg_pc_nav_group' -%}
+                                              {%- break -%}
+                                            {%- elsif nav_group_link.type == 'tg_pc_nav_link' and nav_group_link.settings.title != blank and nav_group_link.settings.link != blank -%}
+                                              <li {{ nav_group_link.shopify_attributes }}>
+                                                <a
+                                                  href="{{ nav_group_link.settings.link }}"
+                                                  class="tg-header-desktop__menu-panel-link focus-inset"
+                                                  style="--tg-header-desktop-menu-link-color: {{ nav_group_link.settings.text_color }}; --tg-header-desktop-menu-link-weight: {{ nav_group_link.settings.font_weight }}; --tg-header-desktop-menu-link-size: {{ nav_group_link.settings.font_size }}px;"
+                                                >
+                                                  {{ nav_group_link.settings.title | escape }}
+                                                </a>
+                                              </li>
+                                            {%- endif -%}
+                                          {%- endif -%}
+                                        {%- endfor -%}
+                                      </ul>
+                                    </div>
+                                  {%- endif -%}
+                                {%- endif -%}
+                              {%- endfor -%}
+                            </div>
+                          </div>
+                        </details>
+                      </header-menu>
+                    {%- elsif nav_item.settings.link != blank -%}
+                      <a
+                        href="{{ nav_item.settings.link }}"
+                        class="tg-header-desktop__menu-link focus-inset"
+                        style="--tg-header-desktop-nav-item-color: {{ nav_item.settings.text_color }}; --tg-header-desktop-nav-item-weight: {{ nav_item.settings.font_weight }}; --tg-header-desktop-nav-item-size: {{ nav_item.settings.font_size }}px;"
+                        {{ nav_item.shopify_attributes }}
+                      >
+                        {{ nav_item.settings.title | escape }}
+                      </a>
+                    {%- endif -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
       </nav>
     </tg-header-desktop>
   {%- endif -%}
@@ -687,7 +763,7 @@
 {
   "name": "t:sections.header.name",
   "class": "section-header",
-  "max_blocks": 30,
+  "max_blocks": 50,
   "settings": [
     {
       "type": "select",
@@ -734,7 +810,8 @@
       "type": "link_list",
       "id": "menu",
       "default": "main-menu",
-      "label": "t:sections.header.settings.menu.label"
+      "label": "移动端导航菜单（主菜单）",
+      "info": "用于移动端导航和未启用 PC 端 Mega 导航时的标准页头。"
     },
     {
       "type": "header",
@@ -812,14 +889,14 @@
     },
     {
       "type": "header",
-      "content": "t:sections.header.tg_header_desktop.heading"
+      "content": "tg | PC端顶部导航栏"
     },
     {
       "type": "checkbox",
       "id": "enable_tg_header_desktop",
       "default": false,
-      "label": "t:sections.header.tg_header_desktop.enable.label",
-      "info": "t:sections.header.tg_header_desktop.enable.info"
+      "label": "启用 PC 端顶部导航栏",
+      "info": "在宽度 990px 及以上替换标准页头；移动端页头和抽屉菜单不受影响。"
     },
     {
       "type": "image_picker",
@@ -916,7 +993,7 @@
     {
       "type": "checkbox",
       "id": "tg_header_desktop_show_utility_links",
-      "default": false,
+      "default": true,
       "label": "t:sections.header.tg_header_desktop.extras.show_utility_links.label",
       "info": "t:sections.header.tg_header_desktop.extras.show_utility_links.info"
     },
@@ -934,13 +1011,13 @@
     {
       "type": "color",
       "id": "tg_header_desktop_announcement_background",
-      "default": "#0b8494",
+      "default": "#fef1e2",
       "label": "t:sections.header.tg_header_desktop.appearance.announcement_background.label"
     },
     {
       "type": "color",
       "id": "tg_header_desktop_announcement_text",
-      "default": "#ffffff",
+      "default": "#202024",
       "label": "t:sections.header.tg_header_desktop.appearance.announcement_text.label"
     },
     {
@@ -958,7 +1035,7 @@
     {
       "type": "color",
       "id": "tg_header_desktop_hover",
-      "default": "#0b8494",
+      "default": "#f76e4a",
       "label": "t:sections.header.tg_header_desktop.appearance.hover.label"
     },
     {
@@ -970,7 +1047,7 @@
     {
       "type": "color",
       "id": "tg_header_desktop_badge_background",
-      "default": "#0b8494",
+      "default": "#ee860f",
       "label": "t:sections.header.tg_header_desktop.appearance.badge_background.label"
     },
     {
@@ -996,18 +1073,8 @@
       "max": 260,
       "step": 4,
       "unit": "px",
-      "default": 132,
+      "default": 136,
       "label": "t:sections.header.tg_header_desktop.appearance.logo_width.label"
-    },
-    {
-      "type": "range",
-      "id": "tg_header_desktop_nav_gap",
-      "min": 4,
-      "max": 48,
-      "step": 2,
-      "unit": "px",
-      "default": 16,
-      "label": "t:sections.header.tg_header_desktop.appearance.nav_gap.label"
     },
     {
       "type": "range",
@@ -1016,18 +1083,51 @@
       "max": 96,
       "step": 2,
       "unit": "px",
-      "default": 64,
+      "default": 72,
       "label": "t:sections.header.tg_header_desktop.appearance.nav_height.label"
     },
     {
+      "type": "header",
+      "content": "tg | PC端下拉导航布局"
+    },
+    {
       "type": "range",
-      "id": "tg_header_desktop_border_width",
+      "id": "tg_header_desktop_menu_panel_width",
+      "min": 60,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 90,
+      "label": "下拉面板宽度"
+    },
+    {
+      "type": "range",
+      "id": "tg_header_desktop_menu_panel_columns",
+      "min": 3,
+      "max": 6,
+      "step": 1,
+      "default": 5,
+      "label": "下拉面板列数"
+    },
+    {
+      "type": "range",
+      "id": "tg_header_desktop_menu_gap",
+      "min": 0,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 0,
+      "label": "一级导航间距"
+    },
+    {
+      "type": "range",
+      "id": "tg_header_desktop_menu_border_width",
       "min": 0,
       "max": 4,
       "step": 1,
       "unit": "px",
       "default": 1,
-      "label": "t:sections.header.tg_header_desktop.appearance.border_width.label"
+      "label": "导航底部分隔线宽度"
     },
     {
       "type": "select",
@@ -1322,82 +1422,200 @@
       ]
     },
     {
-      "type": "tg_header_desktop_feature",
-      "name": "t:sections.header.tg_header_desktop.blocks.feature.name",
+      "type": "tg_pc_nav_item",
+      "name": "tg | PC端导航项目",
       "settings": [
         {
           "type": "text",
           "id": "title",
-          "default": "Summer Picks",
-          "label": "t:sections.header.tg_header_desktop.blocks.feature.title.label"
+          "default": "导航项目",
+          "label": "一级导航名称"
         },
         {
           "type": "url",
           "id": "link",
-          "label": "t:sections.header.tg_header_desktop.blocks.feature.link.label"
+          "label": "一级导航链接",
+          "info": "未启用下拉菜单时使用此链接。"
         },
         {
-          "type": "image_picker",
-          "id": "image",
-          "label": "t:sections.header.tg_header_desktop.blocks.feature.image.label"
+          "type": "color",
+          "id": "text_color",
+          "default": "#202024",
+          "label": "一级导航文字颜色"
         },
         {
           "type": "select",
-          "id": "icon_asset",
-          "default": "summer",
-          "label": "t:sections.header.tg_header_desktop.blocks.feature.icon.label",
+          "id": "font_weight",
+          "default": "400",
+          "label": "一级导航文字粗细",
           "options": [
-            { "value": "summer", "label": "t:sections.header.tg_header_desktop.blocks.feature.icon.options.summer" },
-            { "value": "back_to_school", "label": "t:sections.header.tg_header_desktop.blocks.feature.icon.options.back_to_school" }
+            { "value": "400", "label": "常规" },
+            { "value": "500", "label": "中等" },
+            { "value": "600", "label": "半粗" },
+            { "value": "700", "label": "粗体" }
           ]
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "min": 12,
+          "max": 20,
+          "step": 1,
+          "unit": "px",
+          "default": 13,
+          "label": "一级导航文字大小"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_dropdown",
+          "default": false,
+          "label": "启用二级下拉导航",
+          "info": "开启后，将读取紧随本 block 后的二级导航分组和二级导航链接 block，直到下一个 PC端导航项目。Shopify 限制单个 Header 最多 50 个 block。"
+        }
+      ]
+    },
+    {
+      "type": "tg_pc_nav_group",
+      "name": "tg | PC端二级导航分组",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "default": "导航分组",
+          "label": "分组标题"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "default": "#202024",
+          "label": "分组标题颜色"
+        },
+        {
+          "type": "select",
+          "id": "font_weight",
+          "default": "600",
+          "label": "分组标题粗细",
+          "options": [
+            { "value": "400", "label": "常规" },
+            { "value": "500", "label": "中等" },
+            { "value": "600", "label": "半粗" },
+            { "value": "700", "label": "粗体" }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "min": 12,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "default": 15,
+          "label": "分组标题大小"
+        }
+      ]
+    },
+    {
+      "type": "tg_pc_nav_link",
+      "name": "tg | PC端二级导航链接",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "default": "二级导航",
+          "label": "链接名称"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "跳转链接",
+          "info": "请放在所属二级导航分组的下方，直到下一个分组或一级导航项目。"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "default": "#202024",
+          "label": "链接文字颜色"
+        },
+        {
+          "type": "select",
+          "id": "font_weight",
+          "default": "400",
+          "label": "链接文字粗细",
+          "options": [
+            { "value": "400", "label": "常规" },
+            { "value": "500", "label": "中等" },
+            { "value": "600", "label": "半粗" },
+            { "value": "700", "label": "粗体" }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "min": 12,
+          "max": 20,
+          "step": 1,
+          "unit": "px",
+          "default": 14,
+          "label": "链接文字大小"
         }
       ]
     },
     {
       "type": "tg_header_desktop_utility",
-      "name": "t:sections.header.tg_header_desktop.blocks.utility.name",
+      "name": "tg | PC端快捷入口",
       "settings": [
         {
           "type": "text",
           "id": "title",
           "default": "Gift Finder",
-          "label": "t:sections.header.tg_header_desktop.blocks.utility.title.label"
+          "label": "显示文字"
         },
         {
           "type": "url",
           "id": "link",
-          "label": "t:sections.header.tg_header_desktop.blocks.utility.link.label"
+          "label": "跳转链接"
+        },
+        {
+          "type": "select",
+          "id": "icon_asset",
+          "label": "入口图标",
+          "default": "gift",
+          "options": [
+            { "value": "gift", "label": "礼物" },
+            { "value": "track-order", "label": "物流追踪" },
+            { "value": "reviews", "label": "评价" }
+          ]
         }
       ]
     },
     {
       "type": "tg_header_desktop_social",
-      "name": "t:sections.header.tg_header_desktop.blocks.social.name",
+      "name": "tg | PC端社交媒体链接",
       "settings": [
         {
           "type": "select",
           "id": "platform",
           "default": "facebook",
-          "label": "t:sections.header.tg_header_desktop.blocks.social.platform.label",
+          "label": "社交平台",
           "options": [
-            { "value": "facebook", "label": "t:sections.header.tg_header_desktop.blocks.social.platform.options.facebook" },
-            { "value": "youtube", "label": "t:sections.header.tg_header_desktop.blocks.social.platform.options.youtube" },
-            { "value": "instagram", "label": "t:sections.header.tg_header_desktop.blocks.social.platform.options.instagram" },
-            { "value": "tiktok", "label": "t:sections.header.tg_header_desktop.blocks.social.platform.options.tiktok" },
-            { "value": "twitter", "label": "t:sections.header.tg_header_desktop.blocks.social.platform.options.twitter" }
+            { "value": "facebook", "label": "Facebook" },
+            { "value": "youtube", "label": "YouTube" },
+            { "value": "instagram", "label": "Instagram" },
+            { "value": "tiktok", "label": "TikTok" },
+            { "value": "twitter", "label": "X / Twitter" }
           ]
         },
         {
           "type": "url",
           "id": "link",
-          "label": "t:sections.header.tg_header_desktop.blocks.social.link.label",
-          "info": "t:sections.header.tg_header_desktop.blocks.social.link.info"
+          "label": "主页链接",
+          "info": "留空则不显示该社交媒体图标。"
         },
         {
           "type": "text",
           "id": "accessibility_label",
-          "label": "t:sections.header.tg_header_desktop.blocks.social.accessibility_label.label",
-          "info": "t:sections.header.tg_header_desktop.blocks.social.accessibility_label.info"
+          "label": "无障碍标签",
+          "info": "可选，默认使用所选平台名称。"
         }
       ]
     }

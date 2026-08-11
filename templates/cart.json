@@ -28,6 +28,16 @@
         "tg_cart_preview_label": "Preview",
         "empty_heading": "Your cart is empty",
         "empty_text": "Find something personal for someone special.",
+        "empty_button_label": "Continue shopping",
+        "empty_button_link": "",
+        "empty_button_background_color": "#a50c43",
+        "empty_button_hover_background_color": "#8a0a39",
+        "empty_button_text_color": "#ffffff",
+        "empty_button_border_color": "#a50c43",
+        "empty_button_border_width": 1,
+        "empty_button_radius": 8,
+        "empty_button_height": 48,
+        "empty_button_font_size": 16,
         "tg_cart_font": "poppins_n4",
         "tg_cart_page_accent_color": "#a50c43",
         "tg_cart_page_surface_color": "#ffffff",
@@ -64,7 +74,15 @@
             "minimum_item_count": 2,
             "incomplete_message": "Add 1 more item to get 10% OFF!",
             "link_label": "",
-            "link": ""
+            "link": "",
+            "promotion_background_start_color": "#ffc26d",
+            "promotion_background_end_color": "#ff6173",
+            "promotion_text_color": "#ffffff",
+            "promotion_link_color": "#ffffff",
+            "promotion_border_color": "#ff6173",
+            "promotion_border_width": 0,
+            "promotion_radius": 20,
+            "promotion_font_size": 16
           }
         },
         "subtotal": {
@@ -79,7 +97,15 @@
           "type": "buttons",
           "settings": {
             "checkout_label": "CHECKOUT",
-            "show_dynamic_checkout": false
+            "show_dynamic_checkout": false,
+            "checkout_background_color": "#a50c43",
+            "checkout_hover_background_color": "#910a3a",
+            "checkout_text_color": "#ffffff",
+            "checkout_border_color": "#a50c43",
+            "checkout_border_width": 0,
+            "checkout_radius": 9,
+            "checkout_height": 54,
+            "checkout_font_size": 24
           }
         },
         "payment_methods": {

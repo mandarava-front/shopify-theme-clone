@@ -209,6 +209,292 @@
             "link": "https://www.tiktok.com/@tg_official",
             "accessibility_label": "Pawfect House on TikTok"
           }
+        },
+        "desktop-nav-summer": {
+          "type": "tg_pc_nav_item",
+          "settings": {
+            "title": "Summer Picks",
+            "link": "/pages/summer-2026",
+            "text_color": "#062d8e",
+            "font_weight": "500",
+            "font_size": 13,
+            "enable_dropdown": false
+          }
+        },
+        "desktop-nav-school": {
+          "type": "tg_pc_nav_item",
+          "settings": {
+            "title": "Back To School",
+            "link": "/pages/back-to-school-2026",
+            "text_color": "#054815",
+            "font_weight": "500",
+            "font_size": 13,
+            "enable_dropdown": false
+          }
+        },
+        "desktop-nav-occasions": {
+          "type": "tg_pc_nav_item",
+          "settings": {
+            "title": "Occasions",
+            "link": "/pages/occasions",
+            "text_color": "#202024",
+            "font_weight": "400",
+            "font_size": 13,
+            "enable_dropdown": true
+          }
+        },
+        "desktop-nav-occasions-group-events": {
+          "type": "tg_pc_nav_group",
+          "settings": {
+            "title": "Upcoming Events",
+            "text_color": "#202024",
+            "font_weight": "600",
+            "font_size": 15
+          }
+        },
+        "desktop-nav-occasions-link-summer": {
+          "type": "tg_pc_nav_link",
+          "settings": {
+            "title": "Summer",
+            "link": "/pages/summer-2026",
+            "text_color": "#202024",
+            "font_weight": "400",
+            "font_size": 14
+          }
+        },
+        "desktop-nav-interests": {
+          "type": "tg_pc_nav_item",
+          "settings": {
+            "title": "Interests",
+            "link": "/collections/interests",
+            "text_color": "#202024",
+            "font_weight": "400",
+            "font_size": 13,
+            "enable_dropdown": true
+          }
+        },
+        "desktop-nav-interests-group-pet-lovers": {
+          "type": "tg_pc_nav_group",
+          "settings": {
+            "title": "Pet Lovers",
+            "text_color": "#202024",
+            "font_weight": "600",
+            "font_size": 15
+          }
+        },
+        "desktop-nav-interests-link-all-pet-lovers": {
+          "type": "tg_pc_nav_link",
+          "settings": {
+            "title": "All Pet Lovers",
+            "link": "/pages/pet-lovers",
+            "text_color": "#202024",
+            "font_weight": "400",
+            "font_size": 14
+          }
+        },
+        "desktop-nav-recipients": {
+          "type": "tg_pc_nav_item",
+          "settings": {
+            "title": "Recipients",
+            "link": "/collections/recipients",
+            "text_color": "#202024",
+            "font_weight": "400",
+            "font_size": 13,
+            "enable_dropdown": true
+          }
+        },
+        "desktop-nav-recipients-group-pet-lover": {
+          "type": "tg_pc_nav_group",
+          "settings": {
+            "title": "For Pet Lover",
+            "text_color": "#202024",
+            "font_weight": "600",
+            "font_size": 15
+          }
+        },
+        "desktop-nav-recipients-link-all-pet-lovers": {
+          "type": "tg_pc_nav_link",
+          "settings": {
+            "title": "All Pet Lovers",
+            "link": "/pages/pet-lovers",
+            "text_color": "#202024",
+            "font_weight": "400",
+            "font_size": 14
+          }
+        },
+        "desktop-nav-home-living": {
+          "type": "tg_pc_nav_item",
+          "settings": {
+            "title": "Home & Living",
+            "link": "/collections/home-living",
+            "text_color": "#202024",
+            "font_weight": "400",
+            "font_size": 13,
+            "enable_dropdown": true
+          }
+        },
+        "desktop-nav-home-living-group-wall-art": {
+          "type": "tg_pc_nav_group",
+          "settings": {
+            "title": "Wall Art & Signs",
+            "text_color": "#202024",
+            "font_weight": "600",
+            "font_size": 15
+          }
+        },
+        "desktop-nav-home-living-link-poster": {
+          "type": "tg_pc_nav_link",
+          "settings": {
+            "title": "Poster",
+            "link": "/collections/poster",
+            "text_color": "#202024",
+            "font_weight": "400",
+            "font_size": 14
+          }
+        },
+        "desktop-nav-apparel": {
+          "type": "tg_pc_nav_item",
+          "settings": {
+            "title": "Apparel",
+            "link": "/collections/apparel",
+            "text_color": "#202024",
+            "font_weight": "400",
+            "font_size": 13,
+            "enable_dropdown": true
+          }
+        },
+        "desktop-nav-apparel-group-tops": {
+          "type": "tg_pc_nav_group",
+          "settings": {
+            "title": "Tops",
+            "text_color": "#202024",
+            "font_weight": "600",
+            "font_size": 15
+          }
+        },
+        "desktop-nav-apparel-link-tshirt": {
+          "type": "tg_pc_nav_link",
+          "settings": {
+            "title": "T-shirt",
+            "link": "/collections/t-shirt",
+            "text_color": "#202024",
+            "font_weight": "400",
+            "font_size": 14
+          }
+        },
+        "desktop-nav-accessories": {
+          "type": "tg_pc_nav_item",
+          "settings": {
+            "title": "Accessories",
+            "link": "/collections/accessories",
+            "text_color": "#202024",
+            "font_weight": "400",
+            "font_size": 13,
+            "enable_dropdown": true
+          }
+        },
+        "desktop-nav-accessories-group-headwear": {
+          "type": "tg_pc_nav_group",
+          "settings": {
+            "title": "Headwear",
+            "text_color": "#202024",
+            "font_weight": "600",
+            "font_size": 15
+          }
+        },
+        "desktop-nav-accessories-link-classic-cap": {
+          "type": "tg_pc_nav_link",
+          "settings": {
+            "title": "Classic Cap",
+            "link": "/collections/classic-cap",
+            "text_color": "#202024",
+            "font_weight": "400",
+            "font_size": 14
+          }
+        },
+        "desktop-nav-drinkware": {
+          "type": "tg_pc_nav_item",
+          "settings": {
+            "title": "Drinkware",
+            "link": "/collections/drinkware",
+            "text_color": "#202024",
+            "font_weight": "400",
+            "font_size": 13,
+            "enable_dropdown": true
+          }
+        },
+        "desktop-nav-drinkware-group-mugs": {
+          "type": "tg_pc_nav_group",
+          "settings": {
+            "title": "Mugs",
+            "text_color": "#202024",
+            "font_weight": "600",
+            "font_size": 15
+          }
+        },
+        "desktop-nav-drinkware-link-standard-mug": {
+          "type": "tg_pc_nav_link",
+          "settings": {
+            "title": "Standard Mug",
+            "link": "/collections/standard-mug",
+            "text_color": "#202024",
+            "font_weight": "400",
+            "font_size": 14
+          }
+        },
+        "desktop-nav-outdoor-lifestyle": {
+          "type": "tg_pc_nav_item",
+          "settings": {
+            "title": "Outdoor & Lifestyle",
+            "link": "/collections/outdoor",
+            "text_color": "#202024",
+            "font_weight": "400",
+            "font_size": 13,
+            "enable_dropdown": true
+          }
+        },
+        "desktop-nav-outdoor-lifestyle-group-garden": {
+          "type": "tg_pc_nav_group",
+          "settings": {
+            "title": "Garden & Outdoor Decor",
+            "text_color": "#202024",
+            "font_weight": "600",
+            "font_size": 15
+          }
+        },
+        "desktop-nav-outdoor-lifestyle-link-flag": {
+          "type": "tg_pc_nav_link",
+          "settings": {
+            "title": "Flag",
+            "link": "/collections/flag",
+            "text_color": "#202024",
+            "font_weight": "400",
+            "font_size": 14
+          }
+        },
+        "desktop-utility-gift-finder": {
+          "type": "tg_header_desktop_utility",
+          "settings": {
+            "title": "Gift Finder",
+            "link": "/pages/gift-finder",
+            "icon_asset": "gift"
+          }
+        },
+        "desktop-utility-track-order": {
+          "type": "tg_header_desktop_utility",
+          "settings": {
+            "title": "Track Order",
+            "link": "/pages/track-order",
+            "icon_asset": "track-order"
+          }
+        },
+        "desktop-utility-reviews": {
+          "type": "tg_header_desktop_utility",
+          "settings": {
+            "title": "Reviews",
+            "link": "/pages/happy-customers",
+            "icon_asset": "reviews"
+          }
         }
       },
       "block_order": [
@@ -228,7 +514,36 @@
         "mobile-social-facebook",
         "mobile-social-youtube",
         "mobile-social-instagram",
-        "mobile-social-tiktok"
+        "mobile-social-tiktok",
+        "desktop-nav-summer",
+        "desktop-nav-school",
+        "desktop-nav-occasions",
+        "desktop-nav-occasions-group-events",
+        "desktop-nav-occasions-link-summer",
+        "desktop-nav-interests",
+        "desktop-nav-interests-group-pet-lovers",
+        "desktop-nav-interests-link-all-pet-lovers",
+        "desktop-nav-recipients",
+        "desktop-nav-recipients-group-pet-lover",
+        "desktop-nav-recipients-link-all-pet-lovers",
+        "desktop-nav-home-living",
+        "desktop-nav-home-living-group-wall-art",
+        "desktop-nav-home-living-link-poster",
+        "desktop-nav-apparel",
+        "desktop-nav-apparel-group-tops",
+        "desktop-nav-apparel-link-tshirt",
+        "desktop-nav-accessories",
+        "desktop-nav-accessories-group-headwear",
+        "desktop-nav-accessories-link-classic-cap",
+        "desktop-nav-drinkware",
+        "desktop-nav-drinkware-group-mugs",
+        "desktop-nav-drinkware-link-standard-mug",
+        "desktop-nav-outdoor-lifestyle",
+        "desktop-nav-outdoor-lifestyle-group-garden",
+        "desktop-nav-outdoor-lifestyle-link-flag",
+        "desktop-utility-gift-finder",
+        "desktop-utility-track-order",
+        "desktop-utility-reviews"
       ],
       "settings": {
         "logo_position": "middle-left",
@@ -243,6 +558,34 @@
         "tg_header_mobile_menu_accent": "#0b8494",
         "tg_header_mobile_menu_divider": "#eeeeff",
         "tg_header_mobile_menu_show_social": true,
+        "enable_tg_header_desktop": true,
+        "tg_header_desktop_logo_text": "Pawfect House",
+        "tg_header_desktop_show_announcement": true,
+        "tg_header_desktop_announcement_text_content": "Save 10% orders 2+ with code: PH2",
+        "tg_header_desktop_announcement_dismissible": false,
+        "tg_header_desktop_announcement_close_label": "Close announcement",
+        "tg_header_desktop_show_search": true,
+        "tg_header_desktop_search_placeholder": "Find your perfect gift in seconds...",
+        "tg_header_desktop_search_label": "Search",
+        "tg_header_desktop_show_cart": true,
+        "tg_header_desktop_cart_label": "Cart",
+        "tg_header_desktop_show_utility_links": true,
+        "tg_header_desktop_show_social_links": false,
+        "tg_header_desktop_announcement_background": "#fef1e2",
+        "tg_header_desktop_announcement_text": "#202024",
+        "tg_header_desktop_background": "#ffffff",
+        "tg_header_desktop_text": "#202024",
+        "tg_header_desktop_hover": "#f76e4a",
+        "tg_header_desktop_border": "#f3f3f3",
+        "tg_header_desktop_badge_background": "#ee860f",
+        "tg_header_desktop_badge_text": "#ffffff",
+        "tg_header_desktop_max_width": 1440,
+        "tg_header_desktop_logo_width": 136,
+        "tg_header_desktop_nav_height": 72,
+        "tg_header_desktop_menu_panel_width": 90,
+        "tg_header_desktop_menu_panel_columns": 5,
+        "tg_header_desktop_menu_gap": 0,
+        "tg_header_desktop_menu_border_width": 1,
         "menu_type_desktop": "mega",
         "mobile_track_order_link": "/pages/track-order",
         "mobile_reviews_link": "/#reviews",

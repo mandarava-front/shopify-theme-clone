@@ -6,7 +6,10 @@
 -%}
 
 {%- if tg_cart_promo_message != blank -%}
-  <aside class="tg-cart-promotion">
+  <aside
+    class="tg-cart-promotion"
+    style="--tg-cart-promotion-background-start: {{ block.settings.promotion_background_start_color }}; --tg-cart-promotion-background-end: {{ block.settings.promotion_background_end_color }}; --tg-cart-promotion-text: {{ block.settings.promotion_text_color }}; --tg-cart-promotion-link: {{ block.settings.promotion_link_color }}; --tg-cart-promotion-border: {{ block.settings.promotion_border_color }}; --tg-cart-promotion-border-width: {{ block.settings.promotion_border_width }}px; --tg-cart-promotion-radius: {{ block.settings.promotion_radius }}px; --tg-cart-promotion-font-size: {{ block.settings.promotion_font_size }}px;"
+  >
     <p>{{ tg_cart_promo_message | escape }}</p>
     {%- if block.settings.link_label != blank and block.settings.link != blank -%}
       <a href="{{ block.settings.link }}" class="tg-cart-promotion__link">

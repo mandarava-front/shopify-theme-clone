@@ -36,7 +36,7 @@
 
 <cart-items
   class="gradient color-{{ section.settings.color_scheme }} isolate{% if section.settings.enable_tg_cart_page_style %} tg-cart-page{% endif %}{% if cart == empty %} is-empty{% else %} section-{{ section.id }}-padding{% endif %}"
-  {% if section.settings.enable_tg_cart_page_style %}style="--tg-cart-accent: {{ section.settings.tg_cart_page_accent_color }}; --tg-cart-surface: {{ section.settings.tg_cart_page_surface_color }}; --tg-cart-card: {{ section.settings.tg_cart_page_card_color }}; --tg-cart-border: {{ section.settings.tg_cart_page_border_color }}; --tg-cart-text: {{ section.settings.tg_cart_page_text_color }}; --tg-cart-muted: {{ section.settings.tg_cart_page_muted_color }}; --tg-cart-radius: {{ section.settings.tg_cart_card_radius }}px; --tg-cart-font: {{ section.settings.tg_cart_font.family }}, {{ section.settings.tg_cart_font.fallback_families }};"{% endif %}
+  {% if section.settings.enable_tg_cart_page_style %}style="--tg-cart-accent: {{ section.settings.tg_cart_page_accent_color }}; --tg-cart-surface: {{ section.settings.tg_cart_page_surface_color }}; --tg-cart-card: {{ section.settings.tg_cart_page_card_color }}; --tg-cart-border: {{ section.settings.tg_cart_page_border_color }}; --tg-cart-text: {{ section.settings.tg_cart_page_text_color }}; --tg-cart-muted: {{ section.settings.tg_cart_page_muted_color }}; --tg-cart-radius: {{ section.settings.tg_cart_card_radius }}px; --tg-cart-font: {{ section.settings.tg_cart_font.family }}, {{ section.settings.tg_cart_font.fallback_families }}; --tg-cart-empty-button-background: {{ section.settings.empty_button_background_color }}; --tg-cart-empty-button-hover-background: {{ section.settings.empty_button_hover_background_color }}; --tg-cart-empty-button-text: {{ section.settings.empty_button_text_color }}; --tg-cart-empty-button-border: {{ section.settings.empty_button_border_color }}; --tg-cart-empty-button-border-width: {{ section.settings.empty_button_border_width }}px; --tg-cart-empty-button-radius: {{ section.settings.empty_button_radius }}px; --tg-cart-empty-button-height: {{ section.settings.empty_button_height }}px; --tg-cart-empty-button-font-size: {{ section.settings.empty_button_font_size }}px;"{% endif %}
   view-event-payload="{{ cart | standard_event_data: 'view', context: 'page' | escape }}"
 >
   <div class="page-width">
@@ -83,8 +83,15 @@
       {% if section.settings.enable_tg_cart_page_style and section.settings.empty_text != blank %}
         <p class="tg-cart-page__empty-text">{{ section.settings.empty_text | escape }}</p>
       {% endif %}
-      <a href="{{ routes.all_products_collection_url }}" class="button">
-        {{ 'general.continue_shopping' | t }}
+      <a
+        href="{% if section.settings.empty_button_link != blank %}{{ section.settings.empty_button_link }}{% else %}{{ routes.all_products_collection_url }}{% endif %}"
+        class="button tg-cart-page__empty-button"
+      >
+        {% if section.settings.empty_button_label != blank %}
+          {{ section.settings.empty_button_label | escape }}
+        {% else %}
+          {{ 'general.continue_shopping' | t }}
+        {% endif %}
       </a>
 
       {%- if shop.customer_accounts_enabled and customer == null -%}
@@ -669,6 +676,86 @@
     },
     {
       "type": "header",
+      "content": "Tg | Empty cart button / 空购物车按钮"
+    },
+    {
+      "type": "text",
+      "id": "empty_button_label",
+      "label": "Tg | Empty cart button label / 空购物车按钮文案",
+      "default": "Continue shopping"
+    },
+    {
+      "type": "url",
+      "id": "empty_button_link",
+      "label": "Tg | Empty cart button link / 空购物车按钮链接",
+      "info": "Tg | Uses the all-products collection when left empty / 留空时跳转到全部商品页"
+    },
+    {
+      "type": "color",
+      "id": "empty_button_background_color",
+      "label": "Tg | Button background / 按钮背景色",
+      "default": "#a50c43"
+    },
+    {
+      "type": "color",
+      "id": "empty_button_hover_background_color",
+      "label": "Tg | Button hover background / 按钮悬停背景色",
+      "default": "#8a0a39"
+    },
+    {
+      "type": "color",
+      "id": "empty_button_text_color",
+      "label": "Tg | Button text color / 按钮文字颜色",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "empty_button_border_color",
+      "label": "Tg | Button border color / 按钮边框颜色",
+      "default": "#a50c43"
+    },
+    {
+      "type": "range",
+      "id": "empty_button_border_width",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "label": "Tg | Button border width / 按钮边框宽度",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "empty_button_radius",
+      "min": 0,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Tg | Button corner radius / 按钮圆角",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "empty_button_height",
+      "min": 44,
+      "max": 72,
+      "step": 2,
+      "unit": "px",
+      "label": "Tg | Button height / 按钮高度",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "empty_button_font_size",
+      "min": 14,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Tg | Button font size / 按钮字号",
+      "default": 16
+    },
+    {
+      "type": "header",
       "content": "Tg | Cart appearance / 购物车外观"
     },
     {
@@ -774,6 +861,16 @@
         "tg_cart_preview_label": "Preview",
         "empty_heading": "Your cart is empty",
         "empty_text": "Find something personal for someone special.",
+        "empty_button_label": "Continue shopping",
+        "empty_button_link": "",
+        "empty_button_background_color": "#a50c43",
+        "empty_button_hover_background_color": "#8a0a39",
+        "empty_button_text_color": "#ffffff",
+        "empty_button_border_color": "#a50c43",
+        "empty_button_border_width": 1,
+        "empty_button_radius": 8,
+        "empty_button_height": 48,
+        "empty_button_font_size": 16,
         "tg_cart_font": "poppins_n4",
         "tg_cart_page_accent_color": "#a50c43",
         "tg_cart_page_surface_color": "#ffffff",

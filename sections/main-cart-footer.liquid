@@ -154,7 +154,10 @@
                 {% endif %}
                   </div>
                 {%- when 'buttons' -%}
-                  <div class="cart__ctas tg-cart-summary__ctas">
+                  <div
+                    class="cart__ctas tg-cart-summary__ctas"
+                    style="--tg-cart-checkout-background: {{ block.settings.checkout_background_color }}; --tg-cart-checkout-hover-background: {{ block.settings.checkout_hover_background_color }}; --tg-cart-checkout-text: {{ block.settings.checkout_text_color }}; --tg-cart-checkout-border: {{ block.settings.checkout_border_color }}; --tg-cart-checkout-border-width: {{ block.settings.checkout_border_width }}px; --tg-cart-checkout-radius: {{ block.settings.checkout_radius }}px; --tg-cart-checkout-height: {{ block.settings.checkout_height }}px; --tg-cart-checkout-font-size: {{ block.settings.checkout_font_size }}px;"
+                  >
                 <button
                   type="submit"
                   id="checkout"
@@ -563,6 +566,74 @@
         },
         {
           "type": "header",
+          "content": "Tg | Checkout button appearance / 结账按钮外观"
+        },
+        {
+          "type": "color",
+          "id": "checkout_background_color",
+          "label": "Tg | Button background / 按钮背景色",
+          "default": "#a50c43"
+        },
+        {
+          "type": "color",
+          "id": "checkout_hover_background_color",
+          "label": "Tg | Button hover background / 按钮悬停背景色",
+          "default": "#910a3a"
+        },
+        {
+          "type": "color",
+          "id": "checkout_text_color",
+          "label": "Tg | Button text color / 按钮文字颜色",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "checkout_border_color",
+          "label": "Tg | Button border color / 按钮边框颜色",
+          "default": "#a50c43"
+        },
+        {
+          "type": "range",
+          "id": "checkout_border_width",
+          "min": 0,
+          "max": 4,
+          "step": 1,
+          "unit": "px",
+          "label": "Tg | Button border width / 按钮边框宽度",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "checkout_radius",
+          "min": 0,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Tg | Button corner radius / 按钮圆角",
+          "default": 9
+        },
+        {
+          "type": "range",
+          "id": "checkout_height",
+          "min": 44,
+          "max": 72,
+          "step": 2,
+          "unit": "px",
+          "label": "Tg | Button height / 按钮高度",
+          "default": 54
+        },
+        {
+          "type": "range",
+          "id": "checkout_font_size",
+          "min": 14,
+          "max": 28,
+          "step": 1,
+          "unit": "px",
+          "label": "Tg | Button font size / 按钮字号",
+          "default": 24
+        },
+        {
+          "type": "header",
           "content": "区块间距"
         },
         {
@@ -629,6 +700,70 @@
           "type": "url",
           "id": "link",
           "label": "Tg | Link / 链接"
+        },
+        {
+          "type": "header",
+          "content": "Tg | Promotion appearance / 促销提示外观"
+        },
+        {
+          "type": "color",
+          "id": "promotion_background_start_color",
+          "label": "Tg | Background start color / 背景起始色",
+          "default": "#ffc26d"
+        },
+        {
+          "type": "color",
+          "id": "promotion_background_end_color",
+          "label": "Tg | Background end color / 背景结束色",
+          "default": "#ff6173"
+        },
+        {
+          "type": "color",
+          "id": "promotion_text_color",
+          "label": "Tg | Text color / 文字颜色",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "promotion_link_color",
+          "label": "Tg | Link color / 链接颜色",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "promotion_border_color",
+          "label": "Tg | Border color / 边框颜色",
+          "default": "#ff6173"
+        },
+        {
+          "type": "range",
+          "id": "promotion_border_width",
+          "min": 0,
+          "max": 4,
+          "step": 1,
+          "unit": "px",
+          "label": "Tg | Border width / 边框宽度",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "promotion_radius",
+          "min": 0,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Tg | Corner radius / 圆角",
+          "default": 20
+        },
+        {
+          "type": "range",
+          "id": "promotion_font_size",
+          "min": 12,
+          "max": 20,
+          "step": 1,
+          "unit": "px",
+          "label": "Tg | Text size / 文字字号",
+          "default": 16
         },
         {
           "type": "header",
@@ -1036,7 +1171,15 @@
             "minimum_item_count": 2,
             "incomplete_message": "Add 1 more item to get 10% OFF!",
             "link_label": "",
-            "link": ""
+            "link": "",
+            "promotion_background_start_color": "#ffc26d",
+            "promotion_background_end_color": "#ff6173",
+            "promotion_text_color": "#ffffff",
+            "promotion_link_color": "#ffffff",
+            "promotion_border_color": "#ff6173",
+            "promotion_border_width": 0,
+            "promotion_radius": 20,
+            "promotion_font_size": 16
           }
         },
         {
@@ -1051,7 +1194,15 @@
           "type": "buttons",
           "settings": {
             "checkout_label": "CHECKOUT",
-            "show_dynamic_checkout": false
+            "show_dynamic_checkout": false,
+            "checkout_background_color": "#a50c43",
+            "checkout_hover_background_color": "#910a3a",
+            "checkout_text_color": "#ffffff",
+            "checkout_border_color": "#a50c43",
+            "checkout_border_width": 0,
+            "checkout_radius": 9,
+            "checkout_height": 54,
+            "checkout_font_size": 24
           }
         },
         {
