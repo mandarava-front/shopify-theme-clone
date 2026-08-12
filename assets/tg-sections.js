@@ -138,21 +138,35 @@
     customElements.define('tg-video-rail', class extends HTMLElement {
       connectedCallback() {
         this.track = this.querySelector('[data-tg-track]');
-        this.dialog = this.querySelector('dialog');
-        this.video = this.dialog?.querySelector('video');
-        this.opener = null;
         this.querySelectorAll('[data-tg-scroll]').forEach((button) => button.addEventListener('click', () => {
           const first = this.track?.firstElementChild;
           const amount = (first?.getBoundingClientRect().width || 280) + 24;
           this.track?.scrollBy({ left: Number(button.dataset.tgScroll) * amount, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
         }));
-        this.querySelectorAll('[data-tg-video]').forEach((button) => button.addEventListener('click', () => this.open(button)));
-        this.querySelector('[data-tg-close]')?.addEventListener('click', () => this.close());
-        this.dialog?.addEventListener('click', (event) => { if (event.target === this.dialog) this.close(); });
-        this.dialog?.addEventListener('close', () => { this.video?.pause(); this.opener?.focus(); });
+        this.querySelectorAll('[data-tg-video-play]').forEach((button) => button.addEventListener('click', () => this.play(button)));
+        this.querySelectorAll('[data-tg-inline-video]').forEach((video) => video.addEventListener('play', () => this.pauseOtherVideos(video)));
       }
-      open(button) { this.opener = button; this.video.src = button.dataset.tgVideo; this.dialog.showModal(); this.video.play().catch(() => {}); }
-      close() { this.dialog?.close(); }
+      play(button) {
+        const media = button.closest('.tg-video-card__media');
+        const video = media?.querySelector('[data-tg-inline-video]');
+        if (!video) return;
+
+        if (!video.getAttribute('src')) {
+          video.src = video.dataset.tgVideoSrc;
+          video.load();
+        }
+
+        this.pauseOtherVideos(video);
+        media.classList.add('is-playing');
+        button.hidden = true;
+        video.play().catch(() => {});
+        video.focus({ preventScroll: true });
+      }
+      pauseOtherVideos(activeVideo) {
+        this.querySelectorAll('[data-tg-inline-video]').forEach((video) => {
+          if (video !== activeVideo) video.pause();
+        });
+      }
     });
   }
 })();

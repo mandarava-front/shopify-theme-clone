@@ -1,0 +1,4 @@
+# Store-specific values saved by Shopify's Theme Editor.
+# Keep the live theme's merchant configuration when deploying code changes.
+config/settings_data.json
+config/markets.json

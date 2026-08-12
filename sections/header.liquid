@@ -161,13 +161,15 @@
   {%- if section.settings.enable_tg_header_desktop -%}
     {%- liquid
     assign tg_header_desktop_utility_count = 0
-    assign tg_header_desktop_navigation_count = 0
+    assign tg_header_desktop_menu = blank
+    assign tg_header_desktop_menu_block = blank
     for block in section.blocks
       if block.type == 'tg_header_desktop_utility'
         assign tg_header_desktop_utility_count = tg_header_desktop_utility_count | plus: 1
       endif
-      if block.type == 'tg_pc_nav_item' and block.settings.title != blank
-        assign tg_header_desktop_navigation_count = tg_header_desktop_navigation_count | plus: 1
+      if block.type == 'tg_header_desktop_menu' and block.settings.menu != blank
+        assign tg_header_desktop_menu = block.settings.menu
+        assign tg_header_desktop_menu_block = block
       endif
     endfor
     -%}
@@ -315,103 +317,82 @@
           </div>
         </div>
 
-        {%- if tg_header_desktop_navigation_count > 0 -%}
+        {%- if tg_header_desktop_menu != blank and tg_header_desktop_menu.links != blank -%}
           <div class="tg-header-desktop__menu-row">
             <div class="tg-header-desktop__inner">
-              <div class="tg-header-desktop__menu-links tg-header-desktop__menu-links--{{ section.settings.tg_header_desktop_menu_alignment | default: 'center' }}" role="list">
-                {%- for nav_item in section.blocks -%}
-                  {%- if nav_item.type == 'tg_pc_nav_item' and nav_item.settings.title != blank -%}
-                    {%- liquid
-                      assign has_desktop_submenu = false
-                      if nav_item.settings.enable_dropdown
-                        assign is_current_desktop_nav = false
-                        assign has_current_desktop_group = false
-                        for nav_content_item in section.blocks
-                          if nav_content_item.id == nav_item.id
-                            assign is_current_desktop_nav = true
-                          elsif is_current_desktop_nav
-                            if nav_content_item.type == 'tg_pc_nav_item'
-                              break
-                            elsif nav_content_item.type == 'tg_pc_nav_group' and nav_content_item.settings.title != blank
-                              assign has_current_desktop_group = true
-                            elsif nav_content_item.type == 'tg_pc_nav_link' and has_current_desktop_group and nav_content_item.settings.title != blank and nav_content_item.settings.link != blank
-                              assign has_desktop_submenu = true
-                              break
-                            endif
-                          endif
-                        endfor
-                      endif
-                    -%}
-
-                    {%- if has_desktop_submenu -%}
-                      {%- assign desktop_panel_id = 'TgDesktopHeaderPanel-' | append: section.id | append: '-' | append: nav_item.id -%}
-                      <header-menu class="tg-header-desktop__menu-disclosure" {{ nav_item.shopify_attributes }}>
-                        <details id="TgDesktopHeaderMenu-{{ section.id }}-{{ nav_item.id }}">
-                          <summary
-                            class="tg-header-desktop__menu-link focus-inset"
-                            aria-controls="{{ desktop_panel_id }}"
-                            aria-haspopup="true"
-                            style="--tg-header-desktop-nav-item-color: {{ nav_item.settings.text_color }}; --tg-header-desktop-nav-item-weight: {{ nav_item.settings.font_weight }}; --tg-header-desktop-nav-item-size: {{ nav_item.settings.font_size }}px;"
-                          >
-                            {{ nav_item.settings.title | escape }}
-                          </summary>
-                          <div id="{{ desktop_panel_id }}" class="tg-header-desktop__menu-panel" aria-label="{{ nav_item.settings.title | escape }}">
-                            <div class="tg-header-desktop__menu-panel-grid" role="list">
-                              {%- assign is_current_desktop_nav = false -%}
-                              {%- for nav_content_item in section.blocks -%}
-                                {%- if nav_content_item.id == nav_item.id -%}
-                                  {%- assign is_current_desktop_nav = true -%}
-                                {%- elsif is_current_desktop_nav -%}
-                                  {%- if nav_content_item.type == 'tg_pc_nav_item' -%}
-                                    {%- break -%}
-                                  {%- elsif nav_content_item.type == 'tg_pc_nav_group' and nav_content_item.settings.title != blank -%}
-                                    <div
-                                      class="tg-header-desktop__menu-panel-column"
-                                      role="listitem"
-                                      style="--tg-header-desktop-group-color: {{ nav_content_item.settings.text_color }}; --tg-header-desktop-group-weight: {{ nav_content_item.settings.font_weight }}; --tg-header-desktop-group-size: {{ nav_content_item.settings.font_size }}px;"
-                                      {{ nav_content_item.shopify_attributes }}
-                                    >
-                                      <span class="tg-header-desktop__menu-panel-title">{{ nav_content_item.settings.title | escape }}</span>
-                                      <ul class="tg-header-desktop__menu-panel-list" role="list">
-                                        {%- assign is_current_desktop_group = false -%}
-                                        {%- for nav_group_link in section.blocks -%}
-                                          {%- if nav_group_link.id == nav_content_item.id -%}
-                                            {%- assign is_current_desktop_group = true -%}
-                                          {%- elsif is_current_desktop_group -%}
-                                            {%- if nav_group_link.type == 'tg_pc_nav_item' or nav_group_link.type == 'tg_pc_nav_group' -%}
-                                              {%- break -%}
-                                            {%- elsif nav_group_link.type == 'tg_pc_nav_link' and nav_group_link.settings.title != blank and nav_group_link.settings.link != blank -%}
-                                              <li {{ nav_group_link.shopify_attributes }}>
-                                                <a
-                                                  href="{{ nav_group_link.settings.link }}"
-                                                  class="tg-header-desktop__menu-panel-link focus-inset"
-                                                  style="--tg-header-desktop-menu-link-color: {{ nav_group_link.settings.text_color }}; --tg-header-desktop-menu-link-weight: {{ nav_group_link.settings.font_weight }}; --tg-header-desktop-menu-link-size: {{ nav_group_link.settings.font_size }}px;"
-                                                >
-                                                  {{ nav_group_link.settings.title | escape }}
-                                                </a>
-                                              </li>
-                                            {%- endif -%}
-                                          {%- endif -%}
-                                        {%- endfor -%}
-                                      </ul>
-                                    </div>
-                                  {%- endif -%}
+              <div class="tg-header-desktop__menu-links tg-header-desktop__menu-links--{{ section.settings.tg_header_desktop_menu_alignment | default: 'center' }}" role="list" {{ tg_header_desktop_menu_block.shopify_attributes }}>
+                {%- for link in tg_header_desktop_menu.links -%}
+                  {%- if link.links != blank -%}
+                    {%- assign desktop_panel_id = 'TgDesktopHeaderPanel-' | append: section.id | append: '-' | append: forloop.index -%}
+                    <header-menu class="tg-header-desktop__menu-disclosure">
+                      <details id="TgDesktopHeaderMenu-{{ section.id }}-{{ forloop.index }}">
+                        <summary
+                          class="tg-header-desktop__menu-link focus-inset{% if link.current or link.child_active %} tg-header-desktop__menu-link--current{% endif %}"
+                          aria-controls="{{ desktop_panel_id }}"
+                          aria-haspopup="true"
+                        >
+                          {{ link.title | escape }}
+                        </summary>
+                        <div id="{{ desktop_panel_id }}" class="tg-header-desktop__menu-panel" aria-label="{{ link.title | escape }}">
+                          <div class="tg-header-desktop__menu-panel-grid" role="list">
+                            {%- for childlink in link.links -%}
+                              <div class="tg-header-desktop__menu-panel-column" role="listitem">
+                                {%- if childlink.links != blank -%}
+                                  <a
+                                    href="{{ childlink.url }}"
+                                    class="tg-header-desktop__menu-panel-title focus-inset"
+                                    {% if childlink.current %}
+                                      aria-current="page"
+                                    {% endif %}
+                                  >
+                                    {{ childlink.title | escape }}
+                                  </a>
+                                  <ul class="tg-header-desktop__menu-panel-list" role="list">
+                                    {%- for grandchildlink in childlink.links -%}
+                                      <li>
+                                        <a
+                                          href="{{ grandchildlink.url }}"
+                                          class="tg-header-desktop__menu-panel-link focus-inset"
+                                          {% if grandchildlink.current %}
+                                            aria-current="page"
+                                          {% endif %}
+                                        >
+                                          {{ grandchildlink.title | escape }}
+                                        </a>
+                                      </li>
+                                    {%- endfor -%}
+                                  </ul>
+                                {%- else -%}
+                                  <ul class="tg-header-desktop__menu-panel-list" role="list">
+                                    <li>
+                                      <a
+                                        href="{{ childlink.url }}"
+                                        class="tg-header-desktop__menu-panel-link focus-inset"
+                                        {% if childlink.current %}
+                                          aria-current="page"
+                                        {% endif %}
+                                      >
+                                        {{ childlink.title | escape }}
+                                      </a>
+                                    </li>
+                                  </ul>
                                 {%- endif -%}
-                              {%- endfor -%}
-                            </div>
+                              </div>
+                            {%- endfor -%}
                           </div>
-                        </details>
-                      </header-menu>
-                    {%- elsif nav_item.settings.link != blank -%}
-                      <a
-                        href="{{ nav_item.settings.link }}"
-                        class="tg-header-desktop__menu-link focus-inset"
-                        style="--tg-header-desktop-nav-item-color: {{ nav_item.settings.text_color }}; --tg-header-desktop-nav-item-weight: {{ nav_item.settings.font_weight }}; --tg-header-desktop-nav-item-size: {{ nav_item.settings.font_size }}px;"
-                        {{ nav_item.shopify_attributes }}
-                      >
-                        {{ nav_item.settings.title | escape }}
-                      </a>
-                    {%- endif -%}
+                        </div>
+                      </details>
+                    </header-menu>
+                  {%- else -%}
+                    <a
+                      href="{{ link.url }}"
+                      class="tg-header-desktop__menu-link focus-inset{% if link.current %} tg-header-desktop__menu-link--current{% endif %}"
+                      {% if link.current %}
+                        aria-current="page"
+                      {% endif %}
+                    >
+                      {{ link.title | escape }}
+                    </a>
                   {%- endif -%}
                 {%- endfor -%}
               </div>
@@ -794,6 +775,10 @@
   "max_blocks": 50,
   "settings": [
     {
+      "type": "header",
+      "content": "通用 | 标准页头"
+    },
+    {
       "type": "select",
       "id": "logo_position",
       "options": [
@@ -835,6 +820,17 @@
       "label": "t:sections.header.settings.mobile_logo_position.label"
     },
     {
+      "type": "header",
+      "content": "tg | 移动端 | 启用与导航"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_tg_header_mobile_menu",
+      "default": false,
+      "label": "t:sections.header.tg_header_mobile.enable.label",
+      "info": "t:sections.header.tg_header_mobile.enable.info"
+    },
+    {
       "type": "link_list",
       "id": "menu",
       "default": "main-menu",
@@ -843,14 +839,7 @@
     },
     {
       "type": "header",
-      "content": "t:sections.header.tg_header_mobile.heading"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_tg_header_mobile_menu",
-      "default": false,
-      "label": "t:sections.header.tg_header_mobile.enable.label",
-      "info": "t:sections.header.tg_header_mobile.enable.info"
+      "content": "tg | 移动端 | 搜索"
     },
     {
       "type": "select",
@@ -934,6 +923,10 @@
       "info": "仅在单独一行搜索框模式下显示。"
     },
     {
+      "type": "header",
+      "content": "tg | 移动端 | 抽屉菜单外观"
+    },
+    {
       "type": "text",
       "id": "tg_header_mobile_menu_title",
       "default": "Menu",
@@ -980,6 +973,10 @@
       "label": "t:sections.header.tg_header_mobile.divider.label"
     },
     {
+      "type": "header",
+      "content": "tg | 移动端 | 社媒与默认快捷入口"
+    },
+    {
       "type": "checkbox",
       "id": "tg_header_mobile_menu_show_social",
       "default": true,
@@ -998,7 +995,7 @@
     },
     {
       "type": "header",
-      "content": "tg | PC端顶部导航栏"
+      "content": "tg | PC端 | 启用与品牌"
     },
     {
       "type": "checkbox",
@@ -1022,7 +1019,7 @@
     },
     {
       "type": "header",
-      "content": "t:sections.header.tg_header_desktop.announcement.heading"
+      "content": "tg | PC端 | 公告栏"
     },
     {
       "type": "checkbox",
@@ -1051,7 +1048,7 @@
     },
     {
       "type": "header",
-      "content": "t:sections.header.tg_header_desktop.actions.heading"
+      "content": "tg | PC端 | 搜索与购物车"
     },
     {
       "type": "checkbox",
@@ -1097,7 +1094,7 @@
     },
     {
       "type": "header",
-      "content": "t:sections.header.tg_header_desktop.extras.heading"
+      "content": "tg | PC端 | 快捷入口与社媒"
     },
     {
       "type": "checkbox",
@@ -1115,7 +1112,7 @@
     },
     {
       "type": "header",
-      "content": "t:sections.header.tg_header_desktop.appearance.heading"
+      "content": "tg | PC端 | 外观"
     },
     {
       "type": "color",
@@ -1197,7 +1194,7 @@
     },
     {
       "type": "header",
-      "content": "tg | PC端下拉导航布局"
+      "content": "tg | PC端 | 下拉导航布局"
     },
     {
       "type": "select",
@@ -1248,6 +1245,10 @@
       "unit": "px",
       "default": 1,
       "label": "导航底部分隔线宽度"
+    },
+    {
+      "type": "header",
+      "content": "通用 | 标准页头行为"
     },
     {
       "type": "select",
@@ -1301,7 +1302,7 @@
     },
     {
       "type": "header",
-      "content": "t:sections.header.settings.header__1.content"
+      "content": "通用 | 标准页头色彩"
     },
     {
       "type": "color_scheme",
@@ -1317,7 +1318,7 @@
     },
     {
       "type": "header",
-      "content": "t:sections.header.settings.header__utilities.content"
+      "content": "通用 | 地区、语言与账户"
     },
     {
       "type": "checkbox",
@@ -1342,7 +1343,7 @@
     },
     {
       "type": "header",
-      "content": "t:sections.all.spacing"
+      "content": "通用 | 间距"
     },
     {
       "type": "range",
@@ -1356,7 +1357,7 @@
     },
     {
       "type": "header",
-      "content": "t:sections.all.padding.section_padding_heading"
+      "content": "通用 | 内边距"
     },
     {
       "type": "range",
@@ -1542,141 +1543,15 @@
       ]
     },
     {
-      "type": "tg_pc_nav_item",
-      "name": "tg | PC端导航项目",
+      "type": "tg_header_desktop_menu",
+      "name": "tg | PC端导航菜单",
+      "limit": 1,
       "settings": [
         {
-          "type": "text",
-          "id": "title",
-          "default": "导航项目",
-          "label": "一级导航名称"
-        },
-        {
-          "type": "url",
-          "id": "link",
-          "label": "一级导航链接",
-          "info": "未启用下拉菜单时使用此链接。"
-        },
-        {
-          "type": "color",
-          "id": "text_color",
-          "default": "#202024",
-          "label": "一级导航文字颜色"
-        },
-        {
-          "type": "select",
-          "id": "font_weight",
-          "default": "400",
-          "label": "一级导航文字粗细",
-          "options": [
-            { "value": "400", "label": "常规" },
-            { "value": "500", "label": "中等" },
-            { "value": "600", "label": "半粗" },
-            { "value": "700", "label": "粗体" }
-          ]
-        },
-        {
-          "type": "range",
-          "id": "font_size",
-          "min": 12,
-          "max": 20,
-          "step": 1,
-          "unit": "px",
-          "default": 13,
-          "label": "一级导航文字大小"
-        },
-        {
-          "type": "checkbox",
-          "id": "enable_dropdown",
-          "default": false,
-          "label": "启用二级下拉导航",
-          "info": "开启后，将读取紧随本 block 后的二级导航分组和二级导航链接 block，直到下一个 PC端导航项目。Shopify 限制单个 Header 最多 50 个 block。"
-        }
-      ]
-    },
-    {
-      "type": "tg_pc_nav_group",
-      "name": "tg | PC端二级导航分组",
-      "settings": [
-        {
-          "type": "text",
-          "id": "title",
-          "default": "导航分组",
-          "label": "分组标题"
-        },
-        {
-          "type": "color",
-          "id": "text_color",
-          "default": "#202024",
-          "label": "分组标题颜色"
-        },
-        {
-          "type": "select",
-          "id": "font_weight",
-          "default": "600",
-          "label": "分组标题粗细",
-          "options": [
-            { "value": "400", "label": "常规" },
-            { "value": "500", "label": "中等" },
-            { "value": "600", "label": "半粗" },
-            { "value": "700", "label": "粗体" }
-          ]
-        },
-        {
-          "type": "range",
-          "id": "font_size",
-          "min": 12,
-          "max": 24,
-          "step": 1,
-          "unit": "px",
-          "default": 15,
-          "label": "分组标题大小"
-        }
-      ]
-    },
-    {
-      "type": "tg_pc_nav_link",
-      "name": "tg | PC端二级导航链接",
-      "settings": [
-        {
-          "type": "text",
-          "id": "title",
-          "default": "二级导航",
-          "label": "链接名称"
-        },
-        {
-          "type": "url",
-          "id": "link",
-          "label": "跳转链接",
-          "info": "请放在所属二级导航分组的下方，直到下一个分组或一级导航项目。"
-        },
-        {
-          "type": "color",
-          "id": "text_color",
-          "default": "#202024",
-          "label": "链接文字颜色"
-        },
-        {
-          "type": "select",
-          "id": "font_weight",
-          "default": "400",
-          "label": "链接文字粗细",
-          "options": [
-            { "value": "400", "label": "常规" },
-            { "value": "500", "label": "中等" },
-            { "value": "600", "label": "半粗" },
-            { "value": "700", "label": "粗体" }
-          ]
-        },
-        {
-          "type": "range",
-          "id": "font_size",
-          "min": 12,
-          "max": 20,
-          "step": 1,
-          "unit": "px",
-          "default": 14,
-          "label": "链接文字大小"
+          "type": "link_list",
+          "id": "menu",
+          "label": "Shopify 导航菜单",
+          "info": "选择一个 Shopify 菜单。最多支持三级：一级显示在导航栏，二级和三级显示在下拉面板。"
         }
       ]
     },
