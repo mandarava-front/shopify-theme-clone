@@ -239,6 +239,10 @@ class PredictiveSearch extends SearchForm {
     this.loadingText = this.loadingText || this.getAttribute('data-loading-text');
 
     this.setLiveRegionText(this.loadingText);
+    this.predictiveSearchResults.hidden = false;
+    this.querySelectorAll('.predictive-search__loading-state').forEach((loadingState) => {
+      loadingState.hidden = false;
+    });
     this.setAttribute('loading', true);
   }
 
@@ -260,6 +264,9 @@ class PredictiveSearch extends SearchForm {
   }
 
   setLiveRegionResults() {
+    this.querySelectorAll('.predictive-search__loading-state').forEach((loadingState) => {
+      loadingState.hidden = true;
+    });
     this.removeAttribute('loading');
     this.setLiveRegionText(this.querySelector('[data-predictive-search-live-region-count-value]').textContent);
   }
@@ -271,6 +278,7 @@ class PredictiveSearch extends SearchForm {
   }
 
   open() {
+    this.predictiveSearchResults.hidden = false;
     this.predictiveSearchResults.style.maxHeight = this.resultsMaxHeight || `${this.getResultsMaxHeight()}px`;
     this.setAttribute('open', true);
     this.input.setAttribute('aria-expanded', true);
@@ -292,6 +300,10 @@ class PredictiveSearch extends SearchForm {
     if (selected) selected.setAttribute('aria-selected', false);
 
     this.input.setAttribute('aria-activedescendant', '');
+    this.querySelectorAll('.predictive-search__loading-state').forEach((loadingState) => {
+      loadingState.hidden = true;
+    });
+    this.predictiveSearchResults.hidden = true;
     this.removeAttribute('loading');
     this.removeAttribute('open');
     this.input.setAttribute('aria-expanded', false);

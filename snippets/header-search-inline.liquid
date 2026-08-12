@@ -52,8 +52,9 @@
         class="predictive-search predictive-search--header"
         tabindex="-1"
         data-predictive-search
+        hidden
       >
-        {%- render 'loading-spinner', class: 'predictive-search__loading-state' -%}
+        {%- render 'loading-spinner', class: 'predictive-search__loading-state', initially_hidden: true -%}
       </div>
       <span class="predictive-search-status visually-hidden" role="status" aria-hidden="true"></span>
     {%- endif -%}

@@ -75,7 +75,9 @@
 }
 
 .tg-cart-expiry {
+  align-items: center;
   background: color-mix(in srgb, var(--tg-cart-accent) 7%, var(--tg-cart-card));
+  display: flex;
 }
 
 .tg-cart-page__announcement {
@@ -86,6 +88,10 @@
   color: var(--tg-cart-accent);
   font-variant-numeric: tabular-nums;
   font-weight: 700;
+}
+
+.tg-cart-expiry__expired-message {
+  margin: 0;
 }
 
 .tg-cart-page .cart__warnings {
@@ -1611,7 +1617,7 @@
 }
 
 .tg-cart-summary .totals__total-value {
-  color: var(--tg-cart-price);
+  color: var(--tg-cart-total-price-color, var(--tg-cart-price));
   font-size: 2.3rem;
   font-weight: 700;
   line-height: 3rem;
@@ -2377,7 +2383,7 @@
   .tg-cart-page .tg-cart-items__list > .tg-cart-item {
     gap: 16px;
     grid-template-columns: minmax(104px, 32vw) minmax(0, 1fr);
-    padding: 16px 0;
+    padding: 16px 0 0;
   }
 
   .tg-cart-page .tg-cart-item-content {

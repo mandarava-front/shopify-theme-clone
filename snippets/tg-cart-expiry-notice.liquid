@@ -1,5 +1,6 @@
 {%- liquid
   assign tg_cart_expiry_text = section.settings.tg_cart_expiry_text | default: 'Your cart will expire in [time].'
+  assign tg_cart_expiry_expired_text = section.settings.tg_cart_expiry_expired_text | default: 'Forgot one final step? Place your order now and make the payment right away!'
   capture tg_cart_expiry_placeholder
     echo '[time]'
   endcapture
@@ -18,6 +19,9 @@
     role="status"
     aria-live="polite"
   >
-    {{ tg_cart_expiry_message }}
+    <span data-tg-cart-timer-message>{{ tg_cart_expiry_message }}</span>
+    <p class="tg-cart-expiry__expired-message countdown-content" data-tg-cart-timer-expired-message hidden>
+      {{ tg_cart_expiry_expired_text | escape }}
+    </p>
   </div>
 {%- endif -%}

@@ -46,7 +46,7 @@
   class="gradient color-{{ section.settings.color_scheme }}{% if section.settings.enable_tg_cart_page_style %} tg-cart-footer{% if section.settings.tg_cart_summary_sticky %} tg-cart-footer--sticky{% endif %}{% endif %}{% if cart == empty %} is-empty{% endif %}"
   id="main-cart-footer"
   data-id="{{ section.id }}"
-  {% if section.settings.enable_tg_cart_page_style %}style="--tg-cart-accent: {{ section.settings.tg_cart_page_accent_color }}; --tg-cart-surface: {{ section.settings.tg_cart_page_surface_color }}; --tg-cart-card: {{ section.settings.tg_cart_page_card_color }}; --tg-cart-summary-surface: {{ section.settings.tg_cart_summary_surface_color }}; --tg-cart-border: {{ section.settings.tg_cart_page_border_color }}; --tg-cart-text: {{ section.settings.tg_cart_page_text_color }}; --tg-cart-muted: {{ section.settings.tg_cart_page_muted_color }}; --tg-cart-radius: {{ section.settings.tg_cart_card_radius }}px; --tg-cart-summary-width: {{ section.settings.tg_cart_summary_width }}px; --tg-cart-font: {{ section.settings.tg_cart_font.family }}, {{ section.settings.tg_cart_font.fallback_families }};"{% endif %}
+  {% if section.settings.enable_tg_cart_page_style %}style="--tg-cart-accent: {{ section.settings.tg_cart_page_accent_color }}; --tg-cart-surface: {{ section.settings.tg_cart_page_surface_color }}; --tg-cart-card: {{ section.settings.tg_cart_page_card_color }}; --tg-cart-summary-surface: {{ section.settings.tg_cart_summary_surface_color }}; --tg-cart-border: {{ section.settings.tg_cart_page_border_color }}; --tg-cart-text: {{ section.settings.tg_cart_page_text_color }}; --tg-cart-muted: {{ section.settings.tg_cart_page_muted_color }}; --tg-cart-total-price-color: {{ section.settings.tg_cart_total_price_color }}; --tg-cart-radius: {{ section.settings.tg_cart_card_radius }}px; --tg-cart-summary-width: {{ section.settings.tg_cart_summary_width }}px; --tg-cart-font: {{ section.settings.tg_cart_font.family }}, {{ section.settings.tg_cart_font.fallback_families }};"{% endif %}
 >
   <div class="page-width">
     <div class="cart__footer tg-cart-summary isolate section-{{ section.id }}-padding">
@@ -343,6 +343,12 @@
       "id": "tg_cart_summary_surface_color",
       "label": "Tg | Summary background / 摘要卡背景色",
       "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "tg_cart_total_price_color",
+      "label": "Tg | Total price color / 总价文字颜色",
+      "default": "#d63533"
     },
     {
       "type": "color",
@@ -1142,6 +1148,7 @@
         "tg_cart_page_surface_color": "#ffffff",
         "tg_cart_page_card_color": "#ffffff",
         "tg_cart_summary_surface_color": "#f5f5f5",
+        "tg_cart_total_price_color": "#d63533",
         "tg_cart_page_border_color": "#e2e2e2",
         "tg_cart_page_text_color": "#15375f",
         "tg_cart_page_muted_color": "#858990",

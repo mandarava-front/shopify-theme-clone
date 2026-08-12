@@ -16,7 +16,7 @@
 
     try {
       expiresAt = Number(window.localStorage.getItem(key)) || 0;
-      if (expiresAt <= Date.now()) {
+      if (!expiresAt) {
         expiresAt = Date.now() + duration;
         window.localStorage.setItem(key, String(expiresAt));
       }
@@ -29,6 +29,8 @@
 
   function startTimer(timer) {
     const value = timer.querySelector('[data-tg-cart-timer-value]');
+    const activeMessage = timer.querySelector('[data-tg-cart-timer-message]');
+    const expiredMessage = timer.querySelector('[data-tg-cart-timer-expired-message]');
     if (!value || timer.dataset.tgCartTimerInitialized === 'true') return;
 
     timer.dataset.tgCartTimerInitialized = 'true';
@@ -36,8 +38,16 @@
 
     const render = () => {
       const seconds = Math.max(0, Math.ceil((expiresAt - Date.now()) / 1000));
+      if (seconds === 0) {
+        timer.classList.add('tg-cart-expiry--expired');
+        timer.dataset.tgCartTimerExpired = 'true';
+        if (activeMessage) activeMessage.hidden = true;
+        if (expiredMessage) expiredMessage.hidden = false;
+        window.clearInterval(timer.tgCartTimerInterval);
+        return;
+      }
+
       value.textContent = formatTime(seconds);
-      if (seconds === 0) window.clearInterval(timer.tgCartTimerInterval);
     };
 
     render();
