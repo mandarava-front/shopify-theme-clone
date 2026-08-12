@@ -144,12 +144,18 @@
           this.track?.scrollBy({ left: Number(button.dataset.tgScroll) * amount, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
         }));
         this.querySelectorAll('[data-tg-video-play]').forEach((button) => button.addEventListener('click', () => this.play(button)));
-        this.querySelectorAll('[data-tg-inline-video]').forEach((video) => video.addEventListener('play', () => this.pauseOtherVideos(video)));
+        this.querySelectorAll('[data-tg-inline-video]').forEach((video) => {
+          video.addEventListener('play', () => this.pauseOtherVideos(video));
+          video.addEventListener('playing', () => this.showVideo(video));
+          video.addEventListener('error', () => this.resetVideoLoading(video));
+        });
       }
       play(button) {
         const media = button.closest('.tg-video-card__media');
         const video = media?.querySelector('[data-tg-inline-video]');
         if (!video) return;
+
+        if (media.classList.contains('is-loading')) return;
 
         if (!video.getAttribute('src')) {
           video.src = video.dataset.tgVideoSrc;
@@ -157,10 +163,37 @@
         }
 
         this.pauseOtherVideos(video);
+        media.classList.remove('is-playing');
+        media.classList.add('is-loading');
+        button.disabled = true;
+        button.setAttribute('aria-busy', 'true');
+        video.play().catch(() => this.resetVideoLoading(video));
+      }
+      showVideo(video) {
+        const media = video.closest('.tg-video-card__media');
+        const button = media?.querySelector('[data-tg-video-play]');
+        if (!media?.classList.contains('is-loading')) return;
+
+        this.pauseOtherVideos(video);
+        media.classList.remove('is-loading');
         media.classList.add('is-playing');
-        button.hidden = true;
-        video.play().catch(() => {});
+        if (button) {
+          button.hidden = true;
+          button.disabled = false;
+          button.removeAttribute('aria-busy');
+        }
         video.focus({ preventScroll: true });
+      }
+      resetVideoLoading(video) {
+        const media = video.closest('.tg-video-card__media');
+        const button = media?.querySelector('[data-tg-video-play]');
+        if (!media?.classList.contains('is-loading')) return;
+
+        media.classList.remove('is-loading');
+        if (button) {
+          button.disabled = false;
+          button.removeAttribute('aria-busy');
+        }
       }
       pauseOtherVideos(activeVideo) {
         this.querySelectorAll('[data-tg-inline-video]').forEach((video) => {
