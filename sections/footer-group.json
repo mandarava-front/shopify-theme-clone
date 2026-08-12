@@ -12,31 +12,31 @@
   "type": "footer",
   "sections": {
     "footer": {
-      "type": "footer",
+      "type": "accordion-footer",
       "blocks": {
         "information": {
-          "type": "link_list",
+          "type": "menu",
           "settings": {
             "heading": "Information",
             "menu": "footer"
           }
         },
         "customer_service": {
-          "type": "link_list",
+          "type": "menu",
           "settings": {
             "heading": "Customer Service",
             "menu": "footer"
           }
         },
         "policies": {
-          "type": "link_list",
+          "type": "menu",
           "settings": {
             "heading": "Policies",
             "menu": "footer"
           }
         },
         "help": {
-          "type": "link_list",
+          "type": "menu",
           "settings": {
             "heading": "Help",
             "menu": "footer"
@@ -50,11 +50,6 @@
         "help"
       ],
       "settings": {
-        "newsletter_enable": true,
-        "newsletter_heading": "Unlock Your 10% OFF!",
-        "newsletter_text": "Join us for free gift inspiration, extra savings, and alerts on our latest drops.",
-        "newsletter_placeholder": "Enter your email",
-        "newsletter_button_label": "Subscribe",
         "trustpilot_url": "",
         "trustpilot_reviews": "13,578 reviews",
         "show_dmca_badge": true,

@@ -144,6 +144,19 @@
     if localization.available_countries.size > 1 and section.settings.enable_country_selector or section.settings.enable_language_selector and localization.available_languages.size > 1
       assign localization_forms = true
     endif
+
+    assign tg_header_mobile_search_mode = section.settings.tg_header_mobile_search_mode | default: 'row'
+    assign tg_header_mobile_search_override = blank
+
+    if request.page_type == 'index'
+      assign tg_header_mobile_search_override = section.settings.tg_header_mobile_home_search_mode
+    elsif request.page_type == 'product'
+      assign tg_header_mobile_search_override = section.settings.tg_header_mobile_product_search_mode
+    endif
+
+    if tg_header_mobile_search_override == 'row' or tg_header_mobile_search_override == 'icon'
+      assign tg_header_mobile_search_mode = tg_header_mobile_search_override
+    endif
   -%}
   {%- if section.settings.enable_tg_header_desktop -%}
     {%- liquid
@@ -305,7 +318,7 @@
         {%- if tg_header_desktop_navigation_count > 0 -%}
           <div class="tg-header-desktop__menu-row">
             <div class="tg-header-desktop__inner">
-              <div class="tg-header-desktop__menu-links" role="list">
+              <div class="tg-header-desktop__menu-links tg-header-desktop__menu-links--{{ section.settings.tg_header_desktop_menu_alignment | default: 'center' }}" role="list">
                 {%- for nav_item in section.blocks -%}
                   {%- if nav_item.type == 'tg_pc_nav_item' and nav_item.settings.title != blank -%}
                     {%- liquid
@@ -409,7 +422,7 @@
     </tg-header-desktop>
   {%- endif -%}
   <header
-    class="header header--{{ section.settings.logo_position }} header--mobile-{{ section.settings.mobile_logo_position }} page-width{% if section.settings.menu_type_desktop == 'drawer' %} drawer-menu{% endif %}{% if section.settings.menu != blank %} header--has-menu{% endif %}{% if has_app_block %} header--has-app{% endif %}{% if social_links %} header--has-social{% endif %}{% if shop.customer_accounts_enabled %} header--has-account{% endif %}{% if localization_forms %} header--has-localizations{% endif %}{% if section.settings.enable_tg_header_mobile_menu %} header--tg-mobile-menu-enabled header--tg-mobile-search-{{ section.settings.tg_header_mobile_search_mode }}{% endif %}{% if section.settings.enable_tg_header_desktop %} header--tg-desktop-enabled{% endif %}"
+    class="header header--{{ section.settings.logo_position }} header--mobile-{{ section.settings.mobile_logo_position }} page-width{% if section.settings.menu_type_desktop == 'drawer' %} drawer-menu{% endif %}{% if section.settings.menu != blank %} header--has-menu{% endif %}{% if has_app_block %} header--has-app{% endif %}{% if social_links %} header--has-social{% endif %}{% if shop.customer_accounts_enabled %} header--has-account{% endif %}{% if localization_forms %} header--has-localizations{% endif %}{% if section.settings.enable_tg_header_mobile_menu %} header--tg-mobile-menu-enabled header--tg-mobile-search-{{ tg_header_mobile_search_mode }}{% endif %}{% if section.settings.enable_tg_header_desktop %} header--tg-desktop-enabled{% endif %}"
     {% if section.settings.enable_tg_header_mobile_menu %}
       style="
         --tg-header-mobile-search-font-size: {{ section.settings.tg_header_mobile_search_font_size | default: 14 }}px;
@@ -515,7 +528,7 @@
 
     {% render 'header-search-inline', input_id: 'Search-In-Header' %}
 
-    {%- if section.settings.enable_tg_header_mobile_menu and section.settings.tg_header_mobile_search_mode == 'row' -%}
+    {%- if section.settings.enable_tg_header_mobile_menu and tg_header_mobile_search_mode == 'row' -%}
       {%- assign tg_header_mobile_search_input_id = 'TgMobileHeaderSearch-' | append: section.id -%}
       {% render 'tg-header-mobile-search', input_id: tg_header_mobile_search_input_id, placeholder: section.settings.tg_header_mobile_search_placeholder %}
     {%- endif -%}
@@ -850,6 +863,30 @@
       ]
     },
     {
+      "type": "select",
+      "id": "tg_header_mobile_home_search_mode",
+      "default": "inherit",
+      "label": "首页移动端搜索样式",
+      "info": "仅在首页生效；选择跟随全局设置时，使用上方的移动端搜索样式。",
+      "options": [
+        { "value": "inherit", "label": "跟随全局设置" },
+        { "value": "row", "label": "单独一行搜索框" },
+        { "value": "icon", "label": "标题旁搜索图标" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "tg_header_mobile_product_search_mode",
+      "default": "inherit",
+      "label": "商品详情页移动端搜索样式",
+      "info": "仅在商品详情页生效；选择跟随全局设置时，使用上方的移动端搜索样式。",
+      "options": [
+        { "value": "inherit", "label": "跟随全局设置" },
+        { "value": "row", "label": "单独一行搜索框" },
+        { "value": "icon", "label": "标题旁搜索图标" }
+      ]
+    },
+    {
       "type": "text",
       "id": "tg_header_mobile_search_placeholder",
       "default": "Find your perfect gift in seconds...",
@@ -1163,6 +1200,17 @@
       "content": "tg | PC端下拉导航布局"
     },
     {
+      "type": "select",
+      "id": "tg_header_desktop_menu_alignment",
+      "default": "center",
+      "label": "一级导航对齐方式",
+      "options": [
+        { "value": "left", "label": "左对齐" },
+        { "value": "center", "label": "居中" },
+        { "value": "right", "label": "右对齐" }
+      ]
+    },
+    {
       "type": "range",
       "id": "tg_header_desktop_menu_panel_width",
       "min": 60,
@@ -1188,7 +1236,7 @@
       "max": 48,
       "step": 2,
       "unit": "px",
-      "default": 0,
+      "default": 24,
       "label": "一级导航间距"
     },
     {

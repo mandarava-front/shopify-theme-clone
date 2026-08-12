@@ -35,6 +35,7 @@
     assign has_social_icons = false
   endif
   assign country_position = 'AccordionFooter' | append: section.id
+  assign country_form_id = 'AccordionFooterCountryForm-' | append: section.id
 -%}
 
 <footer
@@ -97,9 +98,11 @@
               {{ block.shopify_attributes }}
             >
               <summary class="mc-accordion-footer__summary">
-                {{ block.settings.heading | default: block.settings.menu.title }}
-                <span class="svg-wrapper mc-accordion-footer__chevron" aria-hidden="true">
-                  {{- 'icon-caret.svg' | inline_asset_content -}}
+                <span class="mc-accordion-footer__heading">
+                  <span class="mc-accordion-footer__title">{{ block.settings.heading | default: block.settings.menu.title }}</span>
+                  <span class="svg-wrapper mc-accordion-footer__chevron" aria-hidden="true">
+                    {{- 'icon-caret.svg' | inline_asset_content -}}
+                  </span>
                 </span>
               </summary>
               <ul class="mc-accordion-footer__links">
@@ -117,7 +120,7 @@
       {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
         <div class="mc-accordion-footer__localization">
           <localization-form>
-            {%- form 'localization', id: 'AccordionFooterCountryForm-' | append: section.id, class: 'localization-form' -%}
+            {%- form 'localization', id: country_form_id, class: 'localization-form' -%}
               <div>
                 <h2 class="visually-hidden" id="{{ country_position }}Label">{{ 'localization.country_label' | t }}</h2>
                 {%- render 'country-localization', localPosition: country_position -%}

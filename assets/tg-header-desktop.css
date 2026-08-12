@@ -151,6 +151,13 @@
     border: 0.15rem solid color-mix(in srgb, var(--tg-header-desktop-text) 48%, transparent);
     border-radius: 99rem;
     background: var(--tg-header-desktop-background);
+    transition: border-color 180ms ease, box-shadow 180ms ease;
+  }
+
+  .tg-header-desktop__search:focus-within {
+    border-color: var(--tg-header-desktop-text);
+    outline: 0.2rem solid color-mix(in srgb, var(--tg-header-desktop-text) 50%, transparent);
+    outline-offset: 0.2rem;
   }
 
   .tg-header-desktop__search input {
@@ -159,10 +166,20 @@
     height: 100%;
     padding: 0;
     border: 0;
+    border-radius: 0;
     outline: 0;
+    box-shadow: none;
+    -webkit-appearance: none;
+    appearance: none;
     background: transparent;
     color: var(--tg-header-desktop-text);
     font-size: 1.3rem;
+  }
+
+  .tg-header-desktop__search input:focus,
+  .tg-header-desktop__search input:focus-visible {
+    outline: 0;
+    box-shadow: none;
   }
 
   .tg-header-desktop__search input::placeholder {
@@ -276,6 +293,15 @@
 
   .tg-header-desktop__cart {
     position: relative;
+    width: 4.4rem;
+    height: 4.4rem;
+    flex-basis: 4.4rem;
+  }
+
+  .tg-header-desktop__cart .svg-wrapper,
+  .tg-header-desktop__cart svg {
+    width: 4rem;
+    height: 4rem;
   }
 
   .tg-header-desktop__cart-count {
@@ -306,9 +332,18 @@
     min-width: 0;
     display: flex;
     align-items: stretch;
+    justify-content: flex-start;
     gap: var(--tg-header-desktop-nav-gap);
     overflow-x: auto;
     scrollbar-width: none;
+  }
+
+  .tg-header-desktop__menu-links--center {
+    justify-content: safe center;
+  }
+
+  .tg-header-desktop__menu-links--right {
+    justify-content: safe flex-end;
   }
 
   .tg-header-desktop__menu-links::-webkit-scrollbar {
