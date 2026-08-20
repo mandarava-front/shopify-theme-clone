@@ -91,7 +91,7 @@
   }
 
   .section-header {
-    position: sticky; /* This is for fixing a Safari z-index issue. PR #2147 */
+    position: relative;
     margin-bottom: {{ section.settings.margin_bottom | times: 0.75 | round: 0 }}px;
   }
 
@@ -120,11 +120,7 @@
 -%}
 
 {% liquid
-  assign header_tag = 'div'
-
-  if section.settings.sticky_header_type != 'none'
-    assign header_tag = 'sticky-header'
-  endif
+  assign header_tag = 'sticky-header'
 %}
 
 <{{ header_tag }}
@@ -148,7 +144,9 @@
     assign tg_header_mobile_search_mode = section.settings.tg_header_mobile_search_mode | default: 'row'
     assign tg_header_mobile_search_override = blank
 
-    if request.page_type == 'index'
+    if request.page_type == 'search'
+      assign tg_header_mobile_search_mode = 'icon'
+    elsif request.page_type == 'index'
       assign tg_header_mobile_search_override = section.settings.tg_header_mobile_home_search_mode
     elsif request.page_type == 'product'
       assign tg_header_mobile_search_override = section.settings.tg_header_mobile_product_search_mode
@@ -160,6 +158,7 @@
   -%}
   {%- if section.settings.enable_tg_header_desktop -%}
     {%- liquid
+    assign tg_header_desktop_announcement_font_bold = section.settings.tg_header_desktop_announcement_font | font_modify: 'weight', '700'
     assign tg_header_desktop_utility_count = 0
     assign tg_header_desktop_menu = blank
     assign tg_header_desktop_menu_block = blank
@@ -173,6 +172,10 @@
       endif
     endfor
     -%}
+    {% style %}
+      {{ section.settings.tg_header_desktop_announcement_font | font_face: font_display: 'swap' }}
+      {{ tg_header_desktop_announcement_font_bold | font_face: font_display: 'swap' }}
+    {% endstyle %}
     <tg-header-desktop
       class="tg-header-desktop"
       data-announcement-key="tg-desktop-announcement-{{ section.id }}"
@@ -180,6 +183,13 @@
       style="
         --tg-header-desktop-announcement-background: {{ section.settings.tg_header_desktop_announcement_background }};
         --tg-header-desktop-announcement-text: {{ section.settings.tg_header_desktop_announcement_text }};
+        --tg-header-desktop-announcement-font: {{ section.settings.tg_header_desktop_announcement_font.family }}, {{ section.settings.tg_header_desktop_announcement_font.fallback_families }};
+        --tg-header-desktop-announcement-font-size: {{ section.settings.tg_header_desktop_announcement_font_size }}px;
+        --tg-header-desktop-announcement-font-weight: {{ section.settings.tg_header_desktop_announcement_font_weight }};
+        --tg-header-desktop-announcement-line-height: {{ section.settings.tg_header_desktop_announcement_line_height }};
+        --tg-header-desktop-announcement-letter-spacing: {{ section.settings.tg_header_desktop_announcement_letter_spacing }}px;
+        --tg-header-desktop-announcement-text-transform: {{ section.settings.tg_header_desktop_announcement_text_transform }};
+        --tg-header-desktop-announcement-height: {{ section.settings.tg_header_desktop_announcement_height }}px;
         --tg-header-desktop-background: {{ section.settings.tg_header_desktop_background }};
         --tg-header-desktop-text: {{ section.settings.tg_header_desktop_text }};
         --tg-header-desktop-hover: {{ section.settings.tg_header_desktop_hover }};
@@ -198,7 +208,22 @@
       {%- if section.settings.tg_header_desktop_show_announcement -%}
         <div class="tg-header-desktop__announcement" data-tg-announcement>
           <div class="tg-header-desktop__announcement-inner">
-            <p>{{ section.settings.tg_header_desktop_announcement_text_content | escape }}</p>
+            <p>
+              {%- if section.settings.tg_header_desktop_announcement_content != blank -%}
+                <span class="tg-header-desktop__announcement-content">{{ section.settings.tg_header_desktop_announcement_content }}</span>
+              {%- else -%}
+                <span class="tg-header-desktop__announcement-content">{{ section.settings.tg_header_desktop_announcement_text_content | escape }}</span>
+              {%- endif -%}
+              {%- if section.settings.tg_header_desktop_announcement_highlight_text != blank -%}
+                <span
+                  class="tg-header-desktop__announcement-accent{% if section.settings.tg_header_desktop_announcement_highlight_bold %} tg-header-desktop__announcement-accent--bold{% endif %}{% if section.settings.tg_header_desktop_announcement_highlight_underline %} tg-header-desktop__announcement-accent--underline{% endif %}"
+                  style="--tg-header-desktop-announcement-accent-color: {{ section.settings.tg_header_desktop_announcement_highlight_color }};"
+                >{{ section.settings.tg_header_desktop_announcement_highlight_text | escape }}</span>
+              {%- endif -%}
+              {%- if section.settings.tg_header_desktop_announcement_suffix != blank -%}
+                <span class="tg-header-desktop__announcement-suffix">{{ section.settings.tg_header_desktop_announcement_suffix }}</span>
+              {%- endif -%}
+            </p>
             {%- if section.settings.tg_header_desktop_announcement_dismissible -%}
               <button
                 class="tg-header-desktop__announcement-close focus-inset"
@@ -408,8 +433,11 @@
       style="
         --tg-header-mobile-search-font-size: {{ section.settings.tg_header_mobile_search_font_size | default: 14 }}px;
         --tg-header-mobile-search-placeholder-color: {{ section.settings.tg_header_mobile_search_placeholder_color | default: '#737379' }};
+        --tg-header-mobile-search-border-width: {% if section.settings.tg_header_mobile_search_show_border %}{{ section.settings.tg_header_mobile_search_border_width | default: 1 }}px{% else %}0px{% endif %};
+        --tg-header-mobile-search-border-color: {{ section.settings.tg_header_mobile_search_border_color | default: '#d7d7db' }};
         --tg-header-mobile-search-top-spacing: {{ section.settings.tg_header_mobile_search_top_spacing | default: 6 }}px;
         --tg-header-mobile-search-bottom-spacing: {{ section.settings.tg_header_mobile_search_bottom_spacing | default: 12 }}px;
+        --tg-header-mobile-base-padding-bottom: {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px;
       "
     {% endif %}
   >
@@ -436,28 +464,9 @@
         <h1 class="header__heading">
       {%- endif -%}
       <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset">
-        {%- if settings.logo != blank -%}
-          <div class="header__heading-logo-wrapper">
-            {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
-            {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
-            {% capture sizes %}(max-width: {{ settings.logo_width | times: 2 }}px) 50vw, {{ settings.logo_width }}px{% endcapture %}
-            {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
-            {{
-              settings.logo
-              | image_url: width: 600
-              | image_tag:
-                class: 'header__heading-logo motion-reduce',
-                widths: widths,
-                height: logo_height,
-                width: settings.logo_width,
-                alt: logo_alt,
-                sizes: sizes,
-                preload: true
-            }}
-          </div>
-        {%- else -%}
-          <span class="h2">{{ shop.name }}</span>
-        {%- endif -%}
+        {% capture sizes %}(max-width: {{ settings.logo_width | times: 2 }}px) 50vw, {{ settings.logo_width }}px{% endcapture %}
+        {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
+        {% render 'tg-header-logo', section: section, sizes: sizes, widths: widths, motion_reduce: true %}
       </a>
       {%- if request.page_type == 'index' -%}
         </h1>
@@ -479,28 +488,9 @@
         <h1 class="header__heading">
       {%- endif -%}
       <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset">
-        {%- if settings.logo != blank -%}
-          <div class="header__heading-logo-wrapper">
-            {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
-            {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
-            {% capture sizes %}(min-width: 750px) {{ settings.logo_width }}px, 50vw{% endcapture %}
-            {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
-            {{
-              settings.logo
-              | image_url: width: 600
-              | image_tag:
-                class: 'header__heading-logo',
-                widths: widths,
-                height: logo_height,
-                width: settings.logo_width,
-                alt: logo_alt,
-                sizes: sizes,
-                preload: true
-            }}
-          </div>
-        {%- else -%}
-          <span class="h2">{{ shop.name }}</span>
-        {%- endif -%}
+        {% capture sizes %}(min-width: 750px) {{ settings.logo_width }}px, 50vw{% endcapture %}
+        {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
+        {% render 'tg-header-logo', section: section, sizes: sizes, widths: widths %}
       </a>
       {%- if request.page_type == 'index' -%}
         </h1>
@@ -549,7 +539,7 @@
           </localization-form>
         {%- endif -%}
       </div>
-      {% render 'header-search', input_id: 'Search-In-Modal' %}
+      {% render 'header-search', input_id: 'Search-In-Modal', mobile_icon_overlay: true %}
 
       {%- if shop.customer_accounts_enabled -%}
         <a
@@ -625,20 +615,28 @@
       this.headerIsAlwaysSticky =
         this.getAttribute('data-sticky-type') === 'always' ||
         this.getAttribute('data-sticky-type') === 'reduce-logo-size';
+      this.headerIsDisabled = this.getAttribute('data-sticky-type') === 'none';
       this.headerBounds = {};
+      this.mobileSearchMediaQuery = window.matchMedia('(max-width: 989px)');
+      this.mobileSearchHasCompacted = false;
+      this.mobileSearchCollapseTimer = null;
 
       this.setHeaderHeight();
 
       window.matchMedia('(max-width: 990px)').addEventListener('change', this.setHeaderHeight.bind(this));
+      this.onMobileSearchBreakpointChange = this.syncMobileSearchCompactState.bind(this);
+      this.mobileSearchMediaQuery.addEventListener('change', this.onMobileSearchBreakpointChange);
 
       if (this.headerIsAlwaysSticky) {
         this.header.classList.add('shopify-section-header-sticky');
       }
 
+      if (this.headerIsDisabled) {
+        this.header.classList.remove('shopify-section-header-sticky', 'shopify-section-header-hidden', 'animate');
+      }
+
       this.currentScrollTop = 0;
       this.preventReveal = false;
-      this.predictiveSearch = this.querySelector('predictive-search');
-
       this.onScrollHandler = this.onScroll.bind(this);
       this.hideHeaderOnScrollUp = () => (this.preventReveal = true);
 
@@ -646,6 +644,7 @@
       window.addEventListener('scroll', this.onScrollHandler, false);
 
       this.createObserver();
+      this.syncMobileSearchCompactState();
     }
 
     setHeaderHeight() {
@@ -655,12 +654,15 @@
     disconnectedCallback() {
       this.removeEventListener('preventHeaderReveal', this.hideHeaderOnScrollUp);
       window.removeEventListener('scroll', this.onScrollHandler);
+      this.mobileSearchMediaQuery.removeEventListener('change', this.onMobileSearchBreakpointChange);
+      window.clearTimeout(this.mobileSearchCollapseTimer);
     }
 
     createObserver() {
       let observer = new IntersectionObserver((entries, observer) => {
         this.headerBounds = entries[0].intersectionRect;
         observer.disconnect();
+        this.onScroll();
       });
 
       observer.observe(this.header);
@@ -669,14 +671,31 @@
     onScroll() {
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-      if (this.predictiveSearch && this.predictiveSearch.isOpen) return;
+      const hasScrolledPastHeader = scrollTop > this.headerBounds.bottom;
+      const shouldCompactMobileSearch =
+        this.mobileSearchMediaQuery.matches &&
+        !this.mobileSearchHasCompacted &&
+        scrollTop > 8;
+
+      if (hasScrolledPastHeader) {
+        this.header.classList.add('scrolled-past-header');
+      } else if (scrollTop <= this.headerBounds.top) {
+        this.header.classList.remove('scrolled-past-header');
+      }
+
+      if (shouldCompactMobileSearch) this.mobileSearchHasCompacted = true;
+
+      this.syncMobileSearchCompactState();
+
+      if (this.headerIsDisabled) {
+        this.currentScrollTop = scrollTop;
+        return;
+      }
 
       if (scrollTop > this.currentScrollTop && scrollTop > this.headerBounds.bottom) {
-        this.header.classList.add('scrolled-past-header');
         if (this.preventHide) return;
         requestAnimationFrame(this.hide.bind(this));
       } else if (scrollTop < this.currentScrollTop && scrollTop > this.headerBounds.bottom) {
-        this.header.classList.add('scrolled-past-header');
         if (!this.preventReveal) {
           requestAnimationFrame(this.reveal.bind(this));
         } else {
@@ -689,11 +708,30 @@
           requestAnimationFrame(this.hide.bind(this));
         }
       } else if (scrollTop <= this.headerBounds.top) {
-        this.header.classList.remove('scrolled-past-header');
         requestAnimationFrame(this.reset.bind(this));
       }
 
       this.currentScrollTop = scrollTop;
+    }
+
+    syncMobileSearchCompactState() {
+      const shouldCompact = this.mobileSearchMediaQuery.matches && this.mobileSearchHasCompacted;
+      if (this.header.classList.contains('tg-header-mobile-search-compact') === shouldCompact) return;
+
+      window.clearTimeout(this.mobileSearchCollapseTimer);
+      this.header.classList.toggle('tg-header-mobile-search-compact', shouldCompact);
+
+      if (shouldCompact) {
+        const collapseDelay = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 220;
+        this.mobileSearchCollapseTimer = window.setTimeout(() => {
+          this.header.classList.add('tg-header-mobile-search-collapsed');
+          this.setHeaderHeight();
+        }, collapseDelay);
+      } else {
+        this.header.classList.remove('tg-header-mobile-search-collapsed');
+      }
+
+      requestAnimationFrame(() => this.setHeaderHeight());
     }
 
     hide() {
@@ -721,7 +759,7 @@
 
     closeSearchModal() {
       this.searchModal = this.searchModal || this.header.querySelector('details-modal');
-      this.searchModal.close(false);
+      if (this.searchModal) this.searchModal.close(false);
     }
   }
 
@@ -821,6 +859,26 @@
     },
     {
       "type": "header",
+      "content": "tg | 移动端 | 品牌"
+    },
+    {
+      "type": "image_picker",
+      "id": "tg_header_mobile_logo",
+      "label": "移动端 Logo 图片",
+      "info": "优先用于 990px 以下的页头；留空时使用“主题设置 > Logo”。"
+    },
+    {
+      "type": "range",
+      "id": "tg_header_mobile_logo_width",
+      "min": 80,
+      "max": 260,
+      "step": 4,
+      "unit": "px",
+      "default": 136,
+      "label": "移动端 Logo 宽度"
+    },
+    {
+      "type": "header",
       "content": "tg | 移动端 | 启用与导航"
     },
     {
@@ -899,6 +957,31 @@
       "default": "#737379",
       "label": "移动端搜索提示文字颜色",
       "info": "仅在单独一行搜索框模式下显示。"
+    },
+    {
+      "type": "checkbox",
+      "id": "tg_header_mobile_search_show_border",
+      "default": false,
+      "label": "显示移动端搜索框边框",
+      "info": "仅在单独一行搜索框模式下显示。"
+    },
+    {
+      "type": "range",
+      "id": "tg_header_mobile_search_border_width",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "default": 1,
+      "label": "移动端搜索框边框粗细",
+      "info": "关闭边框后此项不会生效。"
+    },
+    {
+      "type": "color",
+      "id": "tg_header_mobile_search_border_color",
+      "default": "#d7d7db",
+      "label": "移动端搜索框边框颜色",
+      "info": "关闭边框后此项不会生效。"
     },
     {
       "type": "range",
@@ -1032,6 +1115,109 @@
       "id": "tg_header_desktop_announcement_text_content",
       "default": "Save 10% on orders of 2+ with code: PH2",
       "label": "t:sections.header.tg_header_desktop.announcement.text.label"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "tg_header_desktop_announcement_content",
+      "label": "公告前置文案",
+      "info": "支持在编辑器中对部分文字加粗或添加链接；留空时使用上方原有文案。"
+    },
+    {
+      "type": "text",
+      "id": "tg_header_desktop_announcement_highlight_text",
+      "label": "局部强调文案",
+      "info": "显示在前置文案之后，可单独设置颜色、粗体和下划线。"
+    },
+    {
+      "type": "color",
+      "id": "tg_header_desktop_announcement_highlight_color",
+      "label": "局部强调颜色",
+      "default": "#a50c43"
+    },
+    {
+      "type": "checkbox",
+      "id": "tg_header_desktop_announcement_highlight_bold",
+      "label": "局部强调使用粗体",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "tg_header_desktop_announcement_highlight_underline",
+      "label": "局部强调添加下划线",
+      "default": false
+    },
+    {
+      "type": "inline_richtext",
+      "id": "tg_header_desktop_announcement_suffix",
+      "label": "公告后置文案",
+      "info": "可用于在局部强调文案后继续添加文字，也支持局部加粗和链接。"
+    },
+    {
+      "type": "font_picker",
+      "id": "tg_header_desktop_announcement_font",
+      "label": "公告栏字体",
+      "default": "poppins_n4"
+    },
+    {
+      "type": "range",
+      "id": "tg_header_desktop_announcement_font_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "公告栏字体大小",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "tg_header_desktop_announcement_font_weight",
+      "min": 400,
+      "max": 900,
+      "step": 100,
+      "label": "公告栏常规文字字重",
+      "default": 500
+    },
+    {
+      "type": "select",
+      "id": "tg_header_desktop_announcement_line_height",
+      "label": "公告栏行高",
+      "options": [
+        { "value": "1.2", "label": "紧凑" },
+        { "value": "1.4", "label": "标准" },
+        { "value": "1.6", "label": "宽松" }
+      ],
+      "default": "1.4"
+    },
+    {
+      "type": "range",
+      "id": "tg_header_desktop_announcement_letter_spacing",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "label": "公告栏字间距",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "tg_header_desktop_announcement_text_transform",
+      "label": "公告栏文字大小写",
+      "options": [
+        { "value": "none", "label": "保持原样" },
+        { "value": "uppercase", "label": "全部大写" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "range",
+      "id": "tg_header_desktop_announcement_height",
+      "min": 32,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "label": "公告栏最小高度",
+      "default": 36,
+      "info": "文案换行时会自动增高，避免内容被截断。"
     },
     {
       "type": "checkbox",
@@ -1383,6 +1569,19 @@
   "blocks": [
     {
       "type": "@app"
+    },
+    {
+      "type": "tg_mobile_search_term",
+      "name": "tg | 移动端搜索预设词",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "text",
+          "id": "term",
+          "label": "搜索词",
+          "info": "点击后直接跳转到该词的搜索结果页。"
+        }
+      ]
     },
     {
       "type": "mobile_feature_card",

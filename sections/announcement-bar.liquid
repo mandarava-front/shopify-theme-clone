@@ -2,6 +2,8 @@
 {{ 'component-slider.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
+  assign tg_announcement_font_bold = section.settings.tg_announcement_font | font_modify: 'weight', '700'
+
   assign social_icons = true
   if settings.social_facebook_link == blank and settings.social_instagram_link == blank and settings.social_youtube_link == blank and settings.social_tiktok_link == blank and settings.social_twitter_link == blank and settings.social_pinterest_link == blank and settings.social_snapchat_link == blank and settings.social_tumblr_link == blank and settings.social_vimeo_link == blank
     assign social_icons = false
@@ -13,6 +15,74 @@
     assign announcement_bar = true
   endif
 -%}
+
+{% style %}
+  {{ section.settings.tg_announcement_font | font_face: font_display: 'swap' }}
+  {{ tg_announcement_font_bold | font_face: font_display: 'swap' }}
+
+  #shopify-section-{{ section.id }} .utility-bar {
+    min-height: {{ section.settings.tg_announcement_height }}px;
+    color: {{ section.settings.tg_announcement_text_color }};
+    background: {{ section.settings.tg_announcement_background_color }};
+    background-image: none;
+  }
+
+  #shopify-section-{{ section.id }} .announcement-bar,
+  #shopify-section-{{ section.id }} .announcement-bar__announcement {
+    color: inherit;
+  }
+
+  #shopify-section-{{ section.id }} .announcement-bar__message {
+    display: flex;
+    min-height: {{ section.settings.tg_announcement_height }}px;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35em;
+    padding: 0.6rem 0;
+    color: inherit;
+    font-family: {{ section.settings.tg_announcement_font.family }}, {{ section.settings.tg_announcement_font.fallback_families }};
+    font-size: {{ section.settings.tg_announcement_font_size }}px;
+    font-weight: {{ section.settings.tg_announcement_font_weight }};
+    letter-spacing: {{ section.settings.tg_announcement_letter_spacing }}px;
+    line-height: {{ section.settings.tg_announcement_line_height }};
+    text-transform: {{ section.settings.tg_announcement_text_transform }};
+    overflow-wrap: anywhere;
+  }
+
+  #shopify-section-{{ section.id }} .announcement-bar__content,
+  #shopify-section-{{ section.id }} .announcement-bar__suffix {
+    color: inherit;
+  }
+
+  #shopify-section-{{ section.id }} .announcement-bar__content a,
+  #shopify-section-{{ section.id }} .announcement-bar__suffix a {
+    color: inherit;
+  }
+
+  #shopify-section-{{ section.id }} .announcement-bar__accent {
+    color: var(--tg-announcement-accent-color, currentColor);
+  }
+
+  #shopify-section-{{ section.id }} .announcement-bar__accent--bold {
+    font-weight: 700;
+  }
+
+  #shopify-section-{{ section.id }} .announcement-bar__accent--underline {
+    text-decoration: underline;
+    text-decoration-thickness: max(1px, 0.08em);
+    text-underline-offset: 0.14em;
+  }
+
+  #shopify-section-{{ section.id }} .announcement-bar__message .icon-arrow {
+    margin-left: 0.35em;
+  }
+
+  @media screen and (max-width: 749px) {
+    #shopify-section-{{ section.id }} .announcement-bar__message {
+      font-size: {{ section.settings.tg_announcement_mobile_font_size }}px;
+    }
+  }
+{% endstyle %}
 
 {% if social_icons %}
   {{ 'component-list-social.css' | asset_url | stylesheet_tag }}
@@ -32,7 +102,7 @@
         aria-label="{{ 'sections.header.announcement' | t }}"
         {{ section.blocks.first.shopify_attributes }}
       >
-        {%- if section.blocks.first.settings.text != blank -%}
+        {%- if section.blocks.first.settings.content != blank or section.blocks.first.settings.text != blank or section.blocks.first.settings.highlight_text != blank or section.blocks.first.settings.suffix != blank -%}
           {%- if section.blocks.first.settings.link != blank -%}
             <a
               href="{{ section.blocks.first.settings.link }}"
@@ -40,7 +110,20 @@
             >
           {%- endif -%}
           <p class="announcement-bar__message h5">
-            <span>{{ section.blocks.first.settings.text | escape }}</span>
+            {%- if section.blocks.first.settings.content != blank -%}
+              <span class="announcement-bar__content">{{ section.blocks.first.settings.content }}</span>
+            {%- elsif section.blocks.first.settings.text != blank -%}
+              <span class="announcement-bar__content">{{ section.blocks.first.settings.text | escape }}</span>
+            {%- endif -%}
+            {%- if section.blocks.first.settings.highlight_text != blank -%}
+              <span
+                class="announcement-bar__accent{% if section.blocks.first.settings.highlight_bold %} announcement-bar__accent--bold{% endif %}{% if section.blocks.first.settings.highlight_underline %} announcement-bar__accent--underline{% endif %}"
+                style="--tg-announcement-accent-color: {{ section.blocks.first.settings.highlight_color }};"
+              >{{ section.blocks.first.settings.highlight_text | escape }}</span>
+            {%- endif -%}
+            {%- if section.blocks.first.settings.suffix != blank -%}
+              <span class="announcement-bar__suffix">{{ section.blocks.first.settings.suffix }}</span>
+            {%- endif -%}
             {%- if section.blocks.first.settings.link != blank -%}
               {{- 'icon-arrow.svg' | inline_asset_content -}}
             {%- endif -%}
@@ -92,7 +175,7 @@
                   role="region"
                   aria-label="{{ 'sections.header.announcement' | t }}"
                 >
-                  {%- if block.settings.text != blank -%}
+                  {%- if block.settings.content != blank or block.settings.text != blank or block.settings.highlight_text != blank or block.settings.suffix != blank -%}
                     {%- if block.settings.link != blank -%}
                       <a
                         href="{{ block.settings.link }}"
@@ -100,7 +183,20 @@
                       >
                     {%- endif -%}
                     <p class="announcement-bar__message h5">
-                      <span>{{ block.settings.text | escape }}</span>
+                      {%- if block.settings.content != blank -%}
+                        <span class="announcement-bar__content">{{ block.settings.content }}</span>
+                      {%- elsif block.settings.text != blank -%}
+                        <span class="announcement-bar__content">{{ block.settings.text | escape }}</span>
+                      {%- endif -%}
+                      {%- if block.settings.highlight_text != blank -%}
+                        <span
+                          class="announcement-bar__accent{% if block.settings.highlight_bold %} announcement-bar__accent--bold{% endif %}{% if block.settings.highlight_underline %} announcement-bar__accent--underline{% endif %}"
+                          style="--tg-announcement-accent-color: {{ block.settings.highlight_color }};"
+                        >{{ block.settings.highlight_text | escape }}</span>
+                      {%- endif -%}
+                      {%- if block.settings.suffix != blank -%}
+                        <span class="announcement-bar__suffix">{{ block.settings.suffix }}</span>
+                      {%- endif -%}
                       {%- if block.settings.link != blank -%}
                         {{- 'icon-arrow.svg' | inline_asset_content -}}
                       {%- endif -%}
@@ -192,7 +288,104 @@
       "id": "color_scheme",
       "label": "t:sections.all.colors.label",
       "default": "scheme-4"
-    },  
+    },
+    {
+      "type": "header",
+      "content": "公告栏外观"
+    },
+    {
+      "type": "paragraph",
+      "content": "以下颜色优先于上方色彩方案，可为公告栏单独设置视觉样式。"
+    },
+    {
+      "type": "font_picker",
+      "id": "tg_announcement_font",
+      "label": "字体",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "range",
+      "id": "tg_announcement_font_size",
+      "min": 12,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "label": "桌面端字体大小",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "tg_announcement_mobile_font_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "移动端字体大小",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "tg_announcement_font_weight",
+      "min": 400,
+      "max": 900,
+      "step": 100,
+      "label": "常规文字字重",
+      "default": 700
+    },
+    {
+      "type": "select",
+      "id": "tg_announcement_line_height",
+      "label": "行高",
+      "options": [
+        { "value": "1.2", "label": "紧凑" },
+        { "value": "1.4", "label": "标准" },
+        { "value": "1.6", "label": "宽松" }
+      ],
+      "default": "1.4"
+    },
+    {
+      "type": "range",
+      "id": "tg_announcement_letter_spacing",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "label": "字间距",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "tg_announcement_text_transform",
+      "label": "文字大小写",
+      "options": [
+        { "value": "none", "label": "保持原样" },
+        { "value": "uppercase", "label": "全部大写" }
+      ],
+      "default": "uppercase"
+    },
+    {
+      "type": "range",
+      "id": "tg_announcement_height",
+      "min": 32,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "label": "公告栏最小高度",
+      "default": 40,
+      "info": "文案换行时会自动增高，避免内容被截断。"
+    },
+    {
+      "type": "color",
+      "id": "tg_announcement_background_color",
+      "label": "背景色",
+      "default": "#fef1e2"
+    },
+    {
+      "type": "color",
+      "id": "tg_announcement_text_color",
+      "label": "文字颜色",
+      "default": "#202024"
+    },
     {
       "type": "checkbox",
       "id": "show_line_separator",
@@ -235,10 +428,46 @@
       "name": "t:sections.announcement-bar.blocks.announcement.name",
       "settings": [
         {
+          "type": "inline_richtext",
+          "id": "content",
+          "label": "公告前置文案",
+          "info": "支持在编辑器中对部分文字加粗或添加链接；留空时使用下方原有文案。"
+        },
+        {
           "type": "text",
           "id": "text",
           "default": "t:sections.announcement-bar.blocks.announcement.settings.text.default",
-          "label": "t:sections.announcement-bar.blocks.announcement.settings.text.label"
+          "label": "公告文案（兼容原有内容）"
+        },
+        {
+          "type": "text",
+          "id": "highlight_text",
+          "label": "局部强调文案",
+          "info": "显示在前置文案之后，可单独设置颜色、粗体和下划线。"
+        },
+        {
+          "type": "color",
+          "id": "highlight_color",
+          "label": "局部强调颜色",
+          "default": "#a50c43"
+        },
+        {
+          "type": "checkbox",
+          "id": "highlight_bold",
+          "label": "局部强调使用粗体",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "highlight_underline",
+          "label": "局部强调添加下划线",
+          "default": false
+        },
+        {
+          "type": "inline_richtext",
+          "id": "suffix",
+          "label": "公告后置文案",
+          "info": "可用于在局部强调文案后继续添加文字，也支持局部加粗和链接。"
         },
         {
           "type": "url",

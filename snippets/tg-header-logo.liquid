@@ -1,0 +1,81 @@
+{%- liquid
+  assign mobile_logo = section.settings.tg_header_mobile_logo
+  assign mobile_logo_width = section.settings.tg_header_mobile_logo_width | default: 136
+  assign mobile_logo_width_2x = mobile_logo_width | times: 2
+  assign mobile_logo_width_1_5x = mobile_logo_width | times: 1.5 | round
+  assign logo_class = 'header__heading-logo'
+
+  if motion_reduce
+    assign logo_class = logo_class | append: ' motion-reduce'
+  endif
+-%}
+
+{%- capture mobile_logo_widths -%}{{ mobile_logo_width }}, {{ mobile_logo_width_1_5x }}, {{ mobile_logo_width_2x }}{%- endcapture -%}
+
+{%- if mobile_logo != blank and settings.logo != blank -%}
+  <div
+    class="header__heading-logo-wrapper tg-header-responsive-logo-wrapper"
+    style="--tg-header-mobile-logo-width: {{ mobile_logo_width }}px; --tg-header-desktop-logo-width: {{ settings.logo_width }}px;"
+  >
+    <picture>
+      <source
+        media="(max-width: 989px)"
+        srcset="{{ mobile_logo | image_url: width: mobile_logo_width }} 1x, {{ mobile_logo | image_url: width: mobile_logo_width_2x }} 2x"
+      >
+      {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
+      {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
+      {{
+        settings.logo
+        | image_url: width: 600
+        | image_tag:
+          class: logo_class,
+          widths: widths,
+          height: logo_height,
+          width: settings.logo_width,
+          alt: logo_alt,
+          sizes: sizes,
+          preload: true
+      }}
+    </picture>
+  </div>
+{%- elsif mobile_logo != blank -%}
+  <div
+    class="header__heading-logo-wrapper tg-header-mobile-only-logo-wrapper"
+    style="--tg-header-mobile-logo-width: {{ mobile_logo_width }}px;"
+  >
+    {%- assign logo_alt = mobile_logo.alt | default: shop.name | escape -%}
+    {%- assign logo_height = mobile_logo_width | divided_by: mobile_logo.aspect_ratio -%}
+    {{
+      mobile_logo
+      | image_url: width: 600
+      | image_tag:
+        class: logo_class,
+        widths: mobile_logo_widths,
+        height: logo_height,
+        width: mobile_logo_width,
+        alt: logo_alt,
+        sizes: sizes,
+        preload: true
+    }}
+  </div>
+  <span class="h2 tg-header-desktop-only-logo-fallback">{{ shop.name }}</span>
+{%- elsif settings.logo != blank -%}
+  <div class="header__heading-logo-wrapper">
+    {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
+    {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
+    {{
+      settings.logo
+      | image_url: width: 600
+      | image_tag:
+        class: logo_class,
+        widths: widths,
+        height: logo_height,
+        width: settings.logo_width,
+        alt: logo_alt,
+        sizes: sizes,
+        preload: true
+    }}
+  </div>
+{%- else -%}
+  <span class="h2">{{ shop.name }}</span>
+{%- endif -%}

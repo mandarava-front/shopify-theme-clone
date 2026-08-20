@@ -25,13 +25,25 @@
     assign media_count = media_count | minus: variant_images.size | plus: 1
   endif
 
-  if media_count == 1 or single_media_visible
-    assign single_media_visible_mobile = true
-  endif
-
-  if media_count == 0 or single_media_visible_mobile or section.settings.mobile_thumbnails == 'show' or section.settings.mobile_thumbnails == 'columns' and media_count < 3
-    assign hide_mobile_slider = true
-  endif
+  assign mobile_gallery_aspect_ratio = '1 / 1'
+  case section.settings.mobile_gallery_aspect_ratio
+    when 'landscape_5_4'
+      assign mobile_gallery_aspect_ratio = '5 / 4'
+    when 'portrait_4_5'
+      assign mobile_gallery_aspect_ratio = '4 / 5'
+    when 'landscape_4_3'
+      assign mobile_gallery_aspect_ratio = '4 / 3'
+    when 'portrait_3_4'
+      assign mobile_gallery_aspect_ratio = '3 / 4'
+    when 'landscape_3_2'
+      assign mobile_gallery_aspect_ratio = '3 / 2'
+    when 'portrait_2_3'
+      assign mobile_gallery_aspect_ratio = '2 / 3'
+    when 'landscape_16_9'
+      assign mobile_gallery_aspect_ratio = '16 / 9'
+    when 'portrait_9_16'
+      assign mobile_gallery_aspect_ratio = '9 / 16'
+  endcase
 
   if section.settings.media_size == 'large'
     assign media_width = 0.65
@@ -50,15 +62,16 @@
   {% endif %}
   aria-label="{{ 'products.product.media.gallery_viewer' | t }}"
   data-desktop-layout="{{ section.settings.gallery_layout }}"
+  style="--tg-mobile-gallery-aspect-ratio: {{ mobile_gallery_aspect_ratio }};"
 >
   <div id="GalleryStatus-{{ section.id }}" class="visually-hidden" role="status"></div>
-  <slider-component id="GalleryViewer-{{ section.id }}" class="slider-mobile-gutter">
+  <slider-component id="GalleryViewer-{{ section.id }}" class="slider-mobile-gutter" data-enable-looping="true">
     <a class="skip-to-content-link button visually-hidden quick-add-hidden" href="#ProductInfo-{{ section.id }}">
       {{ 'accessibility.skip_to_product_info' | t }}
     </a>
     <ul
       id="Slider-Gallery-{{ section.id }}"
-      class="product__media-list contains-media grid grid--peek list-unstyled slider slider--mobile"
+      class="product__media-list contains-media grid grid--peek list-unstyled slider slider--mobile{% if media_count <= 1 or single_media_visible %} product__media-list--single{% endif %}"
       role="list"
     >
       {%- if product.selected_or_first_available_variant.featured_media != null -%}
@@ -125,32 +138,30 @@
         {%- endunless -%}
       {%- endfor -%}
     </ul>
-    <div class="slider-buttons quick-add-hidden{% if hide_mobile_slider %} small-hide{% endif %}">
+    <div class="slider-buttons quick-add-hidden{% if media_count <= 1 or single_media_visible %} small-hide{% endif %}">
       <button
         type="button"
-        class="slider-button slider-button--prev"
+        class="slider-button slider-button--prev flickity-button flickity-prev-next-button previous"
         name="previous"
         aria-label="{{ 'general.slider.previous_slide' | t }}"
       >
-        <span class="svg-wrapper">
-          {{- 'icon-caret.svg' | inline_asset_content -}}
-        </span>
+        <svg class="flickity-button-icon" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+          <path d="M 10,50 L 60,100 L 70,90 L 30,50  L 70,10 L 60,0 Z" class="arrow"></path>
+        </svg>
       </button>
-      <div class="slider-counter caption">
-        <span class="slider-counter--current">1</span>
-        <span aria-hidden="true"> / </span>
-        <span class="visually-hidden">{{ 'general.slider.of' | t }}</span>
-        <span class="slider-counter--total">{{ media_count }}</span>
-      </div>
       <button
         type="button"
-        class="slider-button slider-button--next"
+        class="slider-button slider-button--next flickity-button flickity-prev-next-button next"
         name="next"
         aria-label="{{ 'general.slider.next_slide' | t }}"
       >
-        <span class="svg-wrapper">
-          {{- 'icon-caret.svg' | inline_asset_content -}}
-        </span>
+        <svg class="flickity-button-icon" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+          <path
+            d="M 10,50 L 60,100 L 70,90 L 30,50  L 70,10 L 60,0 Z"
+            class="arrow"
+            transform="translate(100, 100) rotate(180)"
+          ></path>
+        </svg>
       </button>
     </div>
   </slider-component>

@@ -154,6 +154,8 @@
         "tg_cart_continue_link": "",
         "tg_cart_summary_sticky": true,
         "tg_cart_summary_width": 480,
+        "tg_cart_summary_padding_block": 20,
+        "tg_cart_summary_padding_inline": 20,
         "tg_cart_font": "poppins_n4",
         "tg_cart_page_accent_color": "#a50c43",
         "tg_cart_page_surface_color": "#ffffff",

@@ -2426,6 +2426,24 @@
     },
     {
       "type": "select",
+      "id": "mobile_gallery_aspect_ratio",
+      "label": "Mobile gallery image ratio / 移动端图库图片比例",
+      "info": "Images are center-cropped to fill this frame / 图片将从中心裁剪并填满画框",
+      "options": [
+        { "value": "square", "label": "1:1 / 正方形" },
+        { "value": "landscape_5_4", "label": "5:4 / 横向" },
+        { "value": "portrait_4_5", "label": "4:5 / 竖向" },
+        { "value": "landscape_4_3", "label": "4:3 / 横向" },
+        { "value": "portrait_3_4", "label": "3:4 / 竖向" },
+        { "value": "landscape_3_2", "label": "3:2 / 横向" },
+        { "value": "portrait_2_3", "label": "2:3 / 竖向" },
+        { "value": "landscape_16_9", "label": "16:9 / 宽屏" },
+        { "value": "portrait_9_16", "label": "9:16 / 竖屏" }
+      ],
+      "default": "square"
+    },
+    {
+      "type": "select",
       "id": "gallery_layout",
       "options": [
         {
@@ -2557,6 +2575,7 @@
         "media_size": "small",
         "constrain_to_viewport": true,
         "media_fit": "contain",
+        "mobile_gallery_aspect_ratio": "square",
         "gallery_layout": "thumbnail_slider",
         "mobile_thumbnails": "hide",
         "media_position": "left",

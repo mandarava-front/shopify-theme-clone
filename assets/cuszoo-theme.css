@@ -101,6 +101,32 @@ button.shopify-payment-button__button--unbranded {
   min-width: 7rem;
 }
 
+@media screen and (max-width: 989px) {
+  .tg-header-responsive-logo-wrapper,
+  .tg-header-mobile-only-logo-wrapper {
+    width: min(100%, var(--tg-header-mobile-logo-width));
+  }
+
+  .tg-header-responsive-logo-wrapper .header__heading-logo,
+  .tg-header-mobile-only-logo-wrapper .header__heading-logo {
+    width: 100%;
+  }
+
+  .tg-header-desktop-only-logo-fallback {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .header .tg-header-responsive-logo-wrapper {
+    width: var(--tg-header-desktop-logo-width);
+  }
+
+  .tg-header-mobile-only-logo-wrapper {
+    display: none;
+  }
+}
+
 .header__heading-link .h2 {
   color: rgb(var(--cuszoo-orange));
   font-family: 'Lora', Georgia, serif;

@@ -69,7 +69,7 @@
   }
 
   .tg-header-desktop__announcement-inner {
-    min-height: 3.6rem;
+    min-height: var(--tg-header-desktop-announcement-height, 3.6rem);
     display: grid;
     grid-template-columns: 4rem 1fr 4rem;
     align-items: center;
@@ -79,9 +79,42 @@
   .tg-header-desktop__announcement-inner p {
     grid-column: 2;
     margin: 0;
-    font-size: 1.4rem;
-    font-weight: 500;
-    line-height: 1.4;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35em;
+    font-family: var(--tg-header-desktop-announcement-font, inherit);
+    font-size: var(--tg-header-desktop-announcement-font-size, 1.4rem);
+    font-weight: var(--tg-header-desktop-announcement-font-weight, 500);
+    letter-spacing: var(--tg-header-desktop-announcement-letter-spacing, 0);
+    line-height: var(--tg-header-desktop-announcement-line-height, 1.4);
+    text-transform: var(--tg-header-desktop-announcement-text-transform, none);
+    overflow-wrap: anywhere;
+  }
+
+  .tg-header-desktop__announcement-content,
+  .tg-header-desktop__announcement-suffix {
+    color: inherit;
+  }
+
+  .tg-header-desktop__announcement-content a,
+  .tg-header-desktop__announcement-suffix a {
+    color: inherit;
+  }
+
+  .tg-header-desktop__announcement-accent {
+    color: var(--tg-header-desktop-announcement-accent-color, currentColor);
+  }
+
+  .tg-header-desktop__announcement-accent--bold {
+    font-weight: 700;
+  }
+
+  .tg-header-desktop__announcement-accent--underline {
+    text-decoration: underline;
+    text-decoration-thickness: max(1px, 0.08em);
+    text-underline-offset: 0.14em;
   }
 
   .tg-header-desktop__announcement-close {

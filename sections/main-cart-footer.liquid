@@ -46,7 +46,7 @@
   class="gradient color-{{ section.settings.color_scheme }}{% if section.settings.enable_tg_cart_page_style %} tg-cart-footer{% if section.settings.tg_cart_summary_sticky %} tg-cart-footer--sticky{% endif %}{% endif %}{% if cart == empty %} is-empty{% endif %}"
   id="main-cart-footer"
   data-id="{{ section.id }}"
-  {% if section.settings.enable_tg_cart_page_style %}style="--tg-cart-accent: {{ section.settings.tg_cart_page_accent_color }}; --tg-cart-surface: {{ section.settings.tg_cart_page_surface_color }}; --tg-cart-card: {{ section.settings.tg_cart_page_card_color }}; --tg-cart-summary-surface: {{ section.settings.tg_cart_summary_surface_color }}; --tg-cart-border: {{ section.settings.tg_cart_page_border_color }}; --tg-cart-text: {{ section.settings.tg_cart_page_text_color }}; --tg-cart-muted: {{ section.settings.tg_cart_page_muted_color }}; --tg-cart-total-price-color: {{ section.settings.tg_cart_total_price_color }}; --tg-cart-radius: {{ section.settings.tg_cart_card_radius }}px; --tg-cart-summary-width: {{ section.settings.tg_cart_summary_width }}px; --tg-cart-font: {{ section.settings.tg_cart_font.family }}, {{ section.settings.tg_cart_font.fallback_families }};"{% endif %}
+  {% if section.settings.enable_tg_cart_page_style %}style="--tg-cart-accent: {{ section.settings.tg_cart_page_accent_color }}; --tg-cart-surface: {{ section.settings.tg_cart_page_surface_color }}; --tg-cart-card: {{ section.settings.tg_cart_page_card_color }}; --tg-cart-summary-surface: {{ section.settings.tg_cart_summary_surface_color }}; --tg-cart-border: {{ section.settings.tg_cart_page_border_color }}; --tg-cart-text: {{ section.settings.tg_cart_page_text_color }}; --tg-cart-muted: {{ section.settings.tg_cart_page_muted_color }}; --tg-cart-total-price-color: {{ section.settings.tg_cart_total_price_color }}; --tg-cart-radius: {{ section.settings.tg_cart_card_radius }}px; --tg-cart-summary-width: {{ section.settings.tg_cart_summary_width }}px; --tg-cart-summary-padding-block: {{ section.settings.tg_cart_summary_padding_block }}px; --tg-cart-summary-padding-inline: {{ section.settings.tg_cart_summary_padding_inline }}px; --tg-cart-font: {{ section.settings.tg_cart_font.family }}, {{ section.settings.tg_cart_font.fallback_families }};"{% endif %}
 >
   <div class="page-width">
     <div class="cart__footer tg-cart-summary isolate section-{{ section.id }}-padding">
@@ -309,6 +309,30 @@
       "unit": "px",
       "label": "Tg | Summary width / 摘要卡宽度",
       "default": 480
+    },
+    {
+      "type": "header",
+      "content": "Tg | Summary spacing / 摘要卡间距"
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_summary_padding_block",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Tg | Vertical padding / 上下内边距",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_summary_padding_inline",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Tg | Horizontal padding / 左右内边距",
+      "default": 20
     },
     {
       "type": "header",
@@ -1143,6 +1167,8 @@
         "tg_cart_continue_link": "",
         "tg_cart_summary_sticky": true,
         "tg_cart_summary_width": 480,
+        "tg_cart_summary_padding_block": 20,
+        "tg_cart_summary_padding_inline": 20,
         "tg_cart_font": "poppins_n4",
         "tg_cart_page_accent_color": "#a50c43",
         "tg_cart_page_surface_color": "#ffffff",

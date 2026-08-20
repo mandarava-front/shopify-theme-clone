@@ -2030,16 +2030,17 @@
 .tg-cart-summary__primary {
   background: var(--tg-cart-summary-surface, #f5f5f5);
   border-radius: 8px;
-  padding: 20px;
+  padding: var(--tg-cart-summary-padding-block, 20px) var(--tg-cart-summary-padding-inline, 20px);
 }
 
 .tg-cart-summary__continue {
   align-items: center;
   color: var(--tg-cart-accent);
-  display: inline-flex;
+  display: flex;
   font-size: 1.4rem;
   font-weight: 400;
   gap: 5px;
+  justify-content: center;
   line-height: 2.2rem;
   margin-top: 10px;
   min-height: 28px;

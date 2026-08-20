@@ -39,6 +39,18 @@
     "header": {
       "type": "header",
       "blocks": {
+        "mobile-search-suggestion-summer": {
+          "type": "tg_mobile_search_term",
+          "settings": {
+            "term": "summer"
+          }
+        },
+        "mobile-search-suggestion-pet-memorial": {
+          "type": "tg_mobile_search_term",
+          "settings": {
+            "term": "pet memorial"
+          }
+        },
         "mobile-feature-summer": {
           "type": "mobile_feature_card",
           "settings": {
@@ -242,6 +254,8 @@
         }
       },
       "block_order": [
+        "mobile-search-suggestion-summer",
+        "mobile-search-suggestion-pet-memorial",
         "mobile-feature-summer",
         "mobile-feature-school",
         "mobile-menu-occasions",
@@ -317,7 +331,7 @@
         "menu_type_desktop": "mega",
         "mobile_track_order_link": "/pages/track-order",
         "mobile_reviews_link": "/#reviews",
-        "sticky_header_type": "always",
+        "sticky_header_type": "none",
         "show_line_separator": false,
         "color_scheme": "scheme-1",
         "menu_color_scheme": "scheme-1",

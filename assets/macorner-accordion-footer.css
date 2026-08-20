@@ -8,6 +8,9 @@
 }
 
 .mc-accordion-footer__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   max-width: 76rem;
   margin: 0 auto;
   padding: 4rem 1.5rem 1.6rem;
@@ -15,6 +18,9 @@
 }
 
 .mc-accordion-footer__logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   color: #f26a24;
   font-family: 'Lora', Georgia, serif;
   font-size: 4.2rem;
@@ -24,7 +30,7 @@
 }
 
 .mc-accordion-footer__logo img {
-  display: inline-block;
+  display: block;
   width: auto;
   max-height: 5rem;
 }
@@ -55,10 +61,17 @@
 
 .mc-accordion-footer__dmca {
   display: inline-flex;
+  align-items: center;
   margin-top: 1.8rem;
 }
 
+.mc-accordion-footer__dmca > a {
+  display: flex;
+  align-items: center;
+}
+
 .mc-accordion-footer__dmca img {
+  display: block;
   width: auto;
   height: 2rem;
 }

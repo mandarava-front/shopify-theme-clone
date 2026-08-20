@@ -629,22 +629,99 @@ product-recommendations.related-products:not(:has(.grid)) {
 
 @media screen and (max-width: 749px) {
   .tg-product-breadcrumb {
+    display: none;
     margin-bottom: 1.6rem;
   }
 
   [data-template='product'] .product__media-wrapper {
+    background: transparent;
+    border: 0;
     border-left: 0;
     border-radius: 0;
     border-right: 0;
-    margin-left: -1.5rem;
+    margin-left: 0;
     padding: 0;
-    width: calc(100% + 3rem);
+    width: 100%;
   }
 
   [data-template='product'] .product__media-list {
-    margin-bottom: 1.6rem;
+    margin: 0;
     margin-left: 0;
+    padding: 0;
     width: 100%;
+    column-gap: 0;
+    row-gap: 0;
+    scroll-padding: 0;
+    scroll-behavior: smooth;
+  }
+
+  [data-template='product'] .product__media-wrapper media-gallery,
+  [data-template='product'] .product__media-wrapper slider-component {
+    display: block;
+    width: 100%;
+  }
+
+  [data-template='product'] .product__media-list .product__media-item {
+    padding-top: 0;
+    padding-bottom: 0;
+    scroll-snap-stop: always;
+  }
+
+  [data-template='product'] .product__media-list .product__media-item:first-of-type {
+    margin-left: 0;
+  }
+
+  [data-template='product'] .product__media-list--single {
+    overflow-x: hidden;
+  }
+
+  [data-template='product'] .product__media-list::after {
+    display: none;
+  }
+
+  [data-template='product'] .product__media-list [data-slider-loop-clone] {
+    pointer-events: none;
+  }
+
+  /* The mobile slider normally leaves a peek gutter on the right. Product
+     media is a primary detail view, so keep each non-column slide centered
+     and full width instead of reserving that gutter as empty space. */
+  [data-template='product'] .product:not(.product--mobile-columns) .product__media-list .product__media-item {
+    flex: 0 0 100%;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  [data-template='product'] .product-media-container,
+  [data-template='product'] .product-media-container.constrain-height {
+    aspect-ratio: var(--tg-mobile-gallery-aspect-ratio, 1 / 1);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    overflow: hidden !important;
+  }
+
+  [data-template='product'] .product-media-container.global-media-settings::after {
+    display: none;
+  }
+
+  [data-template='product'] .product-media-container .product__modal-opener,
+  [data-template='product'] .product-media-container .media,
+  [data-template='product'] .product-media-container.constrain-height .media {
+    height: 100%;
+  }
+
+  [data-template='product'] .product-media-container .media,
+  [data-template='product'] .product-media-container.constrain-height .media {
+    padding-top: 0;
+  }
+
+  [data-template='product'] .product-media-container .product__media img {
+    object-fit: cover;
+    object-position: center;
   }
 
   [data-template='product'] .product__media-wrapper slider-component:not(.thumbnail-slider--no-slide) {
@@ -652,9 +729,47 @@ product-recommendations.related-products:not(:has(.grid)) {
     margin-right: 0;
   }
 
+  /* Keep the gallery full-bleed while exposing explicit controls on top of
+     the image instead of using the slider's right-side peek gutter. */
+  [data-template='product'] .product__media-wrapper > media-gallery > slider-component {
+    position: relative;
+  }
+
+  [data-template='product'] .product__media-wrapper > media-gallery > slider-component > .slider-buttons {
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    right: 0;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+    padding: 0 0.8rem;
+    pointer-events: none;
+    transform: translateY(-50%);
+  }
+
+  [data-template='product'] .product__media-wrapper > media-gallery > slider-component > .slider-buttons .slider-button {
+    flex: 0 0 4.4rem;
+    width: 4.4rem;
+    height: 4.4rem;
+    border: 0.1rem solid rgba(var(--color-foreground), 0.14);
+    border-radius: 50%;
+    background: rgb(var(--color-background));
+    box-shadow: 0 0.2rem 0.6rem rgba(var(--color-foreground), 0.12);
+    pointer-events: auto;
+  }
+
+  [data-template='product'] .product__media-wrapper > media-gallery > slider-component > .slider-buttons .flickity-button-icon {
+    display: block;
+    width: 2rem;
+    height: 2rem;
+    fill: currentColor;
+  }
+
   [data-template='product'] .product__info-wrapper {
     padding-left: 0;
-    padding-top: 2.4rem;
+    padding-top: 0;
   }
 
   [data-template='product'] .product__title h1 {
@@ -670,6 +785,24 @@ product-recommendations.related-products:not(:has(.grid)) {
 /* Keep migrated component rules after the legacy product overrides above. */
 [data-template='product'] .tg-product-accordion {
   border-color: #eee;
+}
+
+[data-template='product'] .tg-product-accordion summary {
+  align-items: center;
+}
+
+[data-template='product'] .tg-product-accordion .summary__title {
+  align-items: center;
+}
+
+[data-template='product'] .tg-product-accordion summary > .icon-caret {
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+[data-template='product'] .tg-product-accordion details[open] summary > .icon-caret {
+  transform: translateY(-50%) rotate(180deg);
 }
 
 @media screen and (max-width: 799px) {

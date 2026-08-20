@@ -12,24 +12,17 @@
   {{ 'mask-blobs.css' | asset_url | stylesheet_tag }}
 {%- endif -%}
 
-<script src="{{ 'main-search.js' | asset_url }}" defer="defer"></script>
-
 <style>
   .template-search__header {
     margin-bottom: 3rem;
   }
 
-  .template-search__search {
-    margin: 0 auto 3.5rem;
-    max-width: 74.1rem;
-  }
-
-  .template-search__search .search {
-    margin-top: 3rem;
-  }
-
   .template-search--empty {
     padding-bottom: 18rem;
+  }
+
+  .template-search__mobile-facets-controls {
+    display: none;
   }
 
   @media screen and (min-width: 750px) {
@@ -38,15 +31,125 @@
     }
   }
 
-  .search__button .icon {
-    height: 1.8rem;
+  @media screen and (max-width: 749px) {
+    .template-search__mobile-facets-controls {
+      padding: 1rem 2.4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .template-search__mobile-facets-button {
+      height: 4.2rem;
+      min-height: 4.2rem;
+      border: 1px solid #d9d9d9;
+      border-radius: 1rem;
+      padding: 0 1.5rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .7rem;
+      background: #fff;
+      color: #333;
+      font: inherit;
+      font-size: 1.4rem;
+      font-weight: 600;
+      line-height: 1.2;
+      cursor: pointer;
+    }
+
+    .template-search__mobile-facets-button--filter {
+      flex: 0 1 26%;
+      max-width: 26%;
+    }
+
+    .template-search__mobile-facets-button--sort {
+      flex: 0 0 min(19.2rem, 62%);
+      justify-content: space-between;
+      text-align: left;
+    }
+
+    .template-search__mobile-facets-button .svg-wrapper {
+      width: 1.7rem;
+      height: 1.7rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .template-search__mobile-facets-button--filter .svg-wrapper {
+      display: none;
+    }
+
+    .template-search__mobile-facets-button--sort .icon-caret {
+      width: 1.1rem;
+      margin-left: auto;
+    }
+
+    .template-search__mobile-facets-button:only-child {
+      flex: 0 0 auto;
+      max-width: none;
+    }
+
+    .template-search__mobile-facets-button:hover {
+      border-color: #ccc;
+      background: #fafafa;
+    }
+
+    .template-search__mobile-facets-button:active {
+      background: #f2f2f2;
+    }
+
+    .template-search__mobile-facets-button:focus-visible {
+      outline: .2rem solid #333;
+      outline-offset: .2rem;
+    }
+
+    .template-search .template-search__results > .product-grid {
+      display: flex;
+      flex-wrap: wrap;
+      column-gap: 1rem;
+      row-gap: 2.4rem;
+    }
+
+    .template-search .template-search__results > .product-grid > .grid__item {
+      flex: 0 0 calc(50% - 0.5rem);
+      width: calc(50% - 0.5rem);
+      max-width: calc(50% - 0.5rem);
+    }
+
+    .template-search__mobile-facets-controls {
+      padding-right: 1.4rem;
+      padding-left: 1.4rem;
+    }
   }
+
+  @media screen and (max-width: 989px) {
+    .template-search .mobile-facets__open-wrapper {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+  }
+
 </style>
 
 {%- liquid
   assign sort_by = search.sort_by | default: search.default_sort_by
   assign terms = search.terms | escape
   assign search_url = '?q=' | append: terms | append: '&options%5Bprefix%5D=last&sort_by=' | append: sort_by
+  assign search_mobile_sort_label = sort_by
+  for option in search.sort_options
+    if option.value == sort_by
+      assign search_mobile_sort_label = option.name
+      break
+    endif
+  endfor
 -%}
 
 {%- style -%}
@@ -73,79 +176,45 @@
           {{- 'general.search.search' | t -}}
         {%- endif -%}
       </h1>
-      <div class="template-search__search">
-        {%- if settings.predictive_search_enabled -%}
-          <predictive-search data-loading-text="{{ 'accessibility.loading' | t }}">
-        {%- endif -%}
-        <main-search>
-          <form action="{{ routes.search_url }}" method="get" role="search" class="search">
-            <div class="field">
-              <input
-                class="search__input field__input"
-                id="Search-In-Template"
-                type="search"
-                name="q"
-                value="{{ search.terms | escape }}"
-                placeholder="{{ 'general.search.search' | t }}"
-                {%- if settings.predictive_search_enabled -%}
-                  role="combobox"
-                  aria-expanded="false"
-                  aria-owns="predictive-search-results"
-                  aria-controls="predictive-search-results"
-                  aria-haspopup="listbox"
-                  aria-autocomplete="list"
-                  autocorrect="off"
-                  autocomplete="off"
-                  autocapitalize="off"
-                  spellcheck="false"
-                {%- endif -%}
-              >
-              <label class="field__label" for="Search-In-Template">{{ 'general.search.search' | t }}</label>
-              <input name="options[prefix]" type="hidden" value="last">
-
-              {%- if settings.predictive_search_enabled -%}
-                <div class="predictive-search predictive-search--search-template" tabindex="-1" data-predictive-search hidden>
-                  {%- render 'loading-spinner', class: 'predictive-search__loading-state', initially_hidden: true -%}
-                </div>
-
-                <span class="predictive-search-status visually-hidden" role="status" aria-hidden="true"></span>
-              {%- endif -%}
-
-              <button
-                type="reset"
-                class="reset__button field__button{% if search.terms == blank %} hidden{% endif %}"
-                aria-label="{{ 'general.search.reset' | t }}"
-              >
-                <span class="svg-wrapper">
-                  {{- 'icon-reset.svg' | inline_asset_content -}}
-                </span>
-              </button>
-              <button type="submit" class="search__button field__button" aria-label="{{ 'general.search.search' | t }}">
-                <span class="svg-wrapper">
-                  {{- 'icon-search.svg' | inline_asset_content -}}
-                </span>
-              </button>
-            </div>
-          </form>
-        </main-search>
-        {%- if settings.predictive_search_enabled -%}
-          </predictive-search>
-        {%- endif -%}
-      </div>
       {%- if search.performed -%}
-        {%- unless section.settings.enable_filtering or section.settings.enable_sorting -%}
-          {%- if search.results_count > 0 -%}
-            <p role="status">
-              {{ 'templates.search.results_with_count_and_term' | t: terms: search.terms, count: search.results_count }}
-            </p>
-          {%- endif -%}
-        {%- endunless -%}
         {%- if search.results_count == 0 and search.filters == empty -%}
           <p role="status">{{ 'templates.search.no_results' | t: terms: search.terms }}</p>
         {%- endif -%}
       {%- endif -%}
     </div>
     {%- if search.performed -%}
+      {%- if search.filters != empty -%}
+        {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
+          <div class="template-search__mobile-facets-controls medium-hide large-up-hide" aria-label="{{ 'products.facets.filter_and_sort' | t }}">
+            {%- if section.settings.enable_filtering -%}
+              <button
+                type="button"
+                class="template-search__mobile-facets-button template-search__mobile-facets-button--filter"
+                data-search-mobile-facets-mode="filter"
+                data-search-mobile-facets-label="{{ 'products.facets.filter_button' | t }}"
+                aria-controls="MobileFacetsDisclosure-{{ section.id }}"
+                aria-expanded="false"
+              >
+                <span class="svg-wrapper" aria-hidden="true">{{- 'icon-filter.svg' | inline_asset_content -}}</span>
+                <span>{{ 'products.facets.filter_button' | t }}</span>
+              </button>
+            {%- endif -%}
+            {%- if section.settings.enable_sorting -%}
+              <button
+                type="button"
+                class="template-search__mobile-facets-button template-search__mobile-facets-button--sort"
+                data-search-mobile-facets-mode="sort"
+                data-search-mobile-facets-label="{{ 'products.facets.sort_by_label' | t }}"
+                aria-controls="MobileFacetsDisclosure-{{ section.id }}"
+                aria-expanded="false"
+              >
+                <span data-search-mobile-sort-label>{{ search_mobile_sort_label | escape }}</span>
+                <span class="svg-wrapper" aria-hidden="true">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+              </button>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endif -%}
       {%- if section.settings.enable_sorting
         and section.settings.filter_type == 'vertical'
         and search.filters != empty
@@ -221,7 +290,9 @@
                 enable_filtering: section.settings.enable_filtering,
                 enable_sorting: section.settings.enable_sorting,
                 filter_type: section.settings.filter_type,
-                paginate: paginate
+                paginate: paginate,
+                mobile_facets_style: 'panel',
+                mobile_price_facet_style: 'tg_collection'
               %}
             </aside>
           {%- endif -%}

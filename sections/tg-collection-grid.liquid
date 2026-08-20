@@ -13,9 +13,15 @@
 {% endif %}
 
 {% assign tg_collection_sort_by = collection.sort_by | default: collection.default_sort_by %}
-{% assign tg_collection_filter_label = 'products.facets.filter_button' | t %}
-{% assign tg_collection_sort_button_label = 'products.facets.sort_button' | t %}
+{% assign tg_collection_filter_label = 'Filters' %}
+{% assign tg_collection_sort_button_label = tg_collection_sort_by %}
 {% assign tg_collection_sort_by_label = 'products.facets.sort_by_label' | t %}
+{% for option in collection.sort_options %}
+  {% if option.value == tg_collection_sort_by %}
+    {% assign tg_collection_sort_button_label = option.name %}
+    {% break %}
+  {% endif %}
+{% endfor %}
 
 <collection-component
   class="tg-collection tg-collection-grid"
@@ -26,9 +32,17 @@
   <tg-collection-controls class="tg-collection__mobile-controls">
     <div class="tg-collection__mobile-toolbar" aria-label="{{ 'products.facets.filter_and_sort' | t }}">
       {% if section.settings.enable_filtering %}
-        <button type="button" class="tg-collection__toolbar-button" data-tg-collection-filter>
+        <button
+          type="button"
+          class="tg-collection__toolbar-button"
+          data-tg-collection-filter
+          data-tg-mobile-facets-label="{{ tg_collection_filter_label | escape }}"
+          aria-controls="MobileFacetsDisclosure-{{ section.id }}"
+          aria-expanded="false"
+        >
           <span class="svg-wrapper" aria-hidden="true">{{- 'icon-filter.svg' | inline_asset_content -}}</span>
           <span>{{ tg_collection_filter_label }}</span>
+          <span class="tg-collection__toolbar-badge" data-tg-collection-filter-count aria-hidden="true" hidden></span>
         </button>
       {% endif %}
       {% if section.settings.enable_sorting %}
@@ -36,7 +50,8 @@
           type="button"
           class="tg-collection__toolbar-button"
           data-tg-collection-sort
-          aria-controls="TgCollectionSort-{{ section.id }}"
+          data-tg-mobile-facets-label="{{ tg_collection_sort_by_label | escape }}"
+          aria-controls="MobileFacetsDisclosure-{{ section.id }}"
           aria-expanded="false"
         >
           <span>{{ tg_collection_sort_button_label }}</span>
@@ -45,51 +60,15 @@
       {% endif %}
     </div>
 
-    <p class="tg-collection__mobile-count" data-tg-collection-count aria-live="polite">
-      {{ 'products.facets.product_count_simple' | t: count: collection.products_count }}
-    </p>
-
-    {% if section.settings.enable_sorting %}
-      <div class="tg-collection__sort-backdrop" data-tg-collection-sort-close hidden></div>
-      <aside
-        id="TgCollectionSort-{{ section.id }}"
-        class="tg-collection__sort-sheet"
-        role="dialog"
-        aria-modal="true"
-        aria-hidden="true"
-        aria-labelledby="TgCollectionSortTitle-{{ section.id }}"
-        hidden
-      >
-        <header class="tg-collection__sort-sheet-header">
-          <h2 id="TgCollectionSortTitle-{{ section.id }}">{{ tg_collection_sort_button_label }}</h2>
-          <button type="button" class="tg-collection__sort-close" data-tg-collection-sort-close aria-label="{{ 'tg.a11y.close' | t }}">
-            <span class="svg-wrapper" aria-hidden="true">{{- 'icon-close.svg' | inline_asset_content -}}</span>
-          </button>
-        </header>
-        <div class="tg-collection__sort-options" role="listbox" aria-label="{{ tg_collection_sort_button_label }}">
-          {% for option in collection.sort_options %}
-            <button
-              type="button"
-              role="option"
-              data-tg-collection-sort-option="{{ option.value | escape }}"
-              aria-selected="{% if option.value == tg_collection_sort_by %}true{% else %}false{% endif %}"
-            >
-              <span>{{ option.name | escape }}</span>
-              <span class="tg-collection__sort-check" aria-hidden="true">{% if option.value == tg_collection_sort_by %}&#10003;{% endif %}</span>
-            </button>
-          {% endfor %}
-        </div>
-      </aside>
-    {% endif %}
   </tg-collection-controls>
 
   <div class="tg-collection__width">
     {% if template.name == 'collection' %}
       {% paginate collection.products by section.settings.products_per_page %}
         <div class="{% if section.settings.filter_type == 'vertical' %}facets-vertical{% endif %}">
-          {% if section.settings.enable_filtering %}
+          {% if section.settings.enable_filtering or section.settings.enable_sorting %}
             <aside class="facets-wrapper" id="main-collection-filters" data-id="{{ section.id }}">
-              {% render 'facets', results: collection, enable_filtering: true, enable_sorting: false, filter_type: section.settings.filter_type, paginate: paginate, price_facet_style: 'tg_collection', price_currency_mode: section.settings.price_currency_mode, price_currency_label: section.settings.price_currency_label %}
+              {% render 'facets', results: collection, enable_filtering: section.settings.enable_filtering, enable_sorting: section.settings.enable_sorting, filter_type: section.settings.filter_type, paginate: paginate, price_facet_style: 'tg_collection', price_currency_mode: section.settings.price_currency_mode, price_currency_label: section.settings.price_currency_label %}
             </aside>
           {% endif %}
 
@@ -98,7 +77,7 @@
               <facet-filters-form class="tg-collection__results-header small-hide">
                 <form class="facets-vertical-form" id="FacetSortForm">
                   <div class="product-count-vertical" role="status">
-                    <span id="ProductCountDesktop">{{ 'products.facets.product_count_simple' | t: count: collection.products_count }}</span>
+                    <span id="ProductCountDesktop" data-product-count="{{ collection.products_count }}">{{ 'products.facets.product_count_simple' | t: count: collection.products_count }}</span>
                     {% render 'loading-spinner' %}
                   </div>
                   <div class="facet-filters sorting">

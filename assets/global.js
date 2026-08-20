@@ -735,7 +735,8 @@ class SliderComponent extends HTMLElement {
     super();
     this.slider = this.querySelector('[id^="Slider-"]');
     this.sliderItems = this.querySelectorAll('[id^="Slide-"]');
-    this.enableSliderLooping = false;
+    this.enableSeamlessLooping = this.dataset.enableLooping === 'true';
+    this.enableSliderLooping = this.enableSeamlessLooping;
     this.currentPageElement = this.querySelector('.slider-counter--current');
     this.pageTotalElement = this.querySelector('.slider-counter--total');
     this.prevButton = this.querySelector('button[name="previous"]');
@@ -747,24 +748,31 @@ class SliderComponent extends HTMLElement {
     const resizeObserver = new ResizeObserver((entries) => this.initPages());
     resizeObserver.observe(this.slider);
 
-    this.slider.addEventListener('scroll', this.update.bind(this));
+    this.slider.addEventListener('scroll', this.onSliderScroll.bind(this));
+    this.slider.addEventListener('scrollend', this.onSliderScrollEnd.bind(this));
     this.prevButton.addEventListener('click', this.onButtonClick.bind(this));
     this.nextButton.addEventListener('click', this.onButtonClick.bind(this));
   }
 
   initPages() {
+    const addedLoopClones = this.setupLoopSlides();
+    this.sliderItems = this.getOriginalSliderItems();
     this.sliderItemsToShow = Array.from(this.sliderItems).filter((element) => element.clientWidth > 0);
     if (this.sliderItemsToShow.length < 2) return;
-    this.sliderItemOffset = this.sliderItemsToShow[1].offsetLeft - this.sliderItemsToShow[0].offsetLeft;
+    this.sliderItemOffset =
+      this.getSlidePosition(this.sliderItemsToShow[1]) - this.getSlidePosition(this.sliderItemsToShow[0]);
+    const leadingOffset = this.hasLoopSlides() ? 0 : this.getSlidePosition(this.sliderItemsToShow[0]);
     this.slidesPerPage = Math.floor(
-      (this.slider.clientWidth - this.sliderItemsToShow[0].offsetLeft) / this.sliderItemOffset
+      (this.slider.clientWidth - leadingOffset) / this.sliderItemOffset
     );
     this.totalPages = this.sliderItemsToShow.length - this.slidesPerPage + 1;
+    if (addedLoopClones) this.setSlidePosition(this.getSlidePosition(this.sliderItemsToShow[0]), true);
     this.update();
   }
 
   resetPages() {
-    this.sliderItems = this.querySelectorAll('[id^="Slide-"]');
+    this.removeLoopSlides();
+    this.sliderItems = this.getOriginalSliderItems();
     this.initPages();
   }
 
@@ -773,8 +781,17 @@ class SliderComponent extends HTMLElement {
     // This should be refactored as part of https://github.com/Shopify/dawn/issues/2057
     if (!this.slider || !this.nextButton) return;
 
+    if (!this.sliderItemsToShow?.length || !this.sliderItemOffset) return;
+
     const previousPage = this.currentPage;
-    this.currentPage = Math.round(this.slider.scrollLeft / this.sliderItemOffset) + 1;
+    if (this.hasLoopSlides()) {
+      const firstSlidePosition = this.getSlidePosition(this.sliderItemsToShow[0]);
+      const slideCount = this.sliderItemsToShow.length;
+      const loopPage = Math.round((this.slider.scrollLeft - firstSlidePosition) / this.sliderItemOffset) + 1;
+      this.currentPage = loopPage < 1 ? slideCount : loopPage > slideCount ? 1 : loopPage;
+    } else {
+      this.currentPage = Math.round(this.slider.scrollLeft / this.sliderItemOffset) + 1;
+    }
 
     if (this.currentPageElement && this.pageTotalElement) {
       this.currentPageElement.textContent = this.currentPage;
@@ -814,18 +831,144 @@ class SliderComponent extends HTMLElement {
 
   onButtonClick(event) {
     event.preventDefault();
+    if (this.loopTransition) return;
+
     const step = event.currentTarget.dataset.step || 1;
-    this.slideScrollPosition =
-      event.currentTarget.name === 'next'
+    const isNext = event.currentTarget.name === 'next';
+    const firstSlide = this.sliderItemsToShow?.[0];
+    const lastSlide = this.sliderItemsToShow?.[this.sliderItemsToShow.length - 1];
+    const maxScrollPosition = this.slider.scrollWidth - this.slider.clientWidth;
+    const firstSlidePosition = firstSlide ? this.getSlidePosition(firstSlide) : 0;
+    const hasLoopSlides = this.hasLoopSlides();
+    const lastSlidePosition = lastSlide
+      ? this.getSlidePosition(lastSlide)
+      : maxScrollPosition;
+    const isAtStart = this.slider.scrollLeft <= firstSlidePosition + 1;
+    const isAtEnd = this.slider.scrollLeft >= lastSlidePosition - 1;
+
+    if (this.enableSliderLooping && isNext && isAtEnd) {
+      if (hasLoopSlides) {
+        this.startLoopTransition('next');
+        return;
+      }
+      this.slideScrollPosition = 0;
+    } else if (this.enableSliderLooping && !isNext && isAtStart) {
+      if (hasLoopSlides) {
+        this.startLoopTransition('previous');
+        return;
+      }
+      this.slideScrollPosition = lastSlidePosition;
+    } else {
+      this.slideScrollPosition = isNext
         ? this.slider.scrollLeft + step * this.sliderItemOffset
         : this.slider.scrollLeft - step * this.sliderItemOffset;
+    }
     this.setSlidePosition(this.slideScrollPosition);
   }
 
-  setSlidePosition(position) {
-    this.slider.scrollTo({
-      left: position,
+  setSlidePosition(position, instant = false) {
+    if (instant) {
+      const scrollBehavior = this.slider.style.scrollBehavior;
+      this.slider.style.scrollBehavior = 'auto';
+      this.slider.scrollLeft = position;
+      this.slider.style.scrollBehavior = scrollBehavior;
+      return;
+    }
+
+    this.slider.scrollTo({ left: position });
+  }
+
+  onSliderScroll() {
+    this.update();
+    if (!this.loopTransition) return;
+
+    clearTimeout(this.loopTransitionTimeout);
+    this.loopTransitionTimeout = setTimeout(() => this.completeLoopTransition(), 100);
+  }
+
+  onSliderScrollEnd() {
+    if (this.loopTransition) {
+      this.completeLoopTransition();
+      return;
+    }
+
+    if (!this.hasLoopSlides()) return;
+
+    const firstSlide = this.sliderItemsToShow[0];
+    const lastSlide = this.sliderItemsToShow[this.sliderItemsToShow.length - 1];
+    const firstSlidePosition = this.getSlidePosition(firstSlide);
+    const lastSlidePosition = this.getSlidePosition(lastSlide);
+    if (this.slider.scrollLeft < firstSlidePosition) {
+      this.setSlidePosition(lastSlidePosition, true);
+    } else if (this.slider.scrollLeft > lastSlidePosition) {
+      this.setSlidePosition(firstSlidePosition, true);
+    }
+  }
+
+  startLoopTransition(direction) {
+    const loopSlide = this.slider.querySelector(`[data-slider-loop-clone="${direction === 'next' ? 'first' : 'last'}"]`);
+    const resetSlide = direction === 'next' ? this.sliderItemsToShow[0] : this.sliderItemsToShow[this.sliderItemsToShow.length - 1];
+    if (!loopSlide || !resetSlide) return;
+
+    this.loopTransition = { resetPosition: this.getSlidePosition(resetSlide) };
+    this.setSlidePosition(this.getSlidePosition(loopSlide));
+  }
+
+  completeLoopTransition() {
+    if (!this.loopTransition) return;
+
+    clearTimeout(this.loopTransitionTimeout);
+    const { resetPosition } = this.loopTransition;
+    this.loopTransition = null;
+    this.setSlidePosition(resetPosition, true);
+  }
+
+  getSlidePosition(slide) {
+    return this.slider.scrollLeft + slide.getBoundingClientRect().left - this.slider.getBoundingClientRect().left;
+  }
+
+  getOriginalSliderItems() {
+    return this.slider.querySelectorAll('[id^="Slide-"]:not([data-slider-loop-clone])');
+  }
+
+  hasLoopSlides() {
+    return this.enableSeamlessLooping && this.slider.querySelector('[data-slider-loop-clone]');
+  }
+
+  setupLoopSlides() {
+    if (
+      !this.enableSeamlessLooping ||
+      !this.slider.classList.contains('slider--mobile') ||
+      !window.matchMedia('(max-width: 749px)').matches ||
+      this.hasLoopSlides()
+    ) {
+      return false;
+    }
+
+    const slides = Array.from(this.getOriginalSliderItems()).filter((element) => element.clientWidth > 0);
+    if (slides.length < 2) return false;
+
+    this.slider.prepend(this.createLoopClone(slides[slides.length - 1], 'last'));
+    this.slider.append(this.createLoopClone(slides[0], 'first'));
+    return true;
+  }
+
+  removeLoopSlides() {
+    this.slider.querySelectorAll('[data-slider-loop-clone]').forEach((slide) => slide.remove());
+  }
+
+  createLoopClone(slide, position) {
+    const clone = slide.cloneNode(true);
+    clone.removeAttribute('id');
+    clone.removeAttribute('data-media-id');
+    clone.classList.remove('is-active');
+    clone.dataset.sliderLoopClone = position;
+    clone.setAttribute('aria-hidden', 'true');
+    clone.querySelectorAll('[id]').forEach((element) => element.removeAttribute('id'));
+    clone.querySelectorAll('a, button, input, select, textarea, [tabindex]').forEach((element) => {
+      element.setAttribute('tabindex', '-1');
     });
+    return clone;
   }
 }
 

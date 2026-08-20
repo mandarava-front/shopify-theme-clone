@@ -21,6 +21,61 @@ class FacetFiltersForm extends HTMLElement {
       FacetFiltersForm.renderPage(searchParams, null, false);
     };
     window.addEventListener('popstate', onHistoryChange);
+
+    document.addEventListener('click', (event) => {
+      const control = event.target.closest('[data-search-mobile-facets-mode]');
+      if (!control) return;
+
+      const disclosure = document.getElementById(control.getAttribute('aria-controls'));
+      if (!disclosure) return;
+
+      const mode = control.dataset.searchMobileFacetsMode;
+      const searchTemplate = control.closest('.template-search');
+
+      if (!disclosure.dataset.searchMobileFacetsControlsBound) {
+        disclosure.dataset.searchMobileFacetsControlsBound = 'true';
+        disclosure.addEventListener('toggle', () => {
+          if (disclosure.open) return;
+          searchTemplate?.querySelectorAll('[data-search-mobile-facets-mode]').forEach((button) => {
+            button.setAttribute('aria-expanded', 'false');
+          });
+        });
+      }
+
+      disclosure.dataset.tgMobileFacetsMode = mode;
+      disclosure.querySelectorAll('[data-tg-mobile-facets-heading]').forEach((heading) => {
+        heading.textContent = control.dataset.searchMobileFacetsLabel || '';
+      });
+      searchTemplate?.querySelectorAll('[data-search-mobile-facets-mode]').forEach((button) => {
+        button.setAttribute('aria-expanded', button === control ? 'true' : 'false');
+      });
+
+      if (!disclosure.open) {
+        disclosure.querySelector('.mobile-facets__open-wrapper')?.click();
+      }
+
+      if (mode === 'sort') {
+        window.setTimeout(() => {
+          disclosure.querySelector('.mobile-facets__sort-radio:checked, .mobile-facets__sort-radio')?.focus();
+        }, 120);
+      }
+    });
+
+    document.addEventListener('change', (event) => {
+      if (!event.target.matches('.template-search .mobile-facets__sort-radio')) return;
+
+      const disclosure = event.target.closest('.mobile-facets__disclosure');
+      const searchTemplate = event.target.closest('.template-search');
+      const selectedLabel = event.target.closest('.mobile-facets__sort-option')?.textContent.trim();
+      const sortControl = searchTemplate?.querySelector('[data-search-mobile-facets-mode="sort"]');
+
+      if (selectedLabel) {
+        const sortLabel = searchTemplate?.querySelector('[data-search-mobile-sort-label]');
+        if (sortLabel) sortLabel.textContent = selectedLabel;
+      }
+
+      disclosure?.closest('menu-drawer')?.closeMenuDrawer(event, sortControl);
+    });
   }
 
   static toggleActiveFacets(disable = true) {
@@ -67,7 +122,8 @@ class FacetFiltersForm extends HTMLElement {
     const facetsContainer = document.querySelector('.facets-container');
     const collectionId = facetsContainer?.dataset.collectionId || null;
     const collectionHandle = facetsContainer?.dataset.collectionHandle || '';
-    const currentCount = parseInt(document.getElementById('ProductCount')?.dataset.productCount) || 0;
+    const countElement = document.getElementById('ProductCount') || document.getElementById('ProductCountDesktop');
+    const currentCount = parseInt(countElement?.dataset.productCount || countElement?.textContent?.replace(/[^\d]/g, ''), 10) || 0;
     const urlSearchParams = new URLSearchParams(searchParams);
     const isSearchPage = facetsContainer?.dataset.template === 'search';
     const isCollectionPage = facetsContainer?.dataset.template === 'collection';
@@ -151,14 +207,24 @@ class FacetFiltersForm extends HTMLElement {
 
   static renderProductCount(html, updateEvent) {
     const parsedHtml = new DOMParser().parseFromString(html, 'text/html');
-    const sourceCount = parsedHtml.getElementById('ProductCount');
+    const sourceCount = parsedHtml.getElementById('ProductCount') || parsedHtml.getElementById('ProductCountDesktop');
+    if (!sourceCount) {
+      document
+        .querySelectorAll('.facets-container .loading__spinner, facet-filters-form .loading__spinner')
+        .forEach((spinner) => spinner.classList.add('hidden'));
+      updateEvent?.resolve(0);
+      return;
+    }
     const count = sourceCount.innerHTML;
+    const productCount = parseInt(sourceCount.dataset.productCount || sourceCount.textContent.replace(/[^\d]/g, ''), 10) || 0;
     const container = document.getElementById('ProductCount');
     const containerDesktop = document.getElementById('ProductCountDesktop');
-    container.innerHTML = count;
-    container.dataset.productCount = sourceCount.dataset.productCount || '';
-    container.dataset.totalCount = sourceCount.dataset.totalCount || '';
-    container.classList.remove('loading');
+    if (container) {
+      container.innerHTML = count;
+      container.dataset.productCount = sourceCount.dataset.productCount || '';
+      container.dataset.totalCount = sourceCount.dataset.totalCount || '';
+      container.classList.remove('loading');
+    }
     if (containerDesktop) {
       containerDesktop.innerHTML = count;
       containerDesktop.classList.remove('loading');
@@ -167,8 +233,15 @@ class FacetFiltersForm extends HTMLElement {
       '.facets-container .loading__spinner, facet-filters-form .loading__spinner',
     );
     loadingSpinners.forEach((spinner) => spinner.classList.add('hidden'));
+    FacetFiltersForm.updateMobileShowProductsButtons(productCount);
 
-    updateEvent?.resolve(parseInt(sourceCount.dataset.productCount) || 0);
+    updateEvent?.resolve(productCount);
+  }
+
+  static updateMobileShowProductsButtons(productCount) {
+    document.querySelectorAll('[data-mobile-facets-show-products]').forEach((button) => {
+      button.textContent = `Show ${productCount} products`;
+    });
   }
 
   static renderFilters(html, event) {
@@ -309,9 +382,21 @@ class FacetFiltersForm extends HTMLElement {
   static renderMobileCounts(source, target) {
     const targetFacetsList = target.querySelector('.mobile-facets__list');
     const sourceFacetsList = source.querySelector('.mobile-facets__list');
+    const targetSummary = target.querySelector('.mobile-facets__summary');
+    const sourceSummary = source.querySelector('.mobile-facets__summary');
+    const targetCloseButton = target.querySelector('.mobile-facets__close-button');
+    const sourceCloseButton = source.querySelector('.mobile-facets__close-button');
 
     if (sourceFacetsList && targetFacetsList) {
       targetFacetsList.outerHTML = sourceFacetsList.outerHTML;
+    }
+
+    if (sourceSummary && targetSummary) {
+      targetSummary.innerHTML = sourceSummary.innerHTML;
+    }
+
+    if (sourceCloseButton && targetCloseButton) {
+      targetCloseButton.innerHTML = sourceCloseButton.innerHTML;
     }
   }
 
@@ -434,6 +519,7 @@ class FacetRemove extends HTMLElement {
 
   closeFilter(event) {
     event.preventDefault();
+    event.stopPropagation();
     const form = this.closest('facet-filters-form') || document.querySelector('facet-filters-form');
     form.onActiveFilterClick(event);
   }
