@@ -207,6 +207,19 @@
   min-height: 4.4rem;
 }
 
+.mc-accordion-footer .disclosure__list-wrapper.country-selector {
+  z-index: 10;
+  background-color: #fff;
+  border-color: rgba(45, 40, 49, 0.2);
+  box-shadow: 0 0.8rem 2.4rem rgba(45, 40, 49, 0.16);
+  opacity: 1;
+}
+
+.mc-accordion-footer .country-filter,
+.mc-accordion-footer .disclosure__list.country-selector__list {
+  background-color: #fff;
+}
+
 .mc-accordion-footer .mc-accordion-footer__social {
   display: flex;
   flex-wrap: wrap;
@@ -365,6 +378,110 @@
 
   .mc-accordion-footer__bottom .mc-accordion-footer__policies {
     justify-content: flex-end;
+  }
+}
+
+/* Keep the accordion treatment through mini pad, then switch to the desktop footer layout. */
+@media screen and (min-width: 990px) {
+  .mc-accordion-footer__inner {
+    display: grid;
+    grid-template-columns: minmax(18rem, 26rem) minmax(0, 1fr);
+    align-items: start;
+    column-gap: clamp(4.8rem, 10vw, 20rem);
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 3.2rem clamp(3.2rem, 2vw, 5rem) 0;
+  }
+
+  .mc-accordion-footer__brand {
+    align-items: flex-start;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+  }
+
+  .mc-accordion-footer__logo {
+    justify-content: flex-start;
+  }
+
+  .mc-accordion-footer__groups {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 3.2rem clamp(2.4rem, 3.6vw, 8rem);
+    max-width: none;
+    margin: 0;
+    padding: 0 0 3.6rem;
+  }
+
+  .mc-accordion-footer__summary {
+    min-height: 0;
+    padding: 0 0 1.6rem;
+    border-radius: 0;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .mc-accordion-footer__group[open] > .mc-accordion-footer__summary {
+    background: transparent;
+  }
+
+  .mc-accordion-footer__heading {
+    display: block;
+  }
+
+  .mc-accordion-footer .mc-accordion-footer__chevron {
+    display: none;
+  }
+
+  .mc-accordion-footer__group > .mc-accordion-footer__links {
+    display: block;
+    padding: 0;
+  }
+
+  .mc-accordion-footer__group[open] > .mc-accordion-footer__links {
+    animation: none;
+  }
+
+  .mc-accordion-footer__links li + li {
+    margin-top: 1.6rem;
+  }
+
+  .mc-accordion-footer__bottom {
+    grid-column: 1 / -1;
+    min-height: 5.2rem;
+    width: 100%;
+    max-width: none;
+    margin-top: 0;
+    padding: 0.4rem 0;
+  }
+
+  .mc-accordion-footer__bottom .mc-accordion-footer__localization {
+    display: flex;
+    align-items: center;
+    min-height: 4.4rem;
+    margin: 0;
+  }
+
+  .mc-accordion-footer__localization .localization-form,
+  .mc-accordion-footer__localization .localization-form:only-child {
+    width: auto;
+    margin: 0;
+    padding: 0;
+  }
+
+  .mc-accordion-footer__localization .localization-form:only-child .localization-form__select,
+  .mc-accordion-footer__localization .disclosure__button.localization-form__select,
+  .mc-accordion-footer__localization .localization-selector.link {
+    min-height: 4.4rem;
+    height: 4.4rem;
+    margin: 0;
+    padding: 0 4rem 0 1.2rem;
+  }
+
+  .mc-accordion-footer__bottom .mc-accordion-footer__copyright {
+    font-size: 1.2rem;
+    line-height: 1.35;
   }
 }
 
