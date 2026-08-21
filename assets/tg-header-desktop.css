@@ -53,89 +53,9 @@
     letter-spacing: 0;
   }
 
-  .tg-header-desktop__announcement {
-    background: var(--tg-header-desktop-announcement-background);
-    color: var(--tg-header-desktop-announcement-text);
-  }
-
-  .tg-header-desktop__announcement[hidden] {
-    display: none;
-  }
-
-  .tg-header-desktop__announcement-inner,
   .tg-header-desktop__inner {
     width: min(var(--tg-header-desktop-max-width), calc(100% - 4rem));
     margin: 0 auto;
-  }
-
-  .tg-header-desktop__announcement-inner {
-    min-height: var(--tg-header-desktop-announcement-height, 3.6rem);
-    display: grid;
-    grid-template-columns: 4rem 1fr 4rem;
-    align-items: center;
-    text-align: center;
-  }
-
-  .tg-header-desktop__announcement-inner p {
-    grid-column: 2;
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 0.35em;
-    font-family: var(--tg-header-desktop-announcement-font, inherit);
-    font-size: var(--tg-header-desktop-announcement-font-size, 1.4rem);
-    font-weight: var(--tg-header-desktop-announcement-font-weight, 500);
-    letter-spacing: var(--tg-header-desktop-announcement-letter-spacing, 0);
-    line-height: var(--tg-header-desktop-announcement-line-height, 1.4);
-    text-transform: var(--tg-header-desktop-announcement-text-transform, none);
-    overflow-wrap: anywhere;
-  }
-
-  .tg-header-desktop__announcement-content,
-  .tg-header-desktop__announcement-suffix {
-    color: inherit;
-  }
-
-  .tg-header-desktop__announcement-content a,
-  .tg-header-desktop__announcement-suffix a {
-    color: inherit;
-  }
-
-  .tg-header-desktop__announcement-accent {
-    color: var(--tg-header-desktop-announcement-accent-color, currentColor);
-  }
-
-  .tg-header-desktop__announcement-accent--bold {
-    font-weight: 700;
-  }
-
-  .tg-header-desktop__announcement-accent--underline {
-    text-decoration: underline;
-    text-decoration-thickness: max(1px, 0.08em);
-    text-underline-offset: 0.14em;
-  }
-
-  .tg-header-desktop__announcement-close {
-    grid-column: 3;
-    justify-self: end;
-    width: 3.6rem;
-    height: 3.6rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: inherit;
-    cursor: pointer;
-  }
-
-  .tg-header-desktop__announcement-close .svg-wrapper,
-  .tg-header-desktop__announcement-close svg {
-    width: 1.7rem;
-    height: 1.7rem;
   }
 
   .tg-header-desktop__nav {

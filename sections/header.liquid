@@ -158,7 +158,6 @@
   -%}
   {%- if section.settings.enable_tg_header_desktop -%}
     {%- liquid
-    assign tg_header_desktop_announcement_font_bold = section.settings.tg_header_desktop_announcement_font | font_modify: 'weight', '700'
     assign tg_header_desktop_utility_count = 0
     assign tg_header_desktop_menu = blank
     assign tg_header_desktop_menu_block = blank
@@ -172,24 +171,9 @@
       endif
     endfor
     -%}
-    {% style %}
-      {{ section.settings.tg_header_desktop_announcement_font | font_face: font_display: 'swap' }}
-      {{ tg_header_desktop_announcement_font_bold | font_face: font_display: 'swap' }}
-    {% endstyle %}
     <tg-header-desktop
       class="tg-header-desktop"
-      data-announcement-key="tg-desktop-announcement-{{ section.id }}"
-      data-announcement-dismissible="{{ section.settings.tg_header_desktop_announcement_dismissible }}"
       style="
-        --tg-header-desktop-announcement-background: {{ section.settings.tg_header_desktop_announcement_background }};
-        --tg-header-desktop-announcement-text: {{ section.settings.tg_header_desktop_announcement_text }};
-        --tg-header-desktop-announcement-font: {{ section.settings.tg_header_desktop_announcement_font.family }}, {{ section.settings.tg_header_desktop_announcement_font.fallback_families }};
-        --tg-header-desktop-announcement-font-size: {{ section.settings.tg_header_desktop_announcement_font_size }}px;
-        --tg-header-desktop-announcement-font-weight: {{ section.settings.tg_header_desktop_announcement_font_weight }};
-        --tg-header-desktop-announcement-line-height: {{ section.settings.tg_header_desktop_announcement_line_height }};
-        --tg-header-desktop-announcement-letter-spacing: {{ section.settings.tg_header_desktop_announcement_letter_spacing }}px;
-        --tg-header-desktop-announcement-text-transform: {{ section.settings.tg_header_desktop_announcement_text_transform }};
-        --tg-header-desktop-announcement-height: {{ section.settings.tg_header_desktop_announcement_height }}px;
         --tg-header-desktop-background: {{ section.settings.tg_header_desktop_background }};
         --tg-header-desktop-text: {{ section.settings.tg_header_desktop_text }};
         --tg-header-desktop-hover: {{ section.settings.tg_header_desktop_hover }};
@@ -205,39 +189,6 @@
         --tg-header-desktop-panel-columns: {{ section.settings.tg_header_desktop_menu_panel_columns }};
       "
     >
-      {%- if section.settings.tg_header_desktop_show_announcement -%}
-        <div class="tg-header-desktop__announcement" data-tg-announcement>
-          <div class="tg-header-desktop__announcement-inner">
-            <p>
-              {%- if section.settings.tg_header_desktop_announcement_content != blank -%}
-                <span class="tg-header-desktop__announcement-content">{{ section.settings.tg_header_desktop_announcement_content }}</span>
-              {%- else -%}
-                <span class="tg-header-desktop__announcement-content">{{ section.settings.tg_header_desktop_announcement_text_content | escape }}</span>
-              {%- endif -%}
-              {%- if section.settings.tg_header_desktop_announcement_highlight_text != blank -%}
-                <span
-                  class="tg-header-desktop__announcement-accent{% if section.settings.tg_header_desktop_announcement_highlight_bold %} tg-header-desktop__announcement-accent--bold{% endif %}{% if section.settings.tg_header_desktop_announcement_highlight_underline %} tg-header-desktop__announcement-accent--underline{% endif %}"
-                  style="--tg-header-desktop-announcement-accent-color: {{ section.settings.tg_header_desktop_announcement_highlight_color }};"
-                >{{ section.settings.tg_header_desktop_announcement_highlight_text | escape }}</span>
-              {%- endif -%}
-              {%- if section.settings.tg_header_desktop_announcement_suffix != blank -%}
-                <span class="tg-header-desktop__announcement-suffix">{{ section.settings.tg_header_desktop_announcement_suffix }}</span>
-              {%- endif -%}
-            </p>
-            {%- if section.settings.tg_header_desktop_announcement_dismissible -%}
-              <button
-                class="tg-header-desktop__announcement-close focus-inset"
-                type="button"
-                data-tg-announcement-close
-                aria-label="{{ section.settings.tg_header_desktop_announcement_close_label | escape }}"
-              >
-                <span class="svg-wrapper" aria-hidden="true">{{- 'icon-close.svg' | inline_asset_content -}}</span>
-              </button>
-            {%- endif -%}
-          </div>
-        </div>
-      {%- endif -%}
-
       <nav class="tg-header-desktop__nav" aria-label="{{ 'sections.header.tg_header_desktop.navigation_label' | t }}">
         <div class="tg-header-desktop__top">
           <div class="tg-header-desktop__inner tg-header-desktop__top-inner">
@@ -1102,138 +1053,6 @@
     },
     {
       "type": "header",
-      "content": "tg | PC端 | 公告栏"
-    },
-    {
-      "type": "checkbox",
-      "id": "tg_header_desktop_show_announcement",
-      "default": true,
-      "label": "t:sections.header.tg_header_desktop.announcement.show.label"
-    },
-    {
-      "type": "text",
-      "id": "tg_header_desktop_announcement_text_content",
-      "default": "Save 10% on orders of 2+ with code: PH2",
-      "label": "t:sections.header.tg_header_desktop.announcement.text.label"
-    },
-    {
-      "type": "inline_richtext",
-      "id": "tg_header_desktop_announcement_content",
-      "label": "公告前置文案",
-      "info": "支持在编辑器中对部分文字加粗或添加链接；留空时使用上方原有文案。"
-    },
-    {
-      "type": "text",
-      "id": "tg_header_desktop_announcement_highlight_text",
-      "label": "局部强调文案",
-      "info": "显示在前置文案之后，可单独设置颜色、粗体和下划线。"
-    },
-    {
-      "type": "color",
-      "id": "tg_header_desktop_announcement_highlight_color",
-      "label": "局部强调颜色",
-      "default": "#a50c43"
-    },
-    {
-      "type": "checkbox",
-      "id": "tg_header_desktop_announcement_highlight_bold",
-      "label": "局部强调使用粗体",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "tg_header_desktop_announcement_highlight_underline",
-      "label": "局部强调添加下划线",
-      "default": false
-    },
-    {
-      "type": "inline_richtext",
-      "id": "tg_header_desktop_announcement_suffix",
-      "label": "公告后置文案",
-      "info": "可用于在局部强调文案后继续添加文字，也支持局部加粗和链接。"
-    },
-    {
-      "type": "font_picker",
-      "id": "tg_header_desktop_announcement_font",
-      "label": "公告栏字体",
-      "default": "poppins_n4"
-    },
-    {
-      "type": "range",
-      "id": "tg_header_desktop_announcement_font_size",
-      "min": 12,
-      "max": 24,
-      "step": 1,
-      "unit": "px",
-      "label": "公告栏字体大小",
-      "default": 14
-    },
-    {
-      "type": "range",
-      "id": "tg_header_desktop_announcement_font_weight",
-      "min": 400,
-      "max": 900,
-      "step": 100,
-      "label": "公告栏常规文字字重",
-      "default": 500
-    },
-    {
-      "type": "select",
-      "id": "tg_header_desktop_announcement_line_height",
-      "label": "公告栏行高",
-      "options": [
-        { "value": "1.2", "label": "紧凑" },
-        { "value": "1.4", "label": "标准" },
-        { "value": "1.6", "label": "宽松" }
-      ],
-      "default": "1.4"
-    },
-    {
-      "type": "range",
-      "id": "tg_header_desktop_announcement_letter_spacing",
-      "min": 0,
-      "max": 4,
-      "step": 1,
-      "unit": "px",
-      "label": "公告栏字间距",
-      "default": 0
-    },
-    {
-      "type": "select",
-      "id": "tg_header_desktop_announcement_text_transform",
-      "label": "公告栏文字大小写",
-      "options": [
-        { "value": "none", "label": "保持原样" },
-        { "value": "uppercase", "label": "全部大写" }
-      ],
-      "default": "none"
-    },
-    {
-      "type": "range",
-      "id": "tg_header_desktop_announcement_height",
-      "min": 32,
-      "max": 120,
-      "step": 2,
-      "unit": "px",
-      "label": "公告栏最小高度",
-      "default": 36,
-      "info": "文案换行时会自动增高，避免内容被截断。"
-    },
-    {
-      "type": "checkbox",
-      "id": "tg_header_desktop_announcement_dismissible",
-      "default": true,
-      "label": "t:sections.header.tg_header_desktop.announcement.dismissible.label",
-      "info": "t:sections.header.tg_header_desktop.announcement.dismissible.info"
-    },
-    {
-      "type": "text",
-      "id": "tg_header_desktop_announcement_close_label",
-      "default": "Close announcement",
-      "label": "t:sections.header.tg_header_desktop.announcement.close_label.label"
-    },
-    {
-      "type": "header",
       "content": "tg | PC端 | 搜索与购物车"
     },
     {
@@ -1299,18 +1118,6 @@
     {
       "type": "header",
       "content": "tg | PC端 | 外观"
-    },
-    {
-      "type": "color",
-      "id": "tg_header_desktop_announcement_background",
-      "default": "#fef1e2",
-      "label": "t:sections.header.tg_header_desktop.appearance.announcement_background.label"
-    },
-    {
-      "type": "color",
-      "id": "tg_header_desktop_announcement_text",
-      "default": "#202024",
-      "label": "t:sections.header.tg_header_desktop.appearance.announcement_text.label"
     },
     {
       "type": "color",

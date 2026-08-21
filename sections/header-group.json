@@ -13,12 +13,12 @@
   "sections": {
     "announcement-bar": {
       "type": "announcement-bar",
-      "disabled": true,
+      "disabled": false,
       "blocks": {
         "announcement-bar-0": {
           "type": "announcement",
           "settings": {
-            "text": "Welcome to our store",
+            "text": "Save 10% orders 2+ with code: PH2",
             "link": ""
           }
         }
@@ -33,7 +33,17 @@
         "show_line_separator": true,
         "show_social": false,
         "enable_country_selector": false,
-        "enable_language_selector": false
+        "enable_language_selector": false,
+        "tg_announcement_font": "poppins_n4",
+        "tg_announcement_font_size": 14,
+        "tg_announcement_mobile_font_size": 14,
+        "tg_announcement_font_weight": 500,
+        "tg_announcement_line_height": "1.4",
+        "tg_announcement_letter_spacing": 0,
+        "tg_announcement_text_transform": "none",
+        "tg_announcement_height": 36,
+        "tg_announcement_background_color": "#fef1e2",
+        "tg_announcement_text_color": "#202024"
       }
     },
     "header": {
@@ -301,10 +311,6 @@
         "tg_header_mobile_menu_show_social": true,
         "enable_tg_header_desktop": true,
         "tg_header_desktop_logo_text": "Pawfect House",
-        "tg_header_desktop_show_announcement": true,
-        "tg_header_desktop_announcement_text_content": "Save 10% orders 2+ with code: PH2",
-        "tg_header_desktop_announcement_dismissible": false,
-        "tg_header_desktop_announcement_close_label": "Close announcement",
         "tg_header_desktop_show_search": true,
         "tg_header_desktop_search_placeholder": "Find your perfect gift in seconds...",
         "tg_header_desktop_search_label": "Search",
@@ -312,8 +318,6 @@
         "tg_header_desktop_cart_label": "Cart",
         "tg_header_desktop_show_utility_links": true,
         "tg_header_desktop_show_social_links": false,
-        "tg_header_desktop_announcement_background": "#fef1e2",
-        "tg_header_desktop_announcement_text": "#202024",
         "tg_header_desktop_background": "#ffffff",
         "tg_header_desktop_text": "#202024",
         "tg_header_desktop_hover": "#f76e4a",

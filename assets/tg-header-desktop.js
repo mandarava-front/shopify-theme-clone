@@ -1,15 +1,9 @@
 class TgHeaderDesktop extends HTMLElement {
   connectedCallback() {
-    this.announcement = this.querySelector('[data-tg-announcement]');
-    this.announcementClose = this.querySelector('[data-tg-announcement-close]');
     this.cartCount = this.querySelector('[data-tg-cart-count]');
     this.cartCountLabel = this.querySelector('[data-tg-cart-count-label]');
 
-    this.onAnnouncementClose = this.closeAnnouncement.bind(this);
     this.onCartUpdate = this.updateCartCount.bind(this);
-
-    this.restoreAnnouncement();
-    this.announcementClose?.addEventListener('click', this.onAnnouncementClose);
 
     if (typeof subscribe === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') {
       this.cartUpdateUnsubscriber = subscribe(PUB_SUB_EVENTS.cartUpdate, this.onCartUpdate);
@@ -17,31 +11,7 @@ class TgHeaderDesktop extends HTMLElement {
   }
 
   disconnectedCallback() {
-    this.announcementClose?.removeEventListener('click', this.onAnnouncementClose);
     this.cartUpdateUnsubscriber?.();
-  }
-
-  restoreAnnouncement() {
-    if (!this.announcement || this.dataset.announcementDismissible !== 'true') return;
-
-    try {
-      if (window.sessionStorage.getItem(this.dataset.announcementKey) === 'hidden') {
-        this.announcement.hidden = true;
-      }
-    } catch (error) {
-      // Storage is optional for this enhancement.
-    }
-  }
-
-  closeAnnouncement() {
-    if (!this.announcement) return;
-    this.announcement.hidden = true;
-
-    try {
-      window.sessionStorage.setItem(this.dataset.announcementKey, 'hidden');
-    } catch (error) {
-      // Storage is optional for this enhancement.
-    }
   }
 
   updateCartCount(event) {
