@@ -27,7 +27,7 @@
   <div
     class="tg-cart-shipping-protection{% if surface == 'drawer' %} tg-cart-drawer__protection-card{% else %} tg-cart-summary__shipping-protection{% endif %}"
     data-tg-cart-protection
-    style="--tg-cart-protection-surface: {{ block.settings.surface_color | default: '#ffffff' }}; --tg-cart-protection-border-width: {% if block.settings.show_border %}1px{% else %}0{% endif %}; --tg-cart-protection-border-color: {{ block.settings.border_color | default: '#cfc4e2' }}; --tg-cart-protection-radius: {{ block.settings.card_radius | default: 6 }}px; --tg-cart-protection-toggle-off: {{ block.settings.toggle_off_color | default: '#c8beff' }}; --tg-cart-protection-toggle-on: {{ block.settings.toggle_on_color | default: '#7055ff' }};"
+    style="--tg-cart-protection-surface: {{ block.settings.surface_color | default: '#FFFFFF' }}; --tg-cart-protection-border-width: {% if block.settings.show_border %}1px{% else %}0{% endif %}; --tg-cart-protection-border-color: {{ block.settings.border_color | default: '#E6E1E3' }}; --tg-cart-protection-radius: {{ block.settings.card_radius | default: 8 }}px; --tg-cart-protection-toggle-off: {{ block.settings.toggle_off_color | default: '#D4CED1' }}; --tg-cart-protection-toggle-on: {{ block.settings.toggle_on_color | default: '#A50C43' }};"
   >
     <div class="tg-cart-shipping-protection__image{% if surface == 'drawer' %} tg-cart-drawer__protection-image{% endif %}">
       {%- if tg_cart_protection_image != blank -%}

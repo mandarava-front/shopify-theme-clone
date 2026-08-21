@@ -31,21 +31,21 @@
         "empty_text": "Find something personal for someone special.",
         "empty_button_label": "Continue shopping",
         "empty_button_link": "",
-        "empty_button_background_color": "#a50c43",
-        "empty_button_hover_background_color": "#8a0a39",
+        "empty_button_background_color": "#A50C43",
+        "empty_button_hover_background_color": "#850936",
         "empty_button_text_color": "#ffffff",
-        "empty_button_border_color": "#a50c43",
+        "empty_button_border_color": "#A50C43",
         "empty_button_border_width": 1,
         "empty_button_radius": 8,
         "empty_button_height": 48,
         "empty_button_font_size": 16,
         "tg_cart_font": "poppins_n4",
-        "tg_cart_page_accent_color": "#a50c43",
+        "tg_cart_page_accent_color": "#A50C43",
         "tg_cart_page_surface_color": "#ffffff",
         "tg_cart_page_card_color": "#ffffff",
-        "tg_cart_page_border_color": "#e2e2e2",
-        "tg_cart_page_text_color": "#15375f",
-        "tg_cart_page_muted_color": "#858990",
+        "tg_cart_page_border_color": "#E6E1E3",
+        "tg_cart_page_text_color": "#1F2933",
+        "tg_cart_page_muted_color": "#667085",
         "tg_cart_card_radius": 8,
         "color_scheme": "scheme-1",
         "padding_top": 0,
@@ -61,11 +61,13 @@
             "target": 75,
             "pending_message_template": "You're [amount] away from free shipping",
             "complete_message": "You've unlocked free shipping",
-            "progress_color": "#7055ff",
-            "track_color": "#e2dfea",
-            "surface_color": "#F5F5F5",
+            "progress_color": "#A50C43",
+            "track_color": "#E9DCE1",
+            "surface_color": "#F7F5F6",
             "show_border": false,
-            "border_color": "#e2e2e2"
+            "border_color": "#E6E1E3",
+            "block_width": 100,
+            "padding_inline": 0
           }
         },
         "promotion": {
@@ -76,14 +78,15 @@
             "incomplete_message": "Add 1 more item to get 10% OFF!",
             "link_label": "",
             "link": "",
-            "promotion_background_start_color": "#ffc26d",
-            "promotion_background_end_color": "#ff6173",
-            "promotion_text_color": "#ffffff",
-            "promotion_link_color": "#ffffff",
-            "promotion_border_color": "#ff6173",
-            "promotion_border_width": 0,
-            "promotion_radius": 20,
-            "promotion_font_size": 16
+            "promotion_background_start_color": "#F9EEF2",
+            "promotion_background_end_color": "#F9EEF2",
+            "promotion_text_color": "#6E1535",
+            "promotion_link_color": "#A50C43",
+            "promotion_border_color": "#E8CBD5",
+            "promotion_border_width": 1,
+            "promotion_radius": 8,
+            "promotion_font_size": 16,
+            "block_width": 100
           }
         },
         "subtotal": {
@@ -91,7 +94,8 @@
           "settings": {
             "label": "Subtotal",
             "show_tax_note": false,
-            "custom_tax_note": ""
+            "custom_tax_note": "",
+            "block_width": 100
           }
         },
         "buttons": {
@@ -99,14 +103,15 @@
           "settings": {
             "checkout_label": "CHECKOUT",
             "show_dynamic_checkout": false,
-            "checkout_background_color": "#a50c43",
-            "checkout_hover_background_color": "#910a3a",
+            "checkout_background_color": "#A50C43",
+            "checkout_hover_background_color": "#850936",
             "checkout_text_color": "#ffffff",
-            "checkout_border_color": "#a50c43",
+            "checkout_border_color": "#A50C43",
             "checkout_border_width": 0,
             "checkout_radius": 9,
             "checkout_height": 54,
-            "checkout_font_size": 24
+            "checkout_font_size": 24,
+            "block_width": 100
           }
         },
         "payment_methods": {
@@ -115,7 +120,8 @@
             "show_secure_line": true,
             "secure_text": "100% Secure Payment",
             "heading": "Payment Methods",
-            "show_payment_types": true
+            "show_payment_types": true,
+            "block_width": 100
           }
         },
         "shipping_protection_M3gWge": {
@@ -129,12 +135,13 @@
             "toggle_label": "Add shipping protection",
             "surface_color": "#ffffff",
             "show_border": true,
-            "border_color": "#cfc4e2",
-            "card_radius": 6,
-            "toggle_off_color": "#c8beff",
-            "toggle_on_color": "#7055ff",
+            "border_color": "#E6E1E3",
+            "card_radius": 8,
+            "toggle_off_color": "#D4CED1",
+            "toggle_on_color": "#A50C43",
             "require_terms": false,
-            "terms_label": "I agree with the terms & conditions"
+            "terms_label": "I agree with the terms & conditions",
+            "block_width": 100
           }
         }
       },
@@ -157,14 +164,14 @@
         "tg_cart_summary_padding_block": 20,
         "tg_cart_summary_padding_inline": 20,
         "tg_cart_font": "poppins_n4",
-        "tg_cart_page_accent_color": "#a50c43",
+        "tg_cart_page_accent_color": "#A50C43",
         "tg_cart_page_surface_color": "#ffffff",
         "tg_cart_page_card_color": "#ffffff",
-        "tg_cart_summary_surface_color": "#f5f5f5",
-        "tg_cart_total_price_color": "#d63533",
-        "tg_cart_page_border_color": "#e2e2e2",
-        "tg_cart_page_text_color": "#15375f",
-        "tg_cart_page_muted_color": "#858990",
+        "tg_cart_summary_surface_color": "#F7F5F6",
+        "tg_cart_total_price_color": "#A50C43",
+        "tg_cart_page_border_color": "#E6E1E3",
+        "tg_cart_page_text_color": "#1F2933",
+        "tg_cart_page_muted_color": "#667085",
         "tg_cart_card_radius": 8,
         "color_scheme": "scheme-1",
         "padding_top": 20,

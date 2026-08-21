@@ -72,7 +72,7 @@
             {%- else -%}
               <div
                 class="tg-cart-summary__block{% if block.settings.enable_custom_spacing %} tg-cart-summary__block--custom-spacing{% endif %}"
-                style="--tg-cart-block-margin-top: {{ block.settings.margin_top | default: 0 }}px; --tg-cart-block-margin-bottom: {{ block.settings.margin_bottom | default: 0 }}px;"
+                style="--tg-cart-block-width: {{ block.settings.block_width | default: 100 }}%; --tg-cart-block-margin-top: {{ block.settings.margin_top | default: 0 }}px; --tg-cart-block-margin-bottom: {{ block.settings.margin_bottom | default: 0 }}px;"
                 {{ block.shopify_attributes }}
               >
               {%- case block.type -%}
@@ -221,7 +221,7 @@
           {%- if block.type == 'buyer_protection' -%}
             <div
               class="tg-cart-summary__block{% if block.settings.enable_custom_spacing %} tg-cart-summary__block--custom-spacing{% endif %}"
-              style="--tg-cart-block-margin-top: {{ block.settings.margin_top | default: 0 }}px; --tg-cart-block-margin-bottom: {{ block.settings.margin_bottom | default: 0 }}px;"
+              style="--tg-cart-block-width: {{ block.settings.block_width | default: 100 }}%; --tg-cart-block-margin-top: {{ block.settings.margin_top | default: 0 }}px; --tg-cart-block-margin-bottom: {{ block.settings.margin_bottom | default: 0 }}px;"
               {{ block.shopify_attributes }}
             >
               {% render 'tg-cart-buyer-protection', block: block %}
@@ -348,7 +348,7 @@
       "type": "color",
       "id": "tg_cart_page_accent_color",
       "label": "Tg | Accent color / 强调色",
-      "default": "#a50c43"
+      "default": "#A50C43"
     },
     {
       "type": "color",
@@ -366,31 +366,31 @@
       "type": "color",
       "id": "tg_cart_summary_surface_color",
       "label": "Tg | Summary background / 摘要卡背景色",
-      "default": "#f5f5f5"
+      "default": "#F7F5F6"
     },
     {
       "type": "color",
       "id": "tg_cart_total_price_color",
       "label": "Tg | Total price color / 总价文字颜色",
-      "default": "#d63533"
+      "default": "#A50C43"
     },
     {
       "type": "color",
       "id": "tg_cart_page_border_color",
       "label": "Tg | Border color / 边框颜色",
-      "default": "#e2e2e2"
+      "default": "#E6E1E3"
     },
     {
       "type": "color",
       "id": "tg_cart_page_text_color",
       "label": "Tg | Primary text color / 主文字颜色",
-      "default": "#15375f"
+      "default": "#1F2933"
     },
     {
       "type": "color",
       "id": "tg_cart_page_muted_color",
       "label": "Tg | Secondary text color / 次要文字颜色",
-      "default": "#858990"
+      "default": "#667085"
     },
     {
       "type": "range",
@@ -463,19 +463,19 @@
           "type": "color",
           "id": "progress_color",
           "label": "进度条颜色",
-          "default": "#7055ff"
+          "default": "#A50C43"
         },
         {
           "type": "color",
           "id": "track_color",
           "label": "进度条背景颜色",
-          "default": "#e2dfea"
+          "default": "#E9DCE1"
         },
         {
           "type": "color",
           "id": "surface_color",
           "label": "组件背景颜色",
-          "default": "#f5f5f5"
+          "default": "#F7F5F6"
         },
         {
           "type": "checkbox",
@@ -487,7 +487,27 @@
           "type": "color",
           "id": "border_color",
           "label": "组件边框颜色",
-          "default": "#e2e2e2"
+          "default": "#E6E1E3"
+        },
+        {
+          "type": "range",
+          "id": "block_width",
+          "min": 70,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "label": "区块宽度",
+          "default": 100
+        },
+        {
+          "type": "range",
+          "id": "padding_inline",
+          "min": 0,
+          "max": 40,
+          "step": 2,
+          "unit": "px",
+          "label": "组件左右内边距",
+          "default": 0
         },
         {
           "type": "header",
@@ -543,6 +563,16 @@
           "type": "textarea",
           "id": "custom_tax_note",
           "label": "Tg | Custom tax and shipping note / 自定义税费和配送说明"
+        },
+        {
+          "type": "range",
+          "id": "block_width",
+          "min": 70,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "label": "区块宽度",
+          "default": 100
         },
         {
           "type": "header",
@@ -602,13 +632,13 @@
           "type": "color",
           "id": "checkout_background_color",
           "label": "Tg | Button background / 按钮背景色",
-          "default": "#a50c43"
+          "default": "#A50C43"
         },
         {
           "type": "color",
           "id": "checkout_hover_background_color",
           "label": "Tg | Button hover background / 按钮悬停背景色",
-          "default": "#910a3a"
+          "default": "#850936"
         },
         {
           "type": "color",
@@ -620,7 +650,7 @@
           "type": "color",
           "id": "checkout_border_color",
           "label": "Tg | Button border color / 按钮边框颜色",
-          "default": "#a50c43"
+          "default": "#A50C43"
         },
         {
           "type": "range",
@@ -661,6 +691,16 @@
           "unit": "px",
           "label": "Tg | Button font size / 按钮字号",
           "default": 24
+        },
+        {
+          "type": "range",
+          "id": "block_width",
+          "min": 70,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "label": "区块宽度",
+          "default": 100
         },
         {
           "type": "header",
@@ -739,31 +779,31 @@
           "type": "color",
           "id": "promotion_background_start_color",
           "label": "Tg | Background start color / 背景起始色",
-          "default": "#ffc26d"
+          "default": "#F9EEF2"
         },
         {
           "type": "color",
           "id": "promotion_background_end_color",
           "label": "Tg | Background end color / 背景结束色",
-          "default": "#ff6173"
+          "default": "#F9EEF2"
         },
         {
           "type": "color",
           "id": "promotion_text_color",
           "label": "Tg | Text color / 文字颜色",
-          "default": "#ffffff"
+          "default": "#6E1535"
         },
         {
           "type": "color",
           "id": "promotion_link_color",
           "label": "Tg | Link color / 链接颜色",
-          "default": "#ffffff"
+          "default": "#A50C43"
         },
         {
           "type": "color",
           "id": "promotion_border_color",
           "label": "Tg | Border color / 边框颜色",
-          "default": "#ff6173"
+          "default": "#E8CBD5"
         },
         {
           "type": "range",
@@ -773,7 +813,7 @@
           "step": 1,
           "unit": "px",
           "label": "Tg | Border width / 边框宽度",
-          "default": 0
+          "default": 1
         },
         {
           "type": "range",
@@ -783,7 +823,7 @@
           "step": 1,
           "unit": "px",
           "label": "Tg | Corner radius / 圆角",
-          "default": 20
+          "default": 8
         },
         {
           "type": "range",
@@ -794,6 +834,16 @@
           "unit": "px",
           "label": "Tg | Text size / 文字字号",
           "default": 16
+        },
+        {
+          "type": "range",
+          "id": "block_width",
+          "min": 70,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "label": "区块宽度",
+          "default": 100
         },
         {
           "type": "header",
@@ -856,6 +906,16 @@
           "id": "show_payment_types",
           "label": "Tg | Show enabled payment methods / 显示已启用的支付方式",
           "default": true
+        },
+        {
+          "type": "range",
+          "id": "block_width",
+          "min": 70,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "label": "区块宽度",
+          "default": 100
         },
         {
           "type": "header",
@@ -939,7 +999,7 @@
           "type": "color",
           "id": "surface_color",
           "label": "卡片背景颜色",
-          "default": "#ffffff"
+          "default": "#FFFFFF"
         },
         {
           "type": "checkbox",
@@ -951,7 +1011,7 @@
           "type": "color",
           "id": "border_color",
           "label": "卡片边框颜色",
-          "default": "#cfc4e2"
+          "default": "#E6E1E3"
         },
         {
           "type": "range",
@@ -961,19 +1021,19 @@
           "step": 1,
           "unit": "px",
           "label": "卡片圆角",
-          "default": 6
+          "default": 8
         },
         {
           "type": "color",
           "id": "toggle_off_color",
           "label": "开关关闭颜色",
-          "default": "#c8beff"
+          "default": "#D4CED1"
         },
         {
           "type": "color",
           "id": "toggle_on_color",
           "label": "开关开启颜色",
-          "default": "#7055ff"
+          "default": "#A50C43"
         },
         {
           "type": "checkbox",
@@ -986,6 +1046,16 @@
           "id": "terms_label",
           "label": "条款确认文案",
           "default": "I agree with the terms & conditions"
+        },
+        {
+          "type": "range",
+          "id": "block_width",
+          "min": 70,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "label": "区块宽度",
+          "default": 100
         },
         {
           "type": "header",
@@ -1061,6 +1131,16 @@
           "label": "Tg | Protection item 2 text / 保障项 2 内容"
         },
         {
+          "type": "range",
+          "id": "block_width",
+          "min": 70,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "label": "区块宽度",
+          "default": 100
+        },
+        {
           "type": "header",
           "content": "区块间距"
         },
@@ -1120,6 +1200,16 @@
           "label": "Link"
         },
         {
+          "type": "range",
+          "id": "block_width",
+          "min": 70,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "label": "区块宽度",
+          "default": 100
+        },
+        {
           "type": "header",
           "content": "区块间距"
         },
@@ -1170,14 +1260,14 @@
         "tg_cart_summary_padding_block": 20,
         "tg_cart_summary_padding_inline": 20,
         "tg_cart_font": "poppins_n4",
-        "tg_cart_page_accent_color": "#a50c43",
+        "tg_cart_page_accent_color": "#A50C43",
         "tg_cart_page_surface_color": "#ffffff",
         "tg_cart_page_card_color": "#ffffff",
-        "tg_cart_summary_surface_color": "#f5f5f5",
-        "tg_cart_total_price_color": "#d63533",
-        "tg_cart_page_border_color": "#e2e2e2",
-        "tg_cart_page_text_color": "#15375f",
-        "tg_cart_page_muted_color": "#858990",
+        "tg_cart_summary_surface_color": "#F7F5F6",
+        "tg_cart_total_price_color": "#A50C43",
+        "tg_cart_page_border_color": "#E6E1E3",
+        "tg_cart_page_text_color": "#1F2933",
+        "tg_cart_page_muted_color": "#667085",
         "tg_cart_card_radius": 8,
         "color_scheme": "scheme-1",
         "padding_top": 20,
@@ -1190,11 +1280,13 @@
             "target": 75,
             "pending_message_template": "You're [amount] away from free shipping",
             "complete_message": "You've unlocked free shipping",
-            "progress_color": "#7055ff",
-            "track_color": "#e2dfea",
-            "surface_color": "#F5F5F5",
+            "progress_color": "#A50C43",
+            "track_color": "#E9DCE1",
+            "surface_color": "#F7F5F6",
             "show_border": false,
-            "border_color": "#e2e2e2"
+            "border_color": "#E6E1E3",
+            "block_width": 100,
+            "padding_inline": 0
           }
         },
         {
@@ -1205,14 +1297,15 @@
             "incomplete_message": "Add 1 more item to get 10% OFF!",
             "link_label": "",
             "link": "",
-            "promotion_background_start_color": "#ffc26d",
-            "promotion_background_end_color": "#ff6173",
-            "promotion_text_color": "#ffffff",
-            "promotion_link_color": "#ffffff",
-            "promotion_border_color": "#ff6173",
-            "promotion_border_width": 0,
-            "promotion_radius": 20,
-            "promotion_font_size": 16
+            "promotion_background_start_color": "#F9EEF2",
+            "promotion_background_end_color": "#F9EEF2",
+            "promotion_text_color": "#6E1535",
+            "promotion_link_color": "#A50C43",
+            "promotion_border_color": "#E8CBD5",
+            "promotion_border_width": 1,
+            "promotion_radius": 8,
+            "promotion_font_size": 16,
+            "block_width": 100
           }
         },
         {
@@ -1220,7 +1313,8 @@
           "settings": {
             "label": "Subtotal",
             "show_tax_note": false,
-            "custom_tax_note": ""
+            "custom_tax_note": "",
+            "block_width": 100
           }
         },
         {
@@ -1228,14 +1322,15 @@
           "settings": {
             "checkout_label": "CHECKOUT",
             "show_dynamic_checkout": false,
-            "checkout_background_color": "#a50c43",
-            "checkout_hover_background_color": "#910a3a",
+            "checkout_background_color": "#A50C43",
+            "checkout_hover_background_color": "#850936",
             "checkout_text_color": "#ffffff",
-            "checkout_border_color": "#a50c43",
+            "checkout_border_color": "#A50C43",
             "checkout_border_width": 0,
             "checkout_radius": 9,
             "checkout_height": 54,
-            "checkout_font_size": 24
+            "checkout_font_size": 24,
+            "block_width": 100
           }
         },
         {
@@ -1244,7 +1339,8 @@
             "show_secure_line": true,
             "secure_text": "100% Secure Payment",
             "heading": "Payment Methods",
-            "show_payment_types": true
+            "show_payment_types": true,
+            "block_width": 100
           }
         },
         {
@@ -1258,12 +1354,13 @@
             "toggle_label": "Add shipping protection",
             "surface_color": "#ffffff",
             "show_border": true,
-            "border_color": "#cfc4e2",
-            "card_radius": 6,
-            "toggle_off_color": "#c8beff",
-            "toggle_on_color": "#7055ff",
+            "border_color": "#E6E1E3",
+            "card_radius": 8,
+            "toggle_off_color": "#D4CED1",
+            "toggle_on_color": "#A50C43",
             "require_terms": false,
-            "terms_label": "I agree with the terms & conditions"
+            "terms_label": "I agree with the terms & conditions",
+            "block_width": 100
           }
         }
       ]
