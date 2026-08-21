@@ -152,7 +152,7 @@
                     id="Details-{{ filter.param_name | escape }}-{{ section.id }}"
                     class="{% if filter_type == 'horizontal' %}disclosure-has-popup facets__disclosure{% else %} facets__disclosure-vertical{% endif %} js-filter"
                     data-index="{{ forloop.index }}"
-                    {% if filter_type == 'vertical' and forloop.index == 1 %}
+                    {% if filter_type == 'vertical' and forloop.index == 1 and price_facet_style != 'tg_collection' %}
                       open
                     {% endif %}
                   >
@@ -323,7 +323,7 @@
                     id="Details-{{ filter.param_name | escape }}-{{ section.id }}"
                     class="{% if filter_type == 'horizontal' %}disclosure-has-popup facets__disclosure{% else %} facets__disclosure-vertical{% endif %} js-filter"
                     data-index="{{ forloop.index }}"
-                    {% if filter_type == 'vertical' and forloop.index == 1 %}
+                    {% if filter_type == 'vertical' and forloop.index == 1 and price_facet_style != 'tg_collection' %}
                       open
                     {% endif %}
                   >
@@ -350,13 +350,15 @@
                           </facet-remove>
                         {%- endif -%}
                       </div>
-                      <price-range class="facets__price">
-                        {% if price_facet_style == 'tg_collection' %}
-                          {% render 'tg-collection-price-facet', filter: filter, id_prefix: 'Filter-', price_currency_mode: price_currency_mode, price_currency_label: price_currency_label %}
-                        {% else %}
+                      {% if price_facet_style == 'tg_collection' %}
+                        <tg-collection-price-range class="facets__price">
+                          {% render 'tg-collection-price-facet', filter: filter, id_prefix: 'Filter-', price_currency_mode: price_currency_mode, price_currency_label: price_currency_label, show_range_slider: true %}
+                        </tg-collection-price-range>
+                      {% else %}
+                        <price-range class="facets__price">
                           {% render 'price-facet', filter: filter, id_prefix: 'Filter-', filter_type: filter_type %}
-                        {% endif %}
-                      </price-range>
+                        </price-range>
+                      {% endif %}
                     </div>
                   </details>
               {% endcase %}

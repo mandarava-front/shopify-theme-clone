@@ -1,5 +1,14 @@
 {%- liquid
   assign tg_price_currency = localization.country.currency.symbol
+  assign tg_price_min = filter.min_value.value | money_without_currency | strip_html
+  assign tg_price_max = filter.max_value.value | money_without_currency | strip_html
+  assign tg_price_range_max = filter.range_max | money_without_currency | strip_html
+  if tg_price_min == blank
+    assign tg_price_min = 0
+  endif
+  if tg_price_max == blank
+    assign tg_price_max = tg_price_range_max
+  endif
   if tg_price_currency == blank
     assign tg_price_currency = cart.currency.symbol
   endif
@@ -7,6 +16,29 @@
     assign tg_price_currency = price_currency_label
   endif
 -%}
+
+{% if show_range_slider %}
+  <div class="tg-collection__price-slider" data-tg-price-slider>
+    <input
+      type="range"
+      min="0"
+      max="{{ tg_price_range_max | escape }}"
+      value="{{ tg_price_min | escape }}"
+      step="0.01"
+      aria-label="{{ 'products.facets.from' | t }}"
+      data-tg-price-range="min"
+    >
+    <input
+      type="range"
+      min="0"
+      max="{{ tg_price_range_max | escape }}"
+      value="{{ tg_price_max | escape }}"
+      step="0.01"
+      aria-label="{{ 'products.facets.to' | t }}"
+      data-tg-price-range="max"
+    >
+  </div>
+{% endif %}
 
 <div class="tg-collection__price-inputs">
   <label class="tg-collection__price-field" for="{{ id_prefix }}{{ filter.label | escape }}-GTE">
@@ -20,6 +52,7 @@
       inputmode="decimal"
       placeholder="{{ 'products.facets.from' | t }}"
       data-pattern="\d| |,|\."
+      data-tg-price-input="min"
       data-min="0"
       data-max="{{ filter.range_max | money_without_currency | strip_html | escape }}"
     >
@@ -36,6 +69,7 @@
       inputmode="decimal"
       placeholder="{{ 'products.facets.to' | t }}"
       data-pattern="\d| |,|\."
+      data-tg-price-input="max"
       data-min="0"
       data-max="{{ filter.range_max | money_without_currency | strip_html | escape }}"
     >

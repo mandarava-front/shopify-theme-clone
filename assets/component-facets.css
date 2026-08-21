@@ -1619,7 +1619,7 @@ input.mobile-facets__checkbox {
 
   .facets-wrap-vertical {
     border: none;
-    padding-left: 0;
+    padding: 0;
   }
 
   .facets__form-vertical {

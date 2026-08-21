@@ -83,15 +83,41 @@
                   <div class="facet-filters sorting">
                     <div class="facet-filters__field">
                       <label class="visually-hidden" for="SortBy">{{ tg_collection_sort_by_label }}</label>
-                      <span class="tg-collection__sort-prefix" aria-hidden="true">{{ tg_collection_sort_by_label }}</span>
-                      <div class="select">
-                        <select name="sort_by" class="facet-filters__sort select__select" id="SortBy" aria-describedby="a11y-refresh-page-message">
-                          {% for option in collection.sort_options %}
-                            <option value="{{ option.value | escape }}" {% if option.value == tg_collection_sort_by %}selected="selected"{% endif %}>{{ option.name | escape }}</option>
-                          {% endfor %}
-                        </select>
-                        <span class="svg-wrapper">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
-                      </div>
+                      <tg-collection-sort class="tg-collection__sort-dropdown">
+                        <details class="tg-collection__sort-disclosure">
+                          <summary
+                            class="tg-collection__sort-trigger"
+                            id="SortBy"
+                            role="button"
+                            aria-expanded="false"
+                            aria-haspopup="listbox"
+                            aria-controls="TgCollectionSortOptions-{{ section.id }}"
+                          >
+                            <span>{{ tg_collection_sort_button_label | escape }}</span>
+                            <span class="svg-wrapper" aria-hidden="true">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+                          </summary>
+                          <ul
+                            class="tg-collection__sort-options"
+                            id="TgCollectionSortOptions-{{ section.id }}"
+                            role="listbox"
+                            aria-labelledby="SortBy"
+                          >
+                            {% for option in collection.sort_options %}
+                              <li role="none">
+                                <button
+                                  type="button"
+                                  role="option"
+                                  data-tg-collection-sort-option="{{ option.value | escape }}"
+                                  aria-selected="{% if option.value == tg_collection_sort_by %}true{% else %}false{% endif %}"
+                                >
+                                  {{ option.name | escape }}
+                                </button>
+                              </li>
+                            {% endfor %}
+                          </ul>
+                        </details>
+                        <input type="hidden" name="sort_by" value="{{ tg_collection_sort_by | escape }}">
+                      </tg-collection-sort>
                     </div>
                   </div>
                 </form>
@@ -144,8 +170,8 @@
     { "type": "checkbox", "id": "enable_filtering", "label": "t:tg_collection.settings.enable_filtering", "default": true },
     { "type": "checkbox", "id": "enable_sorting", "label": "t:tg_collection.settings.enable_sorting", "default": true },
     { "type": "select", "id": "filter_type", "label": "t:tg_collection.settings.filter_type", "options": [{ "value": "vertical", "label": "t:tg_collection.options.vertical" }, { "value": "drawer", "label": "t:tg_collection.options.drawer" }, { "value": "horizontal", "label": "t:tg_collection.options.horizontal" }], "default": "vertical" },
-    { "type": "range", "id": "facet_width", "label": "t:tg_collection.settings.facet_width", "min": 180, "max": 360, "step": 5, "unit": "px", "default": 265 },
-    { "type": "range", "id": "layout_gap", "label": "t:tg_collection.settings.layout_gap", "min": 16, "max": 80, "step": 4, "unit": "px", "default": 40 },
+    { "type": "range", "id": "facet_width", "label": "t:tg_collection.settings.facet_width", "min": 180, "max": 360, "step": 5, "unit": "px", "default": 220 },
+    { "type": "range", "id": "layout_gap", "label": "t:tg_collection.settings.layout_gap", "min": 16, "max": 80, "step": 4, "unit": "px", "default": 32 },
     { "type": "range", "id": "column_gap", "label": "t:tg_collection.settings.column_gap", "min": 8, "max": 48, "step": 4, "unit": "px", "default": 24 },
     { "type": "range", "id": "row_gap", "label": "t:tg_collection.settings.row_gap", "min": 16, "max": 80, "step": 4, "unit": "px", "default": 48 },
     { "type": "range", "id": "card_radius", "label": "t:tg_collection.settings.card_radius", "min": 0, "max": 24, "step": 2, "unit": "px", "default": 4 },
@@ -161,7 +187,7 @@
     { "type": "textarea", "id": "empty_text", "label": "t:tg_collection.settings.empty_text", "default": "Try clearing filters or browse all products." },
     { "type": "text", "id": "empty_button_label", "label": "t:tg_collection.settings.empty_button_label", "default": "Clear filters" },
     { "type": "url", "id": "empty_link", "label": "t:tg_collection.settings.empty_link" },
-    { "type": "range", "id": "padding_top", "label": "t:tg_collection.settings.padding_top", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 40 },
+    { "type": "range", "id": "padding_top", "label": "t:tg_collection.settings.padding_top", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 20 },
     { "type": "range", "id": "padding_bottom", "label": "t:tg_collection.settings.padding_bottom", "min": 0, "max": 200, "step": 4, "unit": "px", "default": 160 }
   ],
   "presets": [
@@ -179,8 +205,8 @@
         "enable_filtering": true,
         "enable_sorting": true,
         "filter_type": "vertical",
-        "facet_width": 265,
-        "layout_gap": 40,
+        "facet_width": 220,
+        "layout_gap": 32,
         "column_gap": 24,
         "row_gap": 48,
         "card_radius": 4,
@@ -196,7 +222,7 @@
         "empty_text": "Try clearing filters or browse all products.",
         "empty_button_label": "Clear filters",
         "empty_link": "",
-        "padding_top": 40,
+        "padding_top": 20,
         "padding_bottom": 160
       }
     }
