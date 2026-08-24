@@ -27,6 +27,15 @@
     background-image: none;
   }
 
+  {%- if language_country_selector -%}
+    @media screen and (min-width: 990px) {
+      #shopify-section-{{ section.id }} {
+        position: relative;
+        z-index: 51;
+      }
+    }
+  {%- endif -%}
+
   #shopify-section-{{ section.id }} .announcement-bar,
   #shopify-section-{{ section.id }} .announcement-bar__announcement {
     color: inherit;

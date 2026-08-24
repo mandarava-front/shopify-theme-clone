@@ -1,9 +1,46 @@
 {{ 'tg-sections.css' | asset_url | stylesheet_tag }}
-<section class="tg-section" style="--tg-background: {{ section.settings.background }}; --tg-text: {{ section.settings.text_color }}; --tg-accent: {{ section.settings.accent_color }}; --tg-border: {{ section.settings.border_color }}; --tg-columns: {{ section.settings.columns }}; --tg-heading-size: {{ section.settings.heading_font_size }}px; --tg-heading-size-mobile: {{ section.settings.heading_font_size_mobile }}px; --tg-heading-color: {{ section.settings.heading_color }}; --tg-heading-hover-color: {{ section.settings.heading_hover_color }}; padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;" {{ section.shopify_attributes }}>
- <div class="tg-page-width"><div class="tg-benefits__header">{%- if section.settings.heading != blank -%}<h2 class="tg-heading">{{ section.settings.heading }}</h2>{%- endif -%}</div><div class="tg-benefits__grid">{%- for block in section.blocks -%}<article class="tg-benefit" style="--tg-benefit-title-size: {{ block.settings.title_font_size }}px; --tg-benefit-title-size-mobile: {{ block.settings.title_font_size_mobile }}px; --tg-benefit-title-color: {{ block.settings.title_color }}; --tg-benefit-title-hover-color: {{ block.settings.title_hover_color }}; --tg-benefit-text-size: {{ block.settings.text_font_size }}px; --tg-benefit-text-size-mobile: {{ block.settings.text_font_size_mobile }}px;" {{ block.shopify_attributes }}><div class="tg-benefit__icon">{% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 120 | image_tag: loading: 'lazy', alt: '' }}{% else %}{{ 'icon-heart.svg' | inline_asset_content }}{% endif %}</div><strong class="tg-benefit__title">{{ block.settings.title | escape }}</strong>{% if block.settings.text != blank %}<span class="tg-benefit__text">{{ block.settings.text | escape }}</span>{% endif %}</article>{%- endfor -%}</div></div>
+<section
+  class="tg-section tg-benefits"
+  style="--tg-background: {{ section.settings.background }}; --tg-text: {{ section.settings.text_color }}; --tg-accent: {{ section.settings.accent_color }}; --tg-border: {{ section.settings.border_color }}; --tg-columns: {{ section.settings.columns }}; --tg-heading-size: {{ section.settings.heading_font_size }}px; --tg-heading-size-mobile: {{ section.settings.heading_font_size_mobile }}px; --tg-heading-color: {{ section.settings.heading_color }}; --tg-heading-hover-color: {{ section.settings.heading_hover_color }}; --tg-benefit-content-background: {{ section.settings.content_background }}; --tg-benefit-content-padding: {{ section.settings.content_padding }}px; --tg-benefit-content-radius: {{ section.settings.content_radius }}px; --tg-benefit-image-overlap: {{ section.settings.image_overlap }}px; padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;"
+  {{ section.shopify_attributes }}
+>
+  <div class="tg-page-width">
+    <div class="tg-benefits__header">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="tg-heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+    </div>
+    <div class="tg-benefits__grid">
+      {%- for block in section.blocks -%}
+        <article
+          class="tg-benefit"
+          style="--tg-benefit-title-size: {{ block.settings.title_font_size }}px; --tg-benefit-title-size-mobile: {{ block.settings.title_font_size_mobile }}px; --tg-benefit-title-color: {{ block.settings.title_color }}; --tg-benefit-title-hover-color: {{ block.settings.title_hover_color }}; --tg-benefit-text-size: {{ block.settings.text_font_size }}px; --tg-benefit-text-size-mobile: {{ block.settings.text_font_size_mobile }}px;"
+          {{ block.shopify_attributes }}
+        >
+          <div class="tg-benefit__content">
+            <div class="tg-benefit__icon">
+              {% if block.settings.image != blank %}
+                {{
+                  block.settings.image
+                  | image_url: width: 120
+                  | image_tag: loading: 'lazy', alt: block.settings.title
+                }}
+              {% else %}
+                {{ 'icon-heart.svg' | inline_asset_content }}
+              {% endif %}
+            </div>
+            <strong class="tg-benefit__title">{{ block.settings.title | escape }}</strong>
+            {% if block.settings.text != blank %}
+              <span class="tg-benefit__text">{{ block.settings.text | escape }}</span>
+            {% endif %}
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
 </section>
 {% schema %}
-{"name":"t:tg.sections.benefits.name","tag":"section","class":"section","settings":[{"type":"inline_richtext","id":"heading","label":"t:tg.settings.heading","default":"Why Us"},{"type":"range","id":"heading_font_size","label":"t:tg.settings.heading_font_size","min":18,"max":48,"step":1,"unit":"px","default":30},{"type":"range","id":"heading_font_size_mobile","label":"t:tg.settings.heading_font_size_mobile","min":14,"max":32,"step":1,"unit":"px","default":18},{"type":"color","id":"heading_color","label":"t:tg.settings.heading_color","default":"#18181e"},{"type":"color","id":"heading_hover_color","label":"t:tg.settings.heading_hover_color","default":"#e7a400"},{"type":"range","id":"columns","label":"t:tg.settings.columns","min":2,"max":5,"step":1,"default":4},{"type":"color","id":"background","label":"t:tg.settings.background","default":"#f8f8ed"},{"type":"color","id":"text_color","label":"t:tg.settings.text_color","default":"#18181e"},{"type":"color","id":"accent_color","label":"t:tg.settings.accent_color","default":"#e7a400"},{"type":"color","id":"border_color","label":"t:tg.settings.border_color","default":"#dedecf"},{"type":"range","id":"padding_top","label":"t:tg.settings.padding_top","min":0,"max":120,"step":4,"unit":"px","default":48},{"type":"range","id":"padding_bottom","label":"t:tg.settings.padding_bottom","min":0,"max":120,"step":4,"unit":"px","default":36}],"blocks":[{"type":"benefit","name":"t:tg.blocks.benefit.name","settings":[{"type":"image_picker","id":"image","label":"t:tg.settings.icon_or_image"},{"type":"text","id":"title","label":"t:tg.settings.title","default":"Free shipping"},{"type":"range","id":"title_font_size","label":"t:tg.settings.title_font_size","min":12,"max":28,"step":1,"unit":"px","default":15},{"type":"range","id":"title_font_size_mobile","label":"t:tg.settings.title_font_size_mobile","min":10,"max":22,"step":1,"unit":"px","default":12},{"type":"color","id":"title_color","label":"t:tg.settings.title_color","default":"#18181e"},{"type":"color","id":"title_hover_color","label":"t:tg.settings.title_hover_color","default":"#e7a400"},{"type":"textarea","id":"text","label":"t:tg.settings.text"},{"type":"range","id":"text_font_size","label":"t:tg.settings.text_font_size","min":10,"max":20,"step":1,"unit":"px","default":13},{"type":"range","id":"text_font_size_mobile","label":"t:tg.settings.text_font_size_mobile","min":8,"max":18,"step":1,"unit":"px","default":10}]}],"max_blocks":6,"presets": [
+{"name":"t:tg.sections.benefits.name","tag":"section","class":"section","settings":[{"type":"inline_richtext","id":"heading","label":"t:tg.settings.heading","default":"Why Us"},{"type":"range","id":"heading_font_size","label":"t:tg.settings.heading_font_size","min":18,"max":48,"step":1,"unit":"px","default":30},{"type":"range","id":"heading_font_size_mobile","label":"t:tg.settings.heading_font_size_mobile","min":14,"max":32,"step":1,"unit":"px","default":18},{"type":"color","id":"heading_color","label":"t:tg.settings.heading_color","default":"#18181e"},{"type":"color","id":"heading_hover_color","label":"t:tg.settings.heading_hover_color","default":"#e7a400"},{"type":"range","id":"columns","label":"t:tg.settings.columns","min":2,"max":5,"step":1,"default":4},{"type":"color","id":"background","label":"t:tg.settings.background","default":"#f8f8ed"},{"type":"color","id":"content_background","label":"t:tg.settings.content_background","default":"#f8f8ed"},{"type":"range","id":"content_padding","label":"t:tg.settings.content_padding","min":0,"max":48,"step":2,"unit":"px","default":0},{"type":"range","id":"content_radius","label":"t:tg.settings.content_radius","min":0,"max":40,"step":1,"unit":"px","default":8},{"type":"range","id":"image_overlap","label":"t:tg.settings.image_overlap","min":0,"max":40,"step":2,"unit":"px","default":20},{"type":"color","id":"text_color","label":"t:tg.settings.text_color","default":"#18181e"},{"type":"color","id":"accent_color","label":"t:tg.settings.accent_color","default":"#e7a400"},{"type":"color","id":"border_color","label":"t:tg.settings.border_color","default":"#dedecf"},{"type":"range","id":"padding_top","label":"t:tg.settings.padding_top","min":0,"max":120,"step":4,"unit":"px","default":48},{"type":"range","id":"padding_bottom","label":"t:tg.settings.padding_bottom","min":0,"max":120,"step":4,"unit":"px","default":36}],"blocks":[{"type":"benefit","name":"t:tg.blocks.benefit.name","settings":[{"type":"image_picker","id":"image","label":"t:tg.settings.icon_or_image"},{"type":"text","id":"title","label":"t:tg.settings.title","default":"Free shipping"},{"type":"range","id":"title_font_size","label":"t:tg.settings.title_font_size","min":12,"max":28,"step":1,"unit":"px","default":15},{"type":"range","id":"title_font_size_mobile","label":"t:tg.settings.title_font_size_mobile","min":10,"max":22,"step":1,"unit":"px","default":12},{"type":"color","id":"title_color","label":"t:tg.settings.title_color","default":"#18181e"},{"type":"color","id":"title_hover_color","label":"t:tg.settings.title_hover_color","default":"#e7a400"},{"type":"textarea","id":"text","label":"t:tg.settings.text"},{"type":"range","id":"text_font_size","label":"t:tg.settings.text_font_size","min":10,"max":20,"step":1,"unit":"px","default":13},{"type":"range","id":"text_font_size_mobile","label":"t:tg.settings.text_font_size_mobile","min":8,"max":18,"step":1,"unit":"px","default":10}]}],"max_blocks":6,"presets": [
   {
     "name": "首页默认 - 服务优势",
     "settings": {
@@ -14,6 +51,10 @@
       "heading_hover_color": "#e7a400",
       "columns": 4,
       "background": "#f8f8ed",
+      "content_background": "#f8f8ed",
+      "content_padding": 0,
+      "content_radius": 8,
+      "image_overlap": 20,
       "text_color": "#18181e",
       "accent_color": "#e7a400",
       "border_color": "#dedecf",

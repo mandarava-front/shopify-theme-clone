@@ -108,9 +108,10 @@
 .tg-product-rail__track > li { flex: 0 0 calc((100% - 7.2rem) / 4); min-width: 24rem; list-style: none; scroll-snap-align: start; }
 
 .tg-benefits__grid { display: grid; grid-template-columns: repeat(var(--tg-columns, 4), minmax(0, 1fr)); margin-top: 4.6rem; }
-.tg-benefit { min-width: 0; padding: 0 2.4rem; border-right: 1px solid var(--tg-border); text-align: center; }
+.tg-benefit { --tg-benefit-image-size: 40px; display: flex; min-width: 0; padding: calc(var(--tg-benefit-image-size) - var(--tg-benefit-image-overlap, 20px)) 2.4rem 0; border-right: 1px solid var(--tg-border); text-align: center; }
 .tg-benefit:last-child { border-right: 0; }
-.tg-benefit__icon { width: 4rem; height: 4rem; margin: 0 auto 1.2rem; color: var(--tg-accent); }
+.tg-benefit__content { position: relative; display: flex; width: 100%; min-width: 0; flex-direction: column; justify-content: center; border-radius: var(--tg-benefit-content-radius, 8px); padding: calc(var(--tg-benefit-image-overlap, 20px) + 12px + var(--tg-benefit-content-padding, 0px)) var(--tg-benefit-content-padding, 0px); background: var(--tg-benefit-content-background, var(--tg-background)); }
+.tg-benefit__icon { position: absolute; top: calc(var(--tg-benefit-image-overlap, 20px) - var(--tg-benefit-image-size)); left: 50%; width: var(--tg-benefit-image-size); height: var(--tg-benefit-image-size); color: var(--tg-accent); transform: translateX(-50%); }
 .tg-benefit__icon img { width: 100%; height: 100%; object-fit: contain; }
 .tg-benefits__header .tg-heading { color: var(--tg-heading-color, var(--tg-text)); font-size: var(--tg-heading-size, clamp(2.1rem, 2.5vw, 3rem)); transition: color .2s ease; }
 .tg-benefits__header .tg-heading:hover { color: var(--tg-heading-hover-color, var(--tg-heading-color, var(--tg-text))); }
