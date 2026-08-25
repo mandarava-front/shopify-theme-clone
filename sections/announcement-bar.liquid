@@ -86,6 +86,74 @@
     margin-left: 0.35em;
   }
 
+  #shopify-section-{{ section.id }} .localization-wrapper .disclosure__list-wrapper {
+    border: 0;
+    box-shadow: none;
+  }
+
+  #shopify-section-{{ section.id }} .localization-wrapper .country-selector {
+    width: 25.5rem;
+  }
+
+  #shopify-section-{{ section.id }} .country-filter,
+  #shopify-section-{{ section.id }} .country-selector__list {
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .country-selector__list {
+    max-width: none;
+    min-width: 0;
+  }
+
+  #shopify-section-{{ section.id }} .country-filter__input {
+    height: 3.8rem;
+    padding: 0 3.8rem 0 1.5rem;
+  }
+
+  #shopify-section-{{ section.id }} .country-filter .field::before {
+    box-shadow: none;
+  }
+
+  #shopify-section-{{ section.id }} .country-filter .field::after {
+    border: 0;
+    box-shadow: 0 0 0 0.1rem rgba(var(--color-foreground), 0.18);
+  }
+
+  #shopify-section-{{ section.id }} .country-filter .field:hover::after {
+    box-shadow: 0 0 0 0.1rem rgba(var(--color-foreground), 0.28);
+  }
+
+  #shopify-section-{{ section.id }} .country-filter .field:focus-within::after {
+    box-shadow: 0 0 0 0.1rem rgba(var(--color-foreground), 0.45);
+  }
+
+  #shopify-section-{{ section.id }} .country-filter__input:focus,
+  #shopify-section-{{ section.id }} .country-filter__input:focus-visible {
+    outline: 0;
+    box-shadow: none;
+  }
+
+  #shopify-section-{{ section.id }} .country-filter .field__label {
+    top: 50%;
+    left: calc(var(--inputs-border-width) + 1.5rem);
+    transform: translateY(-50%);
+    color: rgba(var(--color-foreground), 0.5);
+    font-size: 1.6rem;
+    letter-spacing: 0.1rem;
+  }
+
+  #shopify-section-{{ section.id }} .country-filter__input:not(:placeholder-shown) ~ .field__label,
+  #shopify-section-{{ section.id }} .country-filter__input:-webkit-autofill ~ .field__label {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  #shopify-section-{{ section.id }} .country-filter .field__button {
+    width: 3.8rem;
+    height: 3.8rem;
+  }
+
   @media screen and (max-width: 749px) {
     #shopify-section-{{ section.id }} .announcement-bar__message {
       font-size: {{ section.settings.tg_announcement_mobile_font_size }}px;
