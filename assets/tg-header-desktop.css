@@ -104,13 +104,15 @@
     border: 0.15rem solid color-mix(in srgb, var(--tg-header-desktop-text) 48%, transparent);
     border-radius: 99rem;
     background: var(--tg-header-desktop-background);
-    transition: border-color 180ms ease, box-shadow 180ms ease;
+    box-shadow: none;
+    transition: border-color 180ms ease;
   }
 
   .tg-header-desktop__search:focus-within {
-    border-color: var(--tg-header-desktop-text);
-    outline: 0.2rem solid color-mix(in srgb, var(--tg-header-desktop-text) 50%, transparent);
-    outline-offset: 0.2rem;
+    border-width: 0.2rem;
+    border-color: var(--tg-header-desktop-hover);
+    outline: none;
+    box-shadow: none;
   }
 
   .tg-header-desktop__search input {

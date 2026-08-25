@@ -103,15 +103,21 @@
   }
 
   .header--tg-mobile-search-row .tg-header-mobile-search .field {
-    --inputs-border-width: var(--tg-header-mobile-search-border-width, 0px);
+    --inputs-border-width: 0px;
     --inputs-radius: 99rem;
     --inputs-radius-outset: 99rem;
+    height: 3.8rem;
+    border: var(--tg-header-mobile-search-border-width, 0px) solid
+      var(--tg-header-mobile-search-border-color, transparent);
+    border-radius: 99rem;
+    box-shadow: none;
+    transition: border-color 180ms ease;
   }
 
   .header--tg-mobile-search-row .tg-header-mobile-search .field__input {
-    height: calc(3.8rem - (var(--inputs-border-width) * 2));
-    min-height: calc(3.8rem - (var(--inputs-border-width) * 2));
-    margin: var(--inputs-border-width);
+    height: 100%;
+    min-height: 100%;
+    margin: 0;
     padding: 0 4.6rem 0 1.6rem;
     border-radius: 99rem;
     color: rgb(var(--color-foreground));
@@ -124,7 +130,7 @@
   .header--tg-mobile-search-row .tg-header-mobile-search .field__label {
     right: 4.6rem;
     top: 50%;
-    left: calc(1.6rem + var(--inputs-border-width));
+    left: 1.6rem;
     overflow: hidden;
     color: var(--tg-header-mobile-search-placeholder-color, #737379);
     font-size: var(--tg-header-mobile-search-font-size, 14px);
@@ -146,13 +152,22 @@
 
   .header--tg-mobile-search-row .tg-header-mobile-search .field::before,
   .header--tg-mobile-search-row .tg-header-mobile-search .field::after {
-    border-radius: 99rem;
+    content: none;
   }
 
-  .header--tg-mobile-search-row .tg-header-mobile-search .field::after,
-  .header--tg-mobile-search-row .tg-header-mobile-search .field:hover.field::after {
-    box-shadow: 0 0 0 var(--tg-header-mobile-search-border-width, 0px)
-      var(--tg-header-mobile-search-border-color, transparent);
+  .header--tg-mobile-search-row .tg-header-mobile-search .field__input:focus,
+  .header--tg-mobile-search-row .tg-header-mobile-search .field__input:focus-visible {
+    margin: 0;
+    padding: 0 4.6rem 0 1.6rem;
+    outline: none;
+    box-shadow: none;
+  }
+
+  .header--tg-mobile-search-row .tg-header-mobile-search .field:focus-within {
+    border-width: max(2px, var(--tg-header-mobile-search-border-width, 0px));
+    border-color: rgb(var(--color-button));
+    outline: none;
+    box-shadow: none;
   }
 
   .header--tg-mobile-search-row .tg-header-mobile-search .field__button {

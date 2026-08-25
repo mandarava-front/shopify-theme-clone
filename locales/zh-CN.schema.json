@@ -4134,6 +4134,24 @@
       "close": "关闭"
     }
   },
+  "tg_order_tracking": {
+    "sections": {
+      "main": {
+        "name": "tg | 订单物流查询"
+      }
+    },
+    "settings": {
+      "proxy_endpoint": "代理接口地址",
+      "order_number_label": "订单号字段名称",
+      "order_number_placeholder": "订单号占位文案",
+      "email_label": "邮箱字段名称",
+      "email_placeholder": "邮箱占位文案",
+      "contact_page": "联系页面"
+    },
+    "info": {
+      "proxy_endpoint": "填写物流查询组件使用的 HTTPS 接口地址。不要在此填写任何 API 密钥。"
+    }
+  },
   "tg_collection": {
     "sections": {
       "header": {

@@ -4144,6 +4144,24 @@
       "close": "Close"
     }
   },
+  "tg_order_tracking": {
+    "sections": {
+      "main": {
+        "name": "tg | Order tracking"
+      }
+    },
+    "settings": {
+      "proxy_endpoint": "Proxy endpoint",
+      "order_number_label": "Order number label",
+      "order_number_placeholder": "Order number placeholder",
+      "email_label": "Email label",
+      "email_placeholder": "Email placeholder",
+      "contact_page": "Contact page"
+    },
+    "info": {
+      "proxy_endpoint": "Enter the HTTPS endpoint used by the order tracking component. Never enter API secrets here."
+    }
+  },
   "tg_collection": {
     "sections": {
       "header": {

@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "tg-order-tracking",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

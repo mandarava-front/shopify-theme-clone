@@ -9,161 +9,19 @@
 {% schema %}
 {"name":"t:tg.sections.video_rail.name","tag":"section","class":"section","settings":[{"type":"inline_richtext","id":"heading","label":"t:tg.settings.heading","default":"Featured video"},{"type":"range","id":"heading_font_size","label":"t:tg.settings.heading_font_size","min":18,"max":48,"step":1,"unit":"px","default":30},{"type":"range","id":"heading_font_size_mobile","label":"t:tg.settings.heading_font_size_mobile","min":14,"max":32,"step":1,"unit":"px","default":21},{"type":"select","id":"heading_alignment","label":"Heading alignment","options":[{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}],"default":"center"},{"type":"text","id":"subheading","label":"t:tg.settings.subheading"},{"type":"color","id":"background","label":"t:tg.settings.background","default":"#ffffff"},{"type":"color","id":"text_color","label":"t:tg.settings.text_color","default":"#18181e"},{"type":"color","id":"button_color","label":"t:tg.settings.button_color","default":"#ffb700"},{"type":"color","id":"button_text_color","label":"t:tg.settings.button_text_color","default":"#ffffff"},{"type":"range","id":"play_button_opacity","label":"Tg | Play button opacity / 播放按钮透明度","min":0,"max":100,"step":5,"unit":"%","default":100},{"type":"color","id":"border_color","label":"t:tg.settings.border_color","default":"#deded8"},{"type":"range","id":"padding_top","label":"t:tg.settings.padding_top","min":0,"max":140,"step":4,"unit":"px","default":60},{"type":"range","id":"padding_bottom","label":"t:tg.settings.padding_bottom","min":0,"max":140,"step":4,"unit":"px","default":32}],"blocks":[{"type":"video","name":"t:tg.blocks.video.name","settings":[{"type":"video","id":"video","label":"t:tg.settings.video"},{"type":"url","id":"video_url","label":"t:tg.settings.video_url","info":"t:tg.info.video_url"},{"type":"image_picker","id":"poster","label":"t:tg.settings.poster"},{"type":"url","id":"poster_url","label":"Poster image URL"},{"type":"product","id":"product","label":"t:tg.settings.product"},{"type":"textarea","id":"description","label":"t:tg.settings.description"},{"type":"text","id":"button_label","label":"t:tg.settings.button_label","default":"Shop now"},{"type":"url","id":"link","label":"t:tg.settings.link"}]}],"max_blocks":12,"presets": [
   {
-    "name": "首页默认 - 视频横向滚动（第 1 组）",
-    "settings": {
-      "heading": "MogCustom Interesting Strangers",
-      "heading_font_size": 30,
-      "heading_font_size_mobile": 21,
-      "heading_alignment": "center",
-      "subheading": "",
-      "background": "#ffffff",
-      "text_color": "#18181e",
-      "button_color": "#ffb700",
-      "button_text_color": "#ffffff",
-      "border_color": "#deded8",
-      "padding_top": 60,
-      "padding_bottom": 32
-    },
+    "name": "t:tg.sections.video_rail.name",
     "blocks": [
       {
-        "type": "video",
-        "settings": {
-          "video_url": "https://mogcustom.com/cdn/shop/videos/c/vp/9592028f24fb4d04976c0bc9e49a271f/9592028f24fb4d04976c0bc9e49a271f.HD-1080p-2.5Mbps-85767873.mp4?v=0",
-          "poster_url": "https://mogcustom.com/cdn/shop/files/preview_images/9592028f24fb4d04976c0bc9e49a271f.thumbnail.0000000000.jpg?v=1780644393&width=700",
-          "product": "",
-          "description": "Since 1946, he is not getting older. He is becoming a true legend.",
-          "button_label": "SHOP NOW",
-          "link": "https://mogcustom.com/products/custom-t-shirt-hoodie-personalized-fathers-day-birthday-gifts-for-dad-grandpa-family-yourself-just-a-little-iconic"
-        }
+        "type": "video"
       },
       {
-        "type": "video",
-        "settings": {
-          "video_url": "https://mogcustom.com/cdn/shop/videos/c/vp/01a1370ad96340e58d19c82260726246/01a1370ad96340e58d19c82260726246.HD-1080p-2.5Mbps-85767870.mp4?v=0",
-          "poster_url": "https://mogcustom.com/cdn/shop/files/preview_images/01a1370ad96340e58d19c82260726246.thumbnail.0000000000.jpg?v=1780644389&width=700",
-          "product": "",
-          "description": "Every ride, a reminder he is loved. Safe driving starts with a smile.",
-          "button_label": "SHOP NOW",
-          "link": "https://mogcustom.com/products/fathers-day-gifts-drive-safe-daddy-i-love-you-fathers-day-gift-for-husband-dad-personalized-acrylic-photo-visor-clip"
-        }
+        "type": "video"
       },
       {
-        "type": "video",
-        "settings": {
-          "video_url": "https://mogcustom.com/cdn/shop/videos/c/vp/6f17c8d084f6425a9794cde4ece8ac26/6f17c8d084f6425a9794cde4ece8ac26.HD-1080p-2.5Mbps-84351973.mp4?v=0",
-          "poster_url": "https://mogcustom.com/cdn/shop/files/preview_images/6f17c8d084f6425a9794cde4ece8ac26.thumbnail.0000000000.jpg?v=1779085458&width=700",
-          "product": "",
-          "description": "I absolutely love this design. It looks exactly like a bunch of rowdy students.",
-          "button_label": "SHOP NOW",
-          "link": "https://mogcustom.com/products/funny-seagulls-calling-teacher-personalized-shirt-funny-gift-for-teachers-appreciation-gift"
-        }
+        "type": "video"
       },
       {
-        "type": "video",
-        "settings": {
-          "video_url": "https://mogcustom.com/cdn/shop/videos/c/vp/d46cd43504e1430b9caca3148433a1c8/d46cd43504e1430b9caca3148433a1c8.HD-1080p-7.2Mbps-84351257.mp4?v=0",
-          "poster_url": "https://mogcustom.com/cdn/shop/files/preview_images/d46cd43504e1430b9caca3148433a1c8.thumbnail.0000000000.jpg?v=1779084630&width=700",
-          "product": "",
-          "description": "For my sake, my dad even turned into a cute little princess.",
-          "button_label": "SHOP NOW",
-          "link": "https://mogcustom.com/products/outnumbered-by-girls-cute-goose-personalized-shirt-fathers-day-gift-for-husband-girl-dad"
-        }
-      },
-      {
-        "type": "video",
-        "settings": {
-          "video_url": "https://mogcustom.com/cdn/shop/videos/c/vp/2f403f19ab4146bb92e11bffa729fbd8/2f403f19ab4146bb92e11bffa729fbd8.HD-1080p-2.5Mbps-84350930.mp4?v=0",
-          "poster_url": "https://mogcustom.com/cdn/shop/files/preview_images/2f403f19ab4146bb92e11bffa729fbd8.thumbnail.0000000000.jpg?v=1779084224&width=700",
-          "product": "",
-          "description": "He officially shouldered the duty of becoming the Greatest Dad of All Time.",
-          "button_label": "SHOP NOW",
-          "link": "https://mogcustom.com/products/to-my-husband-the-only-thing-personalized-poster-fathers-day-gift-for-husband-dad"
-        }
-      },
-      {
-        "type": "video",
-        "settings": {
-          "video_url": "https://mogcustom.com/cdn/shop/videos/c/vp/c699b37b7e9a43699f8281180d25f6dc/c699b37b7e9a43699f8281180d25f6dc.HD-1080p-2.5Mbps-84343546.mp4?v=0",
-          "poster_url": "https://mogcustom.com/cdn/shop/files/preview_images/c699b37b7e9a43699f8281180d25f6dc.thumbnail.0000000000.jpg?v=1779074324&width=700",
-          "product": "",
-          "description": "Best shirt for teachers. I got several compliments.",
-          "button_label": "SHOP NOW",
-          "link": "https://mogcustom.com/products/funny-seagulls-calling-teacher-personalized-shirt-funny-gift-for-teachers-appreciation-gift"
-        }
-      },
-      {
-        "type": "video",
-        "settings": {
-          "video_url": "https://mogcustom.com/cdn/shop/videos/c/vp/3265bbe6e0204317a833a3f4f66ef39b/3265bbe6e0204317a833a3f4f66ef39b.HD-1080p-2.5Mbps-84342652.mp4?v=0",
-          "poster_url": "https://mogcustom.com/cdn/shop/files/preview_images/3265bbe6e0204317a833a3f4f66ef39b.thumbnail.0000000000.jpg?v=1779073101&width=700",
-          "product": "",
-          "description": "So cute. The kids I work with think it is funny.",
-          "button_label": "SHOP NOW",
-          "link": "https://mogcustom.com/products/funny-seagulls-calling-teacher-personalized-shirt-funny-gift-for-teachers-appreciation-gift"
-        }
-      }
-    ]
-  },
-  {
-    "name": "首页默认 - 视频横向滚动（第 2 组）",
-    "settings": {
-      "heading": "Featured video",
-      "heading_font_size": 30,
-      "heading_font_size_mobile": 21,
-      "heading_alignment": "center",
-      "subheading": "",
-      "background": "#ffffff",
-      "text_color": "#18181e",
-      "button_color": "#ffb700",
-      "button_text_color": "#ffffff",
-      "border_color": "#deded8",
-      "padding_top": 60,
-      "padding_bottom": 32
-    },
-    "blocks": [
-      {
-        "type": "video",
-        "settings": {
-          "video_url": "",
-          "poster_url": "",
-          "product": "",
-          "description": "",
-          "button_label": "Shop now",
-          "link": ""
-        }
-      },
-      {
-        "type": "video",
-        "settings": {
-          "video_url": "",
-          "poster_url": "",
-          "product": "",
-          "description": "",
-          "button_label": "Shop now",
-          "link": ""
-        }
-      },
-      {
-        "type": "video",
-        "settings": {
-          "video_url": "",
-          "poster_url": "",
-          "product": "",
-          "description": "",
-          "button_label": "Shop now",
-          "link": ""
-        }
-      },
-      {
-        "type": "video",
-        "settings": {
-          "video_url": "",
-          "poster_url": "",
-          "product": "",
-          "description": "",
-          "button_label": "Shop now",
-          "link": ""
-        }
+        "type": "video"
       }
     ]
   }

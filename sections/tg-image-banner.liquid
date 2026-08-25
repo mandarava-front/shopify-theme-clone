@@ -6,10 +6,46 @@
     assign tg_banner_margin_left = 0
     assign tg_banner_margin_right = 0
   endif
+
+  comment
+    高度占比裁剪：容器 aspect-ratio = 图片原始比例 ÷ 高度百分比，
+    配合 object-fit: cover + center，即为上下等比裁剪。
+  endcomment
+  assign tg_height_percent = section.settings.image_height_percent | default: 100
+  assign tg_mobile_height_percent = section.settings.mobile_image_height_percent | default: 100
+
+  assign tg_desktop_source = section.settings.desktop_image
+  assign tg_mobile_source = section.settings.mobile_image
+  if tg_mobile_source == blank
+    assign tg_mobile_source = tg_desktop_source
+  endif
+  if tg_desktop_source == blank
+    assign tg_desktop_source = section.settings.mobile_image
+  endif
+
+  assign tg_crop_enabled = false
+  if tg_height_percent < 100
+    assign tg_crop_enabled = true
+  endif
+  if tg_mobile_height_percent < 100
+    assign tg_crop_enabled = true
+  endif
+  if tg_desktop_source == blank
+    assign tg_crop_enabled = false
+  endif
+
+  assign tg_crop_class = ''
+  assign tg_crop_style = ''
+  if tg_crop_enabled
+    assign tg_crop_class = ' tg-banner--crop'
+    assign tg_desktop_ratio = tg_desktop_source.aspect_ratio | times: 100.0 | divided_by: tg_height_percent
+    assign tg_mobile_ratio = tg_mobile_source.aspect_ratio | times: 100.0 | divided_by: tg_mobile_height_percent
+    assign tg_crop_style = ' --tg-banner-ratio: ' | append: tg_desktop_ratio | append: '; --tg-banner-ratio-mobile: ' | append: tg_mobile_ratio | append: ';'
+  endif
 -%}
 <section class="tg-section" style="--tg-background: {{ section.settings.background }}; padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;" {{ section.shopify_attributes }}>
   <div class="{% if section.settings.full_width %}tg-image-banner__full-width{% else %}tg-page-width{% endif %}">
-    <a class="tg-banner" href="{{ section.settings.link | default: routes.all_products_collection_url }}" style="--tg-banner-margin-left: {{ tg_banner_margin_left }}px; --tg-banner-margin-right: {{ tg_banner_margin_right }}px; --tg-banner-radius: {{ section.settings.image_radius }}px;">
+    <a class="tg-banner{{ tg_crop_class }}" href="{{ section.settings.link | default: routes.all_products_collection_url }}" style="--tg-banner-margin-left: {{ tg_banner_margin_left }}px; --tg-banner-margin-right: {{ tg_banner_margin_right }}px; --tg-banner-radius: {{ section.settings.image_radius }}px;{{ tg_crop_style }}">
       <picture>
         {%- if section.settings.mobile_image != blank -%}<source media="(max-width: 749px)" srcset="{{ section.settings.mobile_image | image_url: width: 900 }}">{%- endif -%}
         {%- if section.settings.desktop_image != blank -%}{{ section.settings.desktop_image | image_url: width: 2200 | image_tag: widths: '750, 1100, 1500, 2200', loading: 'lazy', alt: section.settings.alt }}{%- else -%}{{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}{%- endif -%}
@@ -18,45 +54,9 @@
   </div>
 </section>
 {% schema %}
-{"name":"t:tg.sections.banner.name","tag":"section","class":"section","settings":[{"type":"image_picker","id":"desktop_image","label":"t:tg.settings.desktop_image"},{"type":"image_picker","id":"mobile_image","label":"t:tg.settings.mobile_image"},{"type":"text","id":"alt","label":"t:tg.settings.alt"},{"type":"url","id":"link","label":"t:tg.settings.link"},{"type":"checkbox","id":"full_width","label":"Tg | Full-width image / 图片铺满宽度","default":false},{"type":"range","id":"image_margin_left","label":"t:tg.settings.image_margin_left","min":0,"max":240,"step":4,"unit":"px","default":0},{"type":"range","id":"image_margin_right","label":"t:tg.settings.image_margin_right","min":0,"max":240,"step":4,"unit":"px","default":0},{"type":"range","id":"image_radius","label":"t:tg.settings.image_radius","min":0,"max":32,"step":2,"unit":"px","default":0},{"type":"color","id":"background","label":"t:tg.settings.background","default":"#ffffff"},{"type":"range","id":"padding_top","label":"t:tg.settings.padding_top","min":0,"max":120,"step":4,"unit":"px","default":0},{"type":"range","id":"padding_bottom","label":"t:tg.settings.padding_bottom","min":0,"max":120,"step":4,"unit":"px","default":0}],"presets": [
+{"name":"t:tg.sections.banner.name","tag":"section","class":"section","settings":[{"type":"image_picker","id":"desktop_image","label":"t:tg.settings.desktop_image"},{"type":"image_picker","id":"mobile_image","label":"t:tg.settings.mobile_image"},{"type":"text","id":"alt","label":"t:tg.settings.alt"},{"type":"url","id":"link","label":"t:tg.settings.link"},{"type":"checkbox","id":"full_width","label":"Tg | Full-width image / 图片铺满宽度","default":false},{"type":"header","content":"Tg | Image height / 图片显示高度"},{"type":"paragraph","content":"100% = 完整显示原图；调低后按该比例压缩显示高度，图片上下居中等比裁剪（左右不裁）。"},{"type":"range","id":"image_height_percent","label":"Tg | Desktop height / 桌面端高度占比","min":20,"max":100,"step":5,"unit":"%","default":100},{"type":"range","id":"mobile_image_height_percent","label":"Tg | Mobile height / 移动端高度占比","min":20,"max":100,"step":5,"unit":"%","default":100},{"type":"range","id":"image_margin_left","label":"t:tg.settings.image_margin_left","min":0,"max":240,"step":4,"unit":"px","default":0},{"type":"range","id":"image_margin_right","label":"t:tg.settings.image_margin_right","min":0,"max":240,"step":4,"unit":"px","default":0},{"type":"range","id":"image_radius","label":"t:tg.settings.image_radius","min":0,"max":32,"step":2,"unit":"px","default":0},{"type":"color","id":"background","label":"t:tg.settings.background","default":"#ffffff"},{"type":"range","id":"padding_top","label":"t:tg.settings.padding_top","min":0,"max":120,"step":4,"unit":"px","default":0},{"type":"range","id":"padding_bottom","label":"t:tg.settings.padding_bottom","min":0,"max":120,"step":4,"unit":"px","default":0}],"presets": [
   {
-    "name": "首页默认 - 图片横幅（第 1 组）",
-    "settings": {
-      "alt": "",
-      "link": "",
-      "image_margin_left": 0,
-      "image_margin_right": 0,
-      "image_radius": 0,
-      "background": "#ffffff",
-      "padding_top": 0,
-      "padding_bottom": 0
-    }
-  },
-  {
-    "name": "首页默认 - 图片横幅（第 2 组）",
-    "settings": {
-      "alt": "",
-      "link": "",
-      "image_margin_left": 0,
-      "image_margin_right": 0,
-      "image_radius": 0,
-      "background": "#ffffff",
-      "padding_top": 0,
-      "padding_bottom": 0
-    }
-  },
-  {
-    "name": "首页默认 - 图片横幅（第 3 组）",
-    "settings": {
-      "alt": "",
-      "link": "",
-      "image_margin_left": 0,
-      "image_margin_right": 0,
-      "image_radius": 0,
-      "background": "#ffffff",
-      "padding_top": 0,
-      "padding_bottom": 0
-    }
+    "name": "t:tg.sections.banner.name"
   }
 ]}
 {% endschema %}
