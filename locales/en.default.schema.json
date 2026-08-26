@@ -4156,10 +4156,24 @@
       "order_number_placeholder": "Order number placeholder",
       "email_label": "Email label",
       "email_placeholder": "Email placeholder",
-      "contact_page": "Contact page"
+      "contact_page": "Contact page",
+      "no_shipment_title": "Pre-shipment heading",
+      "no_shipment_message": "Pre-shipment message",
+      "not_found_title": "Order not found heading",
+      "not_found_message": "Order not found message",
+      "no_activity_message": "No tracking events message",
+      "unavailable_message": "Service unavailable message"
+    },
+    "headers": {
+      "messages": "Customer messages"
     },
     "info": {
-      "proxy_endpoint": "Enter the HTTPS endpoint used by the order tracking component. Never enter API secrets here."
+      "proxy_endpoint": "Enter the HTTPS endpoint used by the order tracking component. Never enter API secrets here.",
+      "messages": "Leave a field blank to use the built-in wording.",
+      "no_shipment_message": "Shown when the order is found but has no tracking number yet, for example while it is still in production or being packed.",
+      "not_found_message": "Shown when no order matches the order number and email address entered.",
+      "no_activity_message": "Shown when a tracking number exists but the carrier has not published any scans yet.",
+      "unavailable_message": "Shown when the tracking service cannot be reached."
     }
   },
   "tg_collection": {

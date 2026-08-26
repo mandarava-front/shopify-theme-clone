@@ -8,6 +8,8 @@
   --tracking-warning-surface: #fff4df;
   --tracking-error: #b42318;
   --tracking-error-surface: #fff0ee;
+  --tracking-info-surface: #eef4ff;
+  --tracking-info-accent: #175cd3;
   color: rgb(var(--color-foreground));
   font-family: var(--font-body-family);
   font-style: var(--font-body-style);
@@ -142,7 +144,8 @@
 .tg-order-tracking__copy:focus-visible,
 .tg-order-tracking__back:focus-visible,
 .tg-order-tracking__carrier-link:focus-visible,
-.tg-order-tracking__error-action:focus-visible {
+.tg-order-tracking__dialog-action:focus-visible,
+.tg-order-tracking__dialog-close:focus-visible {
   outline: 0.3rem solid rgba(var(--color-button), 0.35);
   outline-offset: 0.3rem;
 }
@@ -259,12 +262,6 @@
   color: #6d4205;
 }
 
-.tg-order-tracking__message--error {
-  border: 1px solid rgba(180, 35, 24, 0.28);
-  background: var(--tracking-error-surface);
-  color: #861c14;
-}
-
 .tg-order-tracking__message-icon {
   display: inline-flex;
   width: 2rem;
@@ -280,35 +277,192 @@
   height: 1.8rem;
 }
 
-.tg-order-tracking__error-content {
+/* Status feedback dialog (order not found / not shipped yet / service errors) */
+.tg-order-tracking__dialog {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  width: min(46rem, calc(100vw - 3.2rem));
+  max-height: min(90dvh, 70rem);
+  margin: auto;
+  border: 0;
+  border-radius: 1.2rem;
+  padding: 0;
+  overflow: visible;
+  background: transparent;
+  color: rgb(var(--color-foreground));
+}
+
+.tg-order-tracking__dialog:not([open]) {
+  display: none;
+}
+
+.tg-order-tracking__dialog[open] {
+  animation: tg-order-tracking-dialog-enter 200ms ease-out both;
+}
+
+.tg-order-tracking__dialog::backdrop {
+  background: rgba(20, 14, 16, 0.55);
+}
+
+.tg-order-tracking__dialog[open]::backdrop {
+  animation: tg-order-tracking-backdrop-enter 200ms ease-out both;
+}
+
+.tg-order-tracking__dialog-inner {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.2rem;
+  background: rgb(var(--color-background));
+  box-shadow: 0 2.4rem 6rem rgba(20, 14, 16, 0.24);
+}
+
+.tg-order-tracking__dialog-close {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
+  display: inline-flex;
+  width: 3.6rem;
+  height: 3.6rem;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  padding: 0;
+  background: transparent;
+  color: var(--tracking-muted);
+  cursor: pointer;
+}
+
+.tg-order-tracking__dialog-close:hover {
+  background: var(--tracking-subtle);
+  color: rgb(var(--color-foreground));
+}
+
+.tg-order-tracking__dialog-close svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.tg-order-tracking__dialog-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-height: min(90dvh, 70rem);
+  padding: 3.6rem 3.2rem 3.2rem;
+  overflow-y: auto;
+  text-align: center;
+}
+
+.tg-order-tracking__dialog-icon {
+  display: inline-flex;
+  width: 5.6rem;
+  height: 5.6rem;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.8rem;
+  border-radius: 50%;
+  background: var(--tracking-info-surface);
+  color: var(--tracking-info-accent);
+}
+
+.tg-order-tracking__dialog-inner--error .tg-order-tracking__dialog-icon {
+  background: var(--tracking-error-surface);
+  color: var(--tracking-error);
+}
+
+.tg-order-tracking__dialog-icon svg {
+  width: 2.6rem;
+  height: 2.6rem;
+}
+
+.tg-order-tracking__dialog-content {
+  width: 100%;
   min-width: 0;
 }
 
-.tg-order-tracking__error-content p {
-  margin: 0;
+.tg-order-tracking__dialog-title {
+  margin: 0 0 1rem;
+  font-family: var(--font-heading-family);
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0;
 }
 
-.tg-order-tracking__error-actions {
+.tg-order-tracking__dialog-text {
+  max-width: 34rem;
+  margin: 0 auto;
+  color: var(--tracking-muted);
+  font-size: 1.4rem;
+  line-height: 1.65;
+  /* Merchant copy comes from a textarea, so keep the line breaks they typed. */
+  white-space: pre-line;
+}
+
+.tg-order-tracking__dialog-actions {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 0.8rem 1.6rem;
-  margin-top: 1.2rem;
+  gap: 0.4rem;
+  margin-top: 2.8rem;
 }
 
-.tg-order-tracking__error-action {
+.tg-order-tracking__dialog-action {
   display: inline-flex;
   min-height: 4.4rem;
   align-items: center;
+  justify-content: center;
   border: 0;
-  padding: 0;
+  padding: 0 1.2rem;
   background: transparent;
-  color: currentColor;
+  color: var(--tracking-muted);
   cursor: pointer;
   font: inherit;
-  font-weight: 700;
+  font-size: 1.4rem;
+  font-weight: 600;
   text-decoration: underline;
-  text-underline-offset: 0.3rem;
+  text-underline-offset: 0.4rem;
+  transition: color 150ms ease;
+}
+
+.tg-order-tracking__dialog-action:hover {
+  color: rgb(var(--color-foreground));
+}
+
+.tg-order-tracking__dialog-action--primary {
+  width: 100%;
+  max-width: 30rem;
+  min-height: 5rem;
+  border-radius: 0.6rem;
+  padding: 0 2.8rem;
+  background: var(--tracking-primary);
+  color: var(--tracking-on-primary);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: opacity 150ms ease;
+}
+
+.tg-order-tracking__dialog-action--primary:hover {
+  color: var(--tracking-on-primary);
+  opacity: 0.88;
+}
+
+@media screen and (max-width: 480px) {
+  .tg-order-tracking__dialog-body {
+    padding: 3.2rem 2rem 2.4rem;
+  }
+
+  .tg-order-tracking__dialog-title {
+    font-size: 1.8rem;
+  }
+
+  .tg-order-tracking__dialog-action--primary {
+    max-width: none;
+  }
 }
 
 .tg-order-tracking__editor-note {
@@ -598,6 +752,7 @@
   font-size: 1.3rem;
   font-variant-numeric: tabular-nums;
   line-height: 1.5;
+  white-space: pre-line;
   overflow-wrap: anywhere;
 }
 
@@ -709,6 +864,28 @@
 @keyframes tg-order-tracking-spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes tg-order-tracking-dialog-enter {
+  from {
+    opacity: 0;
+    transform: translateY(1.2rem) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes tg-order-tracking-backdrop-enter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }
 

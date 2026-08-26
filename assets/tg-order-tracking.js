@@ -5,12 +5,18 @@
     loading: 'CHECKING ORDER...',
     invalidOrder: 'Enter your order number.',
     invalidEmail: 'Enter a valid email address.',
-    notFound: 'We could not find an order matching that number and email address. Check your details and try again.',
-    noShipment: 'Your order was found, but tracking is not available yet. We will email you when it ships.',
+    notFoundTitle: 'We could not find that order',
+    notFound:
+      'Please check that the order number is complete (for example #TG123456) and that the email address matches the one on your order confirmation. Orders placed in the last few minutes may take a little while to appear.',
+    noShipmentTitle: 'Your order is being prepared',
+    noShipment:
+      'Good news — we found your order! It has not shipped yet, so there is no tracking information available. Your items are still being produced and packed at our workshop. As soon as the carrier collects your parcel, the tracking number will appear here and we will email it to you.',
     rateLimited: 'There have been too many requests. Wait a moment, then try again.',
-    unavailable: 'We cannot retrieve tracking details right now. Please try again later.',
+    unavailable: 'We cannot retrieve tracking details right now. Please try again in a few minutes.',
     timeout: 'The request took too long. Check your connection and try again.',
-    tryAgain: 'Try again',
+    dismiss: 'Close',
+    dismissPending: 'Got it',
+    dismissNotFound: 'Check my details',
     backToSearch: 'Back to search',
     contactSupport: 'Contact support',
     order: 'Order ID',
@@ -23,7 +29,8 @@
     activity: 'Shipment activity',
     activityUpdate: 'Tracking update',
     latest: 'Latest',
-    noActivity: 'Tracking events will appear here when the carrier provides them.',
+    noActivity:
+      'The carrier has accepted your parcel but has not published any scans yet. Tracking events usually appear within 24-48 hours.',
     viewCarrier: 'View carrier site',
   });
 
@@ -45,16 +52,25 @@
       this.submitLabel = this.querySelector('[data-submit-label]');
       this.submitSpinner = this.querySelector('[data-submit-spinner]');
       this.formStatus = this.querySelector('[data-form-status]');
-      this.formError = this.querySelector('[data-form-error]');
       this.results = this.querySelector('[data-tracking-results]');
+      this.dialog = this.querySelector('[data-tracking-dialog]');
+      this.dialogInner = this.querySelector('[data-dialog-inner]');
+      this.dialogBody = this.querySelector('[data-dialog-body]');
+      this.dialogCloseButton = this.querySelector('[data-dialog-close]');
 
       if (!this.form || !this.config) return;
 
       this.onSubmit = this.handleSubmit.bind(this);
       this.onFieldBlur = this.handleFieldBlur.bind(this);
+      this.onDialogClick = this.handleDialogClick.bind(this);
+      this.onDialogClose = this.handleDialogClose.bind(this);
+      this.onDialogCloseClick = () => this.closeDialog();
       this.form.addEventListener('submit', this.onSubmit);
       this.orderInput?.addEventListener('blur', this.onFieldBlur);
       this.emailInput?.addEventListener('blur', this.onFieldBlur);
+      this.dialog?.addEventListener('click', this.onDialogClick);
+      this.dialog?.addEventListener('close', this.onDialogClose);
+      this.dialogCloseButton?.addEventListener('click', this.onDialogCloseClick);
     }
 
     disconnectedCallback() {
@@ -62,8 +78,47 @@
       this.form?.removeEventListener('submit', this.onSubmit);
       this.orderInput?.removeEventListener('blur', this.onFieldBlur);
       this.emailInput?.removeEventListener('blur', this.onFieldBlur);
+      this.dialog?.removeEventListener('click', this.onDialogClick);
+      this.dialog?.removeEventListener('close', this.onDialogClose);
+      this.dialogCloseButton?.removeEventListener('click', this.onDialogCloseClick);
       this.copyTimers?.forEach((timer) => window.clearTimeout(timer));
       this.copyTimers?.clear();
+    }
+
+    handleDialogClick(event) {
+      // A click that lands on the dialog itself is a click on the backdrop.
+      if (event.target === this.dialog) this.closeDialog();
+    }
+
+    handleDialogClose() {
+      this.dialogBody?.replaceChildren();
+
+      const restoreFocus = this.dialogReturnFocus;
+      this.dialogReturnFocus = null;
+      if (this.isConnected) restoreFocus?.();
+    }
+
+    openDialog() {
+      if (!this.dialog) return;
+
+      if (typeof this.dialog.showModal === 'function') {
+        if (!this.dialog.hasAttribute('open')) this.dialog.showModal();
+      } else {
+        // Fallback for browsers without <dialog>: the CSS renders [open] as a fixed overlay.
+        this.dialog.setAttribute('open', '');
+        this.dialogCloseButton?.focus();
+      }
+    }
+
+    closeDialog() {
+      if (!this.dialog?.hasAttribute('open')) return;
+
+      if (typeof this.dialog.close === 'function') {
+        this.dialog.close();
+      } else {
+        this.dialog.removeAttribute('open');
+        this.handleDialogClose();
+      }
     }
 
     readConfig() {
@@ -78,12 +133,24 @@
           strings: {
             ...defaultStrings,
             submit: config.submitLabel || defaultStrings.submit,
+            ...this.readMessageOverrides(config.messages),
           },
         };
       } catch (error) {
         console.error('Order tracking configuration is invalid.', error);
         return null;
       }
+    }
+
+    readMessageOverrides(messages) {
+      if (!messages || typeof messages !== 'object') return {};
+
+      // Merchants can blank out a field in the theme editor to fall back to the built-in copy.
+      return Object.entries(messages).reduce((overrides, [key, value]) => {
+        const text = typeof value === 'string' ? value.trim() : '';
+        if (text && key in defaultStrings) overrides[key] = text;
+        return overrides;
+      }, {});
     }
 
     handleFieldBlur(event) {
@@ -309,37 +376,81 @@
     }
 
     renderError(code) {
-      if (!this.formError) return;
+      if (!this.dialog || !this.dialogBody) return;
 
+      // NO_SHIPMENT means the order exists but has not left the warehouse yet: reassure, do not alarm.
+      const isPending = code === 'NO_SHIPMENT';
+      const editableInput = code === 'NOT_FOUND' || code === 'INVALID_INPUT';
+      const title = this.getErrorTitle(code);
       const message = this.getErrorMessage(code);
-      const content = this.createElement('div', 'tg-order-tracking__error-content');
-      content.appendChild(this.createElement('p', '', message));
 
-      const actions = this.createElement('div', 'tg-order-tracking__error-actions');
-      const retry = this.createElement('button', 'tg-order-tracking__error-action', this.config.strings.tryAgain);
-      retry.type = 'button';
-      retry.addEventListener('click', () => {
-        this.clearError();
+      const icon = this.createElement('span', 'tg-order-tracking__dialog-icon');
+      icon.setAttribute('aria-hidden', 'true');
+      icon.appendChild(this.cloneIcon('info'));
 
-        if (code === 'NOT_FOUND' || code === 'INVALID_INPUT') {
-          this.orderInput?.focus();
-        } else {
-          this.form?.requestSubmit();
-        }
-      });
-      actions.appendChild(retry);
+      const content = this.createElement('div', 'tg-order-tracking__dialog-content');
+
+      if (title) {
+        content.appendChild(this.createElement('h2', 'tg-order-tracking__dialog-title', title));
+      }
+
+      content.appendChild(this.createElement('p', 'tg-order-tracking__dialog-text', message));
+
+      const actions = this.createElement('div', 'tg-order-tracking__dialog-actions');
+      const dismiss = this.createElement(
+        'button',
+        'tg-order-tracking__dialog-action tg-order-tracking__dialog-action--primary',
+        this.getDismissLabel(code),
+      );
+      dismiss.type = 'button';
+      dismiss.addEventListener('click', () => this.closeDialog());
+      actions.appendChild(dismiss);
 
       const contactUrl = this.safeUrl(this.config.contactUrl, true);
       if (contactUrl) {
-        const contact = this.createElement('a', 'tg-order-tracking__error-action', this.config.strings.contactSupport);
+        const contact = this.createElement(
+          'a',
+          'tg-order-tracking__dialog-action',
+          this.config.strings.contactSupport,
+        );
         contact.href = contactUrl;
         actions.appendChild(contact);
       }
 
       content.appendChild(actions);
-      this.formError.replaceChildren(content);
-      this.formError.hidden = false;
-      this.formError.focus();
+
+      this.dialogInner.className = `tg-order-tracking__dialog-inner tg-order-tracking__dialog-inner--${
+        isPending ? 'pending' : 'error'
+      }`;
+      this.dialog.setAttribute('aria-label', title || message);
+      this.dialog.setAttribute('role', isPending ? 'dialog' : 'alertdialog');
+      this.dialogBody.replaceChildren(icon, content);
+
+      // Send focus back where the customer can act once the dialog closes.
+      this.dialogReturnFocus = editableInput
+        ? () => {
+            this.orderInput?.focus();
+            this.orderInput?.select();
+          }
+        : () => this.submitButton?.focus();
+
+      this.openDialog();
+    }
+
+    getDismissLabel(code) {
+      if (code === 'NO_SHIPMENT') return this.config.strings.dismissPending;
+      if (code === 'NOT_FOUND' || code === 'INVALID_INPUT') return this.config.strings.dismissNotFound;
+
+      return this.config.strings.dismiss;
+    }
+
+    getErrorTitle(code) {
+      const titles = {
+        NOT_FOUND: this.config.strings.notFoundTitle,
+        NO_SHIPMENT: this.config.strings.noShipmentTitle,
+      };
+
+      return titles[code] || '';
     }
 
     getErrorMessage(code) {
@@ -356,10 +467,9 @@
     }
 
     clearError() {
-      if (!this.formError) return;
-
-      this.formError.hidden = true;
-      this.formError.replaceChildren();
+      this.dialogReturnFocus = null;
+      this.closeDialog();
+      this.dialogBody?.replaceChildren();
     }
 
     clearResults() {

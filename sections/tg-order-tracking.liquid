@@ -95,13 +95,6 @@
             </button>
 
             <p class="tg-order-tracking__form-status" data-form-status role="status" aria-live="polite"></p>
-            <div
-              class="tg-order-tracking__message tg-order-tracking__message--error"
-              data-form-error
-              role="alert"
-              tabindex="-1"
-              hidden
-            ></div>
           </form>
         </div>
 
@@ -126,6 +119,20 @@
 
       <div class="tg-order-tracking__results" data-tracking-results tabindex="-1" hidden></div>
 
+      <dialog class="tg-order-tracking__dialog" data-tracking-dialog>
+        <div class="tg-order-tracking__dialog-inner" data-dialog-inner>
+          <button
+            type="button"
+            class="tg-order-tracking__dialog-close"
+            data-dialog-close
+            aria-label="{{ 'accessibility.close' | t }}"
+          >
+            {{- 'icon-close.svg' | inline_asset_content -}}
+          </button>
+          <div class="tg-order-tracking__dialog-body" data-dialog-body></div>
+        </div>
+      </dialog>
+
       <template data-icon-template="copy">
         {{- 'icon-copy.svg' | inline_asset_content -}}
       </template>
@@ -135,13 +142,24 @@
       <template data-icon-template="arrow">
         {{- 'icon-arrow.svg' | inline_asset_content -}}
       </template>
+      <template data-icon-template="info">
+        {{- 'icon-info.svg' | inline_asset_content -}}
+      </template>
 
       <script type="application/json" data-tracking-config>
         {
           "endpoint": {{ tracking_endpoint | json }},
           "locale": {{ request.locale.iso_code | json }},
           "contactUrl": {{ section.settings.contact_page.url | json }},
-          "submitLabel": {{ section.settings.submit_label | json }}
+          "submitLabel": {{ section.settings.submit_label | json }},
+          "messages": {
+            "noShipmentTitle": {{ section.settings.no_shipment_title | json }},
+            "noShipment": {{ section.settings.no_shipment_message | json }},
+            "notFoundTitle": {{ section.settings.not_found_title | json }},
+            "notFound": {{ section.settings.not_found_message | json }},
+            "noActivity": {{ section.settings.no_activity_message | json }},
+            "unavailable": {{ section.settings.unavailable_message | json }}
+          }
         }
       </script>
     </order-tracking>
@@ -210,6 +228,51 @@
       "type": "page",
       "id": "contact_page",
       "label": "t:tg_order_tracking.settings.contact_page"
+    },
+    {
+      "type": "header",
+      "content": "t:tg_order_tracking.headers.messages",
+      "info": "t:tg_order_tracking.info.messages"
+    },
+    {
+      "type": "text",
+      "id": "no_shipment_title",
+      "label": "t:tg_order_tracking.settings.no_shipment_title",
+      "default": "Your order is being prepared"
+    },
+    {
+      "type": "textarea",
+      "id": "no_shipment_message",
+      "label": "t:tg_order_tracking.settings.no_shipment_message",
+      "info": "t:tg_order_tracking.info.no_shipment_message",
+      "default": "Good news — we found your order! It has not shipped yet, so there is no tracking information available. Your items are still being produced and packed at our workshop. As soon as the carrier collects your parcel, the tracking number will appear here and we will email it to you."
+    },
+    {
+      "type": "text",
+      "id": "not_found_title",
+      "label": "t:tg_order_tracking.settings.not_found_title",
+      "default": "We could not find that order"
+    },
+    {
+      "type": "textarea",
+      "id": "not_found_message",
+      "label": "t:tg_order_tracking.settings.not_found_message",
+      "info": "t:tg_order_tracking.info.not_found_message",
+      "default": "Please check that the order number is complete (for example #TG123456) and that the email address matches the one on your order confirmation. Orders placed in the last few minutes may take a little while to appear."
+    },
+    {
+      "type": "textarea",
+      "id": "no_activity_message",
+      "label": "t:tg_order_tracking.settings.no_activity_message",
+      "info": "t:tg_order_tracking.info.no_activity_message",
+      "default": "The carrier has accepted your parcel but has not published any scans yet. Tracking events usually appear within 24-48 hours."
+    },
+    {
+      "type": "textarea",
+      "id": "unavailable_message",
+      "label": "t:tg_order_tracking.settings.unavailable_message",
+      "info": "t:tg_order_tracking.info.unavailable_message",
+      "default": "We cannot retrieve tracking details right now. Please try again in a few minutes."
     },
     {
       "type": "color_scheme",

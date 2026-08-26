@@ -4146,10 +4146,24 @@
       "order_number_placeholder": "订单号占位文案",
       "email_label": "邮箱字段名称",
       "email_placeholder": "邮箱占位文案",
-      "contact_page": "联系页面"
+      "contact_page": "联系页面",
+      "no_shipment_title": "待发货提示标题",
+      "no_shipment_message": "待发货提示内容",
+      "not_found_title": "查询不到订单标题",
+      "not_found_message": "查询不到订单提示内容",
+      "no_activity_message": "暂无物流轨迹提示",
+      "unavailable_message": "服务不可用提示"
+    },
+    "headers": {
+      "messages": "顾客提示文案"
     },
     "info": {
-      "proxy_endpoint": "填写物流查询组件使用的 HTTPS 接口地址。不要在此填写任何 API 密钥。"
+      "proxy_endpoint": "填写物流查询组件使用的 HTTPS 接口地址。不要在此填写任何 API 密钥。",
+      "messages": "留空则使用组件内置的默认文案。",
+      "no_shipment_message": "已查询到订单但尚未生成运单号时展示，例如商品仍在生产或正在打包。",
+      "not_found_message": "订单号与邮箱都匹配不到订单时展示。",
+      "no_activity_message": "已有运单号但承运商尚未上传轨迹时展示。",
+      "unavailable_message": "查询服务无法访问时展示。"
     }
   },
   "tg_collection": {
