@@ -936,10 +936,12 @@ class SliderComponent extends HTMLElement {
   }
 
   setupLoopSlides() {
+    const desktopCarousel = this.slider?.classList.contains('product__media-list--desktop-carousel');
+
     if (
       !this.enableSeamlessLooping ||
       !this.slider.classList.contains('slider--mobile') ||
-      !window.matchMedia('(max-width: 749px)').matches ||
+      (!window.matchMedia('(max-width: 749px)').matches && !desktopCarousel) ||
       this.hasLoopSlides()
     ) {
       return false;

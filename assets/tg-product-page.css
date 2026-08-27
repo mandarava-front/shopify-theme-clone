@@ -651,7 +651,7 @@ product-recommendations.related-products:not(:has(.grid)) {
     width: 100%;
     column-gap: 0;
     row-gap: 0;
-    scroll-padding: 0;
+    scroll-padding: 0 !important;
     scroll-behavior: smooth;
   }
 
@@ -683,13 +683,15 @@ product-recommendations.related-products:not(:has(.grid)) {
     pointer-events: none;
   }
 
-  /* The mobile slider normally leaves a peek gutter on the right. Product
-     media is a primary detail view, so keep each non-column slide centered
-     and full width instead of reserving that gutter as empty space. */
+  /* Product media is a primary detail view, so keep each non-column slide
+     left-aligned and exactly as wide as the viewport. */
   [data-template='product'] .product:not(.product--mobile-columns) .product__media-list .product__media-item {
     flex: 0 0 100%;
     width: 100%;
+    min-width: 100%;
     max-width: 100%;
+    box-sizing: border-box;
+    scroll-snap-align: start;
   }
 
   [data-template='product'] .product-media-container,
@@ -779,6 +781,66 @@ product-recommendations.related-products:not(:has(.grid)) {
   [data-template='product'] .product-form__input,
   [data-template='product'] .product-form__buttons {
     max-width: none;
+  }
+}
+
+/* Desktop product media uses the same one-slide-at-a-time interaction as
+   mobile when the gallery is configured as a thumbnail slider. */
+@media screen and (min-width: 750px) {
+  [data-template='product'] .product__media-list--desktop-carousel {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  [data-template='product'] .product--thumbnail_slider .product__media-list--desktop-carousel .product__media-item,
+  [data-template='product'] .product--thumbnail_slider .product__media-list--desktop-carousel .product__media-item:not(.is-active) {
+    display: flex;
+    flex: 0 0 100%;
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    scroll-snap-align: start;
+  }
+
+  [data-template='product'] .product__media-list--desktop-carousel [data-slider-loop-clone] {
+    pointer-events: none;
+  }
+
+  [data-template='product'] .product__media-wrapper > media-gallery > slider-component.product-media-gallery-carousel > .slider-buttons {
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    right: 0;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+    padding: 0 0.8rem;
+    pointer-events: none;
+    transform: translateY(-50%);
+  }
+
+  [data-template='product'] .product__media-wrapper > media-gallery > slider-component.product-media-gallery-carousel > .slider-buttons .slider-button {
+    flex: 0 0 4.4rem;
+    width: 4.4rem;
+    height: 4.4rem;
+    border: 0.1rem solid rgba(var(--color-foreground), 0.14);
+    border-radius: 50%;
+    background: rgb(var(--color-background));
+    box-shadow: 0 0.2rem 0.6rem rgba(var(--color-foreground), 0.12);
+    pointer-events: auto;
+  }
+
+  [data-template='product'] .product__media-wrapper > media-gallery > slider-component.product-media-gallery-carousel > .slider-buttons .flickity-button-icon {
+    display: block;
+    width: 2rem;
+    height: 2rem;
+    fill: currentColor;
   }
 }
 
