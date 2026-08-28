@@ -38,7 +38,7 @@
 .tg-category-rail__label { display: block; margin-top: 1.1rem; }
 
 .tg-banner { display: block; margin-left: var(--tg-banner-margin-left, 0px); margin-right: var(--tg-banner-margin-right, 0px); overflow: hidden; border-radius: var(--tg-banner-radius, 0px); color: inherit; text-decoration: none; }
-.tg-image-banner__full-width { width: 100%; margin: 0; }
+.page-width.tg-image-banner__page-width { max-width: var(--tg-image-banner-max-width, var(--page-width)); padding-right: 0; padding-left: 0; }
 .tg-banner picture, .tg-banner img { display: block; width: 100%; height: auto; }
 .tg-banner--crop { aspect-ratio: var(--tg-banner-ratio); }
 .tg-banner--crop picture { height: 100%; }

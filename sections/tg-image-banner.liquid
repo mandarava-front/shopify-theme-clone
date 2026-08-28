@@ -2,9 +2,13 @@
 {%- liquid
   assign tg_banner_margin_left = section.settings.image_margin_left
   assign tg_banner_margin_right = section.settings.image_margin_right
-  if section.settings.full_width
-    assign tg_banner_margin_left = 0
-    assign tg_banner_margin_right = 0
+
+  assign tg_banner_max_width = 'var(--page-width)'
+  if section.settings.image_max_width_percent != blank
+    unless section.settings.image_max_width_percent == 0
+      assign tg_banner_width_percent = section.settings.image_max_width_percent | at_least: 1 | at_most: 100
+      assign tg_banner_max_width = tg_banner_width_percent | append: 'vw'
+    endunless
   endif
 
   comment
@@ -44,7 +48,7 @@
   endif
 -%}
 <section class="tg-section" style="--tg-background: {{ section.settings.background }}; padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;" {{ section.shopify_attributes }}>
-  <div class="{% if section.settings.full_width %}tg-image-banner__full-width{% else %}tg-page-width{% endif %}">
+  <div class="page-width tg-image-banner__page-width" style="--tg-image-banner-max-width: {{ tg_banner_max_width }};">
     <a class="tg-banner{{ tg_crop_class }}" href="{{ section.settings.link | default: routes.all_products_collection_url }}" style="--tg-banner-margin-left: {{ tg_banner_margin_left }}px; --tg-banner-margin-right: {{ tg_banner_margin_right }}px; --tg-banner-radius: {{ section.settings.image_radius }}px;{{ tg_crop_style }}">
       <picture>
         {%- if section.settings.mobile_image != blank -%}<source media="(max-width: 749px)" srcset="{{ section.settings.mobile_image | image_url: width: 900 }}">{%- endif -%}
@@ -54,7 +58,7 @@
   </div>
 </section>
 {% schema %}
-{"name":"t:tg.sections.banner.name","tag":"section","class":"section","settings":[{"type":"image_picker","id":"desktop_image","label":"t:tg.settings.desktop_image"},{"type":"image_picker","id":"mobile_image","label":"t:tg.settings.mobile_image"},{"type":"text","id":"alt","label":"t:tg.settings.alt"},{"type":"url","id":"link","label":"t:tg.settings.link"},{"type":"checkbox","id":"full_width","label":"Tg | Full-width image / 图片铺满宽度","default":false},{"type":"header","content":"Tg | Image height / 图片显示高度"},{"type":"paragraph","content":"100% = 完整显示原图；调低后按该比例压缩显示高度，图片上下居中等比裁剪（左右不裁）。"},{"type":"range","id":"image_height_percent","label":"Tg | Desktop height / 桌面端高度占比","min":20,"max":100,"step":5,"unit":"%","default":100},{"type":"range","id":"mobile_image_height_percent","label":"Tg | Mobile height / 移动端高度占比","min":20,"max":100,"step":5,"unit":"%","default":100},{"type":"range","id":"image_margin_left","label":"t:tg.settings.image_margin_left","min":0,"max":240,"step":4,"unit":"px","default":0},{"type":"range","id":"image_margin_right","label":"t:tg.settings.image_margin_right","min":0,"max":240,"step":4,"unit":"px","default":0},{"type":"range","id":"image_radius","label":"t:tg.settings.image_radius","min":0,"max":32,"step":2,"unit":"px","default":0},{"type":"color","id":"background","label":"t:tg.settings.background","default":"#ffffff"},{"type":"range","id":"padding_top","label":"t:tg.settings.padding_top","min":0,"max":120,"step":4,"unit":"px","default":0},{"type":"range","id":"padding_bottom","label":"t:tg.settings.padding_bottom","min":0,"max":120,"step":4,"unit":"px","default":0}],"presets": [
+{"name":"t:tg.sections.banner.name","tag":"section","class":"section","settings":[{"type":"image_picker","id":"desktop_image","label":"t:tg.settings.desktop_image"},{"type":"image_picker","id":"mobile_image","label":"t:tg.settings.mobile_image"},{"type":"text","id":"alt","label":"t:tg.settings.alt"},{"type":"url","id":"link","label":"t:tg.settings.link"},{"type":"header","content":"Tg | Image width / 图片宽度"},{"type":"range","id":"image_max_width_percent","label":"Tg | Viewport width / 视口宽度占比","info":"83% 时，1440px 视口下约为 1195px，1920px 视口下约为 1594px。0% 表示跟随主题 page-width，100% 表示铺满视口宽度。","min":0,"max":100,"step":1,"unit":"%","default":0},{"type":"header","content":"Tg | Image height / 图片显示高度"},{"type":"paragraph","content":"100% = 完整显示原图；调低后按该比例压缩显示高度，图片上下居中等比裁剪（左右不裁）。"},{"type":"range","id":"image_height_percent","label":"Tg | Desktop height / 桌面端高度占比","min":20,"max":100,"step":5,"unit":"%","default":100},{"type":"range","id":"mobile_image_height_percent","label":"Tg | Mobile height / 移动端高度占比","min":20,"max":100,"step":5,"unit":"%","default":100},{"type":"range","id":"image_margin_left","label":"t:tg.settings.image_margin_left","min":0,"max":240,"step":4,"unit":"px","default":0},{"type":"range","id":"image_margin_right","label":"t:tg.settings.image_margin_right","min":0,"max":240,"step":4,"unit":"px","default":0},{"type":"range","id":"image_radius","label":"t:tg.settings.image_radius","min":0,"max":32,"step":2,"unit":"px","default":0},{"type":"color","id":"background","label":"t:tg.settings.background","default":"#ffffff"},{"type":"range","id":"padding_top","label":"t:tg.settings.padding_top","min":0,"max":120,"step":4,"unit":"px","default":0},{"type":"range","id":"padding_bottom","label":"t:tg.settings.padding_bottom","min":0,"max":120,"step":4,"unit":"px","default":0}],"presets": [
   {
     "name": "t:tg.sections.banner.name"
   }
