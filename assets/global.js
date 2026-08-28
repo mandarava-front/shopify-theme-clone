@@ -730,6 +730,12 @@ class DeferredMedia extends HTMLElement {
 
 customElements.define('deferred-media', DeferredMedia);
 
+// Scroll offsets are sub-pixel, so the loop boundary checks in
+// onSliderScrollEnd need a tolerance. Comparing exactly makes them fire on
+// rounding noise, and since each correction scrolls (which fires another
+// scrollend) the slider oscillates between the first and last slide forever.
+const SLIDER_LOOP_TOLERANCE = 2;
+
 class SliderComponent extends HTMLElement {
   constructor() {
     super();
@@ -898,9 +904,9 @@ class SliderComponent extends HTMLElement {
     const lastSlide = this.sliderItemsToShow[this.sliderItemsToShow.length - 1];
     const firstSlidePosition = this.getSlidePosition(firstSlide);
     const lastSlidePosition = this.getSlidePosition(lastSlide);
-    if (this.slider.scrollLeft < firstSlidePosition) {
+    if (this.slider.scrollLeft < firstSlidePosition - SLIDER_LOOP_TOLERANCE) {
       this.setSlidePosition(lastSlidePosition, true);
-    } else if (this.slider.scrollLeft > lastSlidePosition) {
+    } else if (this.slider.scrollLeft > lastSlidePosition + SLIDER_LOOP_TOLERANCE) {
       this.setSlidePosition(firstSlidePosition, true);
     }
   }

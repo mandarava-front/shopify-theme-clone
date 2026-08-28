@@ -22,8 +22,18 @@ if (!customElements.get('media-gallery')) {
       }
 
       onSlideChanged(event) {
+        const currentElement = event.detail.currentElement;
+        if (!currentElement) return;
+
+        // Arrow and swipe navigation only move the scroll position, so mirror
+        // the visible slide onto is-active. Without this the gallery's DOM state
+        // drifts from what's on screen as soon as the arrows are used.
+        this.elements.viewer.querySelectorAll('[data-media-id]').forEach((element) => {
+          element.classList.toggle('is-active', element === currentElement);
+        });
+
         const thumbnail = this.elements.thumbnails.querySelector(
-          `[data-target="${event.detail.currentElement.dataset.mediaId}"]`
+          `[data-target="${currentElement.dataset.mediaId}"]`
         );
         this.setActiveThumbnail(thumbnail);
       }
@@ -67,7 +77,7 @@ if (!customElements.get('media-gallery')) {
         if (!this.elements.thumbnails) return;
         const activeThumbnail = this.elements.thumbnails.querySelector(`[data-target="${mediaId}"]`);
         this.setActiveThumbnail(activeThumbnail);
-        this.announceLiveRegion(activeMedia, activeThumbnail.dataset.mediaPosition);
+        this.announceLiveRegion(activeMedia, activeThumbnail?.dataset.mediaPosition);
       }
 
       setActiveThumbnail(thumbnail) {
