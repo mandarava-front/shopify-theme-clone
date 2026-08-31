@@ -4107,6 +4107,63 @@
             "label": "按钮悬停颜色"
           }
         }
+      },
+      "volume_discount": {
+        "name": "tg | 多件折扣",
+        "heading": {
+          "label": "标题"
+        },
+        "tier_count": {
+          "label": "档位数量"
+        },
+        "tier_1": {
+          "heading": "第 1 档"
+        },
+        "tier_2": {
+          "heading": "第 2 档"
+        },
+        "tier_3": {
+          "heading": "第 3 档"
+        },
+        "tier_4": {
+          "heading": "第 4 档"
+        },
+        "quantity": {
+          "label": "数量文案"
+        },
+        "discount": {
+          "label": "折扣文案"
+        },
+        "style": {
+          "heading": "颜色与尺寸"
+        },
+        "background_color": {
+          "label": "外层背景"
+        },
+        "tier_background_color": {
+          "label": "档位背景"
+        },
+        "border_color": {
+          "label": "边框"
+        },
+        "text_color": {
+          "label": "普通文字"
+        },
+        "accent_color": {
+          "label": "强调文字"
+        },
+        "corner_radius": {
+          "label": "圆角"
+        },
+        "title_size": {
+          "label": "标题字号"
+        },
+        "body_size": {
+          "label": "档位字号"
+        },
+        "vertical_spacing": {
+          "label": "上下间距"
+        }
       }
     }
   },

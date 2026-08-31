@@ -12,6 +12,7 @@
   {{ 'section-main-product.css' | asset_url | stylesheet_tag }}
   {{ 'tg-product.css' | asset_url | stylesheet_tag }}
   {{ 'tg-product-page.css' | asset_url | stylesheet_tag }}
+  {{ 'component-volume-discount.css' | asset_url | stylesheet_tag }}
   {{ 'component-accordion.css' | asset_url | stylesheet_tag }}
   {{ 'component-price.css' | asset_url | stylesheet_tag }}
   {{ 'component-slider.css' | asset_url | stylesheet_tag }}
@@ -282,6 +283,57 @@
                       </ul>
                     {%- endif -%}
                   </div>
+                {%- when 'volume_discount' -%}
+                  {%- assign volume_discount_tier_count = block.settings.tier_count | default: 3 | plus: 0 -%}
+                  {%- assign volume_discount_has_tier = false -%}
+                  {%- if volume_discount_tier_count >= 1 and block.settings.tier_1_quantity != blank and block.settings.tier_1_discount != blank -%}
+                    {%- assign volume_discount_has_tier = true -%}
+                  {%- elsif volume_discount_tier_count >= 2 and block.settings.tier_2_quantity != blank and block.settings.tier_2_discount != blank -%}
+                    {%- assign volume_discount_has_tier = true -%}
+                  {%- elsif volume_discount_tier_count >= 3 and block.settings.tier_3_quantity != blank and block.settings.tier_3_discount != blank -%}
+                    {%- assign volume_discount_has_tier = true -%}
+                  {%- elsif volume_discount_tier_count >= 4 and block.settings.tier_4_quantity != blank and block.settings.tier_4_discount != blank -%}
+                    {%- assign volume_discount_has_tier = true -%}
+                  {%- endif -%}
+                  {%- if block.settings.heading != blank and volume_discount_has_tier -%}
+                    <section
+                      class="tg-volume-discount tg-volume-discount--tiers-{{ volume_discount_tier_count }}"
+                      style="--tg-volume-discount-columns: {{ volume_discount_tier_count }}; --tg-volume-discount-background: {{ block.settings.background_color }}; --tg-volume-discount-tier-background: {{ block.settings.tier_background_color }}; --tg-volume-discount-border: {{ block.settings.border_color }}; --tg-volume-discount-text: {{ block.settings.text_color }}; --tg-volume-discount-accent: {{ block.settings.accent_color }}; --tg-volume-discount-radius: {{ block.settings.corner_radius }}px; --tg-volume-discount-title-size: {{ block.settings.title_size }}px; --tg-volume-discount-body-size: {{ block.settings.body_size }}px; --tg-volume-discount-spacing: {{ block.settings.vertical_spacing }}px;"
+                      {{ block.shopify_attributes }}
+                    >
+                      <div class="tg-volume-discount__title">
+                        <span aria-hidden="true"></span>
+                        <h2>{{ block.settings.heading | escape }}</h2>
+                        <span aria-hidden="true"></span>
+                      </div>
+                      <ul class="tg-volume-discount__tiers" role="list">
+                        {%- if volume_discount_tier_count >= 1 and block.settings.tier_1_quantity != blank and block.settings.tier_1_discount != blank -%}
+                          <li class="tg-volume-discount__tier">
+                            <span>{{ block.settings.tier_1_quantity | escape }}</span>
+                            <strong>{{ block.settings.tier_1_discount | escape }}</strong>
+                          </li>
+                        {%- endif -%}
+                        {%- if volume_discount_tier_count >= 2 and block.settings.tier_2_quantity != blank and block.settings.tier_2_discount != blank -%}
+                          <li class="tg-volume-discount__tier">
+                            <span>{{ block.settings.tier_2_quantity | escape }}</span>
+                            <strong>{{ block.settings.tier_2_discount | escape }}</strong>
+                          </li>
+                        {%- endif -%}
+                        {%- if volume_discount_tier_count >= 3 and block.settings.tier_3_quantity != blank and block.settings.tier_3_discount != blank -%}
+                          <li class="tg-volume-discount__tier">
+                            <span>{{ block.settings.tier_3_quantity | escape }}</span>
+                            <strong>{{ block.settings.tier_3_discount | escape }}</strong>
+                          </li>
+                        {%- endif -%}
+                        {%- if volume_discount_tier_count >= 4 and block.settings.tier_4_quantity != blank and block.settings.tier_4_discount != blank -%}
+                          <li class="tg-volume-discount__tier">
+                            <span>{{ block.settings.tier_4_quantity | escape }}</span>
+                            <strong>{{ block.settings.tier_4_discount | escape }}</strong>
+                          </li>
+                        {%- endif -%}
+                      </ul>
+                    </section>
+                  {%- endif -%}
                 {%- when 'tg_product_addon' -%}
                   {%- assign addon_product = block.settings.product -%}
                   {%- if addon_product != blank and addon_product.selected_or_first_available_variant != blank -%}
@@ -888,6 +940,37 @@
           "info": "t:sections.tg_product.sales_proof.assurance_text.info",
           "default": "Free shipping over $59 | 30-day money-back | Secure checkout"
         }
+      ]
+    },
+    {
+      "type": "volume_discount",
+      "name": "t:sections.tg_product.volume_discount.name",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "heading", "label": "t:sections.tg_product.volume_discount.heading.label", "default": "BUY MORE SAVE MORE" },
+        { "type": "range", "id": "tier_count", "label": "t:sections.tg_product.volume_discount.tier_count.label", "min": 1, "max": 4, "step": 1, "default": 3 },
+        { "type": "header", "content": "t:sections.tg_product.volume_discount.tier_1.heading" },
+        { "type": "text", "id": "tier_1_quantity", "label": "t:sections.tg_product.volume_discount.quantity.label", "default": "2 ITEMS" },
+        { "type": "text", "id": "tier_1_discount", "label": "t:sections.tg_product.volume_discount.discount.label", "default": "SAVE 10%" },
+        { "type": "header", "content": "t:sections.tg_product.volume_discount.tier_2.heading" },
+        { "type": "text", "id": "tier_2_quantity", "label": "t:sections.tg_product.volume_discount.quantity.label", "default": "3 ITEMS" },
+        { "type": "text", "id": "tier_2_discount", "label": "t:sections.tg_product.volume_discount.discount.label", "default": "SAVE 15%" },
+        { "type": "header", "content": "t:sections.tg_product.volume_discount.tier_3.heading" },
+        { "type": "text", "id": "tier_3_quantity", "label": "t:sections.tg_product.volume_discount.quantity.label", "default": "4+ ITEMS" },
+        { "type": "text", "id": "tier_3_discount", "label": "t:sections.tg_product.volume_discount.discount.label", "default": "SAVE 20%" },
+        { "type": "header", "content": "t:sections.tg_product.volume_discount.tier_4.heading" },
+        { "type": "text", "id": "tier_4_quantity", "label": "t:sections.tg_product.volume_discount.quantity.label", "default": "5+ ITEMS" },
+        { "type": "text", "id": "tier_4_discount", "label": "t:sections.tg_product.volume_discount.discount.label", "default": "SAVE 25%" },
+        { "type": "header", "content": "t:sections.tg_product.volume_discount.style.heading" },
+        { "type": "color", "id": "background_color", "label": "t:sections.tg_product.volume_discount.background_color.label", "default": "#f7faff" },
+        { "type": "color", "id": "tier_background_color", "label": "t:sections.tg_product.volume_discount.tier_background_color.label", "default": "#eaf2fd" },
+        { "type": "color", "id": "border_color", "label": "t:sections.tg_product.volume_discount.border_color.label", "default": "#91cfee" },
+        { "type": "color", "id": "text_color", "label": "t:sections.tg_product.volume_discount.text_color.label", "default": "#17263b" },
+        { "type": "color", "id": "accent_color", "label": "t:sections.tg_product.volume_discount.accent_color.label", "default": "#244a85" },
+        { "type": "range", "id": "corner_radius", "label": "t:sections.tg_product.volume_discount.corner_radius.label", "min": 0, "max": 24, "step": 1, "default": 10, "unit": "px" },
+        { "type": "range", "id": "title_size", "label": "t:sections.tg_product.volume_discount.title_size.label", "min": 14, "max": 32, "step": 1, "default": 18, "unit": "px" },
+        { "type": "range", "id": "body_size", "label": "t:sections.tg_product.volume_discount.body_size.label", "min": 12, "max": 24, "step": 1, "default": 15, "unit": "px" },
+        { "type": "range", "id": "vertical_spacing", "label": "t:sections.tg_product.volume_discount.vertical_spacing.label", "min": 0, "max": 40, "step": 1, "default": 18, "unit": "px" }
       ]
     },
     {

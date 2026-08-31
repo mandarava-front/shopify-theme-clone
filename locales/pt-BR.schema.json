@@ -4117,6 +4117,63 @@
             "label": "Button hover"
           }
         }
+      },
+      "volume_discount": {
+        "name": "tg | Volume discount",
+        "heading": {
+          "label": "Heading"
+        },
+        "tier_count": {
+          "label": "Number of tiers"
+        },
+        "tier_1": {
+          "heading": "Tier 1"
+        },
+        "tier_2": {
+          "heading": "Tier 2"
+        },
+        "tier_3": {
+          "heading": "Tier 3"
+        },
+        "tier_4": {
+          "heading": "Tier 4"
+        },
+        "quantity": {
+          "label": "Quantity copy"
+        },
+        "discount": {
+          "label": "Discount copy"
+        },
+        "style": {
+          "heading": "Colors and sizing"
+        },
+        "background_color": {
+          "label": "Background"
+        },
+        "tier_background_color": {
+          "label": "Tier background"
+        },
+        "border_color": {
+          "label": "Border"
+        },
+        "text_color": {
+          "label": "Text"
+        },
+        "accent_color": {
+          "label": "Accent"
+        },
+        "corner_radius": {
+          "label": "Corner radius"
+        },
+        "title_size": {
+          "label": "Title size"
+        },
+        "body_size": {
+          "label": "Tier size"
+        },
+        "vertical_spacing": {
+          "label": "Vertical spacing"
+        }
       }
     }
   },

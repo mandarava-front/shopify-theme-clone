@@ -44,6 +44,30 @@
             "assurance_text": "Free shipping over $59 | 30-day money-back | Secure checkout"
           }
         },
+        "volume_discount": {
+          "type": "volume_discount",
+          "settings": {
+            "heading": "BUY MORE SAVE MORE",
+            "tier_count": 3,
+            "tier_1_quantity": "2 ITEMS",
+            "tier_1_discount": "SAVE 10%",
+            "tier_2_quantity": "3 ITEMS",
+            "tier_2_discount": "SAVE 15%",
+            "tier_3_quantity": "4+ ITEMS",
+            "tier_3_discount": "SAVE 20%",
+            "tier_4_quantity": "5+ ITEMS",
+            "tier_4_discount": "SAVE 25%",
+            "background_color": "#f7faff",
+            "tier_background_color": "#eaf2fd",
+            "border_color": "#91cfee",
+            "text_color": "#17263b",
+            "accent_color": "#244a85",
+            "corner_radius": 10,
+            "title_size": 18,
+            "body_size": 15,
+            "vertical_spacing": 18
+          }
+        },
         "delivery_estimate": {
           "type": "delivery_estimate",
           "settings": {
@@ -132,6 +156,7 @@
         "rating",
         "price",
         "sales_proof",
+        "volume_discount",
         "delivery_estimate",
         "variant_picker",
         "quantity_selector",

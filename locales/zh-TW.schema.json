@@ -4117,6 +4117,63 @@
             "label": "按鈕滑過顏色"
           }
         }
+      },
+      "volume_discount": {
+        "name": "tg | 多件折扣",
+        "heading": {
+          "label": "標題"
+        },
+        "tier_count": {
+          "label": "檔位數量"
+        },
+        "tier_1": {
+          "heading": "第 1 檔"
+        },
+        "tier_2": {
+          "heading": "第 2 檔"
+        },
+        "tier_3": {
+          "heading": "第 3 檔"
+        },
+        "tier_4": {
+          "heading": "第 4 檔"
+        },
+        "quantity": {
+          "label": "數量文案"
+        },
+        "discount": {
+          "label": "折扣文案"
+        },
+        "style": {
+          "heading": "顏色與尺寸"
+        },
+        "background_color": {
+          "label": "外層背景"
+        },
+        "tier_background_color": {
+          "label": "檔位背景"
+        },
+        "border_color": {
+          "label": "邊框"
+        },
+        "text_color": {
+          "label": "一般文字"
+        },
+        "accent_color": {
+          "label": "強調文字"
+        },
+        "corner_radius": {
+          "label": "圓角"
+        },
+        "title_size": {
+          "label": "標題字號"
+        },
+        "body_size": {
+          "label": "檔位字號"
+        },
+        "vertical_spacing": {
+          "label": "上下間距"
+        }
       }
     }
   },
