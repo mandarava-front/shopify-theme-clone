@@ -286,19 +286,35 @@
                 {%- when 'volume_discount' -%}
                   {%- assign volume_discount_tier_count = block.settings.tier_count | default: 3 | plus: 0 -%}
                   {%- assign volume_discount_has_tier = false -%}
-                  {%- if volume_discount_tier_count >= 1 and block.settings.tier_1_quantity != blank and block.settings.tier_1_discount != blank -%}
-                    {%- assign volume_discount_has_tier = true -%}
-                  {%- elsif volume_discount_tier_count >= 2 and block.settings.tier_2_quantity != blank and block.settings.tier_2_discount != blank -%}
-                    {%- assign volume_discount_has_tier = true -%}
-                  {%- elsif volume_discount_tier_count >= 3 and block.settings.tier_3_quantity != blank and block.settings.tier_3_discount != blank -%}
-                    {%- assign volume_discount_has_tier = true -%}
-                  {%- elsif volume_discount_tier_count >= 4 and block.settings.tier_4_quantity != blank and block.settings.tier_4_discount != blank -%}
-                    {%- assign volume_discount_has_tier = true -%}
+                  {%- assign volume_discount_visible_tier_count = 0 -%}
+                  {%- if volume_discount_tier_count >= 1 -%}
+                    {%- unless block.settings.tier_1_quantity == blank and block.settings.tier_1_discount == blank -%}
+                      {%- assign volume_discount_has_tier = true -%}
+                      {%- assign volume_discount_visible_tier_count = volume_discount_visible_tier_count | plus: 1 -%}
+                    {%- endunless -%}
+                  {%- endif -%}
+                  {%- if volume_discount_tier_count >= 2 -%}
+                    {%- unless block.settings.tier_2_quantity == blank and block.settings.tier_2_discount == blank -%}
+                      {%- assign volume_discount_has_tier = true -%}
+                      {%- assign volume_discount_visible_tier_count = volume_discount_visible_tier_count | plus: 1 -%}
+                    {%- endunless -%}
+                  {%- endif -%}
+                  {%- if volume_discount_tier_count >= 3 -%}
+                    {%- unless block.settings.tier_3_quantity == blank and block.settings.tier_3_discount == blank -%}
+                      {%- assign volume_discount_has_tier = true -%}
+                      {%- assign volume_discount_visible_tier_count = volume_discount_visible_tier_count | plus: 1 -%}
+                    {%- endunless -%}
+                  {%- endif -%}
+                  {%- if volume_discount_tier_count >= 4 -%}
+                    {%- unless block.settings.tier_4_quantity == blank and block.settings.tier_4_discount == blank -%}
+                      {%- assign volume_discount_has_tier = true -%}
+                      {%- assign volume_discount_visible_tier_count = volume_discount_visible_tier_count | plus: 1 -%}
+                    {%- endunless -%}
                   {%- endif -%}
                   {%- if block.settings.heading != blank and volume_discount_has_tier -%}
                     <section
-                      class="tg-volume-discount tg-volume-discount--tiers-{{ volume_discount_tier_count }}"
-                      style="--tg-volume-discount-columns: {{ volume_discount_tier_count }}; --tg-volume-discount-background: {{ block.settings.background_color }}; --tg-volume-discount-tier-background: {{ block.settings.tier_background_color }}; --tg-volume-discount-border: {{ block.settings.border_color }}; --tg-volume-discount-text: {{ block.settings.text_color }}; --tg-volume-discount-accent: {{ block.settings.accent_color }}; --tg-volume-discount-radius: {{ block.settings.corner_radius }}px; --tg-volume-discount-title-size: {{ block.settings.title_size }}px; --tg-volume-discount-body-size: {{ block.settings.body_size }}px; --tg-volume-discount-spacing: {{ block.settings.vertical_spacing }}px;"
+                      class="tg-volume-discount tg-volume-discount--tiers-{{ volume_discount_visible_tier_count }}"
+                      style="--tg-volume-discount-columns: {{ volume_discount_visible_tier_count }}; --tg-volume-discount-background: {{ block.settings.background_color }}; --tg-volume-discount-tier-background: {{ block.settings.tier_background_color }}; --tg-volume-discount-border: {{ block.settings.border_color }}; --tg-volume-discount-text: {{ block.settings.text_color }}; --tg-volume-discount-accent: {{ block.settings.accent_color }}; --tg-volume-discount-radius: {{ block.settings.corner_radius }}px; --tg-volume-discount-title-size: {{ block.settings.title_size }}px; --tg-volume-discount-body-size: {{ block.settings.body_size }}px; --tg-volume-discount-spacing: {{ block.settings.vertical_spacing }}px;"
                       {{ block.shopify_attributes }}
                     >
                       <div class="tg-volume-discount__title">
@@ -307,29 +323,53 @@
                         <span aria-hidden="true"></span>
                       </div>
                       <ul class="tg-volume-discount__tiers" role="list">
-                        {%- if volume_discount_tier_count >= 1 and block.settings.tier_1_quantity != blank and block.settings.tier_1_discount != blank -%}
-                          <li class="tg-volume-discount__tier">
-                            <span>{{ block.settings.tier_1_quantity | escape }}</span>
-                            <strong>{{ block.settings.tier_1_discount | escape }}</strong>
-                          </li>
+                        {%- if volume_discount_tier_count >= 1 -%}
+                          {%- unless block.settings.tier_1_quantity == blank and block.settings.tier_1_discount == blank -%}
+                            <li class="tg-volume-discount__tier">
+                              {%- if block.settings.tier_1_quantity != blank -%}
+                                <span>{{ block.settings.tier_1_quantity | escape }}</span>
+                              {%- endif -%}
+                              {%- if block.settings.tier_1_discount != blank -%}
+                                <strong>{{ block.settings.tier_1_discount | escape }}</strong>
+                              {%- endif -%}
+                            </li>
+                          {%- endunless -%}
                         {%- endif -%}
-                        {%- if volume_discount_tier_count >= 2 and block.settings.tier_2_quantity != blank and block.settings.tier_2_discount != blank -%}
-                          <li class="tg-volume-discount__tier">
-                            <span>{{ block.settings.tier_2_quantity | escape }}</span>
-                            <strong>{{ block.settings.tier_2_discount | escape }}</strong>
-                          </li>
+                        {%- if volume_discount_tier_count >= 2 -%}
+                          {%- unless block.settings.tier_2_quantity == blank and block.settings.tier_2_discount == blank -%}
+                            <li class="tg-volume-discount__tier">
+                              {%- if block.settings.tier_2_quantity != blank -%}
+                                <span>{{ block.settings.tier_2_quantity | escape }}</span>
+                              {%- endif -%}
+                              {%- if block.settings.tier_2_discount != blank -%}
+                                <strong>{{ block.settings.tier_2_discount | escape }}</strong>
+                              {%- endif -%}
+                            </li>
+                          {%- endunless -%}
                         {%- endif -%}
-                        {%- if volume_discount_tier_count >= 3 and block.settings.tier_3_quantity != blank and block.settings.tier_3_discount != blank -%}
-                          <li class="tg-volume-discount__tier">
-                            <span>{{ block.settings.tier_3_quantity | escape }}</span>
-                            <strong>{{ block.settings.tier_3_discount | escape }}</strong>
-                          </li>
+                        {%- if volume_discount_tier_count >= 3 -%}
+                          {%- unless block.settings.tier_3_quantity == blank and block.settings.tier_3_discount == blank -%}
+                            <li class="tg-volume-discount__tier">
+                              {%- if block.settings.tier_3_quantity != blank -%}
+                                <span>{{ block.settings.tier_3_quantity | escape }}</span>
+                              {%- endif -%}
+                              {%- if block.settings.tier_3_discount != blank -%}
+                                <strong>{{ block.settings.tier_3_discount | escape }}</strong>
+                              {%- endif -%}
+                            </li>
+                          {%- endunless -%}
                         {%- endif -%}
-                        {%- if volume_discount_tier_count >= 4 and block.settings.tier_4_quantity != blank and block.settings.tier_4_discount != blank -%}
-                          <li class="tg-volume-discount__tier">
-                            <span>{{ block.settings.tier_4_quantity | escape }}</span>
-                            <strong>{{ block.settings.tier_4_discount | escape }}</strong>
-                          </li>
+                        {%- if volume_discount_tier_count >= 4 -%}
+                          {%- unless block.settings.tier_4_quantity == blank and block.settings.tier_4_discount == blank -%}
+                            <li class="tg-volume-discount__tier">
+                              {%- if block.settings.tier_4_quantity != blank -%}
+                                <span>{{ block.settings.tier_4_quantity | escape }}</span>
+                              {%- endif -%}
+                              {%- if block.settings.tier_4_discount != blank -%}
+                                <strong>{{ block.settings.tier_4_discount | escape }}</strong>
+                              {%- endif -%}
+                            </li>
+                          {%- endunless -%}
                         {%- endif -%}
                       </ul>
                     </section>

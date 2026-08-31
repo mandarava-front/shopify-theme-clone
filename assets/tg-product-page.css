@@ -121,13 +121,13 @@
 
 [data-template='product'] variant-selects .form__label,
 [data-template='product'] .product-form__quantity .form__label {
-  color: #17212b;
+  color: rgb(var(--color-foreground));
   font-weight: 700;
   margin-bottom: 0.8rem;
 }
 
 [data-template='product'] .product-form__input input[type='radio'] + label {
-  border-color: #c7d5df;
+  border-color: rgba(var(--color-foreground), 0.25);
   border-radius: 0.5rem;
   min-height: 4.2rem;
   padding: 1rem 1.6rem;
@@ -144,9 +144,10 @@
 }
 
 [data-template='product'] .product-form__input input[type='radio']:checked + label {
-  background: #102a43;
-  border-color: #102a43;
-  color: #fff;
+  background: rgb(var(--color-foreground));
+  border-color: rgb(var(--color-foreground));
+  color: rgb(var(--color-background));
+  color: color-mix(in srgb, rgb(var(--color-background)) 85%, rgb(var(--color-shadow)));
 }
 
 /* Single clean box: Dawn draws the quantity border via .quantity::after
