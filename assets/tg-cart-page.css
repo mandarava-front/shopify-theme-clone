@@ -1493,7 +1493,7 @@
 }
 
 .tg-cart-item__options .product-option::before {
-  content: '\\2022';
+  content: '\2022';
   margin-right: 10px;
 }
 
