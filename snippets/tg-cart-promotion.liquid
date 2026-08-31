@@ -1,16 +1,243 @@
 {%- liquid
-  assign tg_cart_promo_message = block.settings.message
-  if block.settings.minimum_item_count > cart.item_count and block.settings.incomplete_message != blank
-    assign tg_cart_promo_message = block.settings.incomplete_message
+  assign tg_cart_item_count = cart.item_count | default: 0
+  assign tg_cart_promo_has_tiers = false
+
+  assign tg_cart_tier_1_configured = false
+  assign tg_cart_tier_2_configured = false
+  assign tg_cart_tier_3_configured = false
+  assign tg_cart_tier_4_configured = false
+
+  if block.settings.tier_1_enabled and block.settings.tier_1_minimum_item_count > 0 and block.settings.tier_1_benefit != blank
+    assign tg_cart_tier_1_configured = true
+    assign tg_cart_promo_has_tiers = true
+  endif
+  if block.settings.tier_2_enabled and block.settings.tier_2_minimum_item_count > 0 and block.settings.tier_2_benefit != blank
+    assign tg_cart_tier_2_configured = true
+    assign tg_cart_promo_has_tiers = true
+  endif
+  if block.settings.tier_3_enabled and block.settings.tier_3_minimum_item_count > 0 and block.settings.tier_3_benefit != blank
+    assign tg_cart_tier_3_configured = true
+    assign tg_cart_promo_has_tiers = true
+  endif
+  if block.settings.tier_4_enabled and block.settings.tier_4_minimum_item_count > 0 and block.settings.tier_4_benefit != blank
+    assign tg_cart_tier_4_configured = true
+    assign tg_cart_promo_has_tiers = true
+  endif
+
+  if tg_cart_promo_has_tiers
+    assign tg_cart_max_item_count = 0
+    if tg_cart_tier_1_configured and block.settings.tier_1_minimum_item_count > tg_cart_max_item_count
+      assign tg_cart_max_item_count = block.settings.tier_1_minimum_item_count
+    endif
+    if tg_cart_tier_2_configured and block.settings.tier_2_minimum_item_count > tg_cart_max_item_count
+      assign tg_cart_max_item_count = block.settings.tier_2_minimum_item_count
+    endif
+    if tg_cart_tier_3_configured and block.settings.tier_3_minimum_item_count > tg_cart_max_item_count
+      assign tg_cart_max_item_count = block.settings.tier_3_minimum_item_count
+    endif
+    if tg_cart_tier_4_configured and block.settings.tier_4_minimum_item_count > tg_cart_max_item_count
+      assign tg_cart_max_item_count = block.settings.tier_4_minimum_item_count
+    endif
+
+    assign tg_cart_progress_value = tg_cart_item_count
+    if tg_cart_progress_value > tg_cart_max_item_count
+      assign tg_cart_progress_value = tg_cart_max_item_count
+    endif
+    assign tg_cart_tier_count = 0
+    assign tg_cart_tier_1_index = 0
+    assign tg_cart_tier_2_index = 0
+    assign tg_cart_tier_3_index = 0
+    assign tg_cart_tier_4_index = 0
+    if tg_cart_tier_1_configured
+      assign tg_cart_tier_count = tg_cart_tier_count | plus: 1
+      assign tg_cart_tier_1_index = tg_cart_tier_count
+    endif
+    if tg_cart_tier_2_configured
+      assign tg_cart_tier_count = tg_cart_tier_count | plus: 1
+      assign tg_cart_tier_2_index = tg_cart_tier_count
+    endif
+    if tg_cart_tier_3_configured
+      assign tg_cart_tier_count = tg_cart_tier_count | plus: 1
+      assign tg_cart_tier_3_index = tg_cart_tier_count
+    endif
+    if tg_cart_tier_4_configured
+      assign tg_cart_tier_count = tg_cart_tier_count | plus: 1
+      assign tg_cart_tier_4_index = tg_cart_tier_count
+    endif
+    assign tg_cart_tier_1_position = blank
+    assign tg_cart_tier_2_position = blank
+    assign tg_cart_tier_3_position = blank
+    assign tg_cart_tier_4_position = blank
+    if tg_cart_tier_1_configured
+      assign tg_cart_tier_1_position = tg_cart_tier_1_index | times: 100.0 | divided_by: tg_cart_tier_count | round: 2
+    endif
+    if tg_cart_tier_2_configured
+      assign tg_cart_tier_2_position = tg_cart_tier_2_index | times: 100.0 | divided_by: tg_cart_tier_count | round: 2
+    endif
+    if tg_cart_tier_3_configured
+      assign tg_cart_tier_3_position = tg_cart_tier_3_index | times: 100.0 | divided_by: tg_cart_tier_count | round: 2
+    endif
+    if tg_cart_tier_4_configured
+      assign tg_cart_tier_4_position = tg_cart_tier_4_index | times: 100.0 | divided_by: tg_cart_tier_count | round: 2
+    endif
+
+    assign tg_cart_current_threshold = 0
+    assign tg_cart_current_benefit = blank
+    if tg_cart_tier_1_configured and tg_cart_item_count >= block.settings.tier_1_minimum_item_count and block.settings.tier_1_minimum_item_count > tg_cart_current_threshold
+      assign tg_cart_current_threshold = block.settings.tier_1_minimum_item_count
+      assign tg_cart_current_benefit = block.settings.tier_1_benefit
+    endif
+    if tg_cart_tier_2_configured and tg_cart_item_count >= block.settings.tier_2_minimum_item_count and block.settings.tier_2_minimum_item_count > tg_cart_current_threshold
+      assign tg_cart_current_threshold = block.settings.tier_2_minimum_item_count
+      assign tg_cart_current_benefit = block.settings.tier_2_benefit
+    endif
+    if tg_cart_tier_3_configured and tg_cart_item_count >= block.settings.tier_3_minimum_item_count and block.settings.tier_3_minimum_item_count > tg_cart_current_threshold
+      assign tg_cart_current_threshold = block.settings.tier_3_minimum_item_count
+      assign tg_cart_current_benefit = block.settings.tier_3_benefit
+    endif
+    if tg_cart_tier_4_configured and tg_cart_item_count >= block.settings.tier_4_minimum_item_count and block.settings.tier_4_minimum_item_count > tg_cart_current_threshold
+      assign tg_cart_current_threshold = block.settings.tier_4_minimum_item_count
+      assign tg_cart_current_benefit = block.settings.tier_4_benefit
+    endif
+
+    assign tg_cart_next_threshold = blank
+    assign tg_cart_next_benefit = blank
+    if tg_cart_tier_1_configured and tg_cart_item_count < block.settings.tier_1_minimum_item_count
+      assign tg_cart_next_threshold = block.settings.tier_1_minimum_item_count
+      assign tg_cart_next_benefit = block.settings.tier_1_benefit
+    endif
+    if tg_cart_tier_2_configured and tg_cart_item_count < block.settings.tier_2_minimum_item_count
+      if tg_cart_next_threshold == blank or block.settings.tier_2_minimum_item_count < tg_cart_next_threshold
+        assign tg_cart_next_threshold = block.settings.tier_2_minimum_item_count
+        assign tg_cart_next_benefit = block.settings.tier_2_benefit
+      endif
+    endif
+    if tg_cart_tier_3_configured and tg_cart_item_count < block.settings.tier_3_minimum_item_count
+      if tg_cart_next_threshold == blank or block.settings.tier_3_minimum_item_count < tg_cart_next_threshold
+        assign tg_cart_next_threshold = block.settings.tier_3_minimum_item_count
+        assign tg_cart_next_benefit = block.settings.tier_3_benefit
+      endif
+    endif
+    if tg_cart_tier_4_configured and tg_cart_item_count < block.settings.tier_4_minimum_item_count
+      if tg_cart_next_threshold == blank or block.settings.tier_4_minimum_item_count < tg_cart_next_threshold
+        assign tg_cart_next_threshold = block.settings.tier_4_minimum_item_count
+        assign tg_cart_next_benefit = block.settings.tier_4_benefit
+      endif
+    endif
+
+    assign tg_cart_current_position = 0
+    if tg_cart_current_threshold == block.settings.tier_1_minimum_item_count
+      assign tg_cart_current_position = tg_cart_tier_1_position
+    endif
+    if tg_cart_current_threshold == block.settings.tier_2_minimum_item_count
+      assign tg_cart_current_position = tg_cart_tier_2_position
+    endif
+    if tg_cart_current_threshold == block.settings.tier_3_minimum_item_count
+      assign tg_cart_current_position = tg_cart_tier_3_position
+    endif
+    if tg_cart_current_threshold == block.settings.tier_4_minimum_item_count
+      assign tg_cart_current_position = tg_cart_tier_4_position
+    endif
+
+    if tg_cart_next_threshold != blank
+      assign tg_cart_next_position = 0
+      if tg_cart_next_threshold == block.settings.tier_1_minimum_item_count
+        assign tg_cart_next_position = tg_cart_tier_1_position
+      endif
+      if tg_cart_next_threshold == block.settings.tier_2_minimum_item_count
+        assign tg_cart_next_position = tg_cart_tier_2_position
+      endif
+      if tg_cart_next_threshold == block.settings.tier_3_minimum_item_count
+        assign tg_cart_next_position = tg_cart_tier_3_position
+      endif
+      if tg_cart_next_threshold == block.settings.tier_4_minimum_item_count
+        assign tg_cart_next_position = tg_cart_tier_4_position
+      endif
+
+      assign tg_cart_item_interval = tg_cart_next_threshold | minus: tg_cart_current_threshold
+      assign tg_cart_item_progress = tg_cart_item_count | minus: tg_cart_current_threshold
+      assign tg_cart_position_interval = tg_cart_next_position | minus: tg_cart_current_position
+      assign tg_cart_position_progress = tg_cart_item_progress | times: tg_cart_position_interval | divided_by: tg_cart_item_interval
+      assign tg_cart_progress_percent = tg_cart_current_position | plus: tg_cart_position_progress | round: 2
+    else
+      assign tg_cart_progress_percent = 100
+    endif
+
+    if tg_cart_next_threshold != blank
+      assign tg_cart_remaining = tg_cart_next_threshold | minus: tg_cart_item_count
+      assign tg_cart_pending_template = block.settings.pending_message_template | default: 'Add [remaining] more item(s) to unlock [benefit]'
+      assign tg_cart_promo_message = tg_cart_pending_template | replace: '[remaining]', tg_cart_remaining | replace: '[benefit]', tg_cart_next_benefit
+    elsif tg_cart_current_benefit != blank
+      assign tg_cart_unlocked_template = block.settings.unlocked_message_template | default: "You've unlocked [benefit]"
+      assign tg_cart_promo_message = tg_cart_unlocked_template | replace: '[benefit]', tg_cart_current_benefit
+    endif
+  else
+    assign tg_cart_promo_message = block.settings.message
+    if block.settings.minimum_item_count > tg_cart_item_count and block.settings.incomplete_message != blank
+      assign tg_cart_promo_message = block.settings.incomplete_message
+    endif
   endif
 -%}
 
 {%- if tg_cart_promo_message != blank -%}
   <aside
-    class="tg-cart-promotion"
+    class="tg-cart-promotion{% if tg_cart_promo_has_tiers %} tg-cart-promotion--tiers{% endif %}"
     style="--tg-cart-promotion-background-start: {{ block.settings.promotion_background_start_color }}; --tg-cart-promotion-background-end: {{ block.settings.promotion_background_end_color }}; --tg-cart-promotion-text: {{ block.settings.promotion_text_color }}; --tg-cart-promotion-link: {{ block.settings.promotion_link_color }}; --tg-cart-promotion-border: {{ block.settings.promotion_border_color }}; --tg-cart-promotion-border-width: {{ block.settings.promotion_border_width }}px; --tg-cart-promotion-radius: {{ block.settings.promotion_radius }}px; --tg-cart-promotion-font-size: {{ block.settings.promotion_font_size }}px;"
   >
-    <p>{{ tg_cart_promo_message | escape }}</p>
+    <p class="tg-cart-promotion__message" role="status" aria-live="polite">{{ tg_cart_promo_message | escape }}</p>
+
+    {%- if tg_cart_promo_has_tiers -%}
+      <div
+        class="tg-cart-promotion__progress"
+        role="progressbar"
+        aria-label="Promotion progress"
+        aria-valuemin="0"
+        aria-valuemax="{{ tg_cart_max_item_count }}"
+        aria-valuenow="{{ tg_cart_progress_value }}"
+      >
+        <span class="tg-cart-promotion__progress-fill" style="width: {{ tg_cart_progress_percent }}%;"></span>
+        {%- if tg_cart_tier_1_configured -%}
+          <span class="tg-cart-promotion__progress-tick{% if tg_cart_item_count >= block.settings.tier_1_minimum_item_count %} is-complete{% endif %}" style="left: {{ tg_cart_tier_1_position }}%;" aria-hidden="true"></span>
+        {%- endif -%}
+        {%- if tg_cart_tier_2_configured -%}
+          <span class="tg-cart-promotion__progress-tick{% if tg_cart_item_count >= block.settings.tier_2_minimum_item_count %} is-complete{% endif %}" style="left: {{ tg_cart_tier_2_position }}%;" aria-hidden="true"></span>
+        {%- endif -%}
+        {%- if tg_cart_tier_3_configured -%}
+          <span class="tg-cart-promotion__progress-tick{% if tg_cart_item_count >= block.settings.tier_3_minimum_item_count %} is-complete{% endif %}" style="left: {{ tg_cart_tier_3_position }}%;" aria-hidden="true"></span>
+        {%- endif -%}
+        {%- if tg_cart_tier_4_configured -%}
+          <span class="tg-cart-promotion__progress-tick{% if tg_cart_item_count >= block.settings.tier_4_minimum_item_count %} is-complete{% endif %}" style="left: {{ tg_cart_tier_4_position }}%;" aria-hidden="true"></span>
+        {%- endif -%}
+      </div>
+
+      <ol class="tg-cart-promotion__tiers" aria-label="Promotion tiers">
+        {%- if tg_cart_tier_1_configured -%}
+          <li class="tg-cart-promotion__tier{% if tg_cart_item_count >= block.settings.tier_1_minimum_item_count %} is-complete{% elsif tg_cart_next_threshold == block.settings.tier_1_minimum_item_count %} is-next{% endif %}" style="left: {{ tg_cart_tier_1_position }}%;">
+            <span class="tg-cart-promotion__tier-marker" aria-hidden="true">{{ block.settings.tier_1_minimum_item_count }}</span>
+            <span class="tg-cart-promotion__tier-label">{{ block.settings.tier_1_benefit | escape }}</span>
+          </li>
+        {%- endif -%}
+        {%- if tg_cart_tier_2_configured -%}
+          <li class="tg-cart-promotion__tier{% if tg_cart_item_count >= block.settings.tier_2_minimum_item_count %} is-complete{% elsif tg_cart_next_threshold == block.settings.tier_2_minimum_item_count %} is-next{% endif %}" style="left: {{ tg_cart_tier_2_position }}%;">
+            <span class="tg-cart-promotion__tier-marker" aria-hidden="true">{{ block.settings.tier_2_minimum_item_count }}</span>
+            <span class="tg-cart-promotion__tier-label">{{ block.settings.tier_2_benefit | escape }}</span>
+          </li>
+        {%- endif -%}
+        {%- if tg_cart_tier_3_configured -%}
+          <li class="tg-cart-promotion__tier{% if tg_cart_item_count >= block.settings.tier_3_minimum_item_count %} is-complete{% elsif tg_cart_next_threshold == block.settings.tier_3_minimum_item_count %} is-next{% endif %}" style="left: {{ tg_cart_tier_3_position }}%;">
+            <span class="tg-cart-promotion__tier-marker" aria-hidden="true">{{ block.settings.tier_3_minimum_item_count }}</span>
+            <span class="tg-cart-promotion__tier-label">{{ block.settings.tier_3_benefit | escape }}</span>
+          </li>
+        {%- endif -%}
+        {%- if tg_cart_tier_4_configured -%}
+          <li class="tg-cart-promotion__tier{% if tg_cart_item_count >= block.settings.tier_4_minimum_item_count %} is-complete{% elsif tg_cart_next_threshold == block.settings.tier_4_minimum_item_count %} is-next{% endif %}" style="left: {{ tg_cart_tier_4_position }}%;">
+            <span class="tg-cart-promotion__tier-marker" aria-hidden="true">{{ block.settings.tier_4_minimum_item_count }}</span>
+            <span class="tg-cart-promotion__tier-label">{{ block.settings.tier_4_benefit | escape }}</span>
+          </li>
+        {%- endif -%}
+      </ol>
+    {%- endif -%}
+
     {%- if block.settings.link_label != blank and block.settings.link != blank -%}
       <a href="{{ block.settings.link }}" class="tg-cart-promotion__link">
         {{ block.settings.link_label | escape }}

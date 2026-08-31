@@ -501,58 +501,58 @@
 
 {% schema %}
 {
-  "name": "Tg | 购物车商品",
+  "name": "t:sections.tg_cart_editor.labels.cart_items",
   "class": "tg-cart-items-section",
   "settings": [
     {
       "type": "checkbox",
       "id": "enable_tg_cart_page_style",
-      "label": "Tg | Enable Prints10 cart / 启用 Prints10 购物车",
-      "info": "Tg | Keep Shopify cart updates / 保留 Shopify 原生购物车更新",
+      "label": "t:sections.tg_cart_editor.labels.enable_prints10_cart",
+      "info": "t:sections.tg_cart_editor.labels.keep_shopify_cart_updates",
       "default": false
     },
     {
       "type": "header",
-      "content": "Tg | Cart heading / 购物车标题"
+      "content": "t:sections.tg_cart_editor.labels.cart_heading"
     },
     {
       "type": "text",
       "id": "tg_cart_title",
-      "label": "Tg | Cart title / 购物车标题",
+      "label": "t:sections.tg_cart_editor.labels.cart_title",
       "default": "Shopping Cart"
     },
     {
       "type": "checkbox",
       "id": "tg_cart_show_item_count",
-      "label": "Tg | Show item count / 显示商品数量",
+      "label": "t:sections.tg_cart_editor.labels.show_item_count",
       "default": true
     },
     {
       "type": "text",
       "id": "tg_cart_continue_label",
-      "label": "Tg | Continue shopping label / 继续购物文案",
+      "label": "t:sections.tg_cart_editor.labels.continue_shopping_label",
       "default": "Keep shopping"
     },
     {
       "type": "url",
       "id": "tg_cart_continue_link",
-      "label": "Tg | Continue shopping link / 继续购物链接"
+      "label": "t:sections.tg_cart_editor.labels.continue_shopping_link"
     },
     {
       "type": "header",
-      "content": "Tg | Cart expiry / 购物车倒计时"
+      "content": "t:sections.tg_cart_editor.labels.cart_expiry"
     },
     {
       "type": "checkbox",
       "id": "tg_cart_expiry_enabled",
-      "label": "Tg | Show expiry notice / 显示倒计时提示",
+      "label": "t:sections.tg_cart_editor.labels.show_expiry_notice",
       "default": true
     },
     {
       "type": "text",
       "id": "tg_cart_expiry_text",
-      "label": "Tg | Expiry message / 倒计时文案",
-      "info": "Tg | Use [time] for the timer / 使用 [time] 显示倒计时",
+      "label": "t:sections.tg_cart_editor.labels.expiry_message",
+      "info": "t:sections.tg_cart_editor.labels.use_time_for_the_timer",
       "default": "Your cart will expire in [time]."
     },
     {
@@ -562,110 +562,110 @@
       "max": 60,
       "step": 1,
       "unit": "min",
-      "label": "Tg | Expiry duration / 倒计时时长",
+      "label": "t:sections.tg_cart_editor.labels.expiry_duration",
       "default": 10
     },
     {
       "type": "textarea",
       "id": "tg_cart_expiry_expired_text",
-      "label": "Tg | Expired message / 倒计时结束文案",
-      "info": "Tg | Shown when the countdown reaches zero / 倒计时结束后显示",
+      "label": "t:sections.tg_cart_editor.labels.expired_message",
+      "info": "t:sections.tg_cart_editor.labels.shown_when_the_countdown_reaches_zero",
       "default": "Forgot one final step? Place your order now and make the payment right away!"
     },
     {
       "type": "checkbox",
       "id": "tg_cart_show_announcement",
-      "label": "Tg | Show announcement / 显示公告",
+      "label": "t:sections.tg_cart_editor.labels.show_announcement",
       "default": false
     },
     {
       "type": "text",
       "id": "announcement_text",
-      "label": "Tg | Announcement text / 公告文案",
+      "label": "t:sections.tg_cart_editor.labels.announcement_text",
       "default": "Free shipping on orders over $75"
     },
     {
       "type": "header",
-      "content": "Tg | Cart item details / 商品信息"
+      "content": "t:sections.tg_cart_editor.labels.cart_item_details"
     },
     {
       "type": "checkbox",
       "id": "tg_cart_show_vendor",
-      "label": "Tg | Show vendor / 显示供应商",
+      "label": "t:sections.tg_cart_editor.labels.show_vendor",
       "default": true
     },
     {
       "type": "checkbox",
       "id": "tg_cart_show_options",
-      "label": "Tg | Show options / 显示变体和自定义选项",
+      "label": "t:sections.tg_cart_editor.labels.show_options",
       "default": true
     },
     {
       "type": "checkbox",
       "id": "tg_cart_show_preview",
-      "label": "Tg | Show image preview / 显示图片预览",
+      "label": "t:sections.tg_cart_editor.labels.show_image_preview",
       "default": true
     },
     {
       "type": "text",
       "id": "tg_cart_preview_label",
-      "label": "Tg | Preview label / 预览按钮文案",
+      "label": "t:sections.tg_cart_editor.labels.preview_label",
       "default": "Preview"
     },
     {
       "type": "header",
-      "content": "Tg | Empty cart / 空购物车"
+      "content": "t:sections.tg_cart_editor.labels.empty_cart"
     },
     {
       "type": "text",
       "id": "empty_heading",
-      "label": "Tg | Empty cart heading / 空购物车标题",
+      "label": "t:sections.tg_cart_editor.labels.empty_cart_heading",
       "default": "Your cart is empty"
     },
     {
       "type": "textarea",
       "id": "empty_text",
-      "label": "Tg | Empty cart description / 空购物车描述",
+      "label": "t:sections.tg_cart_editor.labels.empty_cart_description",
       "default": "Find something personal for someone special."
     },
     {
       "type": "header",
-      "content": "Tg | Empty cart button / 空购物车按钮"
+      "content": "t:sections.tg_cart_editor.labels.empty_cart_button"
     },
     {
       "type": "text",
       "id": "empty_button_label",
-      "label": "Tg | Empty cart button label / 空购物车按钮文案",
+      "label": "t:sections.tg_cart_editor.labels.empty_cart_button_label",
       "default": "Continue shopping"
     },
     {
       "type": "url",
       "id": "empty_button_link",
-      "label": "Tg | Empty cart button link / 空购物车按钮链接",
-      "info": "Tg | Uses the all-products collection when left empty / 留空时跳转到全部商品页"
+      "label": "t:sections.tg_cart_editor.labels.empty_cart_button_link",
+      "info": "t:sections.tg_cart_editor.labels.uses_the_all_products_collection_when_left_empty"
     },
     {
       "type": "color",
       "id": "empty_button_background_color",
-      "label": "Tg | Button background / 按钮背景色",
+      "label": "t:sections.tg_cart_editor.labels.button_background",
       "default": "#A50C43"
     },
     {
       "type": "color",
       "id": "empty_button_hover_background_color",
-      "label": "Tg | Button hover background / 按钮悬停背景色",
+      "label": "t:sections.tg_cart_editor.labels.button_hover_background",
       "default": "#850936"
     },
     {
       "type": "color",
       "id": "empty_button_text_color",
-      "label": "Tg | Button text color / 按钮文字颜色",
+      "label": "t:sections.tg_cart_editor.labels.button_text_color",
       "default": "#ffffff"
     },
     {
       "type": "color",
       "id": "empty_button_border_color",
-      "label": "Tg | Button border color / 按钮边框颜色",
+      "label": "t:sections.tg_cart_editor.labels.button_border_color",
       "default": "#A50C43"
     },
     {
@@ -675,7 +675,7 @@
       "max": 4,
       "step": 1,
       "unit": "px",
-      "label": "Tg | Button border width / 按钮边框宽度",
+      "label": "t:sections.tg_cart_editor.labels.button_border_width",
       "default": 1
     },
     {
@@ -685,7 +685,7 @@
       "max": 24,
       "step": 1,
       "unit": "px",
-      "label": "Tg | Button corner radius / 按钮圆角",
+      "label": "t:sections.tg_cart_editor.labels.button_corner_radius",
       "default": 8
     },
     {
@@ -695,7 +695,7 @@
       "max": 72,
       "step": 2,
       "unit": "px",
-      "label": "Tg | Button height / 按钮高度",
+      "label": "t:sections.tg_cart_editor.labels.button_height",
       "default": 48
     },
     {
@@ -705,53 +705,53 @@
       "max": 20,
       "step": 1,
       "unit": "px",
-      "label": "Tg | Button font size / 按钮字号",
+      "label": "t:sections.tg_cart_editor.labels.button_font_size",
       "default": 16
     },
     {
       "type": "header",
-      "content": "Tg | Cart appearance / 购物车外观"
+      "content": "t:sections.tg_cart_editor.labels.cart_appearance"
     },
     {
       "type": "font_picker",
       "id": "tg_cart_font",
-      "label": "Tg | Cart font / 购物车字体",
+      "label": "t:sections.tg_cart_editor.labels.cart_font",
       "default": "poppins_n4"
     },
     {
       "type": "color",
       "id": "tg_cart_page_accent_color",
-      "label": "Tg | Accent color / 强调色",
+      "label": "t:sections.tg_cart_editor.labels.accent_color",
       "default": "#A50C43"
     },
     {
       "type": "color",
       "id": "tg_cart_page_surface_color",
-      "label": "Tg | Page background / 页面背景色",
+      "label": "t:sections.tg_cart_editor.labels.page_background",
       "default": "#ffffff"
     },
     {
       "type": "color",
       "id": "tg_cart_page_card_color",
-      "label": "Tg | Card background / 卡片背景色",
+      "label": "t:sections.tg_cart_editor.labels.card_background",
       "default": "#ffffff"
     },
     {
       "type": "color",
       "id": "tg_cart_page_border_color",
-      "label": "Tg | Border color / 边框颜色",
+      "label": "t:sections.tg_cart_editor.labels.border_color",
       "default": "#E6E1E3"
     },
     {
       "type": "color",
       "id": "tg_cart_page_text_color",
-      "label": "Tg | Primary text color / 主文字颜色",
+      "label": "t:sections.tg_cart_editor.labels.primary_text_color",
       "default": "#1F2933"
     },
     {
       "type": "color",
       "id": "tg_cart_page_muted_color",
-      "label": "Tg | Secondary text color / 次要文字颜色",
+      "label": "t:sections.tg_cart_editor.labels.secondary_text_color",
       "default": "#667085"
     },
     {
@@ -761,7 +761,7 @@
       "max": 16,
       "step": 2,
       "unit": "px",
-      "label": "Tg | Card corner radius / 卡片圆角",
+      "label": "t:sections.tg_cart_editor.labels.card_corner_radius",
       "default": 8
     },
     {
