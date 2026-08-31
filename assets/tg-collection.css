@@ -144,10 +144,10 @@
 
 .tg-collection__mobile-controls { display: none; }
 
-@media screen and (min-width: 750px) {
+@media screen and (min-width: 990px) {
   .tg-collection-grid .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    grid-template-columns: repeat(var(--mcc-columns-desktop, 4), minmax(0, 1fr));
   }
 
   .tg-collection-grid .product-grid .grid__item {
