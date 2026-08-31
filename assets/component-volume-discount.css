@@ -103,12 +103,27 @@
   }
 
   .tg-volume-discount__tiers {
+    grid-template-columns: repeat(var(--tg-volume-discount-columns), minmax(0, 1fr));
     gap: 0.8rem;
   }
 
   .tg-volume-discount__tier {
     min-height: 5.8rem;
     padding-inline: 0.5rem;
+  }
+
+  .tg-volume-discount__tier span,
+  .tg-volume-discount__tier strong {
+    white-space: nowrap;
+    overflow-wrap: normal;
+  }
+
+  .tg-volume-discount__tier span {
+    font-size: min(var(--tg-volume-discount-body-size), 1.2rem);
+  }
+
+  .tg-volume-discount__tier strong {
+    font-size: min(calc(var(--tg-volume-discount-body-size) + 0.2rem), 1.2rem);
   }
 }
 

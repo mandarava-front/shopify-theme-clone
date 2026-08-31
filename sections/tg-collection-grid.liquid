@@ -133,6 +133,9 @@
               </div>
             {% else %}
               {% render 'tg-collection-product-grid', products: collection.products, section: section %}
+              {% if paginate.pages > 1 %}
+                {% render 'pagination', paginate: paginate, anchor: '' %}
+              {% endif %}
             {% endif %}
           </div>
         </div>
