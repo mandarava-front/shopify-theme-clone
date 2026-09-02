@@ -65,6 +65,7 @@
             "corner_radius": 10,
             "title_size": 18,
             "body_size": 15,
+            "mobile_body_size": 12,
             "vertical_spacing": 18
           }
         },

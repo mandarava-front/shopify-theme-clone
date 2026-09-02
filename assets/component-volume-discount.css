@@ -119,11 +119,11 @@
   }
 
   .tg-volume-discount__tier span {
-    font-size: min(var(--tg-volume-discount-body-size), 1.2rem);
+    font-size: var(--tg-volume-discount-mobile-body-size, 1.2rem);
   }
 
   .tg-volume-discount__tier strong {
-    font-size: min(calc(var(--tg-volume-discount-body-size) + 0.2rem), 1.2rem);
+    font-size: calc(var(--tg-volume-discount-mobile-body-size, 1.2rem) + 0.2rem);
   }
 }
 

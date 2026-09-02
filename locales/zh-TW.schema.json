@@ -4171,6 +4171,9 @@
         "body_size": {
           "label": "檔位字號"
         },
+        "mobile_body_size": {
+          "label": "行動版檔位字號"
+        },
         "vertical_spacing": {
           "label": "上下間距"
         }

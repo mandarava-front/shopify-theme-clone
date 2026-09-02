@@ -4171,6 +4171,9 @@
         "body_size": {
           "label": "Tier size"
         },
+        "mobile_body_size": {
+          "label": "Mobile tier size"
+        },
         "vertical_spacing": {
           "label": "Vertical spacing"
         }

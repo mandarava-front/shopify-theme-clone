@@ -4161,6 +4161,9 @@
         "body_size": {
           "label": "档位字号"
         },
+        "mobile_body_size": {
+          "label": "移动端档位字号"
+        },
         "vertical_spacing": {
           "label": "上下间距"
         }
