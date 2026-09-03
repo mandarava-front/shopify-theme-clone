@@ -402,5 +402,55 @@
     {%- if settings.cart_type == 'drawer' -%}
       <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
-  </body>
+  </b<!-- 隐藏无货变体选项：Category 选择后 Subcategory/Size 只显示有库存的组合（全店生效） -->
+<style>
+  variant-selects fieldset:not(.all-unavailable) input[type="radio"].disabled + label,
+  variant-selects fieldset:not(.all-unavailable) input[type="radio"].visually-disabled + label,
+  variant-selects fieldset:not(.all-unavailable) input[type="radio"]:disabled + label,
+  variant-selects fieldset:not(.all-unavailable) .swatch-input__input:disabled + label,
+  variant-selects fieldset:not(.all-unavailable) .swatch-input__input.disabled + label,
+  variant-selects fieldset:not(.all-unavailable) .swatch-input__input.visually-disabled + label {
+    display: none !important;
+  }
+  variant-selects select option:disabled {
+    display: none;
+  }
+</style>
+<script>
+(function () {
+  "use strict";
+  function isUnavailable(input) {
+    return input.disabled || input.classList.contains("disabled") || input.classList.contains("visually-disabled");
+  }
+  function fixSelections() {
+    document.querySelectorAll("variant-selects").forEach(function (vs) {
+      vs.querySelectorAll("fieldset.product-form__input").forEach(function (fieldset) {
+        var checked = fieldset.querySelector('input[type="radio"]:checked');
+        var inputs = Array.prototype.slice.call(fieldset.querySelectorAll('input[type="radio"]'));
+        // 整组全部无货时不隐藏，保留划线展示（避免出现空白行）
+        fieldset.classList.toggle("all-unavailable", inputs.length > 0 && inputs.every(isUnavailable));
+        // 当前选中项已无货 → 自动选中第一个有货选项（触发主题自身的联动）
+        if (checked && isUnavailable(checked)) {
+          for (var i = 0; i < inputs.length; i++) {
+            if (!isUnavailable(inputs[i])) {
+              inputs[i].checked = true;
+              inputs[i].dispatchEvent(new Event("change", { bubbles: true }));
+              break;
+            }
+          }
+        }
+      });
+    });
+  }
+  var timer = null;
+  function scheduleFix() {
+    clearTimeout(timer);
+    timer = setTimeout(fixSelections, 100);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", scheduleFix);
+  else scheduleFix();
+  // 主题每次选择后会重渲染选项区，持续监听并纠正
+  new MutationObserver(scheduleFix).observe(document.documentElement, { childList: true, subtree: true });
+})();
+</script>
 </html>

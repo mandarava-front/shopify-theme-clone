@@ -14,6 +14,7 @@
       "blocks": {
         "vendor": {
           "type": "text",
+          "disabled": true,
           "settings": {
             "text": "{{ product.vendor }}",
             "text_style": "uppercase"
@@ -41,7 +42,7 @@
           "type": "sales_proof",
           "settings": {
             "sales_text": "500+ bought in the past month",
-            "assurance_text": "Free shipping over $59 | 30-day money-back | Secure checkout"
+            "assurance_text": "Free shipping over $69 | 30-day money-back | Secure checkout"
           }
         },
         "volume_discount": {
@@ -49,31 +50,31 @@
           "settings": {
             "heading": "BUY MORE SAVE MORE",
             "tier_count": 3,
-            "tier_1_quantity": "2 ITEMS",
-            "tier_1_discount": "SAVE 10%",
-            "tier_2_quantity": "3 ITEMS",
-            "tier_2_discount": "SAVE 15%",
-            "tier_3_quantity": "4+ ITEMS",
-            "tier_3_discount": "SAVE 20%",
-            "tier_4_quantity": "5+ ITEMS",
-            "tier_4_discount": "SAVE 25%",
+            "tier_1_quantity": "Buy 2 Get 10% OFF",
+            "tier_1_discount": "",
+            "tier_2_quantity": "Buy 3 Get 15% OFF",
+            "tier_2_discount": "",
+            "tier_3_quantity": "Buy 4 Get 20% OFF",
+            "tier_3_discount": "",
+            "tier_4_quantity": "",
+            "tier_4_discount": "",
             "background_color": "#f7faff",
-            "tier_background_color": "#eaf2fd",
-            "border_color": "#91cfee",
-            "text_color": "#17263b",
-            "accent_color": "#244a85",
+            "tier_background_color": "#fef6f0",
+            "border_color": "#fef6f0",
+            "text_color": "#f36352",
+            "accent_color": "#000000",
             "corner_radius": 10,
             "title_size": 18,
             "body_size": 15,
-            "mobile_body_size": 12,
+            "mobile_body_size": 10,
             "vertical_spacing": 18
           }
         },
         "delivery_estimate": {
           "type": "delivery_estimate",
           "settings": {
-            "day_mode": "business",
-            "processing_min_days": 3,
+            "day_mode": "calendar",
+            "processing_min_days": 2,
             "processing_max_days": 5,
             "transit_min_days": 7,
             "transit_max_days": 9,
@@ -81,7 +82,14 @@
             "summary_suffix": "if you order today.",
             "order_label": "Order placed",
             "ship_label": "Order ships",
-            "delivery_label": "Delivered"
+            "delivery_label": "Delivered",
+            "summary_icon": "truck",
+            "order_icon": "checkmark",
+            "ship_icon": "truck",
+            "arrival_icon": "box",
+            "icon_background_color": "#fef6f0",
+            "svg_icon_color": "#f36352",
+            "icon_line_color": "#f36352"
           }
         },
         "variant_picker": {
@@ -135,7 +143,7 @@
             "open_by_default": false,
             "heading": "Shipping & Return",
             "icon": "none",
-            "content": "<p>Add shipping and return information in the theme editor.</p>",
+            "content": "<ul><li>The above time frame applies only to orders shipped to the US with standard shipping methods.</li><li>International orders may take 2-5 days longer due to the customs clearance process.</li><li>For more information about Shipping and Delivery, <a href=\"/pages/shipping-policy\" target=\"_blank\" title=\"Shipping Policy\">click here</a>.</li><li>To learn more about Replacement and Refund, <a href=\"/pages/refund-policy\" target=\"_blank\" title=\"Refund Policy\">click here</a>.</li></ul>",
             "page": ""
           }
         },
@@ -146,7 +154,7 @@
             "open_by_default": false,
             "heading": "Satisfaction Guarantee",
             "icon": "none",
-            "content": "<p>Add your satisfaction guarantee in the theme editor.</p>",
+            "content": "<p>We want you to be<strong> </strong>satisfied with the products you buy from us. </p><p>We have 24/7/365 ticket and email support. Please contact us at <a href=\"mailto:support@heartlune.com\">support@heartlune.com</a>. if you need any assistance.</p>",
             "page": ""
           }
         }
@@ -181,6 +189,7 @@
         "media_size": "small",
         "constrain_to_viewport": true,
         "media_fit": "contain",
+        "mobile_gallery_aspect_ratio": "square",
         "gallery_layout": "thumbnail_slider",
         "mobile_thumbnails": "hide",
         "media_position": "left",

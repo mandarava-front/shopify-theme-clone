@@ -12,32 +12,72 @@
     "tg_category_rail_y3zte3": {
       "type": "tg-category-rail",
       "blocks": {
+        "category_wBxaWY": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/Wedding.jpg",
+            "title": "Wedding",
+            "collection": "",
+            "link": "shopify://collections/for-couples"
+          }
+        },
+        "category_PUtfti": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/Blankets.jpg",
+            "title": "Blankets",
+            "collection": "",
+            "link": "shopify://collections/blankets"
+          }
+        },
+        "category_hPpKAz": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/Clothing.jpg",
+            "title": "Clothing",
+            "collection": "",
+            "link": "shopify://collections/clothing"
+          }
+        },
+        "category_JADxQD": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/Back_To_School.jpg",
+            "title": "Back To School",
+            "collection": "",
+            "link": "shopify://collections/back-to-school"
+          }
+        },
         "category_7cjQrk": {
           "type": "category",
           "settings": {
-            "title": "Category",
+            "image": "shopify://shop_images/Thanksgiving.jpg",
+            "title": "Thanksgiving",
             "collection": "",
-            "link": ""
+            "link": "shopify://collections/thanksgiving"
           }
         },
         "category_6xkpiC": {
           "type": "category",
           "settings": {
-            "title": "Category",
+            "image": "shopify://shop_images/Halloween.jpg",
+            "title": "Halloween",
             "collection": "",
-            "link": ""
+            "link": "shopify://collections/halloween"
           }
         },
         "category_q4MBrR": {
           "type": "category",
           "settings": {
-            "title": "Category",
+            "image": "shopify://shop_images/Christmas.jpg",
+            "title": "Christmas",
             "collection": "",
-            "link": ""
+            "link": "shopify://collections/christmas"
           }
         },
         "category_k67XTN": {
           "type": "category",
+          "disabled": true,
           "settings": {
             "title": "Category",
             "collection": "",
@@ -46,6 +86,7 @@
         },
         "category_tPEHRe": {
           "type": "category",
+          "disabled": true,
           "settings": {
             "title": "Category",
             "collection": "",
@@ -54,6 +95,10 @@
         }
       },
       "block_order": [
+        "category_wBxaWY",
+        "category_PUtfti",
+        "category_hPpKAz",
+        "category_JADxQD",
         "category_7cjQrk",
         "category_6xkpiC",
         "category_q4MBrR",
@@ -76,11 +121,16 @@
       "type": "tg-image-banner",
       "name": "t:tg.sections.banner.name",
       "settings": {
+        "desktop_image": "shopify://shop_images/1-pc.png",
+        "mobile_image": "shopify://shop_images/1-mb.png",
         "alt": "",
         "link": "",
-        "image_margin_left": 0,
-        "image_margin_right": 0,
-        "image_radius": 0,
+        "image_max_width_percent": 0,
+        "image_height_percent": 85,
+        "mobile_image_height_percent": 85,
+        "image_margin_left": 20,
+        "image_margin_right": 20,
+        "image_radius": 32,
         "background": "#ffffff",
         "padding_top": 0,
         "padding_bottom": 0
@@ -89,32 +139,44 @@
     "tg_process_steps_iFeHaz": {
       "type": "tg-process-steps",
       "blocks": {
+        "step_K7hV4U": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/1.jpg",
+            "title": "Chooes & Customize Your Preview"
+          }
+        },
         "step_mVyk6e": {
           "type": "step",
           "settings": {
-            "title": "Choose your favorite"
+            "image": "shopify://shop_images/2.jpg",
+            "title": "Adjust Product Parameters"
           }
         },
         "step_EfQdef": {
           "type": "step",
           "settings": {
-            "title": "Choose your favorite"
+            "image": "shopify://shop_images/3.jpg",
+            "title": "Final Product Packaged With Care"
           }
         },
         "step_GtXVGL": {
           "type": "step",
           "settings": {
-            "title": "Choose your favorite"
+            "image": "shopify://shop_images/4.jpg",
+            "title": "Done! Wait for your gift"
           }
         },
         "step_exnqQN": {
           "type": "step",
+          "disabled": true,
           "settings": {
             "title": "Choose your favorite"
           }
         }
       },
       "block_order": [
+        "step_K7hV4U",
         "step_mVyk6e",
         "step_EfQdef",
         "step_GtXVGL",
@@ -248,7 +310,7 @@
       ],
       "settings": {
         "collection": "all",
-        "heading": "🎁 2026 Trending Now - Customer Favorites",
+        "heading": "Best Sellers",
         "subheading": "Shop our most-loved personalized gifts, perfect for every occasion!",
         "products_to_show": 8,
         "columns_desktop": 4,
@@ -258,14 +320,14 @@
         "show_rating": true,
         "show_view_all": true,
         "button_label": "VIEW MORE",
-        "button_link": "/collections/best-seller",
+        "button_link": "shopify://collections/best-sellers",
         "card_radius": 4,
         "background": "#f8f8ed",
         "text_color": "#18181e",
         "muted_color": "#707070",
-        "price_color": "#e18a00",
-        "badge_background": "#ffc400",
-        "badge_text_color": "#111111",
+        "price_color": "#F36352",
+        "badge_background": "#FFC400",
+        "badge_text_color": "#000000",
         "star_color": "#ffb400",
         "button_color": "#ffb700",
         "button_text_color": "#ffffff",
@@ -275,17 +337,144 @@
         "mobile_padding_bottom": 34
       }
     },
+    "tg_category_rail_7X8dmR": {
+      "type": "tg-category-rail",
+      "blocks": {
+        "category_LrzqtQ": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/couple.png",
+            "title": "For Lover",
+            "collection": "",
+            "link": "shopify://collections/for-couples"
+          }
+        },
+        "category_M7LDKx": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/bestie.png",
+            "title": "For Bestie",
+            "collection": "",
+            "link": "shopify://collections/for-friends"
+          }
+        },
+        "category_zYm7wb": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/family.png",
+            "title": "For Family",
+            "collection": "",
+            "link": "shopify://collections/for-family"
+          }
+        },
+        "category_EanPkQ": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/mom.png",
+            "title": "For Mom",
+            "collection": "",
+            "link": "shopify://collections/mothers-day"
+          }
+        },
+        "category_f8dDVb": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/dad.png",
+            "title": "For Dad",
+            "collection": "",
+            "link": "shopify://collections/fathers-day"
+          }
+        },
+        "category_bcxN6e": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/pet.png",
+            "title": "For Pet Lover",
+            "collection": "",
+            "link": "shopify://collections/gifts-for-pet-lovers"
+          }
+        }
+      },
+      "block_order": [
+        "category_LrzqtQ",
+        "category_M7LDKx",
+        "category_zYm7wb",
+        "category_EanPkQ",
+        "category_f8dDVb",
+        "category_bcxN6e"
+      ],
+      "name": "t:tg.sections.category.name",
+      "settings": {
+        "heading": "",
+        "card_alignment": "center",
+        "background": "#ffffff",
+        "text_color": "#0b2a4a",
+        "border_color": "#deded8",
+        "gap": 24,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
     "tg_image_banner_mdYn7i": {
       "type": "tg-image-banner",
       "name": "t:tg.sections.banner.name",
       "settings": {
+        "desktop_image": "shopify://shop_images/2-pc.png",
+        "mobile_image": "shopify://shop_images/2-mb.png",
         "alt": "",
         "link": "",
+        "image_max_width_percent": 0,
+        "image_height_percent": 100,
+        "mobile_image_height_percent": 100,
         "image_margin_left": 0,
         "image_margin_right": 0,
         "image_radius": 0,
         "background": "#ffffff",
         "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "tg_image_banner_AUKqgi": {
+      "type": "tg-image-banner",
+      "disabled": true,
+      "name": "t:tg.sections.banner.name",
+      "settings": {
+        "alt": "",
+        "link": "",
+        "image_max_width_percent": 0,
+        "image_height_percent": 100,
+        "mobile_image_height_percent": 100,
+        "image_margin_left": 0,
+        "image_margin_right": 0,
+        "image_radius": 0,
+        "background": "#ffffff",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "tg_split_promo_eDMMB3": {
+      "type": "tg-split-promo",
+      "disabled": true,
+      "name": "t:tg.sections.split_promo.name",
+      "settings": {
+        "desktop_image": "shopify://shop_images/2-pc.png",
+        "image_position": "left",
+        "eyebrow": "",
+        "heading": "",
+        "text": "",
+        "button_label": "Shop now",
+        "link": "",
+        "background": "#ffffff",
+        "content_background": "#fff1dd",
+        "text_color": "#53798b",
+        "button_color": "#ffb700",
+        "button_text_color": "#ffffff",
+        "button_radius": 3,
+        "button_min_height": 44,
+        "button_padding_vertical": 9,
+        "button_padding_horizontal": 20,
+        "button_font_size": 12,
+        "padding_top": 36,
         "padding_bottom": 0
       }
     },
@@ -401,7 +590,7 @@
       ],
       "settings": {
         "collection": "all",
-        "heading": "🎁 2026 Trending Now - Customer Favorites",
+        "heading": "New Arrivals",
         "subheading": "Shop our most-loved personalized gifts, perfect for every occasion!",
         "products_to_show": 8,
         "columns_desktop": 4,
@@ -411,12 +600,12 @@
         "show_rating": true,
         "show_view_all": true,
         "button_label": "VIEW MORE",
-        "button_link": "/collections/best-seller",
+        "button_link": "shopify://collections/new-arrivals",
         "card_radius": 4,
         "background": "#f8f8ed",
         "text_color": "#18181e",
         "muted_color": "#707070",
-        "price_color": "#e18a00",
+        "price_color": "#F36352",
         "badge_background": "#ffc400",
         "badge_text_color": "#111111",
         "star_color": "#ffb400",
@@ -428,32 +617,19 @@
         "mobile_padding_bottom": 34
       }
     },
-    "tg_image_banner_AUKqgi": {
-      "type": "tg-image-banner",
-      "name": "t:tg.sections.banner.name",
-      "settings": {
-        "alt": "",
-        "link": "",
-        "image_margin_left": 0,
-        "image_margin_right": 0,
-        "image_radius": 0,
-        "background": "#ffffff",
-        "padding_top": 0,
-        "padding_bottom": 0
-      }
-    },
     "tg_benefits_MA8VNh": {
       "type": "tg-benefits",
       "blocks": {
         "benefit_NYb7bM": {
           "type": "benefit",
           "settings": {
-            "title": "Free shipping",
+            "image": "shopify://shop_images/1_0276ce36-95b8-4996-9674-413e3d2d71d2.jpg",
+            "title": "On-Time Delivery",
             "title_font_size": 15,
             "title_font_size_mobile": 12,
             "title_color": "#18181e",
             "title_hover_color": "#e7a400",
-            "text": "",
+            "text": "We ensure gifts arrive promptly for celebrations.",
             "text_font_size": 13,
             "text_font_size_mobile": 10
           }
@@ -461,12 +637,13 @@
         "benefit_dGQAAG": {
           "type": "benefit",
           "settings": {
-            "title": "Free shipping",
+            "image": "shopify://shop_images/copy-copy.jpg",
+            "title": "45-Day Refund",
             "title_font_size": 15,
             "title_font_size_mobile": 12,
             "title_color": "#18181e",
             "title_hover_color": "#e7a400",
-            "text": "",
+            "text": "Free replacement or full refund - no return needed.",
             "text_font_size": 13,
             "text_font_size_mobile": 10
           }
@@ -474,12 +651,13 @@
         "benefit_DNJ4BR": {
           "type": "benefit",
           "settings": {
-            "title": "Free shipping",
+            "image": "shopify://shop_images/1_5a10e6b5-85e7-40aa-af66-af8dd3eedbd7.jpg",
+            "title": "Superior Quality",
             "title_font_size": 15,
             "title_font_size_mobile": 12,
             "title_color": "#18181e",
             "title_hover_color": "#e7a400",
-            "text": "",
+            "text": "Made with premium materials for lasting beauty.",
             "text_font_size": 13,
             "text_font_size_mobile": 10
           }
@@ -487,12 +665,13 @@
         "benefit_mh8Dyc": {
           "type": "benefit",
           "settings": {
-            "title": "Free shipping",
+            "image": "shopify://shop_images/6b6efbdccd36d762d428899bb3fdfd0c.jpg",
+            "title": "Holiday Support",
             "title_font_size": 15,
             "title_font_size_mobile": 12,
             "title_color": "#18181e",
             "title_hover_color": "#e7a400",
-            "text": "",
+            "text": "Friendly help anytime during the holidays.",
             "text_font_size": 13,
             "text_font_size_mobile": 10
           }
@@ -513,6 +692,10 @@
         "heading_hover_color": "#e7a400",
         "columns": 4,
         "background": "#f8f8ed",
+        "content_background": "#fefffc",
+        "content_padding": 0,
+        "content_radius": 8,
+        "image_overlap": 40,
         "text_color": "#18181e",
         "accent_color": "#e7a400",
         "border_color": "#dedecf",
@@ -610,6 +793,7 @@
         "stranger-6",
         "stranger-7"
       ],
+      "disabled": true,
       "settings": {
         "heading": "MogCustom Interesting Strangers",
         "heading_font_size": 30,
@@ -620,33 +804,10 @@
         "text_color": "#18181e",
         "button_color": "#ffb700",
         "button_text_color": "#ffffff",
+        "play_button_opacity": 100,
         "border_color": "#deded8",
         "padding_top": 60,
         "padding_bottom": 32
-      }
-    },
-    "tg_split_promo_eDMMB3": {
-      "type": "tg-split-promo",
-      "name": "t:tg.sections.split_promo.name",
-      "settings": {
-        "image_position": "left",
-        "eyebrow": "",
-        "heading": "",
-        "text": "",
-        "button_label": "Shop now",
-        "link": "",
-        "background": "#ffffff",
-        "content_background": "#fff1dd",
-        "text_color": "#53798b",
-        "button_color": "#ffb700",
-        "button_text_color": "#ffffff",
-        "button_radius": 3,
-        "button_min_height": 44,
-        "button_padding_vertical": 9,
-        "button_padding_horizontal": 20,
-        "button_font_size": 12,
-        "padding_top": 36,
-        "padding_bottom": 0
       }
     },
     "tg_tabbed_collections_DhF7KA": {
@@ -679,6 +840,7 @@
         "collection_tab_GL9fzx",
         "collection_tab_zhxgPn"
       ],
+      "disabled": true,
       "name": "t:tg.sections.tabs.name",
       "settings": {
         "heading": "A Gift Only You Can Give",
@@ -698,60 +860,6 @@
         "button_text_color": "#ffffff",
         "padding_top": 72,
         "padding_bottom": 48
-      }
-    },
-    "tg_category_rail_7X8dmR": {
-      "type": "tg-category-rail",
-      "blocks": {
-        "category_LrzqtQ": {
-          "type": "category",
-          "settings": {
-            "title": "Category",
-            "collection": "",
-            "link": ""
-          }
-        },
-        "category_M7LDKx": {
-          "type": "category",
-          "settings": {
-            "title": "Category",
-            "collection": "",
-            "link": ""
-          }
-        },
-        "category_zYm7wb": {
-          "type": "category",
-          "settings": {
-            "title": "Category",
-            "collection": "",
-            "link": ""
-          }
-        },
-        "category_EanPkQ": {
-          "type": "category",
-          "settings": {
-            "title": "Category",
-            "collection": "",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "category_LrzqtQ",
-        "category_M7LDKx",
-        "category_zYm7wb",
-        "category_EanPkQ"
-      ],
-      "name": "t:tg.sections.category.name",
-      "settings": {
-        "heading": "",
-        "card_alignment": "center",
-        "background": "#ffffff",
-        "text_color": "#0b2a4a",
-        "border_color": "#deded8",
-        "gap": 24,
-        "padding_top": 36,
-        "padding_bottom": 36
       }
     },
     "tg_tabbed_collections_QBUrAm": {
@@ -784,6 +892,7 @@
         "collection_tab_KcUh8e",
         "collection_tab_4dyEeR"
       ],
+      "disabled": true,
       "name": "t:tg.sections.tabs.name",
       "settings": {
         "heading": "A Gift Only You Can Give",
@@ -859,6 +968,7 @@
         "video_NRmeHc",
         "video_LJGBMR"
       ],
+      "disabled": true,
       "name": "t:tg.sections.video_rail.name",
       "settings": {
         "heading": "Featured video",
@@ -870,6 +980,7 @@
         "text_color": "#18181e",
         "button_color": "#ffb700",
         "button_text_color": "#ffffff",
+        "play_button_opacity": 100,
         "border_color": "#deded8",
         "padding_top": 60,
         "padding_bottom": 32
@@ -905,6 +1016,7 @@
         "faq_RJVQgR",
         "faq_3KTJXL"
       ],
+      "disabled": true,
       "name": "t:tg.sections.faq.name",
       "settings": {
         "image_alt": "",
@@ -924,14 +1036,14 @@
     "tg_image_banner_gEfTpT",
     "tg_process_steps_iFeHaz",
     "trending_now",
+    "tg_category_rail_7X8dmR",
     "tg_image_banner_mdYn7i",
-    "tg_featured_products_pea9qM",
     "tg_image_banner_AUKqgi",
+    "tg_split_promo_eDMMB3",
+    "tg_featured_products_pea9qM",
     "tg_benefits_MA8VNh",
     "interesting_strangers",
-    "tg_split_promo_eDMMB3",
     "tg_tabbed_collections_DhF7KA",
-    "tg_category_rail_7X8dmR",
     "tg_tabbed_collections_QBUrAm",
     "tg_video_rail_jiQYMc",
     "tg_faq_BiPFVd"

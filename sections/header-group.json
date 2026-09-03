@@ -13,12 +13,17 @@
   "sections": {
     "announcement-bar": {
       "type": "announcement-bar",
-      "disabled": false,
       "blocks": {
         "announcement-bar-0": {
           "type": "announcement",
           "settings": {
-            "text": "Save 10% orders 2+ with code: PH2",
+            "content": "🔥 Buy 2 Get 10% OFF - Buy 3 Get 15% OFF -Buy 4 Get 20% OFF🔥",
+            "text": "Free shipping on orders over $69✈️",
+            "highlight_text": "",
+            "highlight_color": "#a50c43",
+            "highlight_bold": true,
+            "highlight_underline": false,
+            "suffix": "",
             "link": ""
           }
         }
@@ -29,11 +34,7 @@
       "settings": {
         "auto_rotate": false,
         "change_slides_speed": 5,
-        "color_scheme": "scheme-4",
-        "show_line_separator": true,
-        "show_social": false,
-        "enable_country_selector": false,
-        "enable_language_selector": false,
+        "color_scheme": "scheme-1",
         "tg_announcement_font": "poppins_n4",
         "tg_announcement_font_size": 14,
         "tg_announcement_mobile_font_size": 14,
@@ -43,7 +44,11 @@
         "tg_announcement_text_transform": "none",
         "tg_announcement_height": 36,
         "tg_announcement_background_color": "#fef1e2",
-        "tg_announcement_text_color": "#202024"
+        "tg_announcement_text_color": "#202024",
+        "show_line_separator": true,
+        "show_social": false,
+        "enable_country_selector": false,
+        "enable_language_selector": false
       }
     },
     "header": {
@@ -66,7 +71,6 @@
           "settings": {
             "title": "Summer Picks",
             "link": "/pages/summer-2026",
-            "image": "",
             "icon_asset": "tg-menu-icon-summer.svg",
             "background_color": "#b3e2f6",
             "text_color": "#062d8e"
@@ -77,7 +81,6 @@
           "settings": {
             "title": "Back To School",
             "link": "/pages/back-to-school-2026",
-            "image": "",
             "icon_asset": "tg-menu-icon-back-to-school.svg",
             "background_color": "#d6f1d8",
             "text_color": "#054815"
@@ -89,7 +92,6 @@
             "title": "Occasions",
             "link": "/collections/occasions",
             "sub_menu": "",
-            "image": "",
             "icon_asset": "tg-menu-icon-occasions.svg",
             "background_color": "#ffffff",
             "text_color": "#202024"
@@ -101,7 +103,6 @@
             "title": "Interests",
             "link": "/collections/interests",
             "sub_menu": "",
-            "image": "",
             "icon_asset": "tg-menu-icon-interests.svg",
             "background_color": "#ffffff",
             "text_color": "#202024"
@@ -113,7 +114,6 @@
             "title": "Recipients",
             "link": "/collections/recipients",
             "sub_menu": "",
-            "image": "",
             "icon_asset": "tg-menu-icon-recipients.svg",
             "background_color": "#ffffff",
             "text_color": "#202024"
@@ -125,7 +125,6 @@
             "title": "Home & Living",
             "link": "/collections/home-living",
             "sub_menu": "",
-            "image": "",
             "icon_asset": "tg-menu-icon-home.svg",
             "background_color": "#ffffff",
             "text_color": "#202024"
@@ -137,7 +136,6 @@
             "title": "Apparel",
             "link": "/collections/apparel",
             "sub_menu": "",
-            "image": "",
             "icon_asset": "tg-menu-icon-apparel.svg",
             "background_color": "#ffffff",
             "text_color": "#202024"
@@ -149,7 +147,6 @@
             "title": "Accessories",
             "link": "/collections/accessories",
             "sub_menu": "",
-            "image": "",
             "icon_asset": "tg-menu-icon-accessories.svg",
             "background_color": "#ffffff",
             "text_color": "#202024"
@@ -161,7 +158,6 @@
             "title": "Drinkware",
             "link": "/collections/drinkware",
             "sub_menu": "",
-            "image": "",
             "icon_asset": "tg-menu-icon-drinkware.svg",
             "background_color": "#ffffff",
             "text_color": "#202024"
@@ -173,7 +169,6 @@
             "title": "Outdoor & Lifestyle",
             "link": "/collections/outdoor",
             "sub_menu": "",
-            "image": "",
             "icon_asset": "tg-menu-icon-outdoor.svg",
             "background_color": "#ffffff",
             "text_color": "#202024"
@@ -204,38 +199,22 @@
           "type": "mobile_social_link",
           "settings": {
             "platform": "facebook",
-            "link": "https://www.facebook.com/thetg",
-            "accessibility_label": "Pawfect House on Facebook"
-          }
-        },
-        "mobile-social-youtube": {
-          "type": "mobile_social_link",
-          "settings": {
-            "platform": "youtube",
-            "link": "https://www.youtube.com/@tg_official",
-            "accessibility_label": "Pawfect House on YouTube"
+            "link": "https://www.facebook.com/profile.php?id=61593551440607",
+            "accessibility_label": ""
           }
         },
         "mobile-social-instagram": {
           "type": "mobile_social_link",
           "settings": {
             "platform": "instagram",
-            "link": "https://www.instagram.com/tg_official/?hl=en",
-            "accessibility_label": "Pawfect House on Instagram"
-          }
-        },
-        "mobile-social-tiktok": {
-          "type": "mobile_social_link",
-          "settings": {
-            "platform": "tiktok",
-            "link": "https://www.tiktok.com/@tg_official",
-            "accessibility_label": "Pawfect House on TikTok"
+            "link": "https://www.instagram.com/heartlune_official/",
+            "accessibility_label": ""
           }
         },
         "desktop-navigation": {
           "type": "tg_header_desktop_menu",
           "settings": {
-            "menu": "threadsgo-preview-navigation"
+            "menu": "link-list"
           }
         },
         "desktop-utility-gift-finder": {
@@ -280,9 +259,7 @@
         "mobile-utility-track-order",
         "mobile-utility-reviews",
         "mobile-social-facebook",
-        "mobile-social-youtube",
         "mobile-social-instagram",
-        "mobile-social-tiktok",
         "desktop-navigation",
         "desktop-utility-gift-finder",
         "desktop-utility-track-order",
@@ -291,14 +268,19 @@
       "settings": {
         "logo_position": "middle-left",
         "mobile_logo_position": "center",
-        "menu": "threadsgo-preview-navigation",
+        "tg_header_mobile_logo": "shopify://shop_images/0e44a1e857d737112dc14a2239bda79c.png",
+        "tg_header_mobile_logo_width": 136,
         "enable_tg_header_mobile_menu": true,
+        "menu": "",
         "tg_header_mobile_search_mode": "row",
         "tg_header_mobile_home_search_mode": "inherit",
-        "tg_header_mobile_product_search_mode": "inherit",
+        "tg_header_mobile_product_search_mode": "icon",
         "tg_header_mobile_search_placeholder": "Find your perfect gift in seconds...",
         "tg_header_mobile_search_font_size": 14,
         "tg_header_mobile_search_placeholder_color": "#737379",
+        "tg_header_mobile_search_show_border": false,
+        "tg_header_mobile_search_border_width": 1,
+        "tg_header_mobile_search_border_color": "#d7d7db",
         "tg_header_mobile_search_top_spacing": 6,
         "tg_header_mobile_search_bottom_spacing": 12,
         "tg_header_mobile_menu_title": "Menu",
@@ -309,11 +291,16 @@
         "tg_header_mobile_menu_accent": "#0b8494",
         "tg_header_mobile_menu_divider": "#eeeeff",
         "tg_header_mobile_menu_show_social": true,
+        "mobile_track_order_link": "/pages/track-order",
+        "mobile_reviews_link": "/#reviews",
         "enable_tg_header_desktop": true,
-        "tg_header_desktop_logo_text": "Pawfect House",
+        "tg_header_desktop_logo": "shopify://shop_images/0e44a1e857d737112dc14a2239bda79c.png",
+        "tg_header_desktop_logo_text": "Heartlune",
         "tg_header_desktop_show_search": true,
         "tg_header_desktop_search_placeholder": "Find your perfect gift in seconds...",
         "tg_header_desktop_search_label": "Search",
+        "tg_header_desktop_search_open_label": "Open search",
+        "tg_header_desktop_search_close_label": "Close search",
         "tg_header_desktop_show_cart": true,
         "tg_header_desktop_cart_label": "Cart",
         "tg_header_desktop_show_utility_links": true,
@@ -333,8 +320,6 @@
         "tg_header_desktop_menu_gap": 24,
         "tg_header_desktop_menu_border_width": 1,
         "menu_type_desktop": "mega",
-        "mobile_track_order_link": "/pages/track-order",
-        "mobile_reviews_link": "/#reviews",
         "sticky_header_type": "none",
         "show_line_separator": false,
         "color_scheme": "scheme-1",

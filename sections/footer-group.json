@@ -18,28 +18,32 @@
           "type": "menu",
           "settings": {
             "heading": "Information",
-            "menu": "footer"
+            "menu": "about-us",
+            "open_by_default": false
           }
         },
         "customer_service": {
           "type": "menu",
           "settings": {
             "heading": "Customer Service",
-            "menu": "footer"
+            "menu": "customer-service",
+            "open_by_default": false
           }
         },
         "policies": {
           "type": "menu",
           "settings": {
             "heading": "Policies",
-            "menu": "footer"
+            "menu": "policies",
+            "open_by_default": false
           }
         },
         "help": {
           "type": "menu",
           "settings": {
             "heading": "Help",
-            "menu": "footer"
+            "menu": "help",
+            "open_by_default": false
           }
         }
       },
@@ -50,10 +54,23 @@
         "help"
       ],
       "settings": {
+        "logo": "shopify://shop_images/0e44a1e857d737112dc14a2239bda79c.png",
         "trustpilot_url": "",
         "trustpilot_reviews": "13,578 reviews",
         "show_dmca_badge": true,
+        "dmca_url": "",
+        "single_open": true,
         "show_social": true,
+        "social_alignment": "center",
+        "social_facebook_link": "https://www.facebook.com/profile.php?id=61593551440607",
+        "social_instagram_link": "https://www.instagram.com/heartlune_official/",
+        "social_youtube_link": "",
+        "social_tiktok_link": "",
+        "social_twitter_link": "",
+        "social_pinterest_link": "",
+        "social_snapchat_link": "",
+        "social_tumblr_link": "",
+        "social_vimeo_link": "",
         "enable_country_selector": true,
         "show_policy": true
       }
