@@ -33,10 +33,12 @@
             <span class="cuszoo-mobile-menu__currency">
               <span aria-hidden="true">USD</span>
             </span>
-            <a href="{{ routes.account_login_url }}">
-              <span class="svg-wrapper" aria-hidden="true">{{- 'icon-account.svg' | inline_asset_content -}}</span>
-              Sign in
-            </a>
+            {%- if section.settings.show_customer_login -%}
+              <a href="{{ routes.account_login_url }}">
+                <span class="svg-wrapper" aria-hidden="true">{{- 'icon-account.svg' | inline_asset_content -}}</span>
+                Sign in
+              </a>
+            {%- endif -%}
           </div>
           <a href="{{ routes.all_products_collection_url }}" class="cuszoo-mobile-menu__promo" aria-label="Shop personalized pet gifts">
             <img src="{{ 'threadsgo-summer-hero.jpg' | asset_url }}" alt="" width="2000" height="620">
@@ -208,7 +210,7 @@
             <p class="cuszoo-mobile-menu__copyright">&copy; {{ 'now' | date: '%Y' }} Threadsgo. All Rights Reserved.</p>
           </nav>
           <div class="menu-drawer__utility-links">
-            {%- if shop.customer_accounts_enabled -%}
+            {%- if shop.customer_accounts_enabled and section.settings.show_customer_login -%}
               <a
                 href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
                 class="menu-drawer__account link focus-inset h5 medium-hide large-up-hide"

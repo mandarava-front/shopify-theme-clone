@@ -327,6 +327,7 @@
         "enable_country_selector": true,
         "enable_language_selector": true,
         "enable_customer_avatar": true,
+        "show_customer_login": false,
         "margin_bottom": 0,
         "padding_top": 12,
         "padding_bottom": 4

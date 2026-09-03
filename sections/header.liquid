@@ -107,6 +107,19 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+
+  /* Keep a centered mobile logo centered in the viewport, even when the
+    * left and right header controls have different widths. */
+  @media screen and (max-width: 989px) {
+    .header--mobile-center {
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    }
+
+    .header--mobile-center .header__heading,
+    .header--mobile-center .header__heading-link {
+      justify-self: center;
+    }
+  }
 {%- endstyle -%}
 
 <script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
@@ -379,7 +392,7 @@
     </tg-header-desktop>
   {%- endif -%}
   <header
-    class="header header--{{ section.settings.logo_position }} header--mobile-{{ section.settings.mobile_logo_position }} page-width{% if section.settings.menu_type_desktop == 'drawer' %} drawer-menu{% endif %}{% if section.settings.menu != blank %} header--has-menu{% endif %}{% if has_app_block %} header--has-app{% endif %}{% if social_links %} header--has-social{% endif %}{% if shop.customer_accounts_enabled %} header--has-account{% endif %}{% if localization_forms %} header--has-localizations{% endif %}{% if section.settings.enable_tg_header_mobile_menu %} header--tg-mobile-menu-enabled header--tg-mobile-search-{{ tg_header_mobile_search_mode }}{% endif %}{% if section.settings.enable_tg_header_desktop %} header--tg-desktop-enabled{% endif %}"
+    class="header header--{{ section.settings.logo_position }} header--mobile-{{ section.settings.mobile_logo_position }} page-width{% if section.settings.menu_type_desktop == 'drawer' %} drawer-menu{% endif %}{% if section.settings.menu != blank %} header--has-menu{% endif %}{% if has_app_block %} header--has-app{% endif %}{% if social_links %} header--has-social{% endif %}{% if shop.customer_accounts_enabled and section.settings.show_customer_login %} header--has-account{% endif %}{% if localization_forms %} header--has-localizations{% endif %}{% if section.settings.enable_tg_header_mobile_menu %} header--tg-mobile-menu-enabled header--tg-mobile-search-{{ tg_header_mobile_search_mode }}{% endif %}{% if section.settings.enable_tg_header_desktop %} header--tg-desktop-enabled{% endif %}"
     {% if section.settings.enable_tg_header_mobile_menu %}
       style="
         --tg-header-mobile-search-font-size: {{ section.settings.tg_header_mobile_search_font_size | default: 14 }}px;
@@ -457,9 +470,11 @@
 
     <div class="header__icons{% if section.settings.enable_country_selector or section.settings.enable_language_selector %} header__icons--localization header-localization{% endif %}">
       <div class="cuszoo-header-links small-hide medium-hide">
-        <a href="{{ routes.account_url }}" class="cuszoo-header-link">
-          Sign In
-        </a>
+        {%- if section.settings.show_customer_login -%}
+          <a href="{{ routes.account_url }}" class="cuszoo-header-link">
+            Sign In
+          </a>
+        {%- endif -%}
         <a href="{{ routes.account_url }}" class="cuszoo-header-link">
           Track Order
         </a>
@@ -492,7 +507,7 @@
       </div>
       {% render 'header-search', input_id: 'Search-In-Modal', mobile_icon_overlay: true %}
 
-      {%- if shop.customer_accounts_enabled -%}
+      {%- if shop.customer_accounts_enabled and section.settings.show_customer_login -%}
         <a
           href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
           class="header__icon header__icon--account link focus-inset{% if section.settings.menu != blank %} small-hide{% endif %}"
@@ -1333,6 +1348,13 @@
       "default": true,
       "label": "t:sections.header.settings.enable_customer_avatar.label",
       "info": "t:sections.header.settings.enable_customer_avatar.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_customer_login",
+      "default": true,
+      "label": "显示用户登录按钮",
+      "info": "控制桌面端 Sign In 链接和页头账户图标是否显示。"
     },
     {
       "type": "header",
