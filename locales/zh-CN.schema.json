@@ -2107,6 +2107,12 @@
               "options__3": {
                 "label": "无"
               }
+            },
+            "hide_single_value_options": {
+              "label": "隐藏仅有一个值的属性组"
+            },
+            "hide_unavailable_options": {
+              "label": "隐藏不可售选项"
             }
           }
         },

@@ -1,0 +1,3 @@
+# Impeccable (project-local Codex skill and its generated hook manifest)
+/.agents/skills/impeccable/
+/.codex/hooks.json

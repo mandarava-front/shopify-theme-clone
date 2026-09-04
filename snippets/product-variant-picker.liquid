@@ -25,6 +25,11 @@
       {%- liquid
         assign swatch_count = option.values | map: 'swatch' | compact | size
         assign picker_type = block.settings.picker_type
+        assign hide_single_value_option = false
+
+        if block.settings.hide_single_value_options and option.values.size == 1
+          assign hide_single_value_option = true
+        endif
 
         if swatch_count > 0 and block.settings.swatch_shape != 'none'
           if block.settings.picker_type == 'dropdown'
@@ -35,7 +40,7 @@
         endif
       -%}
       {%- if picker_type == 'swatch' -%}
-        <fieldset class="js product-form__input product-form__input--swatch">
+        <fieldset class="js product-form__input product-form__input--swatch"{% if hide_single_value_option %} hidden{% endif %}>
           <legend class="form__label">
             {{ option.name }}:
             <span data-selected-value>
@@ -50,7 +55,7 @@
           %}
         </fieldset>
       {%- elsif picker_type == 'button' -%}
-        <fieldset class="js product-form__input product-form__input--pill">
+        <fieldset class="js product-form__input product-form__input--pill"{% if hide_single_value_option %} hidden{% endif %}>
           <legend class="form__label">{{ option.name }}</legend>
           {% render 'product-variant-options',
             product: product,
@@ -60,7 +65,7 @@
           %}
         </fieldset>
       {%- else -%}
-        <div class="product-form__input product-form__input--dropdown">
+        <div class="product-form__input product-form__input--dropdown"{% if hide_single_value_option %} hidden{% endif %}>
           <label class="form__label" for="Option-{{ section.id }}-{{ forloop.index0 }}">
             {{ option.name }}
           </label>

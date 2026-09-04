@@ -37,6 +37,10 @@
     if value.available
       assign option_disabled = false
     endif
+
+    if block.settings.hide_unavailable_options and option_disabled and value.selected == false
+      continue
+    endif
   -%}
 
   {%- capture input_id -%}

@@ -2126,6 +2126,12 @@
               "options__3": {
                 "label": "Ingen"
               }
+            },
+            "hide_single_value_options": {
+              "label": "Hide option groups with only one value"
+            },
+            "hide_unavailable_options": {
+              "label": "Hide unavailable option values"
             }
           }
         },
