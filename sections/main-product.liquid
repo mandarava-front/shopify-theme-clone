@@ -19,6 +19,104 @@
   {{ 'component-rating.css' | asset_url | stylesheet_tag }}
   {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
 
+  {%- assign teeinblue_button_color = settings.tg_teeinblue_button_color | default: '#FFC400' -%}
+  {%- assign teeinblue_form_header_background = settings.tg_teeinblue_form_header_background | default: '#FFFFFF' -%}
+  {%- assign teeinblue_form_content_background = settings.tg_teeinblue_form_content_background | default: '#FFFFFF' -%}
+
+  {%- comment -%}
+    TeeInBlue settings might be absent in an existing settings_data.json until
+    the merchant saves the Theme settings once. Treat an absent checkbox as its
+    schema default (enabled); an explicitly saved false still disables it.
+  {%- endcomment -%}
+  {%- if settings.tg_teeinblue_overrides_enabled != false -%}
+    <style id="TeeInBlueOverrides">
+      /* TeeInBlue compatibility: prevent duplicate plugin content from
+         appearing alongside the theme's native product information. */
+      {%- if settings.tg_teeinblue_hide_price != false -%}
+        body:has(main[data-template='product']) .tee-block.tee-product-price {
+          display: none !important;
+        }
+      {%- endif -%}
+
+      {%- if settings.tg_teeinblue_hide_form_actions != false -%}
+        body:has(main[data-template='product']) #teeFormActions.tee-form-actions {
+          display: none !important;
+        }
+      {%- endif -%}
+
+      {%- if settings.tg_teeinblue_hide_description != false -%}
+        body:has(main[data-template='product']) .tee-block.tee-description {
+          display: none !important;
+        }
+      {%- endif -%}
+
+    </style>
+
+    <script>
+      (() => {
+        if (!document.querySelector('main[data-template="product"]')) return;
+
+        const previousObserver = window.TgTeeInBlueColorOverrideObserver;
+        if (previousObserver) previousObserver.disconnect();
+
+        const buttonColor = {{ teeinblue_button_color | json }};
+        const headerBackground = {{ teeinblue_form_header_background | json }};
+        const contentBackground = {{ teeinblue_form_content_background | json }};
+        const overrides = [
+          ['.teeinblue-theme-modern .tee-progress.tee-progress--loading > .tee-progress-bar', 'background', buttonColor],
+          ['.teeinblue-theme-modern .tee-progress-percent.text-dark', 'color', buttonColor],
+          ['.teeinblue-theme-modern .tee-photo-action .tee-btn.tee-btn--recustomize', 'color', buttonColor],
+          ['.teeinblue-theme-modern .tee-field--photo .tee-photo-action > label.tee-btn.tee-btn--upload', 'background', buttonColor],
+          ['.teeinblue-theme-modern button.tee-btn.tee-btn--sm.tee-btn--rounded.tee-btn--primary', 'background', buttonColor],
+          ['#tee-artwork-form > .tee-customize-main-form > .tee-form-header', 'background', headerBackground],
+          ['#tee-artwork-form > .tee-customize-main-form > #teeFormInputs.tee-customization-form', 'background', contentBackground],
+        ];
+
+        const applyOverrides = () => {
+          if (!document.querySelector('main[data-template="product"]')) return;
+
+          overrides.forEach(([selector, property, value]) => {
+            document.querySelectorAll(selector).forEach((element) => {
+              const markerName = property === 'background' ? 'tgTeeinblueBackground' : 'tgTeeinblueColor';
+              const currentValue = element.style.getPropertyValue(property).trim();
+              const marker = `${value}::${currentValue}`;
+
+              if (
+                element.dataset[markerName] !== marker ||
+                element.style.getPropertyPriority(property) !== 'important'
+              ) {
+                element.style.setProperty(property, value, 'important');
+                element.dataset[markerName] = `${value}::${element.style.getPropertyValue(property).trim()}`;
+              }
+            });
+          });
+        };
+
+        let animationFrame;
+        const scheduleOverrides = () => {
+          if (animationFrame) return;
+          animationFrame = window.requestAnimationFrame(() => {
+            animationFrame = undefined;
+            applyOverrides();
+          });
+        };
+
+        /* TeeInBlue replaces fields and modal contents dynamically. Reapply
+           only when it inserts a node or changes an inline style/class. */
+        const observer = new MutationObserver(scheduleOverrides);
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true,
+          attributes: true,
+          attributeFilter: ['class', 'style'],
+        });
+        window.TgTeeInBlueColorOverrideObserver = observer;
+
+        applyOverrides();
+      })();
+    </script>
+  {%- endif -%}
+
   {% unless product.has_only_default_variant %}
     {{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
     {{ 'component-swatch-input.css' | asset_url | stylesheet_tag }}

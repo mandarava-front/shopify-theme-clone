@@ -34,6 +34,69 @@
 
 <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
 
+{%- if settings.tg_teeinblue_hide_plugin_cart_preview != false -%}
+  <style>
+    /* TeeInBlue compatibility: retain the theme's cart Preview button and
+       hide the plugin's duplicate trigger on cart pages. */
+    body:has(main[data-template='cart']) .tee-preview-button__wrapper {
+      display: none !important;
+    }
+  </style>
+{%- endif -%}
+
+<script>
+  (() => {
+    const cartTemplate = document.querySelector('main[data-template="cart"]');
+    if (!cartTemplate) return;
+
+    const syncPreviewImage = (cartItem) => {
+      const themePreview = cartItem.querySelector('[data-tg-cart-preview]');
+      const pluginImage = cartItem.querySelector('.tee-cart-thumbnail__img[src]');
+      if (!themePreview || !pluginImage) return;
+
+      const imageUrl = pluginImage.currentSrc || pluginImage.src;
+      if (!imageUrl) return;
+
+      themePreview.dataset.tgCartPreviewImage = imageUrl;
+      themePreview.dataset.tgCartPreviewFallback = imageUrl;
+      themePreview.dataset.tgCartPreviewAlt = pluginImage.alt || themePreview.dataset.tgCartPreviewAlt || '';
+    };
+
+    const syncAllPreviewImages = () => {
+      document.querySelectorAll('.cart-item').forEach(syncPreviewImage);
+    };
+
+    if (window.TgTeeInBlueCartPreviewObserver) {
+      window.TgTeeInBlueCartPreviewObserver.disconnect();
+    }
+
+    /* TeeInBlue inserts its rendered cart thumbnail asynchronously. Sync the
+       native Preview button when that image is added or its source changes. */
+    const observer = new MutationObserver(syncAllPreviewImages);
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['class', 'href', 'src'],
+    });
+    window.TgTeeInBlueCartPreviewObserver = observer;
+
+    document.addEventListener(
+      'click',
+      (event) => {
+        if (!(event.target instanceof Element)) return;
+
+        const themePreview = event.target.closest('[data-tg-cart-preview]');
+        const cartItem = themePreview?.closest('.cart-item');
+        if (cartItem) syncPreviewImage(cartItem);
+      },
+      true,
+    );
+
+    syncAllPreviewImages();
+  })();
+</script>
+
 <cart-items
   class="gradient color-{{ section.settings.color_scheme }} isolate{% if section.settings.enable_tg_cart_page_style %} tg-cart-page{% endif %}{% if cart == empty %} is-empty{% else %} section-{{ section.id }}-padding{% endif %}"
   {% if section.settings.enable_tg_cart_page_style %}style="--tg-cart-accent: {{ section.settings.tg_cart_page_accent_color }}; --tg-cart-surface: {{ section.settings.tg_cart_page_surface_color }}; --tg-cart-card: {{ section.settings.tg_cart_page_card_color }}; --tg-cart-border: {{ section.settings.tg_cart_page_border_color }}; --tg-cart-text: {{ section.settings.tg_cart_page_text_color }}; --tg-cart-muted: {{ section.settings.tg_cart_page_muted_color }}; --tg-cart-radius: {{ section.settings.tg_cart_card_radius }}px; --tg-cart-font: {{ section.settings.tg_cart_font.family }}, {{ section.settings.tg_cart_font.fallback_families }}; --tg-cart-empty-button-background: {{ section.settings.empty_button_background_color }}; --tg-cart-empty-button-hover-background: {{ section.settings.empty_button_hover_background_color }}; --tg-cart-empty-button-text: {{ section.settings.empty_button_text_color }}; --tg-cart-empty-button-border: {{ section.settings.empty_button_border_color }}; --tg-cart-empty-button-border-width: {{ section.settings.empty_button_border_width }}px; --tg-cart-empty-button-radius: {{ section.settings.empty_button_radius }}px; --tg-cart-empty-button-height: {{ section.settings.empty_button_height }}px; --tg-cart-empty-button-font-size: {{ section.settings.empty_button_font_size }}px;"{% endif %}
@@ -120,6 +183,7 @@
                       {%- liquid
                         assign tg_cart_customized_thumb = item.properties['_customily-thumb']
                         assign tg_cart_customized_preview = item.properties['_customily-preview']
+                        assign tg_cart_teeinblue_customization_id = item.properties['_customization_id']
                         assign tg_cart_item_image = item.image
                         assign tg_cart_item_image_url = blank
                         assign tg_cart_item_image_alt = item.product.title
@@ -254,6 +318,17 @@
                           </li>
                         {%- endfor -%}
                       </ul>
+
+                      {%- if tg_cart_teeinblue_customization_id != blank -%}
+                        {%- comment -%}
+                          TeeInBlue uses this documented marker to render its
+                          preview trigger and fetch the rendered customization.
+                        {%- endcomment -%}
+                        <div
+                          class="tee-preview-design tg-teeinblue-cart-preview-source"
+                          data-customization-id="{{ tg_cart_teeinblue_customization_id | escape }}"
+                        ></div>
+                      {%- endif -%}
                     </div>
                     {%- liquid
                       assign has_qty_rules = false

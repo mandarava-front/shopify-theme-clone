@@ -1559,5 +1559,82 @@
         "default": "scheme-1"
       }
     ]
+  },
+  {
+    "name": "TeeInBlue 兼容设置",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "仅影响商品详情页上的 TeeInBlue 插件内容。"
+      },
+      {
+        "type": "checkbox",
+        "id": "tg_teeinblue_overrides_enabled",
+        "label": "启用 TeeInBlue 强制样式覆盖",
+        "info": "关闭后，以下 TeeInBlue 样式设置均不生效。",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "隐藏重复内容"
+      },
+      {
+        "type": "checkbox",
+        "id": "tg_teeinblue_hide_price",
+        "label": "隐藏插件价格区块",
+        "info": "保留主题原生价格，隐藏 TeeInBlue 的重复价格。",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "tg_teeinblue_hide_form_actions",
+        "label": "隐藏插件购买操作区块",
+        "info": "隐藏 TeeInBlue 的预览、数量及加购控件。",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "tg_teeinblue_hide_description",
+        "label": "隐藏插件描述区块",
+        "info": "保留主题原生描述，隐藏 TeeInBlue 的重复描述。",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "购物车预览"
+      },
+      {
+        "type": "checkbox",
+        "id": "tg_teeinblue_hide_plugin_cart_preview",
+        "label": "隐藏 TeeInBlue 购物车预览按钮",
+        "info": "隐藏插件生成的重复 Preview，保留主题 Preview。主题按钮会自动调用插件预览，展示正确的定制图片。",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "TeeInBlue 配色"
+      },
+      {
+        "type": "color",
+        "id": "tg_teeinblue_button_color",
+        "label": "插件按钮和进度颜色",
+        "info": "影响图片上传按钮、进度百分比和 TeeInBlue 的主要按钮（如 Save）。",
+        "default": "#FFC400"
+      },
+      {
+        "type": "color",
+        "id": "tg_teeinblue_form_header_background",
+        "label": "定制面板头部背景色",
+        "info": "影响 .tee-form-header 区域。",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "tg_teeinblue_form_content_background",
+        "label": "定制面板内容背景色",
+        "info": "影响 #teeFormInputs 内容区域。",
+        "default": "#FFFFFF"
+      }
+    ]
   }
 ]
