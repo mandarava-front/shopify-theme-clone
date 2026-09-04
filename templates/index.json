@@ -142,28 +142,28 @@
         "step_K7hV4U": {
           "type": "step",
           "settings": {
-            "image": "shopify://shop_images/1.jpg",
+            "image": "shopify://shop_images/66ea9961-4039-4387-adf0-92ef29e767fa.png",
             "title": "Chooes & Customize Your Preview"
           }
         },
         "step_mVyk6e": {
           "type": "step",
           "settings": {
-            "image": "shopify://shop_images/2.jpg",
+            "image": "shopify://shop_images/d771da9a-666a-45c2-9cda-e50d1e0663b7.png",
             "title": "Adjust Product Parameters"
           }
         },
         "step_EfQdef": {
           "type": "step",
           "settings": {
-            "image": "shopify://shop_images/3.jpg",
+            "image": "shopify://shop_images/49362d3b-8fae-4c2b-ad73-1ccac7a6d187.png",
             "title": "Final Product Packaged With Care"
           }
         },
         "step_GtXVGL": {
           "type": "step",
           "settings": {
-            "image": "shopify://shop_images/4.jpg",
+            "image": "shopify://shop_images/a2675730-3d7f-4bf1-ad74-934d2973b028.png",
             "title": "Done! Wait for your gift"
           }
         },
@@ -194,8 +194,8 @@
         "arrow_color": "#18181e",
         "padding_top": 76,
         "padding_bottom": 48,
-        "mobile_padding_top": 22,
-        "mobile_padding_bottom": 16
+        "mobile_padding_top": 24,
+        "mobile_padding_bottom": 20
       }
     },
     "trending_now": {
