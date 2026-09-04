@@ -21,7 +21,7 @@
         "tg_cart_expiry_text": "Your cart will expire in [time].",
         "tg_cart_expiry_minutes": 10,
         "tg_cart_expiry_expired_text": "Forgot one final step? Place your order now and make the payment right away!",
-        "tg_cart_show_announcement": true,
+        "tg_cart_show_announcement": false,
         "announcement_text": "Free shipping on orders over $69",
         "tg_cart_show_vendor": false,
         "tg_cart_show_options": true,

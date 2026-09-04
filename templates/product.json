@@ -70,6 +70,24 @@
             "vertical_spacing": 18
           }
         },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "circle"
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {}
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": true
+          }
+        },
         "delivery_estimate": {
           "type": "delivery_estimate",
           "settings": {
@@ -92,37 +110,10 @@
             "icon_line_color": "#f36352"
           }
         },
-        "variant_picker": {
-          "type": "variant_picker",
-          "settings": {
-            "picker_type": "button",
-            "swatch_shape": "circle"
-          }
-        },
-        "quantity_selector": {
-          "type": "quantity_selector",
-          "settings": {}
-        },
-        "buy_buttons": {
-          "type": "buy_buttons",
-          "settings": {
-            "show_dynamic_checkout": true,
-            "show_gift_card_recipient": true
-          }
-        },
         "secure_payment": {
           "type": "secure_payment",
           "settings": {
             "heading": "Secure checkout"
-          }
-        },
-        "trust_message": {
-          "type": "trust_message",
-          "settings": {
-            "heading": "Shop with confidence",
-            "text": "<p>Add an accurate delivery, returns, or support statement.</p>",
-            "link_label": "",
-            "link": ""
           }
         },
         "accordion_description": {
@@ -166,12 +157,11 @@
         "price",
         "sales_proof",
         "volume_discount",
-        "delivery_estimate",
         "variant_picker",
         "quantity_selector",
         "buy_buttons",
+        "delivery_estimate",
         "secure_payment",
-        "trust_message",
         "accordion_description",
         "accordion_shipping",
         "accordion_guarantee"
