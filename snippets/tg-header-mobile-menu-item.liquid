@@ -1,0 +1,141 @@
+{%- liquid
+  assign mobile_menu_icon = 'tg-menu-icon-occasions.svg'
+  assign mobile_menu_image = blank
+  assign mobile_menu_background = blank
+  assign mobile_menu_text = blank
+  assign mobile_menu_url = link.url | remove: shop.url
+
+  case link_index
+    when 2
+      assign mobile_menu_icon = 'tg-menu-icon-interests.svg'
+    when 3
+      assign mobile_menu_icon = 'tg-menu-icon-recipients.svg'
+    when 4
+      assign mobile_menu_icon = 'tg-menu-icon-home.svg'
+    when 5
+      assign mobile_menu_icon = 'tg-menu-icon-apparel.svg'
+    when 6
+      assign mobile_menu_icon = 'tg-menu-icon-accessories.svg'
+    when 7
+      assign mobile_menu_icon = 'tg-menu-icon-drinkware.svg'
+    when 8
+      assign mobile_menu_icon = 'tg-menu-icon-outdoor.svg'
+  endcase
+
+  for block in section.blocks
+    assign mobile_menu_override_url = block.settings.link | remove: shop.url
+    if block.type == 'mobile_menu_card' and mobile_menu_override_url != blank and mobile_menu_override_url == mobile_menu_url
+      assign mobile_menu_image = block.settings.image
+      assign mobile_menu_background = block.settings.background_color
+      assign mobile_menu_text = block.settings.text_color
+      break
+    endif
+  endfor
+
+  if featured and mobile_menu_background == blank and mobile_menu_text == blank
+    if link_index == 1
+      assign mobile_menu_background = '#b3e2f6'
+      assign mobile_menu_text = '#062d8e'
+    elsif link_index == 2
+      assign mobile_menu_background = '#d6f1d8'
+      assign mobile_menu_text = '#054815'
+    endif
+  endif
+-%}
+
+{%- if link.links != blank -%}
+  <details id="Tg-mobile-menu-{{ section.id }}-{{ link_index }}">
+    <summary
+      class="tg-header-mobile-menu-card{% if featured %} tg-header-mobile-menu-card--featured{% endif %} menu-drawer__menu-item focus-inset"
+      {% if mobile_menu_background != blank or mobile_menu_text != blank %}style="--tg-header-mobile-menu-card-background: {{ mobile_menu_background | default: section.settings.tg_header_mobile_menu_surface }}; --tg-header-mobile-menu-card-text: {{ mobile_menu_text | default: section.settings.tg_header_mobile_menu_text }};"{% endif %}
+    >
+      {%- if mobile_menu_image != blank -%}
+        {{
+          mobile_menu_image
+          | image_url: width: 120
+          | image_tag:
+            class: 'tg-header-mobile-menu-card__image',
+            widths: '60, 90, 120',
+            sizes: '38px',
+            loading: 'lazy',
+            alt: ''
+        }}
+      {%- else -%}
+        <img src="{{ mobile_menu_icon | asset_url }}" class="tg-header-mobile-menu-card__image" alt="" width="60" height="60" loading="lazy">
+      {%- endif -%}
+      <span>{{ link.title | escape }}</span>
+      <span class="tg-header-mobile-menu-card__chevron" aria-hidden="true">{{- 'icon-arrow.svg' | inline_asset_content -}}</span>
+    </summary>
+    <div class="menu-drawer__submenu has-submenu motion-reduce tg-header-mobile-menu-submenu" tabindex="-1">
+      <div class="menu-drawer__inner-submenu tg-header-mobile-menu-submenu__inner">
+        <div class="tg-header-mobile-menu-submenu__header">
+          <span class="tg-header-mobile-menu-submenu__title">{{ link.title | escape }}</span>
+          <button type="button" class="menu-drawer__close-button tg-header-mobile-menu-submenu__close link focus-inset" aria-label="Return to {{ 'sections.header.menu' | t }}">
+            <span class="svg-wrapper" aria-hidden="true">{{- 'tg-icon-close.svg' | inline_asset_content -}}</span>
+          </button>
+        </div>
+        <div class="tg-header-mobile-menu-accordion">
+          {%- for childlink in link.links -%}
+            {%- if childlink.links == blank -%}
+              <a
+                href="{{ childlink.url }}"
+                class="tg-header-mobile-menu-submenu__link menu-drawer__menu-item link link--text list-menu__item focus-inset{% if childlink.current %} menu-drawer__menu-item--active{% endif %}"
+                {% if childlink.current %}aria-current="page"{% endif %}
+              >
+                {{ childlink.title | escape }}
+              </a>
+            {%- else -%}
+              {%- assign accordion_id = 'Tg-mobile-menu-accordion-' | append: section.id | append: '-' | append: link_index | append: '-' | append: forloop.index -%}
+              <div class="tg-header-mobile-menu-accordion__block">
+                <button
+                  type="button"
+                  class="tg-header-mobile-menu-accordion__trigger focus-inset"
+                  aria-expanded="true"
+                  aria-controls="{{ accordion_id }}"
+                  data-tg-menu-accordion-toggle
+                >
+                  <span>{{ childlink.title | escape }}</span>
+                  <span class="tg-header-mobile-menu-accordion__icon svg-wrapper" aria-hidden="true">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+                </button>
+                <div id="{{ accordion_id }}" class="tg-header-mobile-menu-accordion__panel">
+                  {%- for grandchildlink in childlink.links -%}
+                    <a
+                      href="{{ grandchildlink.url }}"
+                      class="tg-header-mobile-menu-accordion__item menu-drawer__menu-item link link--text list-menu__item focus-inset{% if grandchildlink.current %} menu-drawer__menu-item--active{% endif %}"
+                      {% if grandchildlink.current %}aria-current="page"{% endif %}
+                    >
+                      {{ grandchildlink.title | escape }}
+                    </a>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  </details>
+{%- else -%}
+  <a
+    href="{{ link.url }}"
+    class="tg-header-mobile-menu-card{% if featured %} tg-header-mobile-menu-card--featured{% endif %} focus-inset"
+    {% if mobile_menu_background != blank or mobile_menu_text != blank %}style="--tg-header-mobile-menu-card-background: {{ mobile_menu_background | default: section.settings.tg_header_mobile_menu_surface }}; --tg-header-mobile-menu-card-text: {{ mobile_menu_text | default: section.settings.tg_header_mobile_menu_text }};"{% endif %}
+    {% if link.current %}aria-current="page"{% endif %}
+  >
+    {%- if mobile_menu_image != blank -%}
+      {{
+        mobile_menu_image
+        | image_url: width: 120
+        | image_tag:
+          class: 'tg-header-mobile-menu-card__image',
+          widths: '60, 90, 120',
+          sizes: '38px',
+          loading: 'lazy',
+          alt: ''
+      }}
+    {%- else -%}
+      <img src="{{ mobile_menu_icon | asset_url }}" class="tg-header-mobile-menu-card__image" alt="" width="60" height="60" loading="lazy">
+    {%- endif -%}
+    <span>{{ link.title | escape }}</span>
+  </a>
+{%- endif -%}

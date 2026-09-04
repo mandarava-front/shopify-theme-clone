@@ -3,6 +3,7 @@
 {%- if section.settings.enable_tg_header_mobile_menu -%}
   {{- 'component-menu-drawer.css' | asset_url | stylesheet_tag -}}
   {{- 'tg-header-mobile-menu.css' | asset_url | stylesheet_tag -}}
+  <script src="{{ 'tg-header-mobile-menu.js' | asset_url }}" defer="defer"></script>
 {%- else -%}
   <link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
 {%- endif -%}
@@ -248,24 +249,6 @@
                     {%- if block.type == 'tg_header_desktop_utility' and block.settings.link != blank -%}
                       {%- assign desktop_utility_icon = block.settings.icon_asset | default: 'gift' -%}
                       <a href="{{ block.settings.link }}" class="tg-header-desktop__utility focus-inset" {{ block.shopify_attributes }}>
-                        <span class="svg-wrapper" aria-hidden="true">{{- desktop_utility_icon | prepend: 'tg-icon-' | append: '.svg' | inline_asset_content -}}</span>
-                        <span>{{ block.settings.title | escape }}</span>
-                      </a>
-                    {%- endif -%}
-                  {%- endfor -%}
-                {%- else -%}
-                  {%- for block in section.blocks -%}
-                    {%- if block.type == 'mobile_utility_link' and block.settings.link != blank -%}
-                      {%- liquid
-                        assign desktop_utility_title = block.settings.title | downcase
-                        assign desktop_utility_icon = 'gift'
-                        if desktop_utility_title contains 'track'
-                          assign desktop_utility_icon = 'track-order'
-                        elsif desktop_utility_title contains 'review'
-                          assign desktop_utility_icon = 'reviews'
-                        endif
-                      -%}
-                      <a href="{{ block.settings.link }}" class="tg-header-desktop__utility focus-inset">
                         <span class="svg-wrapper" aria-hidden="true">{{- desktop_utility_icon | prepend: 'tg-icon-' | append: '.svg' | inline_asset_content -}}</span>
                         <span>{{ block.settings.title | escape }}</span>
                       </a>
@@ -858,8 +841,8 @@
       "type": "link_list",
       "id": "menu",
       "default": "main-menu",
-      "label": "移动端导航菜单（主菜单）",
-      "info": "用于移动端导航和未启用 PC 端 Mega 导航时的标准页头。"
+      "label": "标准页头备用菜单",
+      "info": "仅在未启用自定义 PC / 移动端导航时使用。启用自定义导航后，请在“PC / 移动端导航菜单”block 中选择菜单，两个端会自动同步。"
     },
     {
       "type": "header",
@@ -973,13 +956,13 @@
     },
     {
       "type": "header",
-      "content": "tg | 移动端 | 抽屉菜单外观"
+      "content": "tg | 移动端抽屉菜单外观"
     },
     {
       "type": "text",
       "id": "tg_header_mobile_menu_title",
       "default": "Menu",
-      "label": "t:sections.header.tg_header_mobile.title.label"
+      "label": "抽屉顶部标题"
     },
     {
       "type": "range",
@@ -989,37 +972,37 @@
       "step": 1,
       "unit": "%",
       "default": 92,
-      "label": "t:sections.header.tg_header_mobile.width.label"
+      "label": "抽屉宽度"
     },
     {
       "type": "color",
       "id": "tg_header_mobile_menu_background",
       "default": "#f6f6fb",
-      "label": "t:sections.header.tg_header_mobile.background.label"
+      "label": "抽屉主体背景色"
     },
     {
       "type": "color",
       "id": "tg_header_mobile_menu_surface",
       "default": "#ffffff",
-      "label": "t:sections.header.tg_header_mobile.surface.label"
+      "label": "菜单表面背景色"
     },
     {
       "type": "color",
       "id": "tg_header_mobile_menu_text",
       "default": "#202024",
-      "label": "t:sections.header.tg_header_mobile.text.label"
+      "label": "菜单默认文字颜色"
     },
     {
       "type": "color",
       "id": "tg_header_mobile_menu_accent",
       "default": "#0b8494",
-      "label": "t:sections.header.tg_header_mobile.accent.label"
+      "label": "菜单交互强调色"
     },
     {
       "type": "color",
       "id": "tg_header_mobile_menu_divider",
       "default": "#eeeeff",
-      "label": "t:sections.header.tg_header_mobile.divider.label"
+      "label": "菜单分隔线颜色"
     },
     {
       "type": "header",
@@ -1413,100 +1396,20 @@
       ]
     },
     {
-      "type": "mobile_feature_card",
-      "name": "t:sections.header.tg_header_mobile.blocks.featured.name",
-      "settings": [
-        {
-          "type": "text",
-          "id": "title",
-          "default": "Featured",
-          "label": "t:sections.header.tg_header_mobile.blocks.featured.title"
-        },
-        {
-          "type": "url",
-          "id": "link",
-          "label": "t:sections.header.tg_header_mobile.blocks.featured.link"
-        },
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "t:sections.header.tg_header_mobile.blocks.featured.image"
-        },
-        {
-          "type": "select",
-          "id": "icon_asset",
-          "label": "t:sections.header.tg_header_mobile.blocks.featured.icon",
-          "default": "tg-menu-icon-summer.svg",
-          "options": [
-            { "value": "tg-menu-icon-summer.svg", "label": "t:sections.header.tg_header_mobile.blocks.featured.options.summer" },
-            { "value": "tg-menu-icon-back-to-school.svg", "label": "t:sections.header.tg_header_mobile.blocks.featured.options.back_to_school" },
-            { "value": "tg-menu-icon-occasions.svg", "label": "t:sections.header.tg_header_mobile.blocks.featured.options.occasions" },
-            { "value": "tg-menu-icon-interests.svg", "label": "t:sections.header.tg_header_mobile.blocks.featured.options.interests" },
-            { "value": "tg-menu-icon-recipients.svg", "label": "t:sections.header.tg_header_mobile.blocks.featured.options.recipients" },
-            { "value": "tg-menu-icon-home.svg", "label": "t:sections.header.tg_header_mobile.blocks.featured.options.home" },
-            { "value": "tg-menu-icon-apparel.svg", "label": "t:sections.header.tg_header_mobile.blocks.featured.options.apparel" },
-            { "value": "tg-menu-icon-accessories.svg", "label": "t:sections.header.tg_header_mobile.blocks.featured.options.accessories" },
-            { "value": "tg-menu-icon-drinkware.svg", "label": "t:sections.header.tg_header_mobile.blocks.featured.options.drinkware" },
-            { "value": "tg-menu-icon-outdoor.svg", "label": "t:sections.header.tg_header_mobile.blocks.featured.options.outdoor" }
-          ]
-        },
-        {
-          "type": "color",
-          "id": "background_color",
-          "default": "#b3e2f6",
-          "label": "t:sections.header.tg_header_mobile.blocks.featured.background"
-        },
-        {
-          "type": "color",
-          "id": "text_color",
-          "default": "#062d8e",
-          "label": "t:sections.header.tg_header_mobile.blocks.featured.text"
-        }
-      ]
-    },
-    {
       "type": "mobile_menu_card",
-      "name": "t:sections.header.tg_header_mobile.blocks.menu.name",
+      "name": "tg | 移动端菜单项样式",
       "settings": [
-        {
-          "type": "text",
-          "id": "title",
-          "default": "Collection",
-          "label": "t:sections.header.tg_header_mobile.blocks.menu.title"
-        },
         {
           "type": "url",
           "id": "link",
-          "label": "t:sections.header.tg_header_mobile.blocks.menu.link",
-          "info": "t:sections.header.tg_header_mobile.blocks.menu.link_info"
-        },
-        {
-          "type": "link_list",
-          "id": "sub_menu",
-          "label": "t:sections.header.tg_header_mobile.blocks.menu.sub_menu"
+          "label": "匹配的 PC 一级菜单链接",
+          "info": "选择 PC/移动端共用导航中的一级菜单链接（包含顶部前两项特色卡片）。此 block 优先覆盖该菜单项的图标和颜色，不会修改菜单名称、跳转链接或子菜单。"
         },
         {
           "type": "image_picker",
           "id": "image",
-          "label": "t:sections.header.tg_header_mobile.blocks.menu.image"
-        },
-        {
-          "type": "select",
-          "id": "icon_asset",
-          "label": "t:sections.header.tg_header_mobile.blocks.menu.icon",
-          "default": "tg-menu-icon-occasions.svg",
-          "options": [
-            { "value": "tg-menu-icon-occasions.svg", "label": "t:sections.header.tg_header_mobile.blocks.menu.options.occasions" },
-            { "value": "tg-menu-icon-interests.svg", "label": "t:sections.header.tg_header_mobile.blocks.menu.options.interests" },
-            { "value": "tg-menu-icon-recipients.svg", "label": "t:sections.header.tg_header_mobile.blocks.menu.options.recipients" },
-            { "value": "tg-menu-icon-home.svg", "label": "t:sections.header.tg_header_mobile.blocks.menu.options.home" },
-            { "value": "tg-menu-icon-apparel.svg", "label": "t:sections.header.tg_header_mobile.blocks.menu.options.apparel" },
-            { "value": "tg-menu-icon-accessories.svg", "label": "t:sections.header.tg_header_mobile.blocks.menu.options.accessories" },
-            { "value": "tg-menu-icon-drinkware.svg", "label": "t:sections.header.tg_header_mobile.blocks.menu.options.drinkware" },
-            { "value": "tg-menu-icon-outdoor.svg", "label": "t:sections.header.tg_header_mobile.blocks.menu.options.outdoor" },
-            { "value": "tg-menu-icon-summer.svg", "label": "t:sections.header.tg_header_mobile.blocks.menu.options.summer" },
-            { "value": "tg-menu-icon-back-to-school.svg", "label": "t:sections.header.tg_header_mobile.blocks.menu.options.back_to_school" }
-          ]
+          "label": "自定义图标",
+          "info": "上传后替换该一级菜单的默认图标；留空则使用系统默认图标。建议使用 SVG 或透明背景图片。"
         },
         {
           "type": "color",
@@ -1523,69 +1426,21 @@
       ]
     },
     {
-      "type": "mobile_utility_link",
-      "name": "t:sections.header.tg_header_mobile.blocks.utility.name",
-      "settings": [
-        {
-          "type": "text",
-          "id": "title",
-          "default": "Track Order",
-          "label": "t:sections.header.tg_header_mobile.blocks.utility.title"
-        },
-        {
-          "type": "url",
-          "id": "link",
-          "label": "t:sections.header.tg_header_mobile.blocks.utility.link"
-        }
-      ]
-    },
-    {
-      "type": "mobile_social_link",
-      "name": "t:sections.header.tg_header_mobile.blocks.social.name",
-      "settings": [
-        {
-          "type": "select",
-          "id": "platform",
-          "label": "t:sections.header.tg_header_mobile.blocks.social.platform",
-          "default": "facebook",
-          "options": [
-            { "value": "facebook", "label": "t:sections.header.tg_header_mobile.blocks.social.options.facebook" },
-            { "value": "youtube", "label": "t:sections.header.tg_header_mobile.blocks.social.options.youtube" },
-            { "value": "instagram", "label": "t:sections.header.tg_header_mobile.blocks.social.options.instagram" },
-            { "value": "tiktok", "label": "t:sections.header.tg_header_mobile.blocks.social.options.tiktok" },
-            { "value": "twitter", "label": "t:sections.header.tg_header_mobile.blocks.social.options.twitter" }
-          ]
-        },
-        {
-          "type": "url",
-          "id": "link",
-          "label": "t:sections.header.tg_header_mobile.blocks.social.link",
-          "info": "t:sections.header.tg_header_mobile.blocks.social.link_info"
-        },
-        {
-          "type": "text",
-          "id": "accessibility_label",
-          "label": "t:sections.header.tg_header_mobile.blocks.social.accessibility_label",
-          "info": "t:sections.header.tg_header_mobile.blocks.social.accessibility_label_info"
-        }
-      ]
-    },
-    {
       "type": "tg_header_desktop_menu",
-      "name": "tg | PC端导航菜单",
+      "name": "tg | PC / 移动端导航菜单",
       "limit": 1,
       "settings": [
         {
           "type": "link_list",
           "id": "menu",
-          "label": "Shopify 导航菜单",
-          "info": "选择一个 Shopify 菜单。最多支持三级：一级显示在导航栏，二级和三级显示在下拉面板。"
+          "label": "Shopify 导航菜单（PC 与移动端共用）",
+          "info": "选择一个 Shopify 菜单。最多支持三级：PC 端显示下拉面板；移动端显示覆盖式二级面板和三级 accordion。"
         }
       ]
     },
     {
       "type": "tg_header_desktop_utility",
-      "name": "tg | PC端快捷入口",
+      "name": "tg | PC / 移动端快捷入口",
       "settings": [
         {
           "type": "text",
@@ -1596,7 +1451,8 @@
         {
           "type": "url",
           "id": "link",
-          "label": "跳转链接"
+          "label": "PC 与移动端共用跳转链接",
+          "info": "修改后会同时更新 PC 端和移动端快捷入口。"
         },
         {
           "type": "select",
@@ -1613,7 +1469,7 @@
     },
     {
       "type": "tg_header_desktop_social",
-      "name": "tg | PC端社交媒体链接",
+      "name": "tg | PC / 移动端社交媒体链接",
       "settings": [
         {
           "type": "select",
@@ -1631,8 +1487,8 @@
         {
           "type": "url",
           "id": "link",
-          "label": "主页链接",
-          "info": "留空则不显示该社交媒体图标。"
+          "label": "PC 与移动端共用主页链接",
+          "info": "修改后会同时更新 PC 端和移动端社交媒体链接；留空则不显示该平台。"
         },
         {
           "type": "text",

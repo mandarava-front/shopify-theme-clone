@@ -1,26 +1,28 @@
 {% comment %}
-  Tg-inspired mobile navigation. Featured cards, menu cards and
-  utility links are configured as blocks on the Header section.
+  Tg-inspired mobile navigation. The PC navigation block is the shared
+  source of truth for menu content; mobile_menu_card blocks only override
+  the visual treatment of individual top-level menu items.
 {% endcomment %}
 
 {%- liquid
-  assign mobile_feature_count = 0
-  assign mobile_menu_card_count = 0
-  assign mobile_utility_count = 0
-  assign mobile_social_count = 0
+  assign desktop_utility_count = 0
+  assign desktop_social_count = 0
+  assign mobile_navigation_menu = blank
 
   for block in section.blocks
-    case block.type
-      when 'mobile_feature_card'
-        assign mobile_feature_count = mobile_feature_count | plus: 1
-      when 'mobile_menu_card'
-        assign mobile_menu_card_count = mobile_menu_card_count | plus: 1
-      when 'mobile_utility_link'
-        assign mobile_utility_count = mobile_utility_count | plus: 1
-      when 'mobile_social_link'
-        assign mobile_social_count = mobile_social_count | plus: 1
-    endcase
+    if block.type == 'tg_header_desktop_menu' and block.settings.menu != blank
+      assign mobile_navigation_menu = block.settings.menu
+    endif
+
+    if block.type == 'tg_header_desktop_utility' and block.settings.link != blank
+      assign desktop_utility_count = desktop_utility_count | plus: 1
+    endif
+
+    if block.type == 'tg_header_desktop_social' and block.settings.link != blank
+      assign desktop_social_count = desktop_social_count | plus: 1
+    endif
   endfor
+
 -%}
 
 <header-drawer
@@ -69,223 +71,36 @@
 
         <div class="menu-drawer__navigation-container tg-header-mobile-menu__body">
           <nav class="menu-drawer__navigation" aria-label="{{ 'sections.header.menu' | t }}">
-            {%- if mobile_feature_count > 0 -%}
-              <ul class="tg-header-mobile-menu-grid tg-header-mobile-menu-grid--featured list-unstyled" role="list">
-                {%- for block in section.blocks -%}
-                  {%- if block.type == 'mobile_feature_card' -%}
-                    {%- assign card_link = block.settings.link | default: routes.all_products_collection_url -%}
-                    <li {{ block.shopify_attributes }}>
-                      <a
-                        href="{{ card_link }}"
-                        class="tg-header-mobile-menu-card tg-header-mobile-menu-card--featured focus-inset"
-                        style="--tg-header-mobile-menu-card-background: {{ block.settings.background_color }}; --tg-header-mobile-menu-card-text: {{ block.settings.text_color }};"
-                      >
-                        {%- if block.settings.image != blank -%}
-                          {{
-                            block.settings.image
-                            | image_url: width: 120
-                            | image_tag:
-                              class: 'tg-header-mobile-menu-card__image',
-                              widths: '60, 90, 120',
-                              sizes: '38px',
-                              loading: 'lazy',
-                              alt: ''
-                          }}
-                        {%- else -%}
-                          <img
-                            src="{{ block.settings.icon_asset | asset_url }}"
-                            class="tg-header-mobile-menu-card__image"
-                            alt=""
-                            width="42"
-                            height="42"
-                            loading="lazy"
-                          >
-                        {%- endif -%}
-                        <span>{{ block.settings.title | escape }}</span>
-                      </a>
+            {%- if mobile_navigation_menu != blank and mobile_navigation_menu.links != blank -%}
+              <div class="tg-header-mobile-menu__primary-navigation has-submenu">
+                <ul class="tg-header-mobile-menu-grid tg-header-mobile-menu-grid--featured list-unstyled" role="list">
+                  {%- for link in mobile_navigation_menu.links limit: 2 -%}
+                    <li>
+                      {% render 'tg-header-mobile-menu-item', link: link, link_index: forloop.index, featured: true, section: section %}
                     </li>
-                  {%- endif -%}
-                {%- endfor -%}
-              </ul>
+                  {%- endfor -%}
+                </ul>
+                {%- if mobile_navigation_menu.links.size > 2 -%}
+                  <ul class="tg-header-mobile-menu-grid tg-header-mobile-menu-grid--navigation list-unstyled" role="list">
+                    {%- for link in mobile_navigation_menu.links offset: 2 -%}
+                      {%- assign mobile_menu_position = forloop.index | plus: 2 -%}
+                      <li>
+                        {% render 'tg-header-mobile-menu-item', link: link, link_index: mobile_menu_position, featured: false, section: section %}
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              </div>
             {%- endif -%}
-
-            <ul class="tg-header-mobile-menu-grid tg-header-mobile-menu-grid--navigation list-unstyled has-submenu" role="list">
-              {%- if mobile_menu_card_count > 0 -%}
-                {%- for block in section.blocks -%}
-                  {%- if block.type == 'mobile_menu_card' -%}
-                    {%- assign card_link = block.settings.link | default: routes.all_products_collection_url -%}
-                    <li {{ block.shopify_attributes }}>
-                      {%- if block.settings.sub_menu != blank and block.settings.sub_menu.links != blank -%}
-                        <details id="Tg-menu-card-{{ block.id }}">
-                          <summary
-                            class="tg-header-mobile-menu-card menu-drawer__menu-item focus-inset"
-                            style="--tg-header-mobile-menu-card-background: {{ block.settings.background_color }}; --tg-header-mobile-menu-card-text: {{ block.settings.text_color }};"
-                          >
-                            {%- if block.settings.image != blank -%}
-                              {{
-                                block.settings.image
-                                | image_url: width: 120
-                                | image_tag:
-                                  class: 'tg-header-mobile-menu-card__image',
-                                  widths: '60, 90, 120',
-                                  sizes: '38px',
-                                  loading: 'lazy',
-                                  alt: ''
-                              }}
-                            {%- else -%}
-                              <img
-                                src="{{ block.settings.icon_asset | asset_url }}"
-                                class="tg-header-mobile-menu-card__image"
-                                alt=""
-                                width="60"
-                                height="60"
-                                loading="lazy"
-                              >
-                            {%- endif -%}
-                            <span>{{ block.settings.title | escape }}</span>
-                            <span class="tg-header-mobile-menu-card__chevron" aria-hidden="true">
-                              {{- 'icon-arrow.svg' | inline_asset_content -}}
-                            </span>
-                          </summary>
-                          <div
-                            class="menu-drawer__submenu has-submenu motion-reduce tg-header-mobile-menu-submenu"
-                            tabindex="-1"
-                          >
-                            <div class="menu-drawer__inner-submenu">
-                              <button class="menu-drawer__close-button link link--text focus-inset" aria-expanded="true">
-                                <span class="svg-wrapper" aria-hidden="true">
-                                  {{- 'icon-arrow.svg' | inline_asset_content -}}
-                                </span>
-                                {{ block.settings.title | escape }}
-                              </button>
-                              <ul class="menu-drawer__menu list-menu" role="list" tabindex="-1">
-                                {%- if block.settings.link != blank -%}
-                                  <li>
-                                    <a href="{{ block.settings.link }}" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
-                                      View all {{ block.settings.title | escape }}
-                                    </a>
-                                  </li>
-                                {%- endif -%}
-                                {%- for childlink in block.settings.sub_menu.links -%}
-                                  <li>
-                                    {%- if childlink.links == blank -%}
-                                      <a
-                                        href="{{ childlink.url }}"
-                                        class="menu-drawer__menu-item link link--text list-menu__item focus-inset{% if childlink.current %} menu-drawer__menu-item--active{% endif %}"
-                                        {% if childlink.current %}aria-current="page"{% endif %}
-                                      >
-                                        {{ childlink.title | escape }}
-                                      </a>
-                                    {%- else -%}
-                                      <details id="Tg-submenu-{{ block.id }}-{{ childlink.handle }}">
-                                        <summary class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
-                                          {{ childlink.title | escape }}
-                                          <span class="svg-wrapper" aria-hidden="true">
-                                            {{- 'icon-arrow.svg' | inline_asset_content -}}
-                                          </span>
-                                        </summary>
-                                        <div class="menu-drawer__submenu motion-reduce tg-header-mobile-menu-submenu">
-                                          <button class="menu-drawer__close-button link link--text focus-inset" aria-expanded="true">
-                                            <span class="svg-wrapper" aria-hidden="true">
-                                              {{- 'icon-arrow.svg' | inline_asset_content -}}
-                                            </span>
-                                            {{ childlink.title | escape }}
-                                          </button>
-                                          <ul class="menu-drawer__menu list-menu" role="list" tabindex="-1">
-                                            {%- for grandchildlink in childlink.links -%}
-                                              <li>
-                                                <a
-                                                  href="{{ grandchildlink.url }}"
-                                                  class="menu-drawer__menu-item link link--text list-menu__item focus-inset{% if grandchildlink.current %} menu-drawer__menu-item--active{% endif %}"
-                                                  {% if grandchildlink.current %}aria-current="page"{% endif %}
-                                                >
-                                                  {{ grandchildlink.title | escape }}
-                                                </a>
-                                              </li>
-                                            {%- endfor -%}
-                                          </ul>
-                                        </div>
-                                      </details>
-                                    {%- endif -%}
-                                  </li>
-                                {%- endfor -%}
-                              </ul>
-                            </div>
-                          </div>
-                        </details>
-                      {%- else -%}
-                        <a
-                          href="{{ card_link }}"
-                          class="tg-header-mobile-menu-card focus-inset"
-                          style="--tg-header-mobile-menu-card-background: {{ block.settings.background_color }}; --tg-header-mobile-menu-card-text: {{ block.settings.text_color }};"
-                        >
-                          {%- if block.settings.image != blank -%}
-                            {{
-                              block.settings.image
-                              | image_url: width: 120
-                              | image_tag:
-                                class: 'tg-header-mobile-menu-card__image',
-                                widths: '60, 90, 120',
-                                sizes: '38px',
-                                loading: 'lazy',
-                                alt: ''
-                            }}
-                          {%- else -%}
-                            <img
-                              src="{{ block.settings.icon_asset | asset_url }}"
-                              class="tg-header-mobile-menu-card__image"
-                              alt=""
-                              width="60"
-                              height="60"
-                              loading="lazy"
-                            >
-                          {%- endif -%}
-                          <span>{{ block.settings.title | escape }}</span>
-                        </a>
-                      {%- endif -%}
-                    </li>
-                  {%- endif -%}
-                {%- endfor -%}
-              {%- else -%}
-                {%- for link in section.settings.menu.links -%}
-                  {%- liquid
-                    assign fallback_icon = 'tg-menu-icon-occasions.svg'
-                    case forloop.index
-                      when 2
-                        assign fallback_icon = 'tg-menu-icon-interests.svg'
-                      when 3
-                        assign fallback_icon = 'tg-menu-icon-recipients.svg'
-                      when 4
-                        assign fallback_icon = 'tg-menu-icon-home.svg'
-                      when 5
-                        assign fallback_icon = 'tg-menu-icon-apparel.svg'
-                      when 6
-                        assign fallback_icon = 'tg-menu-icon-accessories.svg'
-                      when 7
-                        assign fallback_icon = 'tg-menu-icon-drinkware.svg'
-                      when 8
-                        assign fallback_icon = 'tg-menu-icon-outdoor.svg'
-                    endcase
-                  -%}
-                  <li>
-                    <a href="{{ link.url }}" class="tg-header-mobile-menu-card focus-inset">
-                      <img src="{{ fallback_icon | asset_url }}" class="tg-header-mobile-menu-card__image" alt="" width="60" height="60" loading="lazy">
-                      <span>{{ link.title | escape }}</span>
-                    </a>
-                  </li>
-                {%- endfor -%}
-              {%- endif -%}
-            </ul>
           </nav>
 
           <div class="tg-header-mobile-menu__footer">
-            {%- if mobile_utility_count > 0 -%}
+            {%- if desktop_utility_count > 0 -%}
               <ul class="tg-header-mobile-menu-utilities list-unstyled" role="list">
                 {%- for block in section.blocks -%}
-                  {%- if block.type == 'mobile_utility_link' -%}
-                    {%- assign utility_link = block.settings.link | default: routes.root_url -%}
+                  {%- if block.type == 'tg_header_desktop_utility' and block.settings.link != blank -%}
                     <li {{ block.shopify_attributes }}>
-                      <a href="{{ utility_link }}" class="tg-header-mobile-menu-utility focus-inset">
+                      <a href="{{ block.settings.link }}" class="tg-header-mobile-menu-utility focus-inset">
                         <span>{{ block.settings.title | escape }}</span>
                         <span class="svg-wrapper" aria-hidden="true">{{- 'tg-icon-chevron-right.svg' | inline_asset_content -}}</span>
                       </a>
@@ -297,9 +112,9 @@
 
             {%- if section.settings.tg_header_mobile_menu_show_social -%}
               <ul class="tg-header-mobile-menu-social list-unstyled" role="list">
-                {%- if mobile_social_count > 0 -%}
+                {%- if desktop_social_count > 0 -%}
                   {%- for block in section.blocks -%}
-                    {%- if block.type == 'mobile_social_link' and block.settings.link != blank -%}
+                    {%- if block.type == 'tg_header_desktop_social' and block.settings.link != blank -%}
                       {%- liquid
                         assign social_icon = 'tg-icon-facebook.svg'
                         assign social_label = block.settings.platform | capitalize

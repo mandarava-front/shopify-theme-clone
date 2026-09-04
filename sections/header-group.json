@@ -66,145 +66,16 @@
             "term": "pet memorial"
           }
         },
-        "mobile-feature-summer": {
-          "type": "mobile_feature_card",
-          "settings": {
-            "title": "Summer Picks",
-            "link": "/pages/summer-2026",
-            "icon_asset": "tg-menu-icon-summer.svg",
-            "background_color": "#b3e2f6",
-            "text_color": "#062d8e"
-          }
-        },
-        "mobile-feature-school": {
-          "type": "mobile_feature_card",
-          "settings": {
-            "title": "Back To School",
-            "link": "/pages/back-to-school-2026",
-            "icon_asset": "tg-menu-icon-back-to-school.svg",
-            "background_color": "#d6f1d8",
-            "text_color": "#054815"
-          }
-        },
-        "mobile-menu-occasions": {
-          "type": "mobile_menu_card",
-          "settings": {
-            "title": "Occasions",
-            "link": "/collections/occasions",
-            "sub_menu": "",
-            "icon_asset": "tg-menu-icon-occasions.svg",
-            "background_color": "#ffffff",
-            "text_color": "#202024"
-          }
-        },
-        "mobile-menu-interests": {
-          "type": "mobile_menu_card",
-          "settings": {
-            "title": "Interests",
-            "link": "/collections/interests",
-            "sub_menu": "",
-            "icon_asset": "tg-menu-icon-interests.svg",
-            "background_color": "#ffffff",
-            "text_color": "#202024"
-          }
-        },
-        "mobile-menu-recipients": {
-          "type": "mobile_menu_card",
-          "settings": {
-            "title": "Recipients",
-            "link": "/collections/recipients",
-            "sub_menu": "",
-            "icon_asset": "tg-menu-icon-recipients.svg",
-            "background_color": "#ffffff",
-            "text_color": "#202024"
-          }
-        },
-        "mobile-menu-home": {
-          "type": "mobile_menu_card",
-          "settings": {
-            "title": "Home & Living",
-            "link": "/collections/home-living",
-            "sub_menu": "",
-            "icon_asset": "tg-menu-icon-home.svg",
-            "background_color": "#ffffff",
-            "text_color": "#202024"
-          }
-        },
-        "mobile-menu-apparel": {
-          "type": "mobile_menu_card",
-          "settings": {
-            "title": "Apparel",
-            "link": "/collections/apparel",
-            "sub_menu": "",
-            "icon_asset": "tg-menu-icon-apparel.svg",
-            "background_color": "#ffffff",
-            "text_color": "#202024"
-          }
-        },
-        "mobile-menu-accessories": {
-          "type": "mobile_menu_card",
-          "settings": {
-            "title": "Accessories",
-            "link": "/collections/accessories",
-            "sub_menu": "",
-            "icon_asset": "tg-menu-icon-accessories.svg",
-            "background_color": "#ffffff",
-            "text_color": "#202024"
-          }
-        },
-        "mobile-menu-drinkware": {
-          "type": "mobile_menu_card",
-          "settings": {
-            "title": "Drinkware",
-            "link": "/collections/drinkware",
-            "sub_menu": "",
-            "icon_asset": "tg-menu-icon-drinkware.svg",
-            "background_color": "#ffffff",
-            "text_color": "#202024"
-          }
-        },
-        "mobile-menu-outdoor": {
-          "type": "mobile_menu_card",
-          "settings": {
-            "title": "Outdoor & Lifestyle",
-            "link": "/collections/outdoor",
-            "sub_menu": "",
-            "icon_asset": "tg-menu-icon-outdoor.svg",
-            "background_color": "#ffffff",
-            "text_color": "#202024"
-          }
-        },
-        "mobile-utility-gift-finder": {
-          "type": "mobile_utility_link",
-          "settings": {
-            "title": "Gift Finder",
-            "link": "/pages/gift-finder"
-          }
-        },
-        "mobile-utility-track-order": {
-          "type": "mobile_utility_link",
-          "settings": {
-            "title": "Track Order",
-            "link": "/pages/track-order"
-          }
-        },
-        "mobile-utility-reviews": {
-          "type": "mobile_utility_link",
-          "settings": {
-            "title": "Reviews",
-            "link": "/pages/happy-customers"
-          }
-        },
-        "mobile-social-facebook": {
-          "type": "mobile_social_link",
+        "shared-social-facebook": {
+          "type": "tg_header_desktop_social",
           "settings": {
             "platform": "facebook",
             "link": "https://www.facebook.com/profile.php?id=61593551440607",
             "accessibility_label": ""
           }
         },
-        "mobile-social-instagram": {
-          "type": "mobile_social_link",
+        "shared-social-instagram": {
+          "type": "tg_header_desktop_social",
           "settings": {
             "platform": "instagram",
             "link": "https://www.instagram.com/heartlune_official/",
@@ -245,21 +116,8 @@
       "block_order": [
         "mobile-search-suggestion-summer",
         "mobile-search-suggestion-pet-memorial",
-        "mobile-feature-summer",
-        "mobile-feature-school",
-        "mobile-menu-occasions",
-        "mobile-menu-interests",
-        "mobile-menu-recipients",
-        "mobile-menu-home",
-        "mobile-menu-apparel",
-        "mobile-menu-accessories",
-        "mobile-menu-drinkware",
-        "mobile-menu-outdoor",
-        "mobile-utility-gift-finder",
-        "mobile-utility-track-order",
-        "mobile-utility-reviews",
-        "mobile-social-facebook",
-        "mobile-social-instagram",
+        "shared-social-facebook",
+        "shared-social-instagram",
         "desktop-navigation",
         "desktop-utility-gift-finder",
         "desktop-utility-track-order",
