@@ -118,24 +118,50 @@
                   >
                     <div class="cart-item__media tg-cart-item__media">
                       {%- liquid
+                        assign tg_cart_customized_thumb = item.properties['_customily-thumb']
+                        assign tg_cart_customized_preview = item.properties['_customily-preview']
                         assign tg_cart_item_image = item.image
-                        if tg_cart_item_image == blank
-                          assign tg_cart_item_image = item.variant.image
+                        assign tg_cart_item_image_url = blank
+                        assign tg_cart_item_image_alt = item.product.title
+                        assign tg_cart_item_image_is_customized = false
+
+                        if tg_cart_customized_thumb != blank
+                          assign tg_cart_item_image_url = tg_cart_customized_thumb
+                          assign tg_cart_item_image_is_customized = true
+                        else
+                          if tg_cart_item_image == blank
+                            assign tg_cart_item_image = item.variant.image
+                          endif
+                          if tg_cart_item_image == blank
+                            assign tg_cart_item_image = item.product.featured_image
+                          endif
+                          if tg_cart_item_image != blank
+                            assign tg_cart_item_image_url = tg_cart_item_image | image_url: width: 600
+                            assign tg_cart_item_image_alt = tg_cart_item_image.alt | default: item.product.title
+                          endif
                         endif
-                        if tg_cart_item_image == blank
-                          assign tg_cart_item_image = item.product.featured_image
+
+                        assign tg_cart_preview_image = tg_cart_customized_preview | default: tg_cart_item_image_url
+                        assign tg_cart_preview_fallback_image = tg_cart_item_image_url
+                        if tg_cart_item_image_is_customized
+                          assign tg_cart_preview_fallback_image = item.image | image_url: width: 1600
                         endif
                       -%}
                       {% comment %} Keep a space inside the link because Dawn hides empty anchors. {% endcomment %}
                       <a href="{{ item.url }}" class="cart-item__link" aria-hidden="true" tabindex="-1"> </a>
                       <div class="cart-item__image-container tg-cart-item__image-container">
-                        {%- if tg_cart_item_image != blank -%}
+                        {%- if tg_cart_item_image_url != blank -%}
                           <img
-                            src="{{ tg_cart_item_image | image_url: width: 600 }}"
-                            srcset="{{ tg_cart_item_image | image_url: width: 180 }} 180w, {{ tg_cart_item_image | image_url: width: 360 }} 360w, {{ tg_cart_item_image | image_url: width: 600 }} 600w"
+                            src="{{ tg_cart_item_image_url }}"
+                            {% unless tg_cart_item_image_is_customized %}
+                              srcset="{{ tg_cart_item_image | image_url: width: 180 }} 180w, {{ tg_cart_item_image | image_url: width: 360 }} 360w, {{ tg_cart_item_image | image_url: width: 600 }} 600w"
+                            {% endunless %}
                             sizes="(min-width: 990px) 168px, 104px"
                             class="cart-item__image"
-                            alt="{{ tg_cart_item_image.alt | default: item.product.title | escape }}"
+                            alt="{{ tg_cart_item_image_alt | escape }}"
+                            {% if tg_cart_item_image_is_customized and tg_cart_preview_fallback_image != blank %}
+                              data-tg-cart-image-fallback="{{ tg_cart_preview_fallback_image }}"
+                            {% endif %}
                             {% if forloop.first %}
                               loading="eager"
                               fetchpriority="high"
@@ -143,19 +169,20 @@
                               loading="lazy"
                             {% endif %}
                             width="300"
-                            height="{{ 300 | divided_by: tg_cart_item_image.aspect_ratio | ceil }}"
+                            height="{% if tg_cart_item_image_is_customized %}300{% else %}{{ 300 | divided_by: tg_cart_item_image.aspect_ratio | ceil }}{% endif %}"
                           >
                         {%- else -%}
                           {{ 'product-1' | placeholder_svg_tag: 'tg-cart-item__placeholder placeholder-svg' }}
                         {%- endif -%}
                       </div>
-                      {%- if section.settings.tg_cart_show_preview and tg_cart_item_image != blank -%}
+                      {%- if section.settings.tg_cart_show_preview and tg_cart_preview_image != blank -%}
                         <button
                           class="tg-cart-item__preview button button--tertiary"
                           type="button"
                           data-tg-cart-preview
-                          data-tg-cart-preview-image="{{ tg_cart_item_image | image_url: width: 1600 }}"
-                          data-tg-cart-preview-alt="{{ tg_cart_item_image.alt | default: item.product.title | escape }}"
+                          data-tg-cart-preview-image="{{ tg_cart_preview_image }}"
+                          data-tg-cart-preview-fallback="{{ tg_cart_preview_fallback_image }}"
+                          data-tg-cart-preview-alt="{{ tg_cart_item_image_alt | escape }}"
                           aria-label="{{ section.settings.tg_cart_preview_label | default: 'Preview image' | escape }}: {{ item.product.title | escape }}"
                         >
                           <span class="tg-cart-inline-icon" aria-hidden="true">{{- 'tg-icon-preview.svg' | inline_asset_content -}}</span>
@@ -201,41 +228,22 @@
                       {%- endif -%}
 
                       {%- if section.settings.tg_cart_show_options -%}
-                        {%- if item.product.has_only_default_variant == false
-                          or item.properties.size != 0
-                          or item.selling_plan_allocation != null
+                        {%- assign cart_item_options_modal_id = 'CartItemOptionsModal-page-' | append: item.key | replace: ':', '-' -%}
+                        {%- capture cart_item_options_modal_style -%}
+                          --cart-item-options-accent: {{ section.settings.tg_cart_page_accent_color }};
+                          --cart-item-options-surface: {{ section.settings.tg_cart_page_card_color }};
+                          --cart-item-options-border: {{ section.settings.tg_cart_page_border_color }};
+                          --cart-item-options-text: {{ section.settings.tg_cart_page_text_color }};
+                          --cart-item-options-muted: {{ section.settings.tg_cart_page_muted_color }};
+                          --cart-item-options-radius: {{ section.settings.tg_cart_card_radius }}px;
+                        {%- endcapture -%}
+                        {%- render 'cart-item-options',
+                          item: item,
+                          modal_id: cart_item_options_modal_id,
+                          inline_class: 'tg-cart-item__options',
+                          surface: 'page',
+                          modal_style: cart_item_options_modal_style
                         -%}
-                          <dl class="tg-cart-item__options">
-                          {%- if item.product.has_only_default_variant == false -%}
-                            {%- for option in item.options_with_values -%}
-                              <div class="product-option">
-                                <dt>{{ option.name }}:</dt>
-                                <dd>{{ option.value }}</dd>
-                              </div>
-                            {%- endfor -%}
-                          {%- endif -%}
-
-                          {%- for property in item.properties -%}
-                            {%- assign property_first_char = property.first | slice: 0 -%}
-                            {%- if property.last != blank and property_first_char != '_' -%}
-                              <div class="product-option">
-                                <dt>{{ property.first }}:</dt>
-                                <dd>
-                                  {%- if property.last contains '/uploads/' -%}
-                                    <a href="{{ property.last }}" class="link" target="_blank">
-                                      {{ property.last | split: '/' | last }}
-                                    </a>
-                                  {%- else -%}
-                                    {{ property.last }}
-                                  {%- endif -%}
-                                </dd>
-                              </div>
-                            {%- endif -%}
-                          {%- endfor -%}
-                          </dl>
-
-                          <p class="product-option">{{ item.selling_plan_allocation.selling_plan.name }}</p>
-                        {%- endif -%}
                       {%- endif -%}
 
                       <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">

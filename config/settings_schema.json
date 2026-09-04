@@ -1435,6 +1435,17 @@
         "default": false
       },
       {
+        "type": "header",
+        "content": "Tg | Cart item details"
+      },
+      {
+        "type": "number",
+        "id": "tg_cart_options_inline_limit",
+        "label": "Inline option limit",
+        "info": "When visible options exceed this number, they are shown in a dialog. Set 0 to always use a dialog.",
+        "default": 0
+      },
+      {
         "type": "checkbox",
         "id": "enable_tg_cart_drawer",
         "label": "t:settings_schema.cart.settings.tg_cart_drawer.enable.label",

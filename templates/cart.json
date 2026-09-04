@@ -68,7 +68,6 @@
             "border_color": "#e6e1e3",
             "block_width": 100,
             "padding_inline": 0,
-            "enable_custom_spacing": false,
             "margin_top": 24,
             "margin_bottom": 0
           }
@@ -104,7 +103,6 @@
             "promotion_radius": 8,
             "promotion_font_size": 16,
             "block_width": 100,
-            "enable_custom_spacing": false,
             "margin_top": 24,
             "margin_bottom": 0
           }
@@ -115,8 +113,8 @@
             "label": "Subtotal",
             "show_tax_note": false,
             "custom_tax_note": "",
+            "show_cart_discounts": true,
             "block_width": 100,
-            "enable_custom_spacing": false,
             "margin_top": 24,
             "margin_bottom": 0
           }
@@ -135,7 +133,6 @@
             "checkout_height": 54,
             "checkout_font_size": 24,
             "block_width": 100,
-            "enable_custom_spacing": false,
             "margin_top": 24,
             "margin_bottom": 0
           }
@@ -148,7 +145,6 @@
             "heading": "Payment Methods",
             "show_payment_types": true,
             "block_width": 100,
-            "enable_custom_spacing": false,
             "margin_top": 24,
             "margin_bottom": 0
           }
@@ -170,7 +166,6 @@
             "require_terms": false,
             "terms_label": "I agree with the terms & conditions",
             "block_width": 100,
-            "enable_custom_spacing": false,
             "margin_top": 24,
             "margin_bottom": 0
           }

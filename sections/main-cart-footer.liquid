@@ -71,7 +71,7 @@
               {% render block %}
             {%- else -%}
               <div
-                class="tg-cart-summary__block{% if block.settings.enable_custom_spacing %} tg-cart-summary__block--custom-spacing{% endif %}"
+                class="tg-cart-summary__block"
                 style="--tg-cart-block-width: {{ block.settings.block_width | default: 100 }}%; --tg-cart-block-margin-top: {{ block.settings.margin_top | default: 0 }}px; --tg-cart-block-margin-bottom: {{ block.settings.margin_bottom | default: 0 }}px;"
                 {{ block.shopify_attributes }}
               >
@@ -83,7 +83,7 @@
                 {%- when 'subtotal' -%}
                   <div class="js-contents tg-cart-summary__totals">
                 <div>
-                  {%- if cart.cart_level_discount_applications.size > 0 -%}
+                  {%- if block.settings.show_cart_discounts != false and cart.cart_level_discount_applications.size > 0 -%}
                     <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
                       {%- for discount in cart.cart_level_discount_applications -%}
                         <li class="discounts__discount discounts__discount--position">
@@ -220,7 +220,7 @@
         {% for block in section.blocks %}
           {%- if block.type == 'buyer_protection' -%}
             <div
-              class="tg-cart-summary__block{% if block.settings.enable_custom_spacing %} tg-cart-summary__block--custom-spacing{% endif %}"
+              class="tg-cart-summary__block"
               style="--tg-cart-block-width: {{ block.settings.block_width | default: 100 }}%; --tg-cart-block-margin-top: {{ block.settings.margin_top | default: 0 }}px; --tg-cart-block-margin-bottom: {{ block.settings.margin_bottom | default: 0 }}px;"
               {{ block.shopify_attributes }}
             >
@@ -514,13 +514,6 @@
           "content": "t:sections.tg_cart_editor.labels.block_spacing"
         },
         {
-          "type": "checkbox",
-          "id": "enable_custom_spacing",
-          "label": "t:sections.tg_cart_editor.labels.custom_vertical_margins",
-          "info": "t:sections.tg_cart_editor.labels.when_enabled_this_overrides_the_block_default_margins",
-          "default": false
-        },
-        {
           "type": "range",
           "id": "margin_top",
           "min": 0,
@@ -565,6 +558,12 @@
           "label": "t:sections.tg_cart_editor.labels.custom_tax_and_shipping_note"
         },
         {
+          "type": "checkbox",
+          "id": "show_cart_discounts",
+          "label": "Tg | Show cart discounts",
+          "default": true
+        },
+        {
           "type": "range",
           "id": "block_width",
           "min": 70,
@@ -577,13 +576,6 @@
         {
           "type": "header",
           "content": "t:sections.tg_cart_editor.labels.block_spacing"
-        },
-        {
-          "type": "checkbox",
-          "id": "enable_custom_spacing",
-          "label": "t:sections.tg_cart_editor.labels.custom_vertical_margins",
-          "info": "t:sections.tg_cart_editor.labels.when_enabled_this_overrides_the_block_default_margins",
-          "default": false
         },
         {
           "type": "range",
@@ -705,13 +697,6 @@
         {
           "type": "header",
           "content": "t:sections.tg_cart_editor.labels.block_spacing"
-        },
-        {
-          "type": "checkbox",
-          "id": "enable_custom_spacing",
-          "label": "t:sections.tg_cart_editor.labels.custom_vertical_margins",
-          "info": "t:sections.tg_cart_editor.labels.when_enabled_this_overrides_the_block_default_margins",
-          "default": false
         },
         {
           "type": "range",
@@ -961,13 +946,6 @@
           "content": "t:sections.tg_cart_editor.labels.block_spacing"
         },
         {
-          "type": "checkbox",
-          "id": "enable_custom_spacing",
-          "label": "t:sections.tg_cart_editor.labels.custom_vertical_margins",
-          "info": "t:sections.tg_cart_editor.labels.when_enabled_this_overrides_the_block_default_margins",
-          "default": false
-        },
-        {
           "type": "range",
           "id": "margin_top",
           "min": 0,
@@ -1031,13 +1009,6 @@
         {
           "type": "header",
           "content": "t:sections.tg_cart_editor.labels.block_spacing"
-        },
-        {
-          "type": "checkbox",
-          "id": "enable_custom_spacing",
-          "label": "t:sections.tg_cart_editor.labels.custom_vertical_margins",
-          "info": "t:sections.tg_cart_editor.labels.when_enabled_this_overrides_the_block_default_margins",
-          "default": false
         },
         {
           "type": "range",
@@ -1173,13 +1144,6 @@
           "content": "t:sections.tg_cart_editor.labels.block_spacing"
         },
         {
-          "type": "checkbox",
-          "id": "enable_custom_spacing",
-          "label": "t:sections.tg_cart_editor.labels.custom_vertical_margins",
-          "info": "t:sections.tg_cart_editor.labels.when_enabled_this_overrides_the_block_default_margins",
-          "default": false
-        },
-        {
           "type": "range",
           "id": "margin_top",
           "min": 0,
@@ -1256,13 +1220,6 @@
           "content": "t:sections.tg_cart_editor.labels.block_spacing"
         },
         {
-          "type": "checkbox",
-          "id": "enable_custom_spacing",
-          "label": "t:sections.tg_cart_editor.labels.custom_vertical_margins",
-          "info": "t:sections.tg_cart_editor.labels.when_enabled_this_overrides_the_block_default_margins",
-          "default": false
-        },
-        {
           "type": "range",
           "id": "margin_top",
           "min": 0,
@@ -1323,13 +1280,6 @@
         {
           "type": "header",
           "content": "t:sections.tg_cart_editor.labels.block_spacing"
-        },
-        {
-          "type": "checkbox",
-          "id": "enable_custom_spacing",
-          "label": "t:sections.tg_cart_editor.labels.custom_vertical_margins",
-          "info": "t:sections.tg_cart_editor.labels.when_enabled_this_overrides_the_block_default_margins",
-          "default": false
         },
         {
           "type": "range",

@@ -70,8 +70,10 @@
     dialog.className = 'tg-cart-preview-dialog';
     dialog.innerHTML = `
       <div class="tg-cart-preview-dialog__content" role="document">
-        <button class="tg-cart-preview-dialog__close button button--tertiary" type="button" data-tg-cart-preview-close aria-label="Close preview">
-          <span aria-hidden="true">&times;</span>
+        <button class="tg-cart-preview-dialog__close" type="button" data-tg-cart-preview-close aria-label="Close preview">
+          <svg class="tg-cart-preview-dialog__close-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M6 6l12 12M18 6 6 18"></path>
+          </svg>
         </button>
         <img class="tg-cart-preview-dialog__image" alt="">
       </div>
@@ -79,6 +81,13 @@
     document.body.append(dialog);
     dialog.addEventListener('click', (event) => {
       if (event.target === dialog || event.target.closest('[data-tg-cart-preview-close]')) dialog.close();
+    });
+    const image = dialog.querySelector('.tg-cart-preview-dialog__image');
+    image.addEventListener('error', () => {
+      const fallback = image.dataset.fallback;
+      if (!fallback || image.src === fallback) return;
+      image.dataset.failed = 'true';
+      image.src = fallback;
     });
     return dialog;
   }
@@ -94,6 +103,8 @@
     const dialog = getPreviewDialog();
     const image = dialog.querySelector('.tg-cart-preview-dialog__image');
     image.src = imageUrl;
+    image.dataset.fallback = trigger.dataset.tgCartPreviewFallback || '';
+    image.dataset.failed = 'false';
     image.alt = trigger.dataset.tgCartPreviewAlt || '';
 
     if (typeof dialog.showModal === 'function') dialog.showModal();
