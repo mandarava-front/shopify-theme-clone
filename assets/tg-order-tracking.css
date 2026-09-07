@@ -1,16 +1,17 @@
 .tg-order-tracking {
-  --tracking-border: rgba(var(--color-foreground), 0.16);
-  --tracking-border-strong: rgba(var(--color-foreground), 0.28);
-  --tracking-muted: rgba(var(--color-foreground), 0.7);
-  --tracking-subtle: rgba(var(--color-foreground), 0.055);
-  --tracking-primary: rgb(var(--color-button));
-  --tracking-on-primary: rgb(var(--color-button-text));
+  --tracking-border: rgba(var(--color-foreground, 39, 35, 40), 0.16);
+  --tracking-border-strong: rgba(var(--color-foreground, 39, 35, 40), 0.5);
+  --tracking-muted: rgba(var(--color-foreground, 39, 35, 40), 0.7);
+  --tracking-subtle: rgba(var(--color-foreground, 39, 35, 40), 0.035);
+  --tracking-placeholder: color-mix(in srgb, rgb(var(--color-foreground, 39, 35, 40)) 68%, rgb(var(--color-background, 255, 255, 255)));
+  --tracking-primary: rgb(var(--color-button, 39, 35, 40));
+  --tracking-on-primary: rgb(var(--color-button-text, 255, 255, 255));
   --tracking-warning-surface: #fff4df;
   --tracking-error: #b42318;
   --tracking-error-surface: #fff0ee;
   --tracking-info-surface: #eef4ff;
   --tracking-info-accent: #175cd3;
-  color: rgb(var(--color-foreground));
+  color: rgb(var(--color-foreground, 39, 35, 40));
   font-family: var(--font-body-family);
   font-style: var(--font-body-style);
   letter-spacing: 0;
@@ -29,6 +30,11 @@
   padding-bottom: calc(var(--tracking-padding-bottom) * 0.75);
 }
 
+.tg-order-tracking ::selection {
+  background: var(--tracking-primary);
+  color: var(--tracking-on-primary);
+}
+
 .tg-order-tracking__component {
   display: block;
   width: 100%;
@@ -38,9 +44,8 @@
   width: 100%;
   overflow: hidden;
   border: 1px solid var(--tracking-border);
-  border-radius: 0.8rem;
-  background: rgb(var(--color-background));
-  box-shadow: 0 1.2rem 3.6rem rgba(var(--color-shadow), 0.08);
+  border-radius: 1.2rem;
+  background: rgb(var(--color-background, 255, 255, 255));
 }
 
 .tg-order-tracking__form-card {
@@ -80,7 +85,7 @@
 
 .tg-order-tracking__heading {
   margin: 2rem 0 0;
-  color: rgb(var(--color-foreground));
+  color: rgb(var(--color-foreground, 39, 35, 40));
   font-family: var(--font-heading-family);
   font-size: 2.6rem;
   font-style: var(--font-heading-style);
@@ -100,13 +105,13 @@
 
 .tg-order-tracking__form {
   display: grid;
-  gap: 1.6rem;
+  gap: 2rem;
 }
 
 .tg-order-tracking__field label {
   display: inline-block;
   margin-bottom: 0.8rem;
-  color: rgb(var(--color-foreground));
+  color: rgb(var(--color-foreground, 39, 35, 40));
   font-size: 1.4rem;
   font-weight: 600;
   line-height: 1.4;
@@ -122,22 +127,25 @@
   border: 1px solid var(--tracking-border-strong);
   border-radius: 0.8rem;
   padding: 1.2rem 1.4rem;
-  background: rgb(var(--color-background));
-  color: rgb(var(--color-foreground));
+  background: rgb(var(--color-background, 255, 255, 255));
+  color: rgb(var(--color-foreground, 39, 35, 40));
   font: inherit;
   font-size: 1.6rem;
   letter-spacing: 0;
   line-height: 1.4;
+  caret-color: var(--tracking-primary);
   transition: border-color 180ms ease;
 }
 
 .tg-order-tracking__input::placeholder {
-  color: rgba(var(--color-foreground), 0.52);
+  color: var(--tracking-placeholder);
+  font-size: 1.4rem;
+  font-weight: 400;
   opacity: 1;
 }
 
 .tg-order-tracking__input:hover:not(:disabled) {
-  border-color: rgba(var(--color-foreground), 0.48);
+  border-color: rgba(var(--color-foreground, 39, 35, 40), 0.48);
 }
 
 .tg-order-tracking__submit:focus-visible,
@@ -146,7 +154,7 @@
 .tg-order-tracking__carrier-link:focus-visible,
 .tg-order-tracking__dialog-action:focus-visible,
 .tg-order-tracking__dialog-close:focus-visible {
-  outline: 0.3rem solid rgba(var(--color-button), 0.35);
+  outline: 0.3rem solid rgba(var(--color-button, 39, 35, 40), 0.35);
   outline-offset: 0.3rem;
 }
 
@@ -290,7 +298,7 @@
   padding: 0;
   overflow: visible;
   background: transparent;
-  color: rgb(var(--color-foreground));
+  color: rgb(var(--color-foreground, 39, 35, 40));
 }
 
 .tg-order-tracking__dialog:not([open]) {
@@ -313,7 +321,7 @@
   position: relative;
   overflow: hidden;
   border-radius: 1.2rem;
-  background: rgb(var(--color-background));
+  background: rgb(var(--color-background, 255, 255, 255));
   box-shadow: 0 2.4rem 6rem rgba(20, 14, 16, 0.24);
 }
 
@@ -322,8 +330,8 @@
   top: 1.2rem;
   right: 1.2rem;
   display: inline-flex;
-  width: 3.6rem;
-  height: 3.6rem;
+  width: 4.4rem;
+  height: 4.4rem;
   align-items: center;
   justify-content: center;
   border: 0;
@@ -336,7 +344,7 @@
 
 .tg-order-tracking__dialog-close:hover {
   background: var(--tracking-subtle);
-  color: rgb(var(--color-foreground));
+  color: rgb(var(--color-foreground, 39, 35, 40));
 }
 
 .tg-order-tracking__dialog-close svg {
@@ -428,7 +436,7 @@
 }
 
 .tg-order-tracking__dialog-action:hover {
-  color: rgb(var(--color-foreground));
+  color: rgb(var(--color-foreground, 39, 35, 40));
 }
 
 .tg-order-tracking__dialog-action--primary {
@@ -528,7 +536,7 @@
 }
 
 .tg-order-tracking__back:hover {
-  color: rgb(var(--color-foreground));
+  color: rgb(var(--color-foreground, 39, 35, 40));
 }
 
 .tg-order-tracking__back-icon {
@@ -549,7 +557,7 @@
 .tg-order-tracking__order-number {
   min-width: 0;
   margin: 0;
-  color: rgb(var(--color-foreground));
+  color: rgb(var(--color-foreground, 39, 35, 40));
   font-family: var(--font-heading-family);
   font-size: 2rem;
   font-style: var(--font-heading-style);
@@ -574,7 +582,7 @@
 
 .tg-order-tracking__carrier {
   margin: 0;
-  color: rgb(var(--color-foreground));
+  color: rgb(var(--color-foreground, 39, 35, 40));
   font-size: 1.8rem;
   font-weight: 700;
   line-height: 1.35;
@@ -604,7 +612,7 @@
   display: block;
   min-width: 0;
   flex: 0 1 auto;
-  color: rgb(var(--color-foreground));
+  color: rgb(var(--color-foreground, 39, 35, 40));
   font-size: 1.5rem;
   font-variant-numeric: tabular-nums;
   font-weight: 700;
@@ -624,7 +632,7 @@
   border-radius: 50%;
   padding: 0;
   background: transparent;
-  color: rgb(var(--color-foreground));
+  color: rgb(var(--color-foreground, 39, 35, 40));
   cursor: pointer;
   font: inherit;
   letter-spacing: 0;
@@ -652,7 +660,7 @@
 
 .tg-order-tracking__section-heading {
   margin: 0 0 1.8rem;
-  color: rgb(var(--color-foreground));
+  color: rgb(var(--color-foreground, 39, 35, 40));
   font-size: 1.6rem;
   font-weight: 700;
   line-height: 1.35;
@@ -696,7 +704,7 @@
   z-index: 1;
   width: 1.6rem;
   height: 1.6rem;
-  border: 0.3rem solid rgb(var(--color-background));
+  border: 0.3rem solid rgb(var(--color-background, 255, 255, 255));
   border-radius: 50%;
   background: var(--tracking-border-strong);
   box-shadow: 0 0 0 1px var(--tracking-border-strong);
@@ -723,7 +731,7 @@
   min-width: 0;
   flex: 1 1 24rem;
   margin: 0;
-  color: rgb(var(--color-foreground));
+  color: rgb(var(--color-foreground, 39, 35, 40));
   font-size: 1.4rem;
   font-weight: 600;
   line-height: 1.5;
@@ -738,7 +746,7 @@
   border-radius: 999px;
   padding: 0.3rem 0.8rem;
   background: var(--tracking-subtle);
-  color: rgb(var(--color-foreground));
+  color: rgb(var(--color-foreground, 39, 35, 40));
   font-size: 1.1rem;
   font-weight: 700;
   line-height: 1.2;
@@ -766,7 +774,7 @@
   align-items: center;
   gap: 0.8rem;
   margin-top: 2.4rem;
-  color: rgb(var(--color-foreground));
+  color: rgb(var(--color-foreground, 39, 35, 40));
   font-size: 1.4rem;
   font-weight: 700;
   line-height: 1.35;
@@ -792,16 +800,16 @@
 
   .tg-order-tracking__form-card {
     display: flex;
-    height: 400px;
-    align-items: center;
-    overflow-y: auto;
+    min-height: 400px;
+    flex-direction: column;
+    justify-content: center;
     padding: 4rem;
   }
 
   .tg-order-tracking__form-layout {
     width: 100%;
-    grid-template-columns: minmax(0, 0.9fr) minmax(34rem, 1.1fr);
-    gap: 5.6rem;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    gap: 4.8rem;
     align-items: center;
   }
 

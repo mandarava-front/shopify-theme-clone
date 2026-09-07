@@ -7,7 +7,7 @@
     invalidEmail: 'Enter a valid email address.',
     notFoundTitle: 'We could not find that order',
     notFound:
-      'Please check that the order number is complete (for example #TG123456) and that the email address matches the one on your order confirmation. Orders placed in the last few minutes may take a little while to appear.',
+      'Please check that your order number and email address match your order confirmation. Orders placed in the last few minutes may take a little while to appear.',
     noShipmentTitle: 'Your order is being prepared',
     noShipment:
       'Good news — we found your order! It has not shipped yet, so there is no tracking information available. Your items are still being produced and packed at our workshop. As soon as the carrier collects your parcel, the tracking number will appear here and we will email it to you.',
@@ -61,13 +61,13 @@
       if (!this.form || !this.config) return;
 
       this.onSubmit = this.handleSubmit.bind(this);
-      this.onFieldBlur = this.handleFieldBlur.bind(this);
+      this.onFieldInput = this.handleFieldInput.bind(this);
       this.onDialogClick = this.handleDialogClick.bind(this);
       this.onDialogClose = this.handleDialogClose.bind(this);
       this.onDialogCloseClick = () => this.closeDialog();
       this.form.addEventListener('submit', this.onSubmit);
-      this.orderInput?.addEventListener('blur', this.onFieldBlur);
-      this.emailInput?.addEventListener('blur', this.onFieldBlur);
+      this.orderInput?.addEventListener('input', this.onFieldInput);
+      this.emailInput?.addEventListener('input', this.onFieldInput);
       this.dialog?.addEventListener('click', this.onDialogClick);
       this.dialog?.addEventListener('close', this.onDialogClose);
       this.dialogCloseButton?.addEventListener('click', this.onDialogCloseClick);
@@ -76,8 +76,8 @@
     disconnectedCallback() {
       this.controller?.abort();
       this.form?.removeEventListener('submit', this.onSubmit);
-      this.orderInput?.removeEventListener('blur', this.onFieldBlur);
-      this.emailInput?.removeEventListener('blur', this.onFieldBlur);
+      this.orderInput?.removeEventListener('input', this.onFieldInput);
+      this.emailInput?.removeEventListener('input', this.onFieldInput);
       this.dialog?.removeEventListener('click', this.onDialogClick);
       this.dialog?.removeEventListener('close', this.onDialogClose);
       this.dialogCloseButton?.removeEventListener('click', this.onDialogCloseClick);
@@ -153,7 +153,8 @@
       }, {});
     }
 
-    handleFieldBlur(event) {
+    // Clear corrected errors while typing so blur cannot move the submit button during a click.
+    handleFieldInput(event) {
       const field = event.currentTarget;
 
       if (field === this.orderInput && field.value.trim()) {
@@ -190,6 +191,7 @@
         const endpoint = new URL(this.config.endpoint, window.location.origin);
         endpoint.searchParams.set('orderNumber', values.orderNumber);
         endpoint.searchParams.set('email', values.email);
+        endpoint.searchParams.set('shopName', this.config.shopName);
 
         const response = await fetch(endpoint, {
           method: 'GET',

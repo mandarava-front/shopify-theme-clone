@@ -3,6 +3,14 @@
 
 {%- liquid
   assign tracking_endpoint = section.settings.proxy_endpoint | strip
+  assign order_number_placeholder = section.settings.order_number_placeholder | strip
+  if order_number_placeholder == blank or order_number_placeholder == 'Example: #TG123456'
+    assign order_number_placeholder = 'e.g. 1001'
+  endif
+  assign email_placeholder = section.settings.email_placeholder | strip
+  if email_placeholder == blank or email_placeholder == 'you@example.com'
+    assign email_placeholder = 'Email used at checkout'
+  endif
   assign tracking_configured = false
   if tracking_endpoint != blank
     assign tracking_configured = true
@@ -10,7 +18,7 @@
 -%}
 
 <section
-  class="tg-order-tracking color-{{ section.settings.color_scheme }} gradient"
+  class="tg-order-tracking color-{{ section.settings.color_scheme | default: 'scheme-1' }} gradient"
   style="--tracking-padding-top: {{ section.settings.padding_top }}px; --tracking-padding-bottom: {{ section.settings.padding_bottom }}px;"
   data-section-id="{{ section.id }}"
 >
@@ -41,7 +49,7 @@
                 class="tg-order-tracking__input"
                 type="text"
                 name="orderNumber"
-                placeholder="{{ section.settings.order_number_placeholder | escape }}"
+                placeholder="{{ order_number_placeholder | escape }}"
                 autocomplete="off"
                 autocapitalize="characters"
                 aria-describedby="TrackingOrderNumberError-{{ section.id }}"
@@ -67,7 +75,7 @@
                 class="tg-order-tracking__input"
                 type="email"
                 name="email"
-                placeholder="{{ section.settings.email_placeholder | escape }}"
+                placeholder="{{ email_placeholder | escape }}"
                 autocomplete="email"
                 autocapitalize="none"
                 spellcheck="false"
@@ -112,7 +120,7 @@
 
         {%- if request.design_mode and tracking_endpoint == blank -%}
           <p class="tg-order-tracking__editor-note">
-            Theme editor: add the Shopify App Proxy path in the "Proxy endpoint" setting to enable tracking.
+            Theme editor: add the tracking API URL in the "Proxy endpoint" setting to enable tracking.
           </p>
         {%- endif -%}
       </div>
@@ -149,6 +157,7 @@
       <script type="application/json" data-tracking-config>
         {
           "endpoint": {{ tracking_endpoint | json }},
+          "shopName": {{ shop.permanent_domain | remove: '.com' | json }},
           "locale": {{ request.locale.iso_code | json }},
           "contactUrl": {{ section.settings.contact_page.url | json }},
           "submitLabel": {{ section.settings.submit_label | json }},
@@ -204,7 +213,7 @@
       "type": "text",
       "id": "order_number_placeholder",
       "label": "t:tg_order_tracking.settings.order_number_placeholder",
-      "default": "Example: #TG123456"
+      "default": "e.g. 1001"
     },
     {
       "type": "text",
@@ -216,7 +225,7 @@
       "type": "text",
       "id": "email_placeholder",
       "label": "t:tg_order_tracking.settings.email_placeholder",
-      "default": "you@example.com"
+      "default": "Email used at checkout"
     },
     {
       "type": "text",
@@ -258,7 +267,7 @@
       "id": "not_found_message",
       "label": "t:tg_order_tracking.settings.not_found_message",
       "info": "t:tg_order_tracking.info.not_found_message",
-      "default": "Please check that the order number is complete (for example #TG123456) and that the email address matches the one on your order confirmation. Orders placed in the last few minutes may take a little while to appear."
+      "default": "Please check that your order number and email address match your order confirmation. Orders placed in the last few minutes may take a little while to appear."
     },
     {
       "type": "textarea",
