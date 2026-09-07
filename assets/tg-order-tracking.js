@@ -3,7 +3,7 @@
   const defaultStrings = Object.freeze({
     submit: 'TRACK ORDER',
     loading: 'CHECKING ORDER...',
-    invalidOrder: 'Enter your order number.',
+    invalidOrder: 'Enter an order number using digits only (e.g. 1001).',
     invalidEmail: 'Enter a valid email address.',
     notFoundTitle: 'We could not find that order',
     notFound:
@@ -157,7 +157,7 @@
     handleFieldInput(event) {
       const field = event.currentTarget;
 
-      if (field === this.orderInput && field.value.trim()) {
+      if (field === this.orderInput && /^\d+$/.test(this.normalizeOrderNumber(field.value))) {
         this.clearFieldError('orderNumber');
       }
 
@@ -304,15 +304,20 @@
       };
     }
 
+    normalizeOrderNumber(value) {
+      // Trim pasted punctuation at the edges without joining separate numbers or removing letters.
+      return value.trim().replace(/^[\p{P}\p{S}\s]+|[\p{P}\p{S}\s]+$/gu, '');
+    }
+
     validateForm() {
       this.clearFieldError('orderNumber');
       this.clearFieldError('email');
 
-      const orderNumber = this.orderInput?.value.trim() || '';
+      const orderNumber = this.normalizeOrderNumber(this.orderInput?.value || '');
       const email = this.emailInput?.value.trim().toLowerCase() || '';
       let firstInvalidField = null;
 
-      if (!orderNumber) {
+      if (!/^\d+$/.test(orderNumber)) {
         this.setFieldError('orderNumber', this.config.strings.invalidOrder);
         firstInvalidField = this.orderInput;
       }

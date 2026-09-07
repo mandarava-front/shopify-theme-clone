@@ -49,9 +49,11 @@
                 class="tg-order-tracking__input"
                 type="text"
                 name="orderNumber"
+                inputmode="numeric"
                 placeholder="{{ order_number_placeholder | escape }}"
                 autocomplete="off"
-                autocapitalize="characters"
+                autocapitalize="none"
+                spellcheck="false"
                 aria-describedby="TrackingOrderNumberError-{{ section.id }}"
                 required
                 {% unless tracking_configured %}disabled{% endunless %}
