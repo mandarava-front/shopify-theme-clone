@@ -29,126 +29,155 @@
   data-collection-id="{{ collection.id }}"
   style="--mcc-background: {{ section.settings.background }}; --mcc-text: {{ section.settings.text_color }}; --mcc-muted: {{ section.settings.muted_color }}; --mcc-accent: {{ section.settings.accent_color }}; --mcc-price: {{ section.settings.price_color }}; --mcc-border: {{ section.settings.border_color }}; --mcc-facet-width: {{ section.settings.facet_width }}px; --mcc-layout-gap: {{ section.settings.layout_gap }}px; --mcc-column-gap: {{ section.settings.column_gap }}px; --mcc-row-gap: {{ section.settings.row_gap }}px; --mcc-columns-desktop: {{ section.settings.columns_desktop }}; --mcc-card-radius: {{ section.settings.card_radius }}px; --mcc-grid-top: {{ section.settings.padding_top }}px; --mcc-grid-bottom: {{ section.settings.padding_bottom }}px;"
 >
-  <tg-collection-controls class="tg-collection__mobile-controls">
-    <div class="tg-collection__mobile-toolbar" aria-label="{{ 'products.facets.filter_and_sort' | t }}">
-      {% if section.settings.enable_filtering %}
-        <button
-          type="button"
-          class="tg-collection__toolbar-button"
-          data-tg-collection-filter
-          data-tg-mobile-facets-label="{{ tg_collection_filter_label | escape }}"
-          aria-controls="MobileFacetsDisclosure-{{ section.id }}"
-          aria-expanded="false"
-        >
-          <span class="svg-wrapper" aria-hidden="true">{{- 'icon-filter.svg' | inline_asset_content -}}</span>
-          <span>{{ tg_collection_filter_label }}</span>
-          <span class="tg-collection__toolbar-badge" data-tg-collection-filter-count aria-hidden="true" hidden></span>
-        </button>
-      {% endif %}
-      {% if section.settings.enable_sorting %}
-        <button
-          type="button"
-          class="tg-collection__toolbar-button"
-          data-tg-collection-sort
-          data-tg-mobile-facets-label="{{ tg_collection_sort_by_label | escape }}"
-          aria-controls="MobileFacetsDisclosure-{{ section.id }}"
-          aria-expanded="false"
-        >
-          <span>{{ tg_collection_sort_button_label }}</span>
-          <span class="svg-wrapper" aria-hidden="true">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
-        </button>
-      {% endif %}
-    </div>
+  {% if collection.products.size > 0 %}
+    <tg-collection-controls class="tg-collection__mobile-controls">
+      <div class="tg-collection__mobile-toolbar" aria-label="{{ 'products.facets.filter_and_sort' | t }}">
+        {% if section.settings.enable_filtering %}
+          <button
+            type="button"
+            class="tg-collection__toolbar-button"
+            data-tg-collection-filter
+            data-tg-mobile-facets-label="{{ tg_collection_filter_label | escape }}"
+            aria-controls="MobileFacetsDisclosure-{{ section.id }}"
+            aria-expanded="false"
+          >
+            <span class="svg-wrapper" aria-hidden="true">{{- 'icon-filter.svg' | inline_asset_content -}}</span>
+            <span>{{ tg_collection_filter_label }}</span>
+            <span class="tg-collection__toolbar-badge" data-tg-collection-filter-count aria-hidden="true" hidden></span>
+          </button>
+        {% endif %}
+        {% if section.settings.enable_sorting %}
+          <button
+            type="button"
+            class="tg-collection__toolbar-button"
+            data-tg-collection-sort
+            data-tg-mobile-facets-label="{{ tg_collection_sort_by_label | escape }}"
+            aria-controls="MobileFacetsDisclosure-{{ section.id }}"
+            aria-expanded="false"
+          >
+            <span>{{ tg_collection_sort_button_label }}</span>
+            <span class="svg-wrapper" aria-hidden="true">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+          </button>
+        {% endif %}
+      </div>
 
-  </tg-collection-controls>
+    </tg-collection-controls>
+  {% endif %}
 
   <div class="tg-collection__width">
     {% if template.name == 'collection' %}
       {% paginate collection.products by section.settings.products_per_page %}
-        <div class="{% if section.settings.filter_type == 'vertical' %}facets-vertical{% endif %}">
-          {% if section.settings.enable_filtering or section.settings.enable_sorting %}
-            <aside class="facets-wrapper" id="main-collection-filters" data-id="{{ section.id }}">
-              {% render 'facets', results: collection, enable_filtering: section.settings.enable_filtering, enable_sorting: section.settings.enable_sorting, filter_type: section.settings.filter_type, paginate: paginate, price_facet_style: 'tg_collection', price_currency_mode: section.settings.price_currency_mode, price_currency_label: section.settings.price_currency_label %}
-            </aside>
+        <div class="{% if collection.products.size > 0 and section.settings.filter_type == 'vertical' %}facets-vertical{% endif %}">
+          {% if collection.products.size > 0 %}
+            {% if section.settings.enable_filtering or section.settings.enable_sorting %}
+              <aside class="facets-wrapper" id="main-collection-filters" data-id="{{ section.id }}">
+                {% render 'facets', results: collection, enable_filtering: section.settings.enable_filtering, enable_sorting: section.settings.enable_sorting, filter_type: section.settings.filter_type, paginate: paginate, price_facet_style: 'tg_collection', price_currency_mode: section.settings.price_currency_mode, price_currency_label: section.settings.price_currency_label %}
+              </aside>
+            {% endif %}
           {% endif %}
 
           <div class="product-grid-container" id="ProductGridContainer">
-            {% if section.settings.enable_sorting %}
-              <facet-filters-form class="tg-collection__results-header small-hide">
-                <form class="facets-vertical-form" id="FacetSortForm">
-                  <div class="product-count-vertical" role="status">
-                    <span id="ProductCountDesktop" data-product-count="{{ collection.products_count }}">{{ 'products.facets.product_count_simple' | t: count: collection.products_count }}</span>
-                    {% render 'loading-spinner' %}
-                  </div>
-                  <div class="facet-filters sorting">
-                    <div class="facet-filters__field">
-                      <label class="visually-hidden" for="SortBy">{{ tg_collection_sort_by_label }}</label>
-                      <tg-collection-sort class="tg-collection__sort-dropdown">
-                        <details class="tg-collection__sort-disclosure">
-                          <summary
-                            class="tg-collection__sort-trigger"
-                            id="SortBy"
-                            role="button"
-                            aria-expanded="false"
-                            aria-haspopup="listbox"
-                            aria-controls="TgCollectionSortOptions-{{ section.id }}"
-                          >
-                            <span>{{ tg_collection_sort_button_label | escape }}</span>
-                            <span class="svg-wrapper" aria-hidden="true">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
-                          </summary>
-                          <ul
-                            class="tg-collection__sort-options"
-                            id="TgCollectionSortOptions-{{ section.id }}"
-                            role="listbox"
-                            aria-labelledby="SortBy"
-                          >
-                            {% for option in collection.sort_options %}
-                              <li role="none">
-                                <button
-                                  type="button"
-                                  role="option"
-                                  data-tg-collection-sort-option="{{ option.value | escape }}"
-                                  aria-selected="{% if option.value == tg_collection_sort_by %}true{% else %}false{% endif %}"
-                                >
-                                  {{ option.name | escape }}
-                                </button>
-                              </li>
-                            {% endfor %}
-                          </ul>
-                        </details>
-                        <input type="hidden" name="sort_by" value="{{ tg_collection_sort_by | escape }}">
-                      </tg-collection-sort>
+            {% if collection.products.size > 0 %}
+              {% if section.settings.enable_sorting %}
+                <facet-filters-form class="tg-collection__results-header small-hide">
+                  <form class="facets-vertical-form" id="FacetSortForm">
+                    <div class="product-count-vertical" role="status">
+                      <span id="ProductCountDesktop" data-product-count="{{ collection.products_count }}">{{ 'products.facets.product_count_simple' | t: count: collection.products_count }}</span>
+                      {% render 'loading-spinner' %}
                     </div>
-                  </div>
-                </form>
-              </facet-filters-form>
-            {% endif %}
-
-            {% if collection.products.size == 0 %}
-              <div class="collection tg-collection-empty" id="product-grid" data-id="{{ section.id }}">
-                <div class="loading-overlay gradient"></div>
-                <h2 class="tg-collection-empty__heading">{{ section.settings.empty_heading | escape }}</h2>
-                {% if section.settings.empty_text != blank %}<p class="tg-collection-empty__text">{{ section.settings.empty_text | escape }}</p>{% endif %}
-                <a class="tg-collection-empty__button" href="{{ section.settings.empty_link | default: collection.url }}">{{ section.settings.empty_button_label | escape }}</a>
-              </div>
-            {% else %}
+                    <div class="facet-filters sorting">
+                      <div class="facet-filters__field">
+                        <label class="visually-hidden" for="SortBy">{{ tg_collection_sort_by_label }}</label>
+                        <tg-collection-sort class="tg-collection__sort-dropdown">
+                          <details class="tg-collection__sort-disclosure">
+                            <summary
+                              class="tg-collection__sort-trigger"
+                              id="SortBy"
+                              role="button"
+                              aria-expanded="false"
+                              aria-haspopup="listbox"
+                              aria-controls="TgCollectionSortOptions-{{ section.id }}"
+                            >
+                              <span>{{ tg_collection_sort_button_label | escape }}</span>
+                              <span class="svg-wrapper" aria-hidden="true">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+                            </summary>
+                            <ul
+                              class="tg-collection__sort-options"
+                              id="TgCollectionSortOptions-{{ section.id }}"
+                              role="listbox"
+                              aria-labelledby="SortBy"
+                            >
+                              {% for option in collection.sort_options %}
+                                <li role="none">
+                                  <button
+                                    type="button"
+                                    role="option"
+                                    data-tg-collection-sort-option="{{ option.value | escape }}"
+                                    aria-selected="{% if option.value == tg_collection_sort_by %}true{% else %}false{% endif %}"
+                                  >
+                                    {{ option.name | escape }}
+                                  </button>
+                                </li>
+                              {% endfor %}
+                            </ul>
+                          </details>
+                          <input type="hidden" name="sort_by" value="{{ tg_collection_sort_by | escape }}">
+                        </tg-collection-sort>
+                      </div>
+                    </div>
+                  </form>
+                </facet-filters-form>
+              {% endif %}
               {% render 'tg-collection-product-grid', products: collection.products, section: section %}
               {% if paginate.pages > 1 %}
                 {% render 'pagination', paginate: paginate, anchor: '' %}
+              {% endif %}
+            {% else %}
+              <div class="collection tg-collection-empty" id="product-grid" data-id="{{ section.id }}">
+                <div class="loading-overlay gradient"></div>
+                <div class="tg-collection-empty__content">
+                  <span class="tg-collection-empty__icon" aria-hidden="true">{{- 'icon-search.svg' | inline_asset_content -}}</span>
+                  {% if section.settings.empty_heading != blank %}<h2 class="tg-collection-empty__heading">{{ section.settings.empty_heading | escape }}</h2>{% endif %}
+                  {% if section.settings.empty_text != blank %}<p class="tg-collection-empty__text">{{ section.settings.empty_text | escape }}</p>{% endif %}
+                  {% if section.settings.empty_button_label != blank %}<a class="tg-collection-empty__button" href="{{ section.settings.empty_link | default: collection.url }}">{{ section.settings.empty_button_label | escape }}</a>{% endif %}
+                </div>
+              </div>
+              {% if section.settings.empty_collection != blank %}
+                {% assign tg_empty_collection_products = section.settings.empty_collection.products %}
+                {% if tg_empty_collection_products.size > 0 %}
+                  {% assign tg_empty_grid_id = 'tg-empty-product-grid-' | append: section.id %}
+                  <section class="tg-collection-empty__recommendations" aria-labelledby="tg-empty-recommendations-{{ section.id }}">
+                    <h2 id="tg-empty-recommendations-{{ section.id }}" class="tg-collection-empty__recommendations-heading">{{ section.settings.empty_collection.title | escape }}</h2>
+                    {% render 'tg-collection-product-grid', products: tg_empty_collection_products, section: section, grid_id: tg_empty_grid_id %}
+                  </section>
+                {% endif %}
               {% endif %}
             {% endif %}
           </div>
         </div>
       {% endpaginate %}
     {% else %}
-      {% assign tg_collection_products = collection.products | slice: 0, section.settings.products_per_page %}
+      {% assign tg_collection_products = collection.products %}
       {% if tg_collection_products.size == 0 %}
         <div class="collection tg-collection-empty" id="product-grid" data-id="{{ section.id }}">
           <div class="loading-overlay gradient"></div>
-          <h2 class="tg-collection-empty__heading">{{ section.settings.empty_heading | escape }}</h2>
-          {% if section.settings.empty_text != blank %}<p class="tg-collection-empty__text">{{ section.settings.empty_text | escape }}</p>{% endif %}
-          <a class="tg-collection-empty__button" href="{{ section.settings.empty_link | default: routes.all_products_collection_url }}">{{ section.settings.empty_button_label | escape }}</a>
+          <div class="tg-collection-empty__content">
+            <span class="tg-collection-empty__icon" aria-hidden="true">{{- 'icon-search.svg' | inline_asset_content -}}</span>
+            {% if section.settings.empty_heading != blank %}<h2 class="tg-collection-empty__heading">{{ section.settings.empty_heading | escape }}</h2>{% endif %}
+            {% if section.settings.empty_text != blank %}<p class="tg-collection-empty__text">{{ section.settings.empty_text | escape }}</p>{% endif %}
+            {% if section.settings.empty_button_label != blank %}<a class="tg-collection-empty__button" href="{{ section.settings.empty_link | default: routes.all_products_collection_url }}">{{ section.settings.empty_button_label | escape }}</a>{% endif %}
+          </div>
         </div>
+        {% if section.settings.empty_collection != blank %}
+          {% assign tg_empty_collection_products = section.settings.empty_collection.products %}
+          {% if tg_empty_collection_products.size > 0 %}
+            {% assign tg_empty_grid_id = 'tg-empty-product-grid-' | append: section.id %}
+            <section class="tg-collection-empty__recommendations" aria-labelledby="tg-empty-recommendations-{{ section.id }}">
+              <h2 id="tg-empty-recommendations-{{ section.id }}" class="tg-collection-empty__recommendations-heading">{{ section.settings.empty_collection.title | escape }}</h2>
+              {% render 'tg-collection-product-grid', products: tg_empty_collection_products, section: section, grid_id: tg_empty_grid_id %}
+            </section>
+          {% endif %}
+        {% endif %}
       {% else %}
         {% render 'tg-collection-product-grid', products: tg_collection_products, section: section %}
       {% endif %}
@@ -190,6 +219,7 @@
     { "type": "textarea", "id": "empty_text", "label": "t:tg_collection.settings.empty_text", "default": "Try clearing filters or browse all products." },
     { "type": "text", "id": "empty_button_label", "label": "t:tg_collection.settings.empty_button_label", "default": "Clear filters" },
     { "type": "url", "id": "empty_link", "label": "t:tg_collection.settings.empty_link" },
+    { "type": "collection", "id": "empty_collection", "label": "t:tg_collection.settings.empty_collection", "info": "t:tg_collection.info.empty_collection" },
     { "type": "range", "id": "padding_top", "label": "t:tg_collection.settings.padding_top", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 20 },
     { "type": "range", "id": "padding_bottom", "label": "t:tg_collection.settings.padding_bottom", "min": 0, "max": 200, "step": 4, "unit": "px", "default": 160 }
   ],

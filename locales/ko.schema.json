@@ -4432,6 +4432,7 @@
       "empty_text": "Empty state text",
       "empty_button_label": "Empty state button label",
       "empty_link": "Empty state button link",
+      "empty_collection": "Recommended collection when empty",
       "padding_top": "Top padding",
       "padding_bottom": "Bottom padding"
     },
@@ -4451,7 +4452,8 @@
     },
     "info": {
       "title": "Leave blank to use the current collection title.",
-      "price_currency_label": "Used only when Price filter currency is set to Custom currency unit."
+      "price_currency_label": "Used only when Price filter currency is set to Custom currency unit.",
+      "empty_collection": "Select a collection to show below the empty state."
     },
     "a11y": {
       "breadcrumb": "Breadcrumb"

@@ -1,8 +1,9 @@
 <div class="collection">
   <div class="loading-overlay gradient"></div>
-  <ul id="product-grid" data-id="{{ section.id }}" class="grid product-grid grid--{{ section.settings.columns_mobile }}-col-tablet-down grid--{{ section.settings.columns_desktop }}-col-desktop">
+  <ul id="{{ grid_id | default: 'product-grid' | escape }}" data-id="{{ section.id }}" class="grid product-grid grid--{{ section.settings.columns_mobile }}-col-tablet-down grid--{{ section.settings.columns_desktop }}-col-desktop">
     {%- assign skip_card_product_styles = false -%}
-    {%- for product in products -%}
+    {%- comment -%}Limit the loop to preserve Shopify product objects; slicing the collection can return a string.{%- endcomment -%}
+    {%- for product in products limit: section.settings.products_per_page -%}
       {%- assign lazy_load = true -%}
       {%- if forloop.index <= 2 -%}{%- assign lazy_load = false -%}{%- endif -%}
       <li class="grid__item">

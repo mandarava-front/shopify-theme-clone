@@ -4436,6 +4436,7 @@
       "empty_text": "空状态文案",
       "empty_button_label": "空状态按钮文案",
       "empty_link": "空状态按钮链接",
+      "empty_collection": "空状态推荐商品系列",
       "padding_top": "上内边距",
       "padding_bottom": "下内边距"
     },
@@ -4455,7 +4456,8 @@
     },
     "info": {
       "title": "留空时使用当前集合标题。",
-      "price_currency_label": "仅在“价格筛选货币”设为“自定义货币单位”时使用。"
+      "price_currency_label": "仅在“价格筛选货币”设为“自定义货币单位”时使用。",
+      "empty_collection": "选择一个在空状态下方展示的商品系列。"
     },
     "a11y": {
       "breadcrumb": "面包屑导航"

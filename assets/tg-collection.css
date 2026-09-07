@@ -112,7 +112,7 @@
 .tg-collection__sort-options button:focus-visible { background: #f5f5f6; color: var(--mcc-text); outline: 0; }
 .tg-collection__sort-options button[aria-selected='true'] { font-weight: 600; }
 
-.tg-collection-grid .collection { padding: 0; }
+.tg-collection-grid .collection:not(.tg-collection-empty) { padding: 0; }
 .tg-collection-grid .product-grid { margin: 0; column-gap: var(--mcc-column-gap, 2.4rem); row-gap: var(--mcc-row-gap, 4.8rem); }
 .tg-collection-grid .card__inner { border-radius: var(--mcc-card-radius); overflow: hidden; }
 .tg-collection-grid .card__content { padding: 0; }
@@ -137,10 +137,28 @@
 .tg-collection-grid .pagination__item--current::after,
 .tg-collection-grid .pagination__item:hover::after { content: none; }
 
-.tg-collection-empty { padding: 10rem 2rem; border: 1px solid var(--mcc-border); text-align: center; }
-.tg-collection-empty__heading { margin: 0; font-size: 2.2rem; }
-.tg-collection-empty__text { color: var(--mcc-muted); }
-.tg-collection-empty__button { display: inline-flex; min-height: 4.4rem; align-items: center; margin-top: 1.6rem; padding: .9rem 2rem; background: var(--mcc-text); color: #fff; font-size: 1.3rem; font-weight: 700; text-decoration: none; }
+.tg-collection-empty {
+  display: grid;
+  place-items: center;
+  min-height: 30rem;
+  padding: clamp(5.6rem, 8vw, 9rem) 2rem;
+  border: 1px solid var(--mcc-border);
+  border-radius: 1.2rem;
+  background: #f7f7f4;
+  background: color-mix(in srgb, var(--mcc-background) 92%, var(--mcc-text));
+  text-align: center;
+}
+.tg-collection-empty__content { width: min(100%, 56rem); margin: 0 auto; }
+.tg-collection-empty__icon { width: 5.6rem; height: 5.6rem; margin: 0 auto 2.4rem; display: flex; align-items: center; justify-content: center; border: 1px solid var(--mcc-accent); border-radius: 50%; color: var(--mcc-accent); }
+.tg-collection-empty__icon .icon-search { width: 2.2rem; height: 2.2rem; }
+.tg-collection-empty__heading { margin: 0; color: var(--mcc-text); font-size: 2.6rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; }
+.tg-collection-empty__text { max-width: 52ch; margin: 1.2rem auto 0; color: var(--mcc-muted); font-size: 1.5rem; line-height: 1.6; }
+.tg-collection-empty__button { display: inline-flex; min-height: 4.4rem; align-items: center; justify-content: center; margin-top: 2.4rem; padding: .9rem 2.2rem; border-radius: var(--mcc-card-radius); background: var(--mcc-text); color: var(--mcc-background); font-size: 1.3rem; font-weight: 700; line-height: 1.2; text-decoration: none; transition: background-color .18s ease, color .18s ease, transform .18s ease; }
+.tg-collection-empty__button:hover { background: var(--mcc-accent); color: var(--mcc-text); transform: translateY(-1px); }
+.tg-collection-empty__button:focus-visible { outline: 2px solid var(--mcc-text); outline-offset: 3px; }
+.tg-collection-empty__recommendations { margin-top: clamp(4.8rem, 7vw, 7.2rem); padding-top: clamp(3.2rem, 5vw, 5.6rem); border-top: 1px solid var(--mcc-border); }
+.tg-collection-empty__recommendations-heading { margin: 0 0 2.4rem; color: var(--mcc-text); font-size: 2.4rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.25; }
+.tg-collection-empty__recommendations .collection { padding: 0; }
 
 .tg-collection__mobile-controls { display: none; }
 
@@ -232,6 +250,14 @@
   .tg-collection-grid { padding-bottom: 9.6rem; }
   .tg-collection-grid .pagination-wrapper { margin-top: 4rem; }
   .tg-collection-grid .pagination__item { min-width: 4.2rem; height: 4.2rem; }
+  .tg-collection-empty { min-height: 25rem; padding: 4.8rem 1.6rem; border-radius: .8rem; }
+  .tg-collection-empty__icon { width: 4.8rem; height: 4.8rem; margin-bottom: 1.8rem; }
+  .tg-collection-empty__icon .icon-search { width: 2rem; height: 2rem; }
+  .tg-collection-empty__heading { font-size: 2.2rem; }
+  .tg-collection-empty__text { margin-top: 1rem; font-size: 1.4rem; }
+  .tg-collection-empty__button { margin-top: 2rem; }
+  .tg-collection-empty__recommendations { margin-top: 4.8rem; padding-top: 3.2rem; }
+  .tg-collection-empty__recommendations-heading { margin-bottom: 1.8rem; font-size: 2rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
