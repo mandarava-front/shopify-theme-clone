@@ -485,6 +485,87 @@
   }
 }
 
+/* Mobile: tighten the vertical rhythm. Kept in its own max-width block so the
+   desktop/tablet values above stay untouched — several of these properties are
+   not re-declared at 750px, so editing the mobile-first base would leak up. */
+@media screen and (max-width: 749px) {
+  .mc-accordion-footer__brand {
+    padding: 2.6rem 1.5rem 1.2rem;
+  }
+
+  .mc-accordion-footer__logo img {
+    max-height: 4rem;
+  }
+
+  .mc-accordion-footer__dmca {
+    margin-top: 1.2rem;
+  }
+
+  .mc-accordion-footer__groups {
+    padding-top: 0.8rem;
+  }
+
+  .mc-accordion-footer__summary {
+    min-height: 4.8rem;
+    padding: 1.1rem 4.8rem 1.1rem 1.8rem;
+  }
+
+  .mc-accordion-footer__chevron {
+    right: 1.4rem;
+  }
+
+  .mc-accordion-footer__links {
+    padding: 0.8rem 1.8rem 1.4rem;
+  }
+
+  .mc-accordion-footer__links li + li {
+    margin-top: 1.2rem;
+  }
+
+  .mc-accordion-footer__bottom {
+    margin-top: 0;
+    padding: 1.8rem 0 2.4rem;
+  }
+
+  /* Dawn's localization form stacks ~3.5rem of padding/margin around the
+     button (form :only-child padding, select margin, button padding) and its
+     own min-height never wins. The 990px block already flattens this — do the
+     same here so the row is exactly the 4.4rem tap target plus nothing. */
+  .mc-accordion-footer__localization {
+    margin-bottom: 0.8rem;
+  }
+
+  .mc-accordion-footer__localization .localization-form,
+  .mc-accordion-footer__localization .localization-form:only-child {
+    width: auto;
+    margin: 0;
+    padding: 0;
+  }
+
+  .mc-accordion-footer__localization .localization-form:only-child .localization-form__select,
+  .mc-accordion-footer__localization .disclosure__button.localization-form__select,
+  .mc-accordion-footer__localization .localization-selector.link {
+    min-height: 4.4rem;
+    height: 4.4rem;
+    margin: 0;
+    padding: 0 4rem 0 1.2rem;
+  }
+
+  /* double class to match the specificity of the base social rule */
+  .mc-accordion-footer .mc-accordion-footer__social {
+    margin-bottom: 1.2rem;
+  }
+
+  .mc-accordion-footer__copyright {
+    line-height: 1.45;
+  }
+
+  .mc-accordion-footer__policies {
+    margin-top: 0.6rem;
+    gap: 0.4rem 1.2rem;
+  }
+}
+
 @media screen and (max-width: 599px) {
   .mc-accordion-footer__logo {
     font-size: 3.6rem;
