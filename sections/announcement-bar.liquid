@@ -3,6 +3,10 @@
 
 {%- liquid
   assign tg_announcement_font_bold = section.settings.tg_announcement_font | font_modify: 'weight', '700'
+  assign tg_announcement_marquee = false
+  if section.settings.tg_announcement_scroll_direction == 'left' or section.settings.tg_announcement_scroll_direction == 'right'
+    assign tg_announcement_marquee = true
+  endif
 
   assign social_icons = true
   if settings.social_facebook_link == blank and settings.social_instagram_link == blank and settings.social_youtube_link == blank and settings.social_tiktok_link == blank and settings.social_twitter_link == blank and settings.social_pinterest_link == blank and settings.social_snapchat_link == blank and settings.social_tumblr_link == blank and settings.social_vimeo_link == blank
@@ -15,6 +19,10 @@
     assign announcement_bar = true
   endif
 -%}
+
+{%- if tg_announcement_marquee -%}
+  <script src="{{ 'announcement-marquee.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
 
 {% style %}
   {{ section.settings.tg_announcement_font | font_face: font_display: 'swap' }}
@@ -84,6 +92,104 @@
 
   #shopify-section-{{ section.id }} .announcement-bar__message .icon-arrow {
     margin-left: 0.35em;
+  }
+
+  #shopify-section-{{ section.id }} .announcement-bar__message--marquee {
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    overflow-wrap: normal;
+  }
+
+  #shopify-section-{{ section.id }} .announcement-bar__marquee {
+    display: block;
+    flex: 1 1 100%;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  #shopify-section-{{ section.id }} .announcement-bar__marquee-track {
+    display: flex;
+    width: max-content;
+  }
+
+  #shopify-section-{{ section.id }} .announcement-bar__marquee-group {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35em;
+    padding-inline: clamp(2.4rem, 4vw, 6rem);
+    white-space: nowrap;
+  }
+
+  #shopify-section-{{ section.id }} .announcement-bar__marquee:not(.is-ready) .announcement-bar__marquee-track,
+  #shopify-section-{{ section.id }} .announcement-bar__marquee:not(.is-ready) .announcement-bar__marquee-group {
+    width: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .announcement-bar__marquee:not(.is-ready) .announcement-bar__marquee-group {
+    padding-inline: 0;
+    white-space: normal;
+  }
+
+  #shopify-section-{{ section.id }} .announcement-bar__marquee.is-ready .announcement-bar__marquee-track {
+    animation-duration: var(--tg-announcement-marquee-duration, 12s);
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    will-change: transform;
+  }
+
+  #shopify-section-{{ section.id }} .announcement-bar__marquee.is-ready[data-direction='left'] .announcement-bar__marquee-track {
+    animation-name: tgAnnouncementMarqueeLeft;
+  }
+
+  #shopify-section-{{ section.id }} .announcement-bar__marquee.is-ready[data-direction='right'] .announcement-bar__marquee-track {
+    animation-name: tgAnnouncementMarqueeRight;
+  }
+
+  #shopify-section-{{ section.id }} .announcement-bar__marquee:hover .announcement-bar__marquee-track,
+  #shopify-section-{{ section.id }} .announcement-bar__marquee:focus-within .announcement-bar__marquee-track,
+  #shopify-section-{{ section.id }} .announcement-bar__marquee.is-paused .announcement-bar__marquee-track {
+    animation-play-state: paused;
+    will-change: auto;
+  }
+
+  @keyframes tgAnnouncementMarqueeLeft {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(calc(-1 * var(--tg-announcement-marquee-distance)), 0, 0);
+    }
+  }
+
+  @keyframes tgAnnouncementMarqueeRight {
+    from {
+      transform: translate3d(calc(-1 * var(--tg-announcement-marquee-distance)), 0, 0);
+    }
+    to {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #shopify-section-{{ section.id }} .announcement-bar__marquee.is-ready .announcement-bar__marquee-track {
+      width: 100%;
+      transform: none;
+      animation: none;
+      will-change: auto;
+    }
+
+    #shopify-section-{{ section.id }} .announcement-bar__marquee.is-ready .announcement-bar__marquee-group {
+      width: 100%;
+      padding-inline: 0;
+      white-space: normal;
+    }
+
+    #shopify-section-{{ section.id }} .announcement-bar__marquee-group[data-marquee-clone] {
+      display: none;
+    }
   }
 
   #shopify-section-{{ section.id }} .localization-wrapper .disclosure__list-wrapper {
@@ -186,7 +292,15 @@
               class="announcement-bar__link link link--text focus-inset animate-arrow"
             >
           {%- endif -%}
-          <p class="announcement-bar__message h5">
+          <p class="announcement-bar__message h5{% if tg_announcement_marquee %} announcement-bar__message--marquee{% endif %}">
+            {%- if tg_announcement_marquee -%}
+              <announcement-marquee
+                class="announcement-bar__marquee"
+                data-direction="{{ section.settings.tg_announcement_scroll_direction }}"
+              >
+                <span class="announcement-bar__marquee-track">
+                  <span class="announcement-bar__marquee-group">
+            {%- endif -%}
             {%- if section.blocks.first.settings.content != blank -%}
               <span class="announcement-bar__content">{{ section.blocks.first.settings.content }}</span>
             {%- elsif section.blocks.first.settings.text != blank -%}
@@ -203,6 +317,11 @@
             {%- endif -%}
             {%- if section.blocks.first.settings.link != blank -%}
               {{- 'icon-arrow.svg' | inline_asset_content -}}
+            {%- endif -%}
+            {%- if tg_announcement_marquee -%}
+                  </span>
+                </span>
+              </announcement-marquee>
             {%- endif -%}
           </p>
           {%- if section.blocks.first.settings.link != blank -%}
@@ -259,7 +378,15 @@
                         class="announcement-bar__link link link--text focus-inset animate-arrow"
                       >
                     {%- endif -%}
-                    <p class="announcement-bar__message h5">
+                    <p class="announcement-bar__message h5{% if tg_announcement_marquee %} announcement-bar__message--marquee{% endif %}">
+                      {%- if tg_announcement_marquee -%}
+                        <announcement-marquee
+                          class="announcement-bar__marquee"
+                          data-direction="{{ section.settings.tg_announcement_scroll_direction }}"
+                        >
+                          <span class="announcement-bar__marquee-track">
+                            <span class="announcement-bar__marquee-group">
+                      {%- endif -%}
                       {%- if block.settings.content != blank -%}
                         <span class="announcement-bar__content">{{ block.settings.content }}</span>
                       {%- elsif block.settings.text != blank -%}
@@ -276,6 +403,11 @@
                       {%- endif -%}
                       {%- if block.settings.link != blank -%}
                         {{- 'icon-arrow.svg' | inline_asset_content -}}
+                      {%- endif -%}
+                      {%- if tg_announcement_marquee -%}
+                            </span>
+                          </span>
+                        </announcement-marquee>
                       {%- endif -%}
                     </p>
                     {%- if block.settings.link != blank -%}
@@ -450,6 +582,18 @@
       "label": "公告栏最小高度",
       "default": 40,
       "info": "文案换行时会自动增高，避免内容被截断。"
+    },
+    {
+      "type": "select",
+      "id": "tg_announcement_scroll_direction",
+      "label": "文字滚动方式",
+      "options": [
+        { "value": "none", "label": "不滚动" },
+        { "value": "left", "label": "向左滚动" },
+        { "value": "right", "label": "向右滚动" }
+      ],
+      "default": "none",
+      "info": "启用后文字会连续循环滚动；悬停、键盘聚焦或系统开启“减少动态效果”时会暂停。"
     },
     {
       "type": "color",
