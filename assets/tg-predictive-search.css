@@ -479,6 +479,15 @@ predictive-search[loading] .predictive-search__results-groups-wrapper .predictiv
  * ---------------------------------------------------------------- */
 
 @media screen and (min-width: 990px) {
+  .tg-predictive-search--desktop .predictive-search__heading,
+  .tg-predictive-search--tg-desktop .predictive-search__heading {
+    margin-right: 0.6rem;
+    margin-left: 0.6rem;
+    padding-right: 1rem;
+    padding-left: 1rem;
+    border-radius: 0.8rem;
+  }
+
   .tg-predictive-search--desktop .predictive-search,
   .tg-predictive-search--desktop .tg-search-idle {
     width: 100%;
