@@ -16,6 +16,10 @@ class SearchForm extends HTMLElement {
   }
 
   toggleResetButton() {
+    // tg custom: onChange() calls this on every keystroke. A search form without a
+    // type="reset" button would throw here and break predictive search entirely.
+    if (!this.resetButton) return;
+
     const resetIsHidden = this.resetButton.classList.contains('hidden');
     if (this.input.value.length > 0 && resetIsHidden) {
       this.resetButton.classList.remove('hidden');

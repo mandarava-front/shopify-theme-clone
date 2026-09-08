@@ -1,13 +1,21 @@
 {% comment %}
   Renders the full-width mobile header search field.
 
+  This field deliberately does NOT run predictive search inline: the dropdown
+  would be cramped under the header on mobile. Instead the shopper types, hits
+  search, and tg-mobile-search-handoff.js hands the term to the full-screen
+  overlay (snippets/header-search.liquid, mobile_icon_overlay) which shows the
+  results. Without JS, or with predictive search disabled, the form just submits
+  to the search page as normal.
+
   Accepts:
   - input_id: {String} Id for the search input (required)
   - placeholder: {String} Visible field label and placeholder (required)
 {% endcomment %}
 
 <div class="tg-header-mobile-search">
-  <search-form>
+  <tg-mobile-search-handoff>
+    <search-form>
       <form action="{{ routes.search_url }}" method="get" role="search" class="search">
         <div class="field">
           <input
@@ -31,7 +39,7 @@
             <span class="svg-wrapper">{{- 'icon-search.svg' | inline_asset_content -}}</span>
           </button>
         </div>
-
       </form>
-  </search-form>
+    </search-form>
+  </tg-mobile-search-handoff>
 </div>

@@ -9,6 +9,16 @@
   {% render 'header-search', input_id: 'My-Id' %}
 {% endcomment %}
 
+{%- liquid
+  if mobile_icon_overlay
+    assign search_placeholder = 'general.search.search_by_recipient' | t
+    assign panel_variant = 'mobile-overlay'
+  else
+    assign search_placeholder = 'general.search.search' | t
+    assign panel_variant = 'desktop'
+  endif
+-%}
+
 <details-modal class="header__search{% if mobile_icon_overlay %} header__search--tg-mobile-overlay{% endif %}">
   <details>
     <summary
@@ -40,14 +50,18 @@
           <button
             type="button"
             class="search-modal__back-button modal__close-button link link--text focus-inset"
-            aria-label="Back"
+            aria-label="{{ 'accessibility.back' | t }}"
           >
             <span class="svg-wrapper" aria-hidden="true">
               {{- 'icon-arrow.svg' | inline_asset_content -}}
             </span>
           </button>
         {%- endif -%}
-        <search-form class="search-modal__form">
+        {%- if settings.predictive_search_enabled -%}
+          <predictive-search class="tg-predictive-search tg-predictive-search--{{ panel_variant }} search-modal__form" data-loading-text="{{ 'accessibility.loading' | t }}">
+        {%- else -%}
+          <search-form class="search-modal__form">
+        {%- endif -%}
           <form action="{{ routes.search_url }}" method="get" role="search" class="search search-modal__form">
             <div class="field">
               <input
@@ -56,10 +70,22 @@
                 type="search"
                 name="q"
                 value="{{ search.terms | escape }}"
-                placeholder="{% if mobile_icon_overlay %}Search by recipient or occasion{% else %}{{ 'general.search.search' | t }}{% endif %}"
+                placeholder="{{ search_placeholder | escape }}"
+                {%- if settings.predictive_search_enabled -%}
+                  role="combobox"
+                  aria-expanded="false"
+                  aria-owns="predictive-search-results"
+                  aria-controls="predictive-search-results"
+                  aria-haspopup="listbox"
+                  aria-autocomplete="list"
+                  autocorrect="off"
+                  autocomplete="off"
+                  autocapitalize="off"
+                  spellcheck="false"
+                {%- endif -%}
               >
               <label class="{% if mobile_icon_overlay %}visually-hidden{% else %}field__label{% endif %}" for="{{ input_id }}">
-                {% if mobile_icon_overlay %}Search by recipient or occasion{% else %}{{ 'general.search.search' | t }}{% endif %}
+                {{ search_placeholder }}
               </label>
               <input type="hidden" name="options[prefix]" value="last">
               <button
@@ -77,40 +103,17 @@
                 </span>
               </button>
             </div>
-          </form>
-        </search-form>
-        {%- if mobile_icon_overlay -%}
-          {%- assign has_tg_mobile_search_suggestions = false -%}
-          {%- for block in section.blocks -%}
-            {%- if block.type == 'tg_mobile_search_term' and block.settings.term != blank -%}
-              {%- assign has_tg_mobile_search_suggestions = true -%}
-              {%- break -%}
-            {%- endif -%}
-          {%- endfor -%}
 
-          {%- if has_tg_mobile_search_suggestions -%}
-            <section class="tg-mobile-search-suggestions" aria-labelledby="TgMobileSearchSuggestions-{{ input_id }}">
-              <h2 id="TgMobileSearchSuggestions-{{ input_id }}" class="tg-mobile-search-suggestions__heading">
-                Popular suggestions
-              </h2>
-              <ul class="tg-mobile-search-suggestions__list list-unstyled" role="list">
-                {%- for block in section.blocks -%}
-                  {%- if block.type == 'tg_mobile_search_term' and block.settings.term != blank -%}
-                    <li class="tg-mobile-search-suggestions__item" {{ block.shopify_attributes }}>
-                      <a
-                        class="tg-mobile-search-suggestions__link focus-inset"
-                        href="{{ routes.search_url }}?q={{ block.settings.term | url_encode }}&amp;options%5Bprefix%5D=last"
-                      >
-                        <span class="svg-wrapper" aria-hidden="true">{{- 'icon-search.svg' | inline_asset_content -}}</span>
-                        <span>{{ block.settings.term | escape }}</span>
-                      </a>
-                    </li>
-                  {%- endif -%}
-                {%- endfor -%}
-              </ul>
-            </section>
-          {%- endif -%}
+            {%- if settings.predictive_search_enabled -%}
+              {%- render 'tg-search-panel', variant: panel_variant -%}
+            {%- endif -%}
+          </form>
+        {%- if settings.predictive_search_enabled -%}
+          </predictive-search>
         {%- else -%}
+          </search-form>
+        {%- endif -%}
+        {%- unless mobile_icon_overlay -%}
           <button
             type="button"
             class="search-modal__close-button modal__close-button link link--text focus-inset"
@@ -120,7 +123,7 @@
               {{- 'icon-close.svg' | inline_asset_content -}}
             </span>
           </button>
-        {%- endif -%}
+        {%- endunless -%}
       </div>
     </div>
   </details>

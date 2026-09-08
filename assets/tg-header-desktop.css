@@ -141,7 +141,19 @@
     color: color-mix(in srgb, var(--tg-header-desktop-text) 58%, transparent);
   }
 
+  /* Chrome/Safari draw their own clear affordance inside type="search", which
+     would sit next to .tg-header-desktop__search-reset and read as two clear
+     buttons. base.css only suppresses it for .field__input, and this input
+     intentionally isn't one (it uses the pill styling above instead). */
+  .tg-header-desktop__search input::-webkit-search-cancel-button,
+  .tg-header-desktop__search input::-webkit-search-decoration {
+    -webkit-appearance: none;
+    appearance: none;
+    display: none;
+  }
+
   .tg-header-desktop__search-submit,
+  .tg-header-desktop__search-reset,
   .tg-header-desktop__action {
     width: 3.4rem;
     height: 3.4rem;
@@ -160,6 +172,7 @@
   }
 
   .tg-header-desktop__search-submit:hover,
+  .tg-header-desktop__search-reset:hover,
   .tg-header-desktop__action:hover {
     color: var(--tg-header-desktop-hover);
     background: color-mix(in srgb, var(--tg-header-desktop-hover) 8%, transparent);
@@ -167,10 +180,26 @@
 
   .tg-header-desktop__search-submit .svg-wrapper,
   .tg-header-desktop__search-submit svg,
+  .tg-header-desktop__search-reset .svg-wrapper,
+  .tg-header-desktop__search-reset svg,
   .tg-header-desktop__action .svg-wrapper,
   .tg-header-desktop__action svg {
     width: 1.9rem;
     height: 1.9rem;
+  }
+
+  /* The clear button reads as secondary next to the submit icon. */
+  .tg-header-desktop__search-reset {
+    flex: 0 0 2.8rem;
+    width: 2.8rem;
+    height: 2.8rem;
+    color: color-mix(in srgb, var(--tg-header-desktop-text) 55%, transparent);
+  }
+
+  .tg-header-desktop__search-reset .svg-wrapper,
+  .tg-header-desktop__search-reset svg {
+    width: 1.5rem;
+    height: 1.5rem;
   }
 
   .tg-header-desktop__top-actions,

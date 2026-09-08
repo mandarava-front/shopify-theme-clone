@@ -2,10 +2,15 @@ class PredictiveSearch extends SearchForm {
   constructor() {
     super();
     this.cachedResults = {};
+    this.cachedSearchCounts = {};
     this.predictiveSearchResults = this.querySelector('[data-predictive-search]');
+    // tg custom: idle panel (popular + recent searches) shown while the input is empty.
+    // It lives outside [data-predictive-search] because renderSearchResults() overwrites that container.
+    this.idlePanel = this.querySelector('[data-tg-search-idle]');
     this.allPredictiveSearchInstances = document.querySelectorAll('predictive-search');
     this.isOpen = false;
     this.abortController = new AbortController();
+    this.searchCountAbortController = new AbortController();
     this.searchTerm = '';
 
     this.setupEventListeners();
@@ -40,9 +45,13 @@ class PredictiveSearch extends SearchForm {
 
     if (!this.searchTerm.length) {
       this.close(true);
+      // tg custom: fall back to the idle panel rather than closing outright,
+      // so clearing the input reveals popular/recent terms again.
+      this.openIdle();
       return;
     }
 
+    this.removeAttribute('idle'); // tg custom
     this.getSearchResults(this.searchTerm);
   }
 
@@ -56,14 +65,22 @@ class PredictiveSearch extends SearchForm {
       this.searchTerm = '';
       this.abortController.abort();
       this.abortController = new AbortController();
+      this.searchCountAbortController.abort();
+      this.searchCountAbortController = new AbortController();
       this.closeResults(true);
+      // tg custom: SearchForm.onFormReset refocuses the input, so show the idle panel.
+      this.openIdle();
     }
   }
 
   onFocus() {
     const currentSearchTerm = this.getQuery();
 
-    if (!currentSearchTerm.length) return;
+    // tg custom: an empty input opens the idle panel instead of doing nothing.
+    if (!currentSearchTerm.length) {
+      this.openIdle();
+      return;
+    }
 
     if (this.searchTerm !== currentSearchTerm) {
       // Search term was changed from other search input, treat it as a user change
@@ -82,7 +99,11 @@ class PredictiveSearch extends SearchForm {
   }
 
   onKeyup(event) {
-    if (!this.getQuery().length) this.close(true);
+    // tg custom: emptying the query via keyboard falls back to the idle panel.
+    if (!this.getQuery().length) {
+      this.close(true);
+      this.openIdle();
+    }
     event.preventDefault();
 
     switch (event.code) {
@@ -108,14 +129,21 @@ class PredictiveSearch extends SearchForm {
   updateSearchForTerm(previousTerm, newTerm) {
     const searchForTextElement = this.querySelector('[data-predictive-search-search-for-text]');
     const currentButtonText = searchForTextElement?.innerText;
-    if (currentButtonText) {
-      if (currentButtonText.match(new RegExp(previousTerm, 'g')).length > 1) {
-        // The new term matches part of the button text and not just the search term, do not replace to avoid mistakes
-        return;
-      }
-      const newButtonText = currentButtonText.replace(previousTerm, newTerm);
-      searchForTextElement.innerText = newButtonText;
+    if (!currentButtonText || !previousTerm) return;
+
+    // tg custom: escape regex metacharacters and bail out when the term isn't in the
+    // button text. Upstream called .length on a null match, which threw for terms
+    // containing characters like "(" or for labels that don't embed the term at all.
+    const escapedTerm = previousTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const matches = currentButtonText.match(new RegExp(escapedTerm, 'g'));
+    if (!matches) return;
+
+    if (matches.length > 1) {
+      // The new term matches part of the button text and not just the search term, do not replace to avoid mistakes
+      return;
     }
+
+    searchForTextElement.innerText = currentButtonText.replace(previousTerm, newTerm);
   }
 
   switchOption(direction) {
@@ -126,7 +154,9 @@ class PredictiveSearch extends SearchForm {
 
     // Filter out hidden elements (duplicated page and article resources) thanks
     // to this https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetParent
-    const allVisibleElements = Array.from(this.querySelectorAll('li, button.predictive-search__item')).filter(
+    const allVisibleElements = Array.from(
+      this.querySelectorAll('li, button.predictive-search__item, a.predictive-search__item')
+    ).filter(
       (element) => element.offsetParent !== null
     );
     let activeElementIndex = 0;
@@ -169,6 +199,8 @@ class PredictiveSearch extends SearchForm {
 
   getSearchResults(searchTerm) {
     const queryKey = searchTerm.replace(' ', '-').toLowerCase();
+    this.searchCountAbortController.abort();
+    this.searchCountAbortController = new AbortController();
     this.setLiveRegionLoadingState();
 
     if (this.cachedResults[queryKey]) {
@@ -180,7 +212,16 @@ class PredictiveSearch extends SearchForm {
 
     const searchDeferred = this.dispatchSearchUpdateEvent(searchTerm);
 
-    fetch(`${routes.predictive_search_url}?q=${encodeURIComponent(searchTerm)}&section_id=predictive-search`, {
+    // tg custom: request resource types/limits explicitly so the panel layout is predictable.
+    const searchParams = new URLSearchParams({
+      q: searchTerm,
+      'resources[type]': 'query,collection,product,article,page',
+      'resources[limit]': '6',
+      'resources[options][unavailable_products]': 'last',
+      section_id: 'predictive-search',
+    });
+
+    fetch(`${routes.predictive_search_url}?${searchParams}`, {
       signal: this.abortController.signal,
     })
       .then((response) => {
@@ -257,10 +298,53 @@ class PredictiveSearch extends SearchForm {
 
   renderSearchResults(resultsMarkup) {
     this.predictiveSearchResults.innerHTML = resultsMarkup;
+    this.removeAttribute('idle'); // tg custom: results supersede the idle panel
     this.setAttribute('results', true);
+    this.updateViewAllCount();
 
     this.setLiveRegionResults();
     this.open();
+  }
+
+  updateViewAllCount() {
+    const viewAllLink = this.predictiveSearchResults.querySelector('[data-tg-view-all-results]');
+    const viewAllLabel = viewAllLink?.querySelector('[data-tg-view-all-label]');
+    if (!viewAllLink || !viewAllLabel) return;
+
+    const searchUrl = viewAllLink.href;
+    const cachedLabel = this.cachedSearchCounts[searchUrl];
+    if (cachedLabel) {
+      viewAllLabel.textContent = cachedLabel;
+      return;
+    }
+
+    const countUrl = new URL(searchUrl);
+    countUrl.searchParams.set('section_id', 'tg-search-count');
+
+    fetch(countUrl, { signal: this.searchCountAbortController.signal })
+      .then((response) => {
+        if (!response.ok) throw new Error(response.status);
+        return response.text();
+      })
+      .then((text) => {
+        const countElement = new DOMParser()
+          .parseFromString(text, 'text/html')
+          .querySelector('[data-tg-search-result-count]');
+        const exactLabel = countElement?.textContent.trim();
+        if (!exactLabel) return;
+
+        this.allPredictiveSearchInstances.forEach((predictiveSearchInstance) => {
+          predictiveSearchInstance.cachedSearchCounts[searchUrl] = exactLabel;
+        });
+
+        const currentLink = this.predictiveSearchResults.querySelector('[data-tg-view-all-results]');
+        if (currentLink?.href === searchUrl) {
+          currentLink.querySelector('[data-tg-view-all-label]').textContent = exactLabel;
+        }
+      })
+      .catch((error) => {
+        if (error.name !== 'AbortError') console.error('Unable to load the full search result count.', error);
+      });
   }
 
   setLiveRegionResults() {
@@ -285,8 +369,27 @@ class PredictiveSearch extends SearchForm {
     this.isOpen = true;
   }
 
+  // tg custom: does the idle panel currently hold anything worth showing?
+  // The recent-searches element stays [hidden] until it has history, and the
+  // popular group is only rendered when the header has merchandised terms.
+  hasIdleContent() {
+    if (!this.idlePanel) return false;
+    return !!this.idlePanel.querySelector('.tg-search-idle__group:not([hidden]) .tg-search-idle__item');
+  }
+
+  // tg custom: show the popular/recent panel (empty-query state).
+  openIdle() {
+    if (!this.hasIdleContent()) return;
+
+    this.setAttribute('idle', true);
+    this.setAttribute('open', true);
+    this.input.setAttribute('aria-expanded', true);
+    this.isOpen = true;
+  }
+
   close(clearSearchTerm = false) {
     this.closeResults(clearSearchTerm);
+    this.removeAttribute('idle'); // tg custom
     this.isOpen = false;
   }
 

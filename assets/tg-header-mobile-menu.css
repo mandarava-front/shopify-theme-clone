@@ -194,6 +194,15 @@
     display: none;
   }
 
+  /* Row mode hides the icon, but the overlay it wraps is still the results
+     surface: the row field hands its term off to it (tg-mobile-search-handoff.js),
+     so the container has to be displayable while open. The summary icon becoming
+     visible with it doesn't show, since the open overlay is position:fixed with
+     inset:0 over the whole header. */
+  .header--tg-mobile-search-row .header__icons > .header__search:has(details[open]) {
+    display: block;
+  }
+
   .tg-header-mobile-search-compact .header.header--tg-mobile-search-row {
     row-gap: 0;
     padding-bottom: var(--tg-header-mobile-base-padding-bottom, 0);
@@ -405,53 +414,110 @@
     height: 2.4rem;
   }
 
-  .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .tg-mobile-search-suggestions {
-    margin-top: 2.4rem;
+  .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .tg-search-idle {
+    margin-top: 0;
   }
 
-  .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .tg-mobile-search-suggestions__heading {
-    min-height: 5.6rem;
+  .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .tg-search-idle__group-header {
+    min-height: 0;
     display: flex;
     align-items: center;
-    margin: 0;
-    padding: 0 2rem;
-    border-radius: 1.2rem;
-    background: var(--tg-mobile-search-subtle);
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 1.6rem 0 0.4rem;
+    padding: 1rem 0.4rem;
+    border-radius: 0.6rem;
+    background: var(--tg-ps-surface-heading);
     color: var(--tg-mobile-search-text);
     font-family: inherit;
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     font-weight: 700;
     letter-spacing: 0;
-    line-height: 1.2;
+    line-height: 1.4;
   }
 
-  .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .tg-mobile-search-suggestions__list {
-    display: grid;
-    gap: 0.8rem;
-    margin: 1.6rem 0 0;
-    padding: 0 1.5rem;
+  /* The heading inherits the header band's type instead of the compact
+     desktop caption treatment. */
+  .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .tg-search-idle__heading {
+    font-size: inherit;
+    font-weight: inherit;
+    letter-spacing: inherit;
+    text-transform: none;
+    color: inherit;
   }
 
-  .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .tg-mobile-search-suggestions__link {
+  .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .tg-search-idle__clear {
+    flex: 0 0 auto;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--tg-mobile-search-focus);
+  }
+
+  .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .tg-search-idle__group:not([hidden])
+    + .tg-search-idle__group {
+    margin-top: 0;
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .tg-search-idle__list {
+    display: block;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Popular terms use the same full-width rows as history on mobile (bigger
+     touch targets), so drop the desktop pill treatment. */
+  .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .tg-search-idle__list--pills .tg-search-idle__item {
+    border-radius: 0.8rem;
+    background-color: transparent;
+  }
+
+  .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .tg-search-idle__list--pills .tg-search-idle__link {
+    padding: 1rem 0.4rem;
+    font-size: 1.5rem;
+  }
+
+  .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .tg-search-idle__item {
+    display: flex;
+    align-items: center;
+  }
+
+  .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .tg-search-idle__link {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .tg-search-idle__remove {
+    flex: 0 0 auto;
+    width: 4rem;
+    height: 4rem;
+    margin-right: 0;
+    color: var(--tg-mobile-search-muted);
+    font-size: 2rem;
+  }
+
+  .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .tg-search-idle__link {
     display: flex;
     align-items: center;
     min-height: 4.8rem;
-    gap: 1.2rem;
-    padding: 0 0.4rem;
+    gap: 1.4rem;
+    padding: 1rem 0.4rem;
     border-radius: 0.8rem;
     color: var(--tg-mobile-search-text);
     font-family: inherit;
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     font-weight: 600;
     letter-spacing: 0;
-    line-height: 1.2;
+    line-height: 1.33;
     text-decoration: none;
     touch-action: manipulation;
     transition: background-color 180ms ease-out, color 180ms ease-out;
   }
 
-  .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .tg-mobile-search-suggestions__link .svg-wrapper,
-  .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .tg-mobile-search-suggestions__link svg {
+  .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .tg-search-idle__link .svg-wrapper,
+  .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .tg-search-idle__link svg {
     width: 2.4rem;
     height: 2.4rem;
     flex: 0 0 2.4rem;
@@ -459,22 +525,22 @@
 
   .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .field__button:hover,
   .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .search-modal__back-button:hover,
-  .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .tg-mobile-search-suggestions__link:hover {
+  .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .tg-search-idle__link:hover {
     color: var(--tg-mobile-search-focus);
   }
 
-  .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .tg-mobile-search-suggestions__link:active {
+  .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .tg-search-idle__link:active {
     background: var(--tg-mobile-search-pressed);
   }
 
-  .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .tg-mobile-search-suggestions__link:focus-visible {
+  .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .tg-search-idle__link:focus-visible {
     outline: 0.2rem solid var(--tg-mobile-search-focus);
     outline-offset: 0.2rem;
   }
 
   @media (prefers-reduced-motion: reduce) {
     .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .field,
-    .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .tg-mobile-search-suggestions__link {
+    .header--tg-mobile-menu-enabled .header__icons > .header__search--tg-mobile-overlay .tg-search-idle__link {
       transition: none;
     }
   }

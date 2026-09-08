@@ -1,0 +1,84 @@
+{% comment %}
+  Renders the predictive search dropdown: the idle (empty query) panel plus the
+  results container that predictive-search.js fills in.
+
+  The idle panel deliberately sits OUTSIDE [data-predictive-search] because
+  PredictiveSearch.renderSearchResults() overwrites that container's innerHTML.
+
+  Popular terms reuse the header section's 'tg_mobile_search_term' blocks, so PC
+  and mobile share one set of merchandised terms. Falls back to no popular block
+  when rendered outside the header section (e.g. the search template).
+
+  Accepts:
+  - variant: {String} 'tg-desktop' | 'desktop' | 'mobile-overlay' | 'search-template'
+             (optional, default 'desktop')
+
+  Usage:
+  {% render 'tg-search-panel', variant: 'desktop' %}
+{% endcomment %}
+
+{%- liquid
+  assign panel_variant = variant | default: 'desktop'
+
+  assign has_popular_terms = false
+  for block in section.blocks
+    if block.type == 'tg_mobile_search_term' and block.settings.term != blank
+      assign has_popular_terms = true
+      break
+    endif
+  endfor
+-%}
+
+<div class="tg-search-idle tg-search-idle--{{ panel_variant }}" data-tg-search-idle>
+  <tg-recent-searches
+    class="tg-search-idle__group"
+    data-recent-limit="8"
+    data-search-url="{{ routes.search_url }}"
+    data-remove-label="{{ 'general.search.remove_recent' | t }}"
+    hidden
+  >
+    <div class="tg-search-idle__group-header">
+      <h2 class="tg-search-idle__heading">{{ 'general.search.recent' | t }}</h2>
+      <button type="button" class="tg-search-idle__clear link" data-recent-clear>
+        {{- 'general.search.clear_recent' | t -}}
+      </button>
+    </div>
+    <ul class="tg-search-idle__list list-unstyled" data-recent-list role="group"></ul>
+  </tg-recent-searches>
+
+  {%- if has_popular_terms -%}
+    <div class="tg-search-idle__group">
+      <div class="tg-search-idle__group-header">
+        <h2 class="tg-search-idle__heading">{{ 'general.search.popular' | t }}</h2>
+      </div>
+      <ul class="tg-search-idle__list tg-search-idle__list--pills list-unstyled" role="group">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'tg_mobile_search_term' and block.settings.term != blank -%}
+            <li
+              class="tg-search-idle__item"
+              role="option"
+              aria-selected="false"
+              {{ block.shopify_attributes }}
+            >
+              <a
+                class="tg-search-idle__link focus-inset"
+                href="{{ routes.search_url }}?q={{ block.settings.term | url_encode }}&amp;options%5Bprefix%5D=last"
+              >
+                <span class="svg-wrapper" aria-hidden="true">
+                  {{- 'icon-search.svg' | inline_asset_content -}}
+                </span>
+                <span class="tg-search-idle__label">{{ block.settings.term | escape }}</span>
+              </a>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    </div>
+  {%- endif -%}
+</div>
+
+<div class="predictive-search predictive-search--header" tabindex="-1" data-predictive-search>
+  {%- render 'loading-spinner', class: 'predictive-search__loading-state' -%}
+</div>
+
+<span class="predictive-search-status visually-hidden" role="status" aria-hidden="true"></span>

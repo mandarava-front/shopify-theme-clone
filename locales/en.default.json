@@ -37,7 +37,12 @@
     },
     "search": {
       "search": "Search",
-      "reset": "Clear search term"
+      "reset": "Clear search term",
+      "search_by_recipient": "Search by recipient or occasion",
+      "popular": "Popular searches",
+      "recent": "Recent searches",
+      "clear_recent": "Clear all",
+      "remove_recent": "Remove recent search"
     },
     "cart": {
       "view": "View cart ({{ count }})",
@@ -75,6 +80,7 @@
       "external": "Opens external website."
     },
     "loading": "Loading...",
+    "back": "Back",
     "total_reviews": "total reviews",
     "star_reviews_info": "{{ rating_value }} out of {{ rating_max }} stars",
     "collapsible_content_title": "Collapsible content",
@@ -248,7 +254,15 @@
       "title": "Search results",
       "search_for": "Search for “{{ terms }}”",
       "suggestions": "Suggestions",
-      "pages": "Pages"
+      "pages": "Pages",
+      "collections": "Collections",
+      "articles": "Articles",
+      "view_all": "View all results",
+      "view_all_results": {
+        "one": "View {{ count }} result",
+        "other": "View all {{ count }} results"
+      },
+      "no_predictive_results": "No matches for “{{ terms }}”. Check the spelling or try a different word."
     },
     "cart": {
       "cart": "Cart"

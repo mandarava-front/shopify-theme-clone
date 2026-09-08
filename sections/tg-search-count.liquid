@@ -1,0 +1,5 @@
+{%- if search.performed -%}
+  <span data-tg-search-result-count="{{ search.results_count }}">
+    {{- 'templates.search.view_all_results' | t: count: search.results_count -}}
+  </span>
+{%- endif -%}

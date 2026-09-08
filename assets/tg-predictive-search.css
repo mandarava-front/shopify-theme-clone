@@ -1,0 +1,868 @@
+/**
+ * Predictive search panel - overrides Dawn/Crave's component-predictive-search.css
+ * for the three header entry points (desktop inline, mobile row, mobile overlay)
+ * plus the idle panel (popular + recent searches).
+ */
+
+/* ---------------------------------------------------------------- *
+ * Shared panel shell
+ * ---------------------------------------------------------------- */
+
+.tg-predictive-search {
+  position: relative;
+  display: block;
+
+  /* Panel design tokens, mirroring the storefront design system these headers
+     already follow (tg-header-mobile-menu.css uses the same #f5f5f6 / #f3fbfc /
+     #0c94a4 ramp). Declared locally so the panel stays consistent across all
+     four entry points without depending on globals that may not be in scope. */
+  --tg-ps-text: #202024;
+  --tg-ps-text-muted: #79797b;
+  --tg-ps-text-subtle: #85888d;
+  --tg-ps-title: #3b4148;
+  --tg-ps-price: #e78534;
+  --tg-ps-border: #eaeaea;
+  --tg-ps-surface-subtle: #f5f5f6;
+  --tg-ps-surface-hover: #f3fbfc;
+  /* core-bg-accent - a step deeper than the hover tint so group headings read as
+     structure rather than as an active row. */
+  --tg-ps-surface-heading: #e8f7f9;
+  --tg-ps-accent: #0c94a4;
+  --tg-ps-radius: 1rem;
+  --tg-ps-shadow: 0 2rem 2.4rem -0.4rem rgba(16, 24, 40, 0.06), 0 0.8rem 0.8rem -0.4rem rgba(16, 24, 40, 0.04);
+
+  /* Primary action colour. Not wired to --color-button on purpose: this shop's
+     scheme-1 button is blue (#087EDB), which fights the orange/teal palette the
+     rest of these headers use. Change here to retheme the button. */
+  --tg-ps-btn: #f4993d;
+  --tg-ps-btn-hover: #e78534;
+  --tg-ps-btn-text: #fff;
+}
+
+.tg-predictive-search .predictive-search {
+  border: 0.1rem solid var(--tg-ps-border);
+  border-radius: var(--tg-ps-radius);
+  box-shadow: var(--tg-ps-shadow);
+  padding: 0.6rem 0;
+  color: var(--tg-ps-text);
+  overscroll-behavior: contain;
+}
+
+/* The idle panel replaces the results container while the query is empty. */
+.tg-search-idle {
+  display: none;
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  left: 0;
+  right: 0;
+  z-index: 4;
+  padding: 0.6rem 0 1rem;
+  border: 0.1rem solid var(--tg-ps-border);
+  border-radius: var(--tg-ps-radius);
+  background-color: rgb(var(--color-background));
+  box-shadow: var(--tg-ps-shadow);
+  color: var(--tg-ps-text);
+  max-height: min(60vh, 48rem);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+predictive-search[idle] .tg-search-idle {
+  display: block;
+}
+
+/* While idle, suppress the (stale/empty) results container that
+   component-predictive-search.css would otherwise reveal via [open]. */
+predictive-search[idle][open] .predictive-search,
+predictive-search[idle][loading] .predictive-search {
+  display: none;
+}
+
+/* ---------------------------------------------------------------- *
+ * Idle panel: popular + recent
+ * ---------------------------------------------------------------- */
+
+/* :not([hidden]) so the divider/spacing collapses when there's no history yet. */
+.tg-search-idle__group:not([hidden]) + .tg-search-idle__group {
+  margin-top: 0.4rem;
+  border-top: 0.1rem solid var(--tg-ps-border);
+  padding-top: 0.4rem;
+}
+
+.tg-search-idle__group-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.6rem 0.6rem;
+}
+
+.tg-search-idle__heading {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--tg-ps-text-subtle);
+}
+
+.tg-search-idle__clear {
+  border: 0;
+  background: none;
+  padding: 0;
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--tg-ps-accent);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.tg-search-idle__clear:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.3rem;
+}
+
+.tg-search-idle__list {
+  margin: 0;
+  padding: 0;
+}
+
+.tg-search-idle__item {
+  display: flex;
+  align-items: center;
+}
+
+.tg-search-idle__link {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0.9rem 1.6rem;
+  text-decoration: none;
+  color: var(--tg-ps-text);
+  font-size: 1.4rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.tg-search-idle__link .svg-wrapper {
+  flex: 0 0 auto;
+  width: 1.6rem;
+  height: 1.6rem;
+  color: var(--tg-ps-text-subtle);
+}
+
+.tg-search-idle__link .svg-wrapper svg {
+  width: 100%;
+  height: 100%;
+}
+
+.tg-search-idle__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tg-search-idle__item[aria-selected='true'],
+.tg-search-idle__item:hover {
+  background-color: var(--tg-ps-surface-hover);
+}
+
+.tg-search-idle__item[aria-selected='true'] .tg-search-idle__link,
+.tg-search-idle__item:hover .tg-search-idle__link {
+  color: var(--tg-ps-accent);
+}
+
+.tg-search-idle__remove {
+  flex: 0 0 auto;
+  width: 3.2rem;
+  height: 3.2rem;
+  margin-right: 0.6rem;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--tg-ps-text-subtle);
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.tg-search-idle__remove:hover {
+  background-color: var(--tg-ps-surface-subtle);
+  color: var(--tg-ps-text);
+}
+
+/* Popular terms render as pills to read differently from history rows. */
+.tg-search-idle__list--pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  padding: 0.4rem 1.6rem 0.8rem;
+}
+
+.tg-search-idle__list--pills .tg-search-idle__item {
+  border-radius: 2.4rem;
+  background-color: var(--tg-ps-surface-subtle);
+}
+
+.tg-search-idle__list--pills .tg-search-idle__link {
+  gap: 0.7rem;
+  padding: 0.7rem 1.4rem;
+  font-size: 1.3rem;
+}
+
+.tg-search-idle__list--pills .tg-search-idle__link .svg-wrapper {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+.tg-search-idle__list--pills .tg-search-idle__item[aria-selected='true'],
+.tg-search-idle__list--pills .tg-search-idle__item:hover {
+  background-color: var(--tg-ps-surface-hover);
+}
+
+/* ---------------------------------------------------------------- *
+ * Results panel content
+ * ---------------------------------------------------------------- */
+
+/* Pages/articles are now rendered once (upstream rendered two copies and hid one
+   per breakpoint). Undo those display:none rules so the single copy always shows. */
+.tg-predictive-search .predictive-search__result-group:first-child .predictive-search__pages-wrapper,
+.tg-predictive-search .predictive-search__result-group:last-child .predictive-search__pages-wrapper {
+  display: block;
+}
+
+.tg-predictive-search .predictive-search__heading {
+  /* Horizontal margin stays 0 and padding-left matches .predictive-search__item
+     below, so the band's label lines up with the rows under it. The band then
+     spans the full panel width, same as the rows' hover background. */
+  margin: 1.2rem 0 0.6rem;
+  padding: 0.7rem 1.6rem;
+  border-bottom: 0;
+  border-radius: 0.6rem;
+  background-color: var(--tg-ps-surface-heading);
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0;
+  text-transform: none;
+  /* Darker than the plain label was: the tinted band now carries the visual
+     separation, so the text can sit at full contrast on it. */
+  color: var(--tg-ps-text);
+}
+
+.tg-predictive-search .predictive-search__item {
+  padding: 0.9rem 1.6rem;
+  gap: 1.2rem;
+  border-radius: 0.8rem;
+  color: var(--tg-ps-text);
+}
+
+/* Products are wrapped in <product-component>, which is what the `> *` hover rule
+   below actually paints. Match the card radius so its corners don't square off. */
+.tg-predictive-search .predictive-search__list-item > product-component {
+  border-radius: 0.8rem;
+}
+
+/* Tint on hover/keyboard selection instead of upstream's grey wash + underline. */
+.tg-predictive-search .predictive-search__list-item[aria-selected='true'] > *,
+.tg-predictive-search .predictive-search__list-item:hover > *,
+.tg-predictive-search .predictive-search__item[aria-selected='true'],
+.tg-predictive-search .predictive-search__item:hover {
+  background-color: var(--tg-ps-surface-hover);
+  color: var(--tg-ps-text);
+}
+
+.tg-predictive-search .predictive-search__list-item[aria-selected='true'] .predictive-search__item-heading,
+.tg-predictive-search .predictive-search__list-item:hover .predictive-search__item-heading {
+  text-decoration: none;
+  color: var(--tg-ps-accent);
+}
+
+.tg-predictive-search .predictive-search__list-item[aria-selected='true'] .predictive-search__item-icon,
+.tg-predictive-search .predictive-search__list-item:hover .predictive-search__item-icon {
+  color: var(--tg-ps-accent);
+}
+
+.tg-predictive-search .predictive-search__item--link-with-thumbnail {
+  grid-template-columns: 6.4rem 1fr;
+  grid-column-gap: 1.2rem;
+  align-items: center;
+}
+
+.tg-predictive-search .predictive-search__image {
+  width: 6.4rem;
+  height: 6.4rem;
+  border-radius: 0.8rem;
+  background-color: var(--tg-ps-surface-subtle);
+  object-fit: cover;
+}
+
+.tg-predictive-search .predictive-search__image--placeholder {
+  display: block;
+  grid-area: product-image;
+}
+
+/* Collection rows and mobile product rows keep the compact horizontal form;
+   the vertical product card is a desktop-panel treatment (see --tg-desktop). */
+
+/* Collection rows use a smaller, rounder thumbnail than products. */
+.tg-predictive-search .predictive-search__item--collection {
+  grid-template-columns: 4rem 1fr;
+}
+
+.tg-predictive-search .predictive-search__image--collection {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 0.6rem;
+}
+
+/* Product/collection titles follow the storefront's product-card type:
+   14/18, semibold, #3b4148. */
+.tg-predictive-search .predictive-search__item-heading {
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 1.29;
+  color: var(--tg-ps-title);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+/* Vendor line matches the product-type token: 13/18, medium, #85888d. */
+.tg-predictive-search .predictive-search__item-vendor {
+  font-size: 1.3rem;
+  font-weight: 500;
+  line-height: 1.38;
+  color: var(--tg-ps-text-subtle);
+}
+
+.tg-predictive-search .predictive-search__item .price {
+  margin-top: 0.4rem;
+  font-size: 1.6rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--tg-ps-price);
+}
+
+.tg-predictive-search .predictive-search__item .price--on-sale .price-item--regular {
+  color: var(--tg-ps-text-muted);
+  font-weight: 400;
+}
+
+/* Leading search icon on suggested queries, matching the popular/recent rows in
+   the idle panel so all term-style rows read the same. */
+.tg-predictive-search .predictive-search__item-icon {
+  flex: 0 0 auto;
+  width: 1.6rem;
+  height: 1.6rem;
+  color: var(--tg-ps-text-subtle);
+}
+
+.tg-predictive-search .predictive-search__item-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.tg-predictive-search .predictive-search__item--query {
+  align-items: center;
+}
+
+/* Emphasise the matched fragment in suggested queries. */
+.tg-predictive-search .predictive-search__item-query-result *:not(mark) {
+  font-weight: 600;
+  color: var(--tg-ps-text);
+}
+
+.tg-predictive-search .predictive-search__item-query-result mark {
+  background-color: transparent;
+  color: var(--tg-ps-text-muted);
+  font-weight: 400;
+}
+
+/* ---------------------------------------------------------------- *
+ * "View all results" - filled button at the foot of the left column
+ * ---------------------------------------------------------------- */
+
+.tg-predictive-search .predictive-search__search-for-button {
+  margin-top: 1.2rem;
+  padding: 0 1.6rem;
+  border-top: 0;
+}
+
+/* The button now sits inside .predictive-search__results-groups-wrapper, so
+   upstream's sibling selector (component-predictive-search.css:125) that keeps it
+   visible while a new query loads no longer matches. Without this it would blink
+   out on every keystroke. */
+predictive-search[loading] .predictive-search__results-groups-wrapper .predictive-search__search-for-button {
+  display: block;
+}
+
+.tg-predictive-search .tg-predictive-search__view-all {
+  width: 100%;
+  /* Fills the narrow left column, but stays a sensible size if the column ever
+     spans the full panel (no products in the response). */
+  max-width: 32rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  padding: 1.1rem 1.6rem;
+  /* base.css has no global <button> reset (only the Shopify payment button), so
+     without this the UA's default grey border draws over the fill. */
+  border: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: var(--tg-ps-radius);
+  background-color: var(--tg-ps-btn);
+  color: var(--tg-ps-btn-text);
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 1.28;
+  text-align: center;
+  cursor: pointer;
+  /* Upstream .predictive-search__item--term sets break-all, which mangles a
+     centred button label. Keep the label on one line. */
+  word-break: normal;
+  white-space: nowrap;
+  transition: background-color 150ms ease, box-shadow 150ms ease;
+}
+
+/* Beats the upstream .predictive-search__item:hover grey wash. */
+.tg-predictive-search .tg-predictive-search__view-all:hover {
+  background-color: var(--tg-ps-btn-hover);
+  color: var(--tg-ps-btn-text);
+}
+
+/* The button carries tabindex="-1" and is reached with the arrow keys, so
+   aria-selected is its only focus cue - give it a ring, not just a fill shift. */
+.tg-predictive-search .tg-predictive-search__view-all[aria-selected='true'] {
+  background-color: var(--tg-ps-btn-hover);
+  color: var(--tg-ps-btn-text);
+  box-shadow: 0 0 0 0.3rem color-mix(in srgb, var(--tg-ps-btn) 35%, transparent);
+}
+
+.tg-predictive-search .tg-predictive-search__view-all:focus-visible {
+  outline: 0.2rem solid var(--tg-ps-accent);
+  outline-offset: 0.2rem;
+}
+
+/* nowrap alone would let a longer translated label spill past the button edge. */
+.tg-predictive-search .tg-predictive-search__view-all [data-predictive-search-search-for-text] {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tg-predictive-search .tg-predictive-search__view-all .svg-wrapper,
+.tg-predictive-search .tg-predictive-search__view-all .icon-arrow {
+  width: 1.4rem;
+  height: 1.4rem;
+  margin-left: 0;
+  flex: 0 0 auto;
+  color: currentColor;
+}
+
+.tg-predictive-search .tg-predictive-search__empty {
+  padding: 2rem 1.6rem;
+  font-size: 1.4rem;
+  line-height: 1.5;
+  color: var(--tg-ps-text-muted);
+}
+
+/* ---------------------------------------------------------------- *
+ * Desktop: two columns (suggestions/collections | products)
+ * ---------------------------------------------------------------- */
+
+@media screen and (min-width: 990px) {
+  .tg-predictive-search--desktop .predictive-search,
+  .tg-predictive-search--desktop .tg-search-idle {
+    width: 100%;
+    max-height: min(70vh, 58rem);
+  }
+
+  .tg-predictive-search--desktop .predictive-search {
+    top: calc(100% + 0.6rem);
+    left: 0;
+    right: 0;
+  }
+
+  /* Replace Dawn's flex split with an explicit grid so the product column
+     always gets the bulk of the width. */
+  .tg-predictive-search--desktop .predictive-search__results-groups-wrapper {
+    display: grid;
+    grid-template-columns: minmax(20rem, 26rem) 1fr;
+    gap: 0 1.6rem;
+    border-bottom: 0;
+    padding-bottom: 0.4rem;
+  }
+
+  /* A lone group (only products, or only suggestions/pages) spans both tracks. */
+  .tg-predictive-search--desktop .predictive-search__result-group:only-child {
+    grid-column: 1 / -1;
+  }
+
+  .tg-predictive-search--desktop .predictive-search__result-group:first-child:not(:only-child) {
+    border-right: 0.1rem solid var(--tg-ps-border);
+  }
+
+  .tg-predictive-search--desktop .predictive-search__result-group {
+    flex: initial;
+    gap: 0;
+  }
+
+  /* Two-up product grid on wide dropdowns. */
+  .tg-predictive-search--desktop .predictive-search__results-list--products {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.2rem;
+    padding: 0 0.6rem;
+  }
+}
+
+/* ---------------------------------------------------------------- *
+ * Desktop custom header (<tg-header-desktop>)
+ *
+ * This is the search shoppers actually use at >=990px. The wrapper replaces
+ * the <form> as the middle grid track of .tg-header-desktop__top-inner
+ * (grid: logo | minmax(20rem, 1fr) | max-content), so it must carry the
+ * track's sizing and act as the panel's positioning context.
+ * ---------------------------------------------------------------- */
+
+.tg-predictive-search--tg-desktop {
+  position: relative;
+  min-width: 0;
+}
+
+.tg-predictive-search--tg-desktop .tg-header-desktop__search {
+  width: 100%;
+}
+
+@media screen and (min-width: 990px) {
+  /* __top-inner (the header's content box) is the containing block rather than
+     the search field: anchoring to the field caps how wide the panel can get,
+     since the left side is bounded by the logo column, which can be as narrow as
+     80px. Positioning against this box instead means the width is set by one
+     value below, with no risk of overflowing the viewport. */
+  .tg-header-desktop__top-inner {
+    position: relative;
+  }
+
+  /* The two tuning knobs for the desktop panel. */
+  .tg-predictive-search--tg-desktop {
+    position: static;
+    /* Deliberately short of the header's full content width (1440px by default)
+       so the panel reads as a dropdown rather than a full-bleed bar. */
+    --tg-ps-width: 108rem;
+    /* Share given to the term column; the product grid takes the rest, so
+       raising this narrows the products area. Product columns hold at 3 up to
+       about 43rem here - past that the grid drops to 2. */
+    --tg-ps-terms-width: 30rem;
+  }
+
+  .tg-predictive-search--tg-desktop .predictive-search,
+  .tg-predictive-search--tg-desktop .tg-search-idle {
+    /* Relative to __top-inner, so this is the bottom of the top bar row. */
+    top: calc(100% + 0.4rem);
+    /* left: 0 is the start of the header content box, i.e. the logo's left edge,
+       so the panel lines up with the logo instead of being centred. min(, 100%)
+       keeps it inside the header on narrow desktops. */
+    left: 0;
+    right: auto;
+    width: min(var(--tg-ps-width), 100%);
+    margin-inline: 0;
+    max-height: min(74vh, 62rem);
+    /* Above the mega menu panel (z-index 20 in tg-header-desktop.css) so an
+       open menu never covers what the shopper is typing into. */
+    z-index: 30;
+    /* Kept on the panel's own light surface rather than inheriting
+       --tg-header-desktop-background: a merchant running a dark header would
+       otherwise get dark panel chrome behind the fixed dark body text. */
+    border-radius: var(--tg-ps-radius);
+    border-color: var(--tg-ps-border);
+    background: #fff;
+    color: var(--tg-ps-text);
+    box-shadow: var(--tg-ps-shadow);
+  }
+
+  /* Two columns of terms so the wide panel doesn't read as empty when idle. */
+  predictive-search[idle].tg-predictive-search--tg-desktop .tg-search-idle {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 2.4rem;
+    align-items: start;
+    padding: 0.6rem 0 1.4rem;
+  }
+
+  /* Side by side, so the stacked divider/spacing would be wrong. */
+  .tg-predictive-search--tg-desktop .tg-search-idle__group:not([hidden]) + .tg-search-idle__group {
+    margin-top: 0;
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  /* With no history yet, popular terms take the full width. */
+  .tg-predictive-search--tg-desktop .tg-search-idle__group[hidden] + .tg-search-idle__group {
+    grid-column: 1 / -1;
+  }
+
+  /* Term links sit a step below the 14px product-card title. */
+  .tg-predictive-search--tg-desktop .tg-search-idle__link {
+    font-size: 1.3rem;
+  }
+
+  .tg-predictive-search--tg-desktop .predictive-search__results-groups-wrapper {
+    display: grid;
+    /* Intentionally lopsided, not a 50/50 split: the term column only holds
+       short text links, so it gets a capped share and the product grid takes
+       whatever is left. */
+    grid-template-columns: minmax(0, var(--tg-ps-terms-width, 19rem)) minmax(0, 1fr);
+    gap: 0 2.4rem;
+    border-bottom: 0;
+    padding-bottom: 0.4rem;
+  }
+
+  .tg-predictive-search--tg-desktop .predictive-search__result-group:only-child {
+    grid-column: 1 / -1;
+  }
+
+  /* Response had products but no query/collection/page terms, so the left column
+     holds only the button. Collapse to one column and move it below the products
+     rather than leaving a near-empty term column beside them. */
+  .tg-predictive-search--tg-desktop .predictive-search__results-groups-wrapper--no-terms {
+    grid-template-columns: 1fr;
+  }
+
+  .tg-predictive-search--tg-desktop
+    .predictive-search__results-groups-wrapper--no-terms
+    .predictive-search__result-group:first-child {
+    order: 2;
+    border-right: 0;
+  }
+
+  .tg-predictive-search--tg-desktop .predictive-search__result-group:first-child:not(:only-child) {
+    border-right: 0.1rem solid var(--tg-ps-border);
+  }
+
+  .tg-predictive-search--tg-desktop .predictive-search__result-group {
+    flex: initial;
+    gap: 0;
+  }
+
+  /* auto-fill rather than a fixed count, so the columns adapt if the panel or
+     term-column widths above are retuned. At 90rem this resolves to 3 tracks,
+     so the 6 requested products fill 3x2 exactly with no empty track. */
+  .tg-predictive-search--tg-desktop .predictive-search__results-list--products {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+    gap: 0.8rem 0.4rem;
+    padding: 0 0.6rem;
+  }
+
+  /* ---- Product cards: image on top, details underneath ----
+     Overrides the upstream side-by-side thumbnail layout
+     (grid-template-areas: 'product-image product-content'). Scoped to
+     --product so collection rows keep their horizontal form. */
+
+  .tg-predictive-search--tg-desktop .predictive-search__item--product {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'product-image'
+      'product-content';
+    grid-column-gap: 0;
+    grid-row-gap: 0.9rem;
+    align-items: start;
+    padding: 0.9rem;
+  }
+
+  .tg-predictive-search--tg-desktop .predictive-search__image--product {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    border-radius: 1rem;
+  }
+
+  .tg-predictive-search--tg-desktop .predictive-search__item--product .predictive-search__item-content {
+    gap: 0.2rem;
+  }
+
+  /* Titles wrap to 2 lines; reserve both so cards in a row align. Matches the
+     1.29 line-height set on .predictive-search__item-heading. */
+  .tg-predictive-search--tg-desktop .predictive-search__item--product .predictive-search__item-heading {
+    min-height: calc(2 * 1.29em);
+  }
+}
+
+/* The mobile row field has no dropdown of its own: it hands its term to the
+   overlay on submit (tg-mobile-search-handoff.js), so the only mobile panel
+   styling needed is the --mobile-overlay block below. */
+
+/* ---------------------------------------------------------------- *
+ * Mobile overlay: inline, static, fills the sheet
+ * ---------------------------------------------------------------- */
+
+.tg-predictive-search--mobile-overlay .predictive-search,
+.tg-predictive-search--mobile-overlay .tg-search-idle {
+  position: static;
+  top: auto;
+  left: auto;
+  right: auto;
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  /* JS sets an inline max-height for the floating variants. */
+  max-height: none !important;
+  padding-top: 0.8rem;
+}
+
+/* Popular terms are visible as soon as the overlay opens, before any focus. */
+.tg-predictive-search--mobile-overlay .tg-search-idle {
+  display: block;
+}
+
+.tg-predictive-search--mobile-overlay[results]:not([idle]) .tg-search-idle,
+.tg-predictive-search--mobile-overlay[loading]:not([idle]) .tg-search-idle {
+  display: none;
+}
+
+.tg-predictive-search--mobile-overlay .predictive-search__results-groups-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+/* display:contents lifts each group's sections up to be flex items of the
+   wrapper, so the "view all" button can be ordered past the products list
+   without duplicating it in the markup. */
+.tg-predictive-search--mobile-overlay .predictive-search__result-group {
+  display: contents;
+}
+
+.tg-predictive-search--mobile-overlay .predictive-search__search-for-button {
+  order: 1;
+  margin-top: 2rem;
+  padding: 0;
+}
+
+.tg-predictive-search--mobile-overlay .tg-predictive-search__view-all {
+  max-width: none;
+  padding: 1.4rem 1.6rem;
+  font-size: 1.6rem;
+}
+
+.tg-predictive-search--mobile-overlay .tg-search-idle__group-header {
+  padding-left: 0;
+  padding-right: 0;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* ---- Touch-scale type and spacing ----
+   A step up from the desktop panel, matching the overlay's own metrics in
+   tg-header-mobile-menu.css: 1.6rem rows, 4.8rem targets, 2.4rem icons. */
+
+.tg-predictive-search--mobile-overlay .predictive-search__heading {
+  margin: 1.6rem 0 0.4rem;
+  /* padding-left matches the overlay's row inset below, keeping the band label
+     aligned with the items. */
+  padding: 1rem 0.4rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.tg-predictive-search--mobile-overlay .tg-search-idle__link,
+.tg-predictive-search--mobile-overlay .predictive-search__item {
+  min-height: 4.8rem;
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
+}
+
+.tg-predictive-search--mobile-overlay .predictive-search__item {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  gap: 1.4rem;
+  /* min-height above would otherwise top-align the text in the taller row. */
+  align-items: center;
+}
+
+.tg-predictive-search--mobile-overlay .predictive-search__item-heading {
+  font-size: 1.5rem;
+  line-height: 1.33;
+  /* Room for a longer title on a narrow sheet. */
+  -webkit-line-clamp: 3;
+}
+
+.tg-predictive-search--mobile-overlay .predictive-search__item-vendor {
+  font-size: 1.3rem;
+}
+
+.tg-predictive-search--mobile-overlay .predictive-search__item .price {
+  margin-top: 0.6rem;
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+.tg-predictive-search--mobile-overlay .predictive-search__item--link-with-thumbnail {
+  grid-template-columns: 7.2rem 1fr;
+  grid-column-gap: 1.4rem;
+}
+
+.tg-predictive-search--mobile-overlay .predictive-search__image {
+  width: 7.2rem;
+  height: 7.2rem;
+  border-radius: 1rem;
+}
+
+.tg-predictive-search--mobile-overlay .predictive-search__item--collection {
+  grid-template-columns: 4.8rem 1fr;
+}
+
+.tg-predictive-search--mobile-overlay .predictive-search__image--collection {
+  width: 4.8rem;
+  height: 4.8rem;
+  border-radius: 0.8rem;
+}
+
+.tg-predictive-search--mobile-overlay .predictive-search__item-query-result {
+  font-size: 1.6rem;
+}
+
+/* 2.4rem to match the overlay's other icons (tg-header-mobile-menu.css). */
+.tg-predictive-search--mobile-overlay .predictive-search__item-icon {
+  width: 2.4rem;
+  height: 2.4rem;
+}
+
+.tg-predictive-search--mobile-overlay .tg-predictive-search__empty {
+  padding: 2rem 0.4rem;
+  font-size: 1.5rem;
+}
+
+.tg-predictive-search--mobile-overlay .tg-search-idle__list--pills {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.tg-predictive-search--mobile-overlay .tg-search-idle__list--pills .tg-search-idle__link {
+  padding-left: 1.4rem;
+  padding-right: 1.4rem;
+}
+
+/* ---------------------------------------------------------------- *
+ * Search template variant
+ * ---------------------------------------------------------------- */
+
+.tg-predictive-search--search-template .predictive-search,
+.tg-predictive-search--search-template .tg-search-idle {
+  left: 0;
+  right: 0;
+  width: 100%;
+}

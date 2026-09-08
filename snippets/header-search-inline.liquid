@@ -6,7 +6,11 @@
 {% endcomment %}
 
 <div class="cuszoo-header-search small-hide medium-hide">
-  <search-form>
+  {%- if settings.predictive_search_enabled -%}
+    <predictive-search class="tg-predictive-search tg-predictive-search--desktop" data-loading-text="{{ 'accessibility.loading' | t }}">
+  {%- else -%}
+    <search-form>
+  {%- endif -%}
   <form action="{{ routes.search_url }}" method="get" role="search" class="search">
     <div class="field">
       <input
@@ -16,6 +20,18 @@
         name="q"
         value="{{ search.terms | escape }}"
         placeholder="{{ 'general.search.search' | t }}"
+        {%- if settings.predictive_search_enabled -%}
+          role="combobox"
+          aria-expanded="false"
+          aria-owns="predictive-search-results"
+          aria-controls="predictive-search-results"
+          aria-haspopup="listbox"
+          aria-autocomplete="list"
+          autocorrect="off"
+          autocomplete="off"
+          autocapitalize="off"
+          spellcheck="false"
+        {%- endif -%}
       >
       <label class="field__label" for="{{ input_id }}">{{ 'general.search.search' | t }}</label>
       <input type="hidden" name="options[prefix]" value="last">
@@ -31,6 +47,13 @@
       </button>
     </div>
 
+    {%- if settings.predictive_search_enabled -%}
+      {%- render 'tg-search-panel', variant: 'desktop' -%}
+    {%- endif -%}
   </form>
-  </search-form>
+  {%- if settings.predictive_search_enabled -%}
+    </predictive-search>
+  {%- else -%}
+    </search-form>
+  {%- endif -%}
 </div>

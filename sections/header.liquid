@@ -20,6 +20,8 @@
 
 {%- if settings.predictive_search_enabled -%}
   <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
+  {{- 'tg-predictive-search.css' | asset_url | stylesheet_tag -}}
+  <script src="{{ 'tg-search-recent.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
 {%- if section.settings.menu_type_desktop == 'mega' -%}
@@ -233,12 +235,56 @@
           </a>
 
           {%- if section.settings.tg_header_desktop_show_search -%}
+            {%- comment -%}
+              This is the search field shoppers actually see on desktop: at >=990px
+              tg-header-desktop.css hides .header--tg-desktop-enabled entirely, so the
+              standard header's search (snippets/header-search-inline.liquid) is not
+              visible here. Predictive search must be wired up on THIS form.
+
+              The type="reset" button also matters functionally: SearchForm.onChange()
+              calls toggleResetButton() on every keystroke, so the button is what lets
+              shoppers clear the field and drop back to the popular/recent panel.
+            {%- endcomment -%}
+            {%- if settings.predictive_search_enabled -%}
+              <predictive-search class="tg-predictive-search tg-predictive-search--tg-desktop" data-loading-text="{{ 'accessibility.loading' | t }}">
+            {%- else -%}
+              <search-form class="tg-header-desktop__search-form">
+            {%- endif -%}
             <form class="tg-header-desktop__search" action="{{ routes.search_url }}" method="get" role="search">
                 <label class="visually-hidden" for="TgHeaderDesktopSearch-{{ section.id }}">{{ section.settings.tg_header_desktop_search_label | escape }}</label>
-                <input id="TgHeaderDesktopSearch-{{ section.id }}" type="search" name="q" placeholder="{{ section.settings.tg_header_desktop_search_placeholder | escape }}" data-tg-search-input>
+                <input
+                  id="TgHeaderDesktopSearch-{{ section.id }}"
+                  type="search"
+                  name="q"
+                  value="{{ search.terms | escape }}"
+                  placeholder="{{ section.settings.tg_header_desktop_search_placeholder | escape }}"
+                  data-tg-search-input
+                  {%- if settings.predictive_search_enabled -%}
+                    role="combobox"
+                    aria-expanded="false"
+                    aria-owns="predictive-search-results"
+                    aria-controls="predictive-search-results"
+                    aria-haspopup="listbox"
+                    aria-autocomplete="list"
+                    autocorrect="off"
+                    autocomplete="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                  {%- endif -%}
+                >
                 <input type="hidden" name="options[prefix]" value="last">
+                <button type="reset" class="tg-header-desktop__search-reset focus-inset{% if search.terms == blank %} hidden{% endif %}" aria-label="{{ 'general.search.reset' | t }}"><span class="svg-wrapper" aria-hidden="true">{{- 'icon-reset.svg' | inline_asset_content -}}</span></button>
                 <button type="submit" class="tg-header-desktop__search-submit focus-inset" aria-label="{{ section.settings.tg_header_desktop_search_label | escape }}"><span class="svg-wrapper" aria-hidden="true">{{- 'icon-search.svg' | inline_asset_content -}}</span></button>
+
+                {%- if settings.predictive_search_enabled -%}
+                  {%- render 'tg-search-panel', variant: 'tg-desktop' -%}
+                {%- endif -%}
             </form>
+            {%- if settings.predictive_search_enabled -%}
+              </predictive-search>
+            {%- else -%}
+              </search-form>
+            {%- endif -%}
           {%- endif -%}
 
           <div class="tg-header-desktop__top-actions">
@@ -448,6 +494,13 @@
 
     {%- if section.settings.enable_tg_header_mobile_menu and tg_header_mobile_search_mode == 'row' -%}
       {%- assign tg_header_mobile_search_input_id = 'TgMobileHeaderSearch-' | append: section.id -%}
+      {%- comment -%}
+        Loaded here rather than with the other header assets at the top of this
+        file because the row/icon mode isn't resolved until further down.
+      {%- endcomment -%}
+      {%- if settings.predictive_search_enabled -%}
+        <script src="{{ 'tg-mobile-search-handoff.js' | asset_url }}" defer="defer"></script>
+      {%- endif -%}
       {% render 'tg-header-mobile-search', input_id: tg_header_mobile_search_input_id, placeholder: section.settings.tg_header_mobile_search_placeholder %}
     {%- endif -%}
 
