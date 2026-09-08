@@ -32,6 +32,12 @@
     <style id="TeeInBlueOverrides">
       /* TeeInBlue compatibility: prevent duplicate plugin content from
          appearing alongside the theme's native product information. */
+      {%- if settings.tg_teeinblue_hide_duplicate_options != false -%}
+        body:has(main[data-template='product']) .tg-teeinblue-duplicate-option {
+          display: none !important;
+        }
+      {%- endif -%}
+
       {%- if settings.tg_teeinblue_hide_price != false -%}
         body:has(main[data-template='product']) .tee-block.tee-product-price {
           display: none !important;
@@ -59,6 +65,12 @@
         const previousObserver = window.TgTeeInBlueColorOverrideObserver;
         if (previousObserver) previousObserver.disconnect();
 
+        const previousVariantSyncHandler = window.TgTeeInBlueVariantSyncHandler;
+        if (previousVariantSyncHandler) {
+          document.removeEventListener('change', previousVariantSyncHandler);
+          window.TgTeeInBlueVariantSyncHandler = undefined;
+        }
+
         const buttonColor = {{ teeinblue_button_color | json }};
         const headerBackground = {{ teeinblue_form_header_background | json }};
         const contentBackground = {{ teeinblue_form_content_background | json }};
@@ -71,6 +83,98 @@
           ['#tee-artwork-form > .tee-customize-main-form > .tee-form-header', 'background', headerBackground],
           ['#tee-artwork-form > .tee-customize-main-form > #teeFormInputs.tee-customization-form', 'background', contentBackground],
         ];
+
+        {%- if settings.tg_teeinblue_hide_duplicate_options != false -%}
+          const normalizeOptionText = (value) =>
+            String(value || '')
+              .replace(/\s+/g, ' ')
+              .trim()
+              .toLowerCase();
+
+          const getThemeOptionName = (group) => {
+            const namedControl = group.querySelector('[data-option-name]');
+            if (namedControl?.dataset.optionName) return normalizeOptionText(namedControl.dataset.optionName);
+
+            const selectName = group.querySelector('select[name^="options["]')?.getAttribute('name') || '';
+            const match = selectName.match(/^options\[(.*)]$/);
+            return normalizeOptionText(match?.[1]);
+          };
+
+          const getTeeInBlueOptionName = (option) =>
+            normalizeOptionText(option.querySelector('.tee-option__title')?.textContent);
+
+          const isTeeInBlueOptionVisible = (option) => {
+            if (option.hidden || option.classList.contains('sr-only')) return false;
+
+            const style = window.getComputedStyle(option);
+            const bounds = option.getBoundingClientRect();
+            return (
+              style.display !== 'none' &&
+              style.visibility !== 'hidden' &&
+              style.opacity !== '0' &&
+              bounds.width > 1 &&
+              bounds.height > 1
+            );
+          };
+
+          const syncDuplicateOptionVisibility = () => {
+            const productRoot = document.getElementById('MainProduct-{{ section.id }}');
+            if (!productRoot) return;
+
+            const visibleTeeInBlueOptions = new Set(
+              [...productRoot.querySelectorAll('#tee-artwork-form .tee-variants .tee-option')]
+                .filter(isTeeInBlueOptionVisible)
+                .map(getTeeInBlueOptionName)
+                .filter(Boolean)
+            );
+
+            productRoot.querySelectorAll('variant-selects .product-form__input').forEach((group) => {
+              const hasVisibleDuplicate = visibleTeeInBlueOptions.has(getThemeOptionName(group));
+              group.classList.toggle('tg-teeinblue-duplicate-option', hasVisibleDuplicate);
+            });
+          };
+
+          const syncTeeInBlueSelectionToTheme = (event) => {
+            const teeInBlueControl = event.target.closest?.(
+              '#tee-artwork-form .tee-variants .tee-option input[type="radio"], #tee-artwork-form .tee-variants .tee-option select'
+            );
+            if (!teeInBlueControl) return;
+
+            const teeInBlueOption = teeInBlueControl.closest('.tee-option');
+            if (!teeInBlueOption || !isTeeInBlueOptionVisible(teeInBlueOption)) return;
+
+            const productRoot = document.getElementById('MainProduct-{{ section.id }}');
+            const optionName = getTeeInBlueOptionName(teeInBlueOption);
+            const optionValue = normalizeOptionText(teeInBlueControl.value);
+            if (!productRoot || !optionName || !optionValue) return;
+
+            const themeGroup = [...productRoot.querySelectorAll('variant-selects .product-form__input')].find(
+              (group) => getThemeOptionName(group) === optionName
+            );
+            if (!themeGroup) return;
+
+            const themeRadio = [...themeGroup.querySelectorAll('input[type="radio"]')].find(
+              (input) => normalizeOptionText(input.value) === optionValue
+            );
+            const themeSelect = themeGroup.querySelector('select');
+
+            if (themeRadio && !themeRadio.checked) {
+              themeRadio.checked = true;
+              themeRadio.dispatchEvent(new Event('change', { bubbles: true }));
+            } else if (themeSelect && normalizeOptionText(themeSelect.value) !== optionValue) {
+              const matchingOption = [...themeSelect.options].find(
+                (option) => normalizeOptionText(option.value) === optionValue
+              );
+              if (!matchingOption) return;
+
+              themeSelect.value = matchingOption.value;
+              themeSelect.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+          };
+
+          document.addEventListener('change', syncTeeInBlueSelectionToTheme);
+          window.TgTeeInBlueVariantSyncHandler = syncTeeInBlueSelectionToTheme;
+        {%- endif -%}
 
         const applyOverrides = () => {
           if (!document.querySelector('main[data-template="product"]')) return;
@@ -90,6 +194,10 @@
               }
             });
           });
+
+          {%- if settings.tg_teeinblue_hide_duplicate_options != false -%}
+            syncDuplicateOptionVisibility();
+          {%- endif -%}
         };
 
         let animationFrame;
@@ -104,7 +212,7 @@
         /* TeeInBlue replaces fields and modal contents dynamically. Reapply
            only when it inserts a node or changes an inline style/class. */
         const observer = new MutationObserver(scheduleOverrides);
-        observer.observe(document.body, {
+        observer.observe(document.documentElement, {
           childList: true,
           subtree: true,
           attributes: true,
