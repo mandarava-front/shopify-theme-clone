@@ -7,6 +7,7 @@
   if section.settings.tg_announcement_scroll_direction == 'left' or section.settings.tg_announcement_scroll_direction == 'right'
     assign tg_announcement_marquee = true
   endif
+  assign tg_announcement_scroll_devices = section.settings.tg_announcement_scroll_devices | default: 'mobile'
 
   assign social_icons = true
   if settings.social_facebook_link == blank and settings.social_instagram_link == blank and settings.social_youtube_link == blank and settings.social_tiktok_link == blank and settings.social_twitter_link == blank and settings.social_pinterest_link == blank and settings.social_snapchat_link == blank and settings.social_tumblr_link == blank and settings.social_vimeo_link == blank
@@ -173,6 +174,50 @@
     }
   }
 
+  @media screen and (max-width: 749px) {
+    #shopify-section-{{ section.id }} .announcement-bar__marquee.is-ready[data-devices='desktop'] .announcement-bar__marquee-track,
+    #shopify-section-{{ section.id }} .announcement-bar__marquee.is-ready[data-devices='desktop'] .announcement-bar__marquee-group {
+      width: 100%;
+    }
+
+    #shopify-section-{{ section.id }} .announcement-bar__marquee.is-ready[data-devices='desktop'] .announcement-bar__marquee-track {
+      transform: none;
+      animation: none;
+      will-change: auto;
+    }
+
+    #shopify-section-{{ section.id }} .announcement-bar__marquee.is-ready[data-devices='desktop'] .announcement-bar__marquee-group {
+      padding-inline: 0;
+      white-space: normal;
+    }
+
+    #shopify-section-{{ section.id }} .announcement-bar__marquee.is-ready[data-devices='desktop'] .announcement-bar__marquee-group[data-marquee-clone] {
+      display: none;
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    #shopify-section-{{ section.id }} .announcement-bar__marquee.is-ready[data-devices='mobile'] .announcement-bar__marquee-track,
+    #shopify-section-{{ section.id }} .announcement-bar__marquee.is-ready[data-devices='mobile'] .announcement-bar__marquee-group {
+      width: 100%;
+    }
+
+    #shopify-section-{{ section.id }} .announcement-bar__marquee.is-ready[data-devices='mobile'] .announcement-bar__marquee-track {
+      transform: none;
+      animation: none;
+      will-change: auto;
+    }
+
+    #shopify-section-{{ section.id }} .announcement-bar__marquee.is-ready[data-devices='mobile'] .announcement-bar__marquee-group {
+      padding-inline: 0;
+      white-space: normal;
+    }
+
+    #shopify-section-{{ section.id }} .announcement-bar__marquee.is-ready[data-devices='mobile'] .announcement-bar__marquee-group[data-marquee-clone] {
+      display: none;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     #shopify-section-{{ section.id }} .announcement-bar__marquee.is-ready .announcement-bar__marquee-track {
       width: 100%;
@@ -297,6 +342,7 @@
               <announcement-marquee
                 class="announcement-bar__marquee"
                 data-direction="{{ section.settings.tg_announcement_scroll_direction }}"
+                data-devices="{{ tg_announcement_scroll_devices }}"
               >
                 <span class="announcement-bar__marquee-track">
                   <span class="announcement-bar__marquee-group">
@@ -383,6 +429,7 @@
                         <announcement-marquee
                           class="announcement-bar__marquee"
                           data-direction="{{ section.settings.tg_announcement_scroll_direction }}"
+                          data-devices="{{ tg_announcement_scroll_devices }}"
                         >
                           <span class="announcement-bar__marquee-track">
                             <span class="announcement-bar__marquee-group">
@@ -586,14 +633,25 @@
     {
       "type": "select",
       "id": "tg_announcement_scroll_direction",
-      "label": "文字滚动方式",
+      "label": "文字滚动方向",
       "options": [
         { "value": "none", "label": "不滚动" },
         { "value": "left", "label": "向左滚动" },
         { "value": "right", "label": "向右滚动" }
       ],
       "default": "none",
-      "info": "启用后文字会连续循环滚动；悬停、键盘聚焦或系统开启“减少动态效果”时会暂停。"
+      "info": "系统开启“减少动态效果”时会暂停滚动。"
+    },
+    {
+      "type": "select",
+      "id": "tg_announcement_scroll_devices",
+      "label": "滚动生效设备",
+      "options": [
+        { "value": "mobile", "label": "仅移动端" },
+        { "value": "desktop", "label": "仅电脑端" },
+        { "value": "all", "label": "电脑端和移动端" }
+      ],
+      "default": "mobile"
     },
     {
       "type": "color",

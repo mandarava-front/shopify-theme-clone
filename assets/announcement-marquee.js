@@ -10,6 +10,8 @@ if (!customElements.get('announcement-marquee')) {
       this.isVisible = true;
       this.queueRefresh = this.queueRefresh.bind(this);
       this.updatePlayback = this.updatePlayback.bind(this);
+      this.viewportMediaQuery = window.matchMedia('(max-width: 749px)');
+      this.viewportMediaQuery.addEventListener('change', this.queueRefresh);
 
       this.resizeObserver = new ResizeObserver(this.queueRefresh);
       this.resizeObserver.observe(this);
@@ -30,6 +32,7 @@ if (!customElements.get('announcement-marquee')) {
       this.isConnectedToPage = false;
       this.resizeObserver?.disconnect();
       this.intersectionObserver?.disconnect();
+      this.viewportMediaQuery?.removeEventListener('change', this.queueRefresh);
       document.removeEventListener('visibilitychange', this.updatePlayback);
 
       if (this.refreshFrame) cancelAnimationFrame(this.refreshFrame);
@@ -48,6 +51,13 @@ if (!customElements.get('announcement-marquee')) {
     refresh() {
       this.track.querySelectorAll('[data-marquee-clone]').forEach((clone) => clone.remove());
       this.classList.add('is-ready');
+
+      if (!this.shouldAnimateAtCurrentViewport()) {
+        this.style.removeProperty('--tg-announcement-marquee-distance');
+        this.style.removeProperty('--tg-announcement-marquee-duration');
+        this.updatePlayback();
+        return;
+      }
 
       const groupWidth = this.sourceGroup.getBoundingClientRect().width;
       const viewportWidth = this.getBoundingClientRect().width;
@@ -74,6 +84,13 @@ if (!customElements.get('announcement-marquee')) {
       this.style.setProperty('--tg-announcement-marquee-distance', `${groupWidth}px`);
       this.style.setProperty('--tg-announcement-marquee-duration', `${duration}s`);
       this.updatePlayback();
+    }
+
+    shouldAnimateAtCurrentViewport() {
+      const devices = this.dataset.devices || 'mobile';
+      const isMobile = this.viewportMediaQuery.matches;
+
+      return devices === 'all' || (devices === 'mobile' && isMobile) || (devices === 'desktop' && !isMobile);
     }
 
     updatePlayback() {
