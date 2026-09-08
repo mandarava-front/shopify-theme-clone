@@ -74,7 +74,22 @@
           "type": "variant_picker",
           "settings": {
             "picker_type": "button",
-            "swatch_shape": "circle"
+            "swatch_shape": "circle",
+            "hide_single_value_options": false,
+            "hide_unavailable_options": false
+          }
+        },
+        "teeinblue_product_personalizer_product_app_block_pwCrLi": {
+          "type": "shopify://apps/teeinblue-product-personalizer/blocks/product-app-block/67212f31-32b0-450c-97dd-7e182a5fac7b",
+          "settings": {
+            "enable_design_mode": false,
+            "loading_background_color": "#000000",
+            "show_price": true,
+            "show_available_product": true,
+            "show_color": true,
+            "show_size": true,
+            "show_form": true,
+            "show_action_buttons": true
           }
         },
         "quantity_selector": {
@@ -84,7 +99,7 @@
         "buy_buttons": {
           "type": "buy_buttons",
           "settings": {
-            "show_dynamic_checkout": true,
+            "show_dynamic_checkout": false,
             "show_gift_card_recipient": true
           }
         },
@@ -108,12 +123,6 @@
             "icon_background_color": "#fef6f0",
             "svg_icon_color": "#f36352",
             "icon_line_color": "#f36352"
-          }
-        },
-        "secure_payment": {
-          "type": "secure_payment",
-          "settings": {
-            "heading": "Secure checkout"
           }
         },
         "accordion_description": {
@@ -158,10 +167,10 @@
         "sales_proof",
         "volume_discount",
         "variant_picker",
+        "teeinblue_product_personalizer_product_app_block_pwCrLi",
         "quantity_selector",
         "buy_buttons",
         "delivery_estimate",
-        "secure_payment",
         "accordion_description",
         "accordion_shipping",
         "accordion_guarantee"
@@ -218,11 +227,18 @@
         "padding_top": 32,
         "padding_bottom": 64
       }
+    },
+    "1788516308e48ffd5b": {
+      "type": "apps",
+      "settings": {
+        "include_margins": true
+      }
     }
   },
   "order": [
     "main",
     "disclosures",
-    "related-products"
+    "related-products",
+    "1788516308e48ffd5b"
   ]
 }

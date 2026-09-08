@@ -36,6 +36,8 @@
   endif
   assign country_position = 'AccordionFooter' | append: section.id
   assign country_form_id = 'AccordionFooterCountryForm-' | append: section.id
+  assign menu_blocks = section.blocks | where: 'type', 'menu'
+  assign secure_payment_block = section.blocks | where: 'type', 'secure_payment' | first
 -%}
 
 <footer
@@ -85,9 +87,9 @@
       {%- endif -%}
     </div>
 
-    {%- if section.blocks.size > 0 -%}
+    {%- if menu_blocks.size > 0 -%}
       <div class="mc-accordion-footer__groups">
-        {%- for block in section.blocks -%}
+        {%- for block in menu_blocks -%}
           {%- if block.settings.menu != blank -%}
             <details
               class="mc-accordion-footer__group"
@@ -208,17 +210,33 @@
       {%- endif -%}
 
       <div class="mc-accordion-footer__copyright">
-        <span>&copy; {{ 'now' | date: '%Y' }}, {{ shop.name | link_to: routes.root_url }}. All Rights Reserved.</span>
-        <br>
-        <span>{{ powered_by_link }}</span>
-        {%- if section.settings.show_policy -%}
-          <ul class="mc-accordion-footer__policies">
-            {%- for policy in shop.policies -%}
-              {%- if policy != blank -%}
-                <li><a href="{{ policy.url }}">{{ policy.title | escape }}</a></li>
-              {%- endif -%}
-            {%- endfor -%}
-          </ul>
+        <div class="mc-accordion-footer__copyright-content">
+          <span>&copy; {{ 'now' | date: '%Y' }}, {{ shop.name | link_to: routes.root_url }}. All Rights Reserved.</span>
+          <br>
+          <span>{{ powered_by_link }}</span>
+          {%- if section.settings.show_policy -%}
+            <ul class="mc-accordion-footer__policies">
+              {%- for policy in shop.policies -%}
+                {%- if policy != blank -%}
+                  <li><a href="{{ policy.url }}">{{ policy.title | escape }}</a></li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </div>
+
+        {%- if secure_payment_block and shop.enabled_payment_types.size > 0 -%}
+          <div class="mc-accordion-footer__payment" {{ secure_payment_block.shopify_attributes }}>
+            <ul
+              class="mc-accordion-footer__payment-list list-unstyled"
+              role="list"
+              aria-label="{{ 'sections.footer.payment' | t }}"
+            >
+              {%- for type in shop.enabled_payment_types -%}
+                <li>{{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}</li>
+              {%- endfor -%}
+            </ul>
+          </div>
         {%- endif -%}
       </div>
     </div>
@@ -259,6 +277,11 @@
           "label": "默认展开"
         }
       ]
+    },
+    {
+      "type": "secure_payment",
+      "name": "t:sections.tg_product.secure_payment.name",
+      "limit": 1
     }
   ],
   "settings": [
@@ -402,7 +425,8 @@
         { "type": "menu" },
         { "type": "menu", "settings": { "open_by_default": true } },
         { "type": "menu" },
-        { "type": "menu" }
+        { "type": "menu" },
+        { "type": "secure_payment" }
       ]
     }
   ]

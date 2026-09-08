@@ -356,39 +356,6 @@
   color: #1c7a4a;
 }
 
-.tg-product-payment {
-  border: 0.1rem solid #d7e1e8;
-  border-radius: 0.6rem;
-  padding: 1.4rem 1.6rem;
-  text-align: center;
-}
-
-.tg-product-payment__heading {
-  color: #526373;
-  font-size: 1.3rem;
-  font-weight: 700;
-  margin: 0 0 1rem;
-}
-
-.tg-product-payment-list {
-  align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  justify-content: center;
-  margin: 0;
-}
-
-.tg-product-payment-list li {
-  display: flex;
-  height: 2.4rem;
-}
-
-.tg-product-payment-list svg {
-  height: 2.4rem;
-  width: auto;
-}
-
 .tg-trust-message {
   align-items: flex-start;
   background: #f5f8fa;

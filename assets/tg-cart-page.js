@@ -16,7 +16,8 @@
 
     try {
       expiresAt = Number(window.localStorage.getItem(key)) || 0;
-      if (!expiresAt) {
+      // 未开始或已倒计时结束时重新计时，进行中则沿用已存的到期时间
+      if (expiresAt <= Date.now()) {
         expiresAt = Date.now() + duration;
         window.localStorage.setItem(key, String(expiresAt));
       }

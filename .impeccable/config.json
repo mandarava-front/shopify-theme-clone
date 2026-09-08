@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "geist",
+        "createdAt": "2026-09-08T09:57:29.007Z",
+        "reason": "Existing site UI font used consistently across cuszoo-theme.css and macorner-home.css; this finding predates the footer payment migration."
+      }
+    ]
+  }
+}

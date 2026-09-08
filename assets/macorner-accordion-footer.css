@@ -275,6 +275,32 @@
   text-decoration: underline;
 }
 
+.mc-accordion-footer__payment {
+  margin-top: 1.4rem;
+}
+
+.mc-accordion-footer__payment-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  width: 100%;
+  max-width: 56rem;
+  margin: 0 auto;
+}
+
+.mc-accordion-footer__payment-list li {
+  display: flex;
+  flex: 0 0 auto;
+  height: 3.2rem;
+}
+
+.mc-accordion-footer__payment-list svg {
+  width: auto;
+  height: 3.2rem;
+}
+
 .mc-accordion-footer__policies {
   display: flex;
   flex-wrap: wrap;
@@ -371,13 +397,14 @@
   }
 
   .mc-accordion-footer__bottom .mc-accordion-footer__copyright {
-    grid-column: 3;
-    justify-self: end;
-    text-align: right;
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: 100%;
+    text-align: center;
   }
 
   .mc-accordion-footer__bottom .mc-accordion-footer__policies {
-    justify-content: flex-end;
+    justify-content: center;
   }
 }
 
@@ -482,6 +509,30 @@
   .mc-accordion-footer__bottom .mc-accordion-footer__copyright {
     font-size: 1.2rem;
     line-height: 1.35;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2.4rem;
+    text-align: left;
+  }
+
+  .mc-accordion-footer__copyright-content {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .mc-accordion-footer__payment {
+    flex: 0 1 56rem;
+    margin-top: 0;
+  }
+
+  .mc-accordion-footer__payment-list {
+    justify-content: flex-end;
+    margin-right: 0;
+  }
+
+  .mc-accordion-footer__bottom .mc-accordion-footer__policies {
+    justify-content: flex-start;
   }
 }
 

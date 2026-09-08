@@ -702,19 +702,6 @@
                     inline_purchase_actions: inline_purchase_actions,
                     show_pickup_availability: true
                   -%}
-                {%- when 'secure_payment' -%}
-                  <div class="tg-product-payment" {{ block.shopify_attributes }}>
-                    {%- if block.settings.heading != blank -%}
-                      <p class="tg-product-payment__heading">{{ block.settings.heading | escape }}</p>
-                    {%- endif -%}
-                    {%- if shop.enabled_payment_types.size > 0 -%}
-                      <ul class="tg-product-payment-list list-unstyled" role="list">
-                        {%- for type in shop.enabled_payment_types -%}
-                          <li>{{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}</li>
-                        {%- endfor -%}
-                      </ul>
-                    {%- endif -%}
-                  </div>
                 {%- when 'trust_message' -%}
                   <div class="tg-trust-message" {{ block.shopify_attributes }}>
                     <span class="svg-wrapper" aria-hidden="true">{{- 'icon-checkmark.svg' | inline_asset_content -}}</span>
@@ -1379,19 +1366,6 @@
           "default": true,
           "label": "t:sections.main-product.blocks.buy_buttons.settings.show_gift_card_recipient.label",
           "info": "t:sections.main-product.blocks.buy_buttons.settings.show_gift_card_recipient.info"
-        }
-      ]
-    },
-    {
-      "type": "secure_payment",
-      "name": "t:sections.tg_product.secure_payment.name",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "text",
-          "id": "heading",
-          "default": "Secure checkout",
-          "label": "t:sections.tg_product.secure_payment.heading.label"
         }
       ]
     },
@@ -2988,12 +2962,6 @@
           "settings": {
             "show_dynamic_checkout": true,
             "show_gift_card_recipient": true
-          }
-        },
-        {
-          "type": "secure_payment",
-          "settings": {
-            "heading": "Secure checkout"
           }
         },
         {
