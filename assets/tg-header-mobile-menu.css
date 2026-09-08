@@ -89,7 +89,6 @@
       'search search search';
     row-gap: var(--tg-header-mobile-search-top-spacing, 0.6rem);
     padding-bottom: var(--tg-header-mobile-search-bottom-spacing, 1.2rem);
-    transition: row-gap 220ms ease-in, padding-bottom 220ms ease-in;
   }
 
   .header--tg-mobile-search-row .tg-header-mobile-search {
@@ -99,7 +98,7 @@
     min-width: 0;
     position: relative;
     z-index: 2;
-    transition: height 220ms ease-in, opacity 160ms ease-in, transform 220ms ease-in;
+    transition: opacity 160ms ease-in, transform 220ms ease-in;
   }
 
   .header--tg-mobile-search-row .tg-header-mobile-search .field {
@@ -203,13 +202,7 @@
     display: block;
   }
 
-  .tg-header-mobile-search-compact .header.header--tg-mobile-search-row {
-    row-gap: 0;
-    padding-bottom: var(--tg-header-mobile-base-padding-bottom, 0);
-  }
-
   .tg-header-mobile-search-compact .header--tg-mobile-search-row .tg-header-mobile-search {
-    height: 0;
     opacity: 0;
     overflow: hidden;
     pointer-events: none;
@@ -218,6 +211,8 @@
 
   .tg-header-mobile-search-collapsed .header.header--tg-mobile-search-row {
     grid-template-areas: 'left-icons heading icons';
+    row-gap: 0;
+    padding-bottom: var(--tg-header-mobile-base-padding-bottom, 0);
   }
 
   .tg-header-mobile-search-collapsed .header--tg-mobile-search-row .tg-header-mobile-search {
