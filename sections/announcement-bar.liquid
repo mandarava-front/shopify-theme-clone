@@ -50,6 +50,15 @@
     color: inherit;
   }
 
+  /* Let the grid/flex containers shrink around the clipped marquee track. */
+  #shopify-section-{{ section.id }} .announcement-bar,
+  #shopify-section-{{ section.id }} .announcement-bar__announcement,
+  #shopify-section-{{ section.id }} .announcement-bar__link,
+  #shopify-section-{{ section.id }} .announcement-bar-slider {
+    min-width: 0;
+    max-width: 100%;
+  }
+
   #shopify-section-{{ section.id }} .announcement-bar__message {
     display: flex;
     min-height: {{ section.settings.tg_announcement_height }}px;
