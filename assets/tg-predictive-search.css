@@ -40,12 +40,40 @@
 }
 
 .tg-predictive-search .predictive-search {
+  display: none;
+  position: absolute;
+  top: calc(100% + 0.1rem);
+  left: -0.1rem;
+  width: calc(100% + 0.2rem);
+  z-index: 3;
   border: 0.1rem solid var(--tg-ps-border);
   border-radius: var(--tg-ps-radius);
+  background-color: rgb(var(--color-background));
   box-shadow: var(--tg-ps-shadow);
   padding: 0.6rem 0;
   color: var(--tg-ps-text);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
+}
+
+/* Critical first-paint fallback for the asynchronously loaded upstream
+   predictive-search stylesheet: keep the panel out of the search field until
+   it is actually open or loading. */
+.tg-predictive-search[open] .predictive-search,
+.tg-predictive-search[loading] .predictive-search {
+  display: block;
+}
+
+.tg-predictive-search[loading] .predictive-search__loading-state {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.tg-predictive-search .predictive-search__loading-state .spinner {
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 /* The idle panel replaces the results container while the query is empty. */

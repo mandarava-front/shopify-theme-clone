@@ -68,6 +68,7 @@
         const previousVariantSyncHandler = window.TgTeeInBlueVariantSyncHandler;
         if (previousVariantSyncHandler) {
           document.removeEventListener('change', previousVariantSyncHandler);
+          document.removeEventListener('teeinblue-event-variant-changed', previousVariantSyncHandler);
           window.TgTeeInBlueVariantSyncHandler = undefined;
         }
 
@@ -122,7 +123,7 @@
             if (!productRoot) return;
 
             const visibleTeeInBlueOptions = new Set(
-              [...productRoot.querySelectorAll('#tee-artwork-form .tee-variants .tee-option')]
+              [...productRoot.querySelectorAll('#tee-artwork-form .tee-option')]
                 .filter(isTeeInBlueOptionVisible)
                 .map(getTeeInBlueOptionName)
                 .filter(Boolean)
@@ -134,46 +135,77 @@
             });
           };
 
-          const syncTeeInBlueSelectionToTheme = (event) => {
-            const teeInBlueControl = event.target.closest?.(
-              '#tee-artwork-form .tee-variants .tee-option input[type="radio"], #tee-artwork-form .tee-variants .tee-option select'
+          const getThemeControlForValue = (group, optionValue) => {
+            const normalizedValue = normalizeOptionText(optionValue);
+            if (!normalizedValue) return;
+
+            const radio = [...group.querySelectorAll('input[type="radio"]')].find(
+              (input) => normalizeOptionText(input.value) === normalizedValue
             );
-            if (!teeInBlueControl) return;
-
-            const teeInBlueOption = teeInBlueControl.closest('.tee-option');
-            if (!teeInBlueOption || !isTeeInBlueOptionVisible(teeInBlueOption)) return;
-
-            const productRoot = document.getElementById('MainProduct-{{ section.id }}');
-            const optionName = getTeeInBlueOptionName(teeInBlueOption);
-            const optionValue = normalizeOptionText(teeInBlueControl.value);
-            if (!productRoot || !optionName || !optionValue) return;
-
-            const themeGroup = [...productRoot.querySelectorAll('variant-selects .product-form__input')].find(
-              (group) => getThemeOptionName(group) === optionName
-            );
-            if (!themeGroup) return;
-
-            const themeRadio = [...themeGroup.querySelectorAll('input[type="radio"]')].find(
-              (input) => normalizeOptionText(input.value) === optionValue
-            );
-            const themeSelect = themeGroup.querySelector('select');
-
-            if (themeRadio && !themeRadio.checked) {
-              themeRadio.checked = true;
-              themeRadio.dispatchEvent(new Event('change', { bubbles: true }));
-            } else if (themeSelect && normalizeOptionText(themeSelect.value) !== optionValue) {
-              const matchingOption = [...themeSelect.options].find(
-                (option) => normalizeOptionText(option.value) === optionValue
-              );
-              if (!matchingOption) return;
-
-              themeSelect.value = matchingOption.value;
-              themeSelect.dispatchEvent(new Event('change', { bubbles: true }));
+            if (radio) {
+              return {
+                control: radio,
+                isSelected: radio.checked,
+                select: () => {
+                  radio.checked = true;
+                },
+              };
             }
+
+            const select = group.querySelector('select');
+            const matchingOption = [...(select?.options || [])].find(
+              (option) => normalizeOptionText(option.value) === normalizedValue
+            );
+            if (!select || !matchingOption) return;
+
+            return {
+              control: select,
+              isSelected: select.value === matchingOption.value,
+              select: () => {
+                select.value = matchingOption.value;
+              },
+            };
           };
 
-          document.addEventListener('change', syncTeeInBlueSelectionToTheme);
-          window.TgTeeInBlueVariantSyncHandler = syncTeeInBlueSelectionToTheme;
+          const syncTeeInBlueVariantToTheme = (event) => {
+            const productRoot = document.getElementById('MainProduct-{{ section.id }}');
+            const campaign = window.teeinblueCampaign;
+            const variantId = String(event.detail?.variantId || '');
+            if (!productRoot || !variantId || !campaign) return;
+
+            if (
+              campaign.productId &&
+              productRoot.dataset.productId &&
+              String(campaign.productId) !== productRoot.dataset.productId
+            ) {
+              return;
+            }
+
+            const variant = campaign.variantsById?.[variantId];
+            if (!variant) return;
+
+            const themeGroups = [...productRoot.querySelectorAll('variant-selects .product-form__input')];
+            const optionValues = Array.isArray(variant.options)
+              ? variant.options
+              : themeGroups.map((_, index) => variant[`option${index + 1}`]);
+            if (!themeGroups.length || optionValues.length < themeGroups.length) return;
+
+            const themeControls = themeGroups.map((group, index) =>
+              getThemeControlForValue(group, optionValues[index])
+            );
+            if (themeControls.some((entry) => !entry)) return;
+
+            const changedControls = themeControls.filter((entry) => !entry.isSelected);
+            if (!changedControls.length) return;
+
+            changedControls.forEach((entry) => entry.select());
+            changedControls[changedControls.length - 1].control.dispatchEvent(
+              new Event('change', { bubbles: true })
+            );
+          };
+
+          document.addEventListener('teeinblue-event-variant-changed', syncTeeInBlueVariantToTheme);
+          window.TgTeeInBlueVariantSyncHandler = syncTeeInBlueVariantToTheme;
         {%- endif -%}
 
         const applyOverrides = () => {
