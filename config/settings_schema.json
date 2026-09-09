@@ -1561,6 +1561,46 @@
     ]
   },
   {
+    "name": "商品尺码表",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "给商品添加指定标签后，在匹配的尺码选项旁显示尺码表入口。"
+      },
+      {
+        "type": "checkbox",
+        "id": "tg_size_chart_enabled",
+        "label": "启用商品尺码表",
+        "default": true
+      },
+      {
+        "type": "image_picker",
+        "id": "tg_size_chart_image",
+        "label": "尺码表图片"
+      },
+      {
+        "type": "text",
+        "id": "tg_size_chart_trigger_tag",
+        "label": "触发商品标签",
+        "info": "只有包含此标签的商品才显示尺码表。匹配时忽略大小写。",
+        "default": "size-chart"
+      },
+      {
+        "type": "text",
+        "id": "tg_size_chart_option_names",
+        "label": "尺码选项名称",
+        "info": "使用英文或中文逗号分隔多个名称，例如：Size,尺码,尺寸。名称按完整文字匹配。",
+        "default": "Size,尺码,尺寸"
+      },
+      {
+        "type": "text",
+        "id": "tg_size_chart_button_label",
+        "label": "入口文案",
+        "default": "Size Chart"
+      }
+    ]
+  },
+  {
     "name": "TeeInBlue 兼容设置",
     "settings": [
       {

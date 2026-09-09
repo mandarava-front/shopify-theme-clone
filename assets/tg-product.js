@@ -329,6 +329,116 @@ function bindTgCustomilyPreviewSync(container = document) {
   });
 }
 
+const TG_SIZE_CHART_NATIVE_GROUP_SELECTOR = 'variant-selects .product-form__input';
+const TG_SIZE_CHART_TEEINBLUE_GROUP_SELECTOR = '#tee-artwork-form .tee-option';
+
+class TgSizeChart {
+  constructor(root) {
+    this.root = root;
+    this.modalId = root.dataset.tgSizeChartModalId;
+    this.label = root.dataset.tgSizeChartLabel || 'Size Chart';
+    this.optionNames = new Set(
+      (root.dataset.tgSizeChartOptionNames || 'Size,尺码,尺寸')
+        .split(/[,，]/)
+        .map((name) => this.normalize(name))
+        .filter(Boolean)
+    );
+    this.animationFrame = null;
+    this.scheduleSync = this.scheduleSync.bind(this);
+    this.observer = new MutationObserver(this.scheduleSync);
+    this.observer.observe(root, { childList: true, subtree: true, characterData: true });
+    this.sync();
+  }
+
+  normalize(value) {
+    return String(value || '')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .toLowerCase();
+  }
+
+  getNativeOptionName(group) {
+    const namedControl = group.querySelector('[data-option-name]');
+    if (namedControl?.dataset.optionName) return namedControl.dataset.optionName;
+
+    const selectName = group.querySelector('select[name^="options["]')?.getAttribute('name') || '';
+    return selectName.match(/^options\[(.*)]$/)?.[1] || '';
+  }
+
+  getTeeInBlueOptionName(group) {
+    return group.querySelector('.tee-option__title')?.textContent || '';
+  }
+
+  createButton() {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'tg-size-chart__button link';
+    button.dataset.tgSizeChartOpener = 'true';
+    button.setAttribute('aria-haspopup', 'dialog');
+    button.setAttribute('aria-controls', this.modalId);
+    button.textContent = this.label;
+    button.addEventListener('click', () => {
+      const modal = document.getElementById(this.modalId);
+      if (typeof modal?.show === 'function') modal.show(button);
+    });
+    return button;
+  }
+
+  syncGroup(group, optionName, title) {
+    const existingButton = group.querySelector('[data-tg-size-chart-opener]');
+    const isSizeOption = this.optionNames.has(this.normalize(optionName));
+
+    if (!isSizeOption || !title) {
+      existingButton?.remove();
+      group.classList.remove('tg-size-chart-option');
+      return;
+    }
+
+    group.classList.add('tg-size-chart-option');
+    const button = existingButton || this.createButton();
+    if (title.tagName === 'LEGEND') {
+      if (button.parentElement !== title) title.appendChild(button);
+    } else if (title.nextElementSibling !== button) {
+      title.insertAdjacentElement('afterend', button);
+    }
+  }
+
+  sync() {
+    this.root.querySelectorAll(TG_SIZE_CHART_NATIVE_GROUP_SELECTOR).forEach((group) => {
+      this.syncGroup(group, this.getNativeOptionName(group), group.querySelector('.form__label'));
+    });
+
+    this.root.querySelectorAll(TG_SIZE_CHART_TEEINBLUE_GROUP_SELECTOR).forEach((group) => {
+      this.syncGroup(group, this.getTeeInBlueOptionName(group), group.querySelector('.tee-option__title'));
+    });
+  }
+
+  scheduleSync() {
+    if (this.animationFrame) return;
+    this.animationFrame = window.requestAnimationFrame(() => {
+      this.animationFrame = null;
+      this.sync();
+    });
+  }
+
+  destroy() {
+    this.observer.disconnect();
+    if (this.animationFrame) window.cancelAnimationFrame(this.animationFrame);
+    document.getElementById(this.modalId)?.remove();
+  }
+}
+
+function bindTgSizeCharts(container = document) {
+  const roots = [];
+  if (container.matches?.('product-info[data-tg-size-chart]')) roots.push(container);
+  roots.push(...container.querySelectorAll('product-info[data-tg-size-chart]'));
+
+  roots.forEach((root) => {
+    if (root.tgSizeChart) return;
+    root.tgSizeChart = new TgSizeChart(root);
+  });
+}
+
 document.addEventListener('click', releaseTgCustomilyFollow, true);
 document.addEventListener('click', trackTgCustomilyInteraction, true);
 document.addEventListener('change', trackTgCustomilyInteraction, true);
@@ -336,10 +446,18 @@ document.addEventListener('change', trackTgCustomilyInteraction, true);
 document.addEventListener('DOMContentLoaded', () => {
   bindTgProductAddOnForms();
   bindTgCustomilyPreviewSync();
+  bindTgSizeCharts();
   window.TgTeeInBlueCartBridge ||= new TgTeeInBlueCartBridge();
 });
 
 document.addEventListener('shopify:section:load', (event) => {
   bindTgProductAddOnForms(event.target);
   bindTgCustomilyPreviewSync(event.target);
+  bindTgSizeCharts(event.target);
+});
+
+document.addEventListener('shopify:section:unload', (event) => {
+  event.target.querySelectorAll('product-info[data-tg-size-chart]').forEach((root) => {
+    root.tgSizeChart?.destroy();
+  });
 });
