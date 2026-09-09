@@ -105,7 +105,14 @@
                       {{ 'sections.cart.estimated_total' | t }}
                     {% endif %}
                   </h2>
-                  <p class="totals__total-value">{{ cart.total_price | money_with_currency }}</p>
+                  <p
+                    class="totals__total-value"
+                    {% if block.settings.total_price_color != blank %}
+                      style="color: {{ block.settings.total_price_color }};"
+                    {% endif %}
+                  >
+                    {{ cart.total_price | money_with_currency }}
+                  </p>
                 </div>
 
                 {% if block.settings.show_tax_note %}
@@ -546,6 +553,11 @@
           "id": "label",
           "label": "t:sections.tg_cart_editor.labels.total_label",
           "default": "Subtotal"
+        },
+        {
+          "type": "color",
+          "id": "total_price_color",
+          "label": "t:sections.tg_cart_editor.labels.total_price_color"
         },
         {
           "type": "checkbox",

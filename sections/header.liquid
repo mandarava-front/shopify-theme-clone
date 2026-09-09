@@ -94,8 +94,19 @@
   }
 
   .section-header {
-    position: relative;
     margin-bottom: {{ section.settings.margin_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  body:has(sticky-header[data-sticky-type='always']) .announcement-bar-section,
+  body:has(sticky-header[data-sticky-type='reduce-logo-size']) .announcement-bar-section {
+    position: sticky;
+    top: 0;
+    z-index: 4;
+  }
+
+  .section-header.shopify-section-header-sticky:has(> sticky-header[data-sticky-type='always']),
+  .section-header.shopify-section-header-sticky:has(> sticky-header[data-sticky-type='reduce-logo-size']) {
+    top: var(--announcement-bar-height, 0px);
   }
 
   @media screen and (min-width: 750px) {
@@ -619,15 +630,19 @@
         this.getAttribute('data-sticky-type') === 'reduce-logo-size';
       this.headerIsDisabled = this.getAttribute('data-sticky-type') === 'none';
       this.headerBounds = {};
+      this.announcementBar = null;
+      this.announcementBarResizeObserver = null;
       this.mobileSearchMediaQuery = window.matchMedia('(max-width: 989px)');
       this.mobileSearchHasCompacted = false;
       this.mobileSearchCollapseTimer = null;
+      this.onSectionLoadHandler = this.syncAnnouncementBar.bind(this);
 
-      this.setHeaderHeight();
+      this.syncAnnouncementBar();
 
       window.matchMedia('(max-width: 990px)').addEventListener('change', this.setHeaderHeight.bind(this));
       this.onMobileSearchBreakpointChange = this.syncMobileSearchCompactState.bind(this);
       this.mobileSearchMediaQuery.addEventListener('change', this.onMobileSearchBreakpointChange);
+      document.addEventListener('shopify:section:load', this.onSectionLoadHandler);
 
       if (this.headerIsAlwaysSticky) {
         this.header.classList.add('shopify-section-header-sticky');
@@ -651,12 +666,34 @@
 
     setHeaderHeight() {
       document.documentElement.style.setProperty('--header-height', `${this.header.offsetHeight}px`);
+      document.documentElement.style.setProperty(
+        '--announcement-bar-height',
+        `${this.announcementBar?.offsetHeight || 0}px`,
+      );
+    }
+
+    syncAnnouncementBar() {
+      const announcementBar = document.querySelector('.announcement-bar-section');
+
+      if (announcementBar !== this.announcementBar) {
+        this.announcementBarResizeObserver?.disconnect();
+        this.announcementBar = announcementBar;
+
+        if (this.announcementBar && 'ResizeObserver' in window) {
+          this.announcementBarResizeObserver = new ResizeObserver(() => this.setHeaderHeight());
+          this.announcementBarResizeObserver.observe(this.announcementBar);
+        }
+      }
+
+      this.setHeaderHeight();
     }
 
     disconnectedCallback() {
       this.removeEventListener('preventHeaderReveal', this.hideHeaderOnScrollUp);
       window.removeEventListener('scroll', this.onScrollHandler);
       this.mobileSearchMediaQuery.removeEventListener('change', this.onMobileSearchBreakpointChange);
+      document.removeEventListener('shopify:section:load', this.onSectionLoadHandler);
+      this.announcementBarResizeObserver?.disconnect();
       window.clearTimeout(this.mobileSearchCollapseTimer);
     }
 
@@ -1335,7 +1372,7 @@
           "label": "t:sections.header.settings.sticky_header_type.options__4.label"
         }
       ],
-      "default": "on-scroll-up",
+      "default": "always",
       "label": "t:sections.header.settings.sticky_header_type.label"
     },
     {

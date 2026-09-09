@@ -179,7 +179,7 @@
         "tg_header_desktop_menu_gap": 24,
         "tg_header_desktop_menu_border_width": 1,
         "menu_type_desktop": "mega",
-        "sticky_header_type": "none",
+        "sticky_header_type": "always",
         "show_line_separator": false,
         "color_scheme": "scheme-1",
         "menu_color_scheme": "scheme-1",
