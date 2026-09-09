@@ -528,7 +528,6 @@
 .tg-cart-promotion {
   align-items: center;
   background: color-mix(in srgb, var(--tg-cart-accent) 9%, #fff);
-  border-left: 3px solid var(--tg-cart-accent);
   display: flex;
   gap: 16px;
   justify-content: space-between;
@@ -590,7 +589,6 @@
   left: 0;
   position: absolute;
   top: 0;
-  transition: width 220ms ease-out;
 }
 
 .tg-cart-promotion__progress-tick {
@@ -695,12 +693,6 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .tg-cart-promotion__progress-fill {
-    transition: none;
-  }
-}
-
 .tg-cart-summary__shipping-progress {
   display: flex;
   flex-direction: column;
@@ -709,6 +701,15 @@
   border: var(--tg-cart-free-shipping-border-width, 0) solid var(--tg-cart-free-shipping-border-color, var(--tg-cart-border));
   border-radius: var(--tg-cart-radius);
   background: var(--tg-cart-free-shipping-surface, color-mix(in srgb, var(--tg-cart-accent) 5%, var(--tg-cart-card)));
+}
+
+.tg-cart-page__mobile-shipping-slot {
+  max-width: none;
+  width: 100%;
+}
+
+.tg-cart-page__mobile-shipping-slot[hidden] {
+  display: none;
 }
 
 .tg-cart-summary__shipping-progress .tg-cart-free-shipping__message {
@@ -746,7 +747,6 @@
     transparent
   );
   background-size: 3rem 3rem;
-  transition: width 260ms ease-out;
 }
 
 .tg-cart-summary__shipping-progress .tg-cart-free-shipping__value {
@@ -1127,7 +1127,7 @@
 .tg-cart-assurance {
   align-items: flex-start;
   background: var(--tg-cart-card);
-  border-left: 3px solid var(--tg-cart-accent);
+  border: 1px solid color-mix(in srgb, var(--tg-cart-accent) 18%, var(--tg-cart-border));
   color: var(--tg-cart-muted);
   display: flex;
   font-size: 1.25rem;
@@ -1301,6 +1301,16 @@
 }
 
 @media screen and (max-width: 749px) {
+  .tg-cart-expiry:has(+ .tg-cart-page__mobile-shipping-slot:not([hidden])) {
+    margin-bottom: 0;
+  }
+
+  .tg-cart-summary.tg-cart-page__mobile-shipping-slot {
+    margin: 0;
+    padding-bottom: var(--tg-cart-block-margin-bottom, 0px);
+    padding-top: var(--tg-cart-block-margin-top, 0px);
+  }
+
   .tg-cart-preview-dialog {
     max-height: calc(100dvh - 24px);
     max-width: calc(100vw - 24px);
@@ -1619,7 +1629,7 @@
   font-weight: 400;
   line-height: 2.6rem;
   margin: 0 0 18px;
-  min-height: 83px;
+  min-height: 48px;
   padding: 14px 10px;
   text-align: left;
 }

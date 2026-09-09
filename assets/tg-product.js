@@ -82,6 +82,161 @@ function bindTgProductAddOnForms(container = document) {
   });
 }
 
+// TeeInBlue mounts its customization controls outside Shopify's product form.
+// Its own add-to-cart action creates the customization and submits the line
+// item with the generated properties. When the plugin action area is visually
+// hidden, route the visible theme button through that flow instead of
+// submitting the base variant without its customization metadata.
+class TgTeeInBlueCartBridge {
+  constructor() {
+    this.pendingForm = null;
+    this.pendingButton = null;
+    this.customizationStarted = false;
+    this.validationTimer = null;
+    this.fallbackTimer = null;
+
+    this.onClick = this.onClick.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onCustomizationStarted = this.onCustomizationStarted.bind(this);
+    this.reset = this.reset.bind(this);
+
+    document.addEventListener('click', this.onClick, true);
+    document.addEventListener('submit', this.onSubmit, true);
+    document.addEventListener('teeinblue-event-before-customization-created', this.onCustomizationStarted);
+    document.addEventListener('teeinblue-event-after-cart-added', this.reset);
+    document.addEventListener('teeinblue-event-error', this.reset);
+  }
+
+  getContext(event) {
+    let form;
+    let button;
+
+    if (event.type === 'submit') {
+      form = event.target;
+      if (!(form instanceof HTMLFormElement) || !form.matches('form[data-type="add-to-cart-form"]')) return null;
+      if (event.submitter?.closest?.('.shopify-payment-button')) return null;
+      button = event.submitter?.matches?.('button.product-form__submit[type="submit"]')
+        ? event.submitter
+        : form.querySelector('button.product-form__submit[type="submit"]');
+    } else {
+      button = event.target.closest?.('button.product-form__submit[type="submit"]');
+      form = button?.form;
+    }
+
+    const productRoot = form?.closest('product-info[data-product-id]');
+    const campaign = window.teeinblueCampaign;
+    if (!button || !productRoot || !productRoot.contains(button)) return null;
+    if (campaign?.isTeeInBlueProduct !== true) return null;
+    if (campaign.productId && String(campaign.productId) !== productRoot.dataset.productId) return null;
+
+    const customizationForm = productRoot.querySelector('#tee-artwork-form');
+    const pluginButton = customizationForm?.querySelector('#teeAtcButton');
+    if (!customizationForm || !pluginButton) return null;
+
+    return { form, button, pluginButton, customizationForm };
+  }
+
+  preventThemeSubmit(event) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }
+
+  syncQuantity(form, customizationForm) {
+    const themeQuantity = Number(new FormData(form).get('quantity')) || 1;
+    const pluginQuantity = customizationForm.querySelector('.tee-quantity-input');
+    if (!pluginQuantity || Number(pluginQuantity.value) === themeQuantity) return;
+
+    pluginQuantity.value = String(themeQuantity);
+    pluginQuantity.dispatchEvent(new Event('input', { bubbles: true }));
+    pluginQuantity.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+
+  setButtonLoading(button, loading) {
+    if (!button) return;
+
+    if (loading) {
+      if (button.getAttribute('aria-disabled') === 'true') return;
+      button.dataset.tgTeeinbluePending = 'true';
+      button.setAttribute('aria-disabled', 'true');
+      button.classList.add('loading');
+      button.querySelector('.loading__spinner')?.classList.remove('hidden');
+      return;
+    }
+
+    if (button.dataset.tgTeeinbluePending !== 'true') return;
+    delete button.dataset.tgTeeinbluePending;
+    button.removeAttribute('aria-disabled');
+    button.classList.remove('loading');
+    button.querySelector('.loading__spinner')?.classList.add('hidden');
+  }
+
+  begin(context, event) {
+    this.preventThemeSubmit(event);
+    this.pendingForm = context.form;
+    this.pendingButton = context.button;
+    this.customizationStarted = false;
+    this.setButtonLoading(context.button, true);
+
+    window.clearTimeout(this.validationTimer);
+    window.clearTimeout(this.fallbackTimer);
+    this.fallbackTimer = window.setTimeout(this.reset, 60_000);
+
+    try {
+      this.syncQuantity(context.form, context.customizationForm);
+      context.pluginButton.click();
+
+      // Validation failures do not consistently emit a public TeeInBlue error
+      // event. A valid submission emits BEFORE_CUSTOMIZATION_CREATED first.
+      this.validationTimer = window.setTimeout(() => {
+        if (this.pendingForm === context.form && !this.customizationStarted) this.reset();
+      }, 500);
+    } catch (error) {
+      console.error('[TeeInBlue] Unable to start customization-aware add to cart', error);
+      this.reset();
+    }
+  }
+
+  onClick(event) {
+    const context = this.getContext(event);
+    if (!context) return;
+
+    if (this.pendingForm) {
+      this.preventThemeSubmit(event);
+      return;
+    }
+
+    if (context.button.disabled || context.button.getAttribute('aria-disabled') === 'true') return;
+    this.begin(context, event);
+  }
+
+  onSubmit(event) {
+    const context = this.getContext(event);
+    if (!context) return;
+
+    if (this.pendingForm) {
+      this.preventThemeSubmit(event);
+      return;
+    }
+
+    this.begin(context, event);
+  }
+
+  onCustomizationStarted() {
+    if (!this.pendingForm) return;
+    this.customizationStarted = true;
+    window.clearTimeout(this.validationTimer);
+  }
+
+  reset() {
+    this.setButtonLoading(this.pendingButton, false);
+    this.pendingForm = null;
+    this.pendingButton = null;
+    this.customizationStarted = false;
+    window.clearTimeout(this.validationTimer);
+    window.clearTimeout(this.fallbackTimer);
+  }
+}
+
 // Customily renders its live preview onto a canvas mounted inside one of the
 // product media slides, then relies on that slide being the one the shopper
 // sees. That holds for Dawn's stacked desktop gallery, but this theme turns the
@@ -181,6 +336,7 @@ document.addEventListener('change', trackTgCustomilyInteraction, true);
 document.addEventListener('DOMContentLoaded', () => {
   bindTgProductAddOnForms();
   bindTgCustomilyPreviewSync();
+  window.TgTeeInBlueCartBridge ||= new TgTeeInBlueCartBridge();
 });
 
 document.addEventListener('shopify:section:load', (event) => {

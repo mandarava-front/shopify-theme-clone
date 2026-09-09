@@ -87,6 +87,7 @@
     if (drawer && typeof data.item_count === 'number') drawer.classList.toggle('is-empty', data.item_count === 0);
 
     window.TgCartPage?.initTimers(document);
+    window.TgCartPage?.syncFreeShippingPlacement();
     syncDrawer();
     drawer?.initializeTgCartDrawer?.();
   };

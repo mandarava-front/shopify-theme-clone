@@ -73,6 +73,7 @@
               <div
                 class="tg-cart-summary__block"
                 style="--tg-cart-block-width: {{ block.settings.block_width | default: 100 }}%; --tg-cart-block-margin-top: {{ block.settings.margin_top | default: 0 }}px; --tg-cart-block-margin-bottom: {{ block.settings.margin_bottom | default: 0 }}px;"
+                {% if block.type == 'free_shipping_progress' %}data-tg-cart-free-shipping-page-block{% endif %}
                 {{ block.shopify_attributes }}
               >
               {%- case block.type -%}

@@ -8,6 +8,15 @@
         "value": "geist",
         "createdAt": "2026-09-08T09:57:29.007Z",
         "reason": "Existing site UI font used consistently across cuszoo-theme.css and macorner-home.css; this finding predates the footer payment migration."
+      },
+      {
+        "rule": "broken-image",
+        "value": "*",
+        "files": [
+          "assets/tg-cart-page.js"
+        ],
+        "createdAt": "2026-09-09T02:47:02.404Z",
+        "reason": "Existing preview dialog image receives its real src immediately before showModal; missing initial src intentionally prevents an unnecessary request and does not render a broken image."
       }
     ]
   }

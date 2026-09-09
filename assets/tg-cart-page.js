@@ -1,6 +1,11 @@
 (() => {
   const timerSelector = '[data-tg-cart-timer]';
   const previewSelector = '[data-tg-cart-preview]';
+  const mobileShippingSlotSelector = '[data-tg-cart-mobile-free-shipping-slot]';
+  const pageShippingBlockSelector = '[data-tg-cart-free-shipping-page-block]';
+  const freeShippingSelector = '[data-tg-cart-free-shipping]';
+  const mobileShippingQuery = window.matchMedia('(max-width: 749px)');
+  const freeShippingSpacingProperties = ['--tg-cart-block-margin-top', '--tg-cart-block-margin-bottom'];
 
   function formatTime(seconds) {
     const safeSeconds = Math.max(0, Math.floor(seconds));
@@ -59,8 +64,74 @@
     root.querySelectorAll(timerSelector).forEach(startTimer);
   }
 
+  function getDirectFreeShipping(container) {
+    const progress = container?.firstElementChild;
+    return progress?.matches(freeShippingSelector) ? progress : null;
+  }
+
+  function syncFreeShippingSpacing(slot, sourceBlock) {
+    freeShippingSpacingProperties.forEach((property) => {
+      const value = sourceBlock?.style.getPropertyValue(property);
+      if (value) slot.style.setProperty(property, value);
+      else slot.style.removeProperty(property);
+    });
+  }
+
+  function restoreFreeShippingPlacement() {
+    const slot = document.querySelector(mobileShippingSlotSelector);
+    const sourceBlock = document.querySelector(pageShippingBlockSelector);
+    if (!slot || !sourceBlock) return;
+
+    const slottedProgress = getDirectFreeShipping(slot);
+    const sourceProgress = getDirectFreeShipping(sourceBlock);
+
+    if (sourceProgress) {
+      if (slottedProgress && slottedProgress !== sourceProgress) slottedProgress.remove();
+    } else if (slottedProgress) {
+      sourceBlock.append(slottedProgress);
+    }
+
+    sourceBlock.hidden = false;
+    slot.hidden = true;
+  }
+
+  function syncFreeShippingPlacement() {
+    const slot = document.querySelector(mobileShippingSlotSelector);
+    if (!slot) return;
+
+    const sourceBlock = document.querySelector(pageShippingBlockSelector);
+    const cartItems = document.querySelector('cart-items.tg-cart-page');
+    if (!sourceBlock || cartItems?.classList.contains('is-empty')) {
+      syncFreeShippingSpacing(slot, null);
+      slot.replaceChildren();
+      slot.hidden = true;
+      return;
+    }
+
+    const sourceProgress = getDirectFreeShipping(sourceBlock);
+    const slottedProgress = getDirectFreeShipping(slot);
+
+    if (mobileShippingQuery.matches) {
+      syncFreeShippingSpacing(slot, sourceBlock);
+      if (sourceProgress) slot.replaceChildren(sourceProgress);
+      sourceBlock.hidden = Boolean(getDirectFreeShipping(slot));
+      slot.hidden = !getDirectFreeShipping(slot);
+      return;
+    }
+
+    if (sourceProgress) {
+      if (slottedProgress && slottedProgress !== sourceProgress) slottedProgress.remove();
+    } else if (slottedProgress) {
+      sourceBlock.append(slottedProgress);
+    }
+    sourceBlock.hidden = false;
+    slot.hidden = true;
+  }
+
   window.TgCartPage = window.TgCartPage || {};
   window.TgCartPage.initTimers = initTimers;
+  window.TgCartPage.restoreFreeShippingPlacement = restoreFreeShippingPlacement;
+  window.TgCartPage.syncFreeShippingPlacement = syncFreeShippingPlacement;
 
   function getPreviewDialog() {
     let dialog = document.getElementById('TgCartPreviewDialog');
@@ -112,6 +183,21 @@
     else window.open(imageUrl, '_blank', 'noopener');
   });
 
-  document.addEventListener('DOMContentLoaded', () => initTimers());
-  document.addEventListener('shopify:section:load', (event) => initTimers(event.target));
+  document.addEventListener('DOMContentLoaded', () => {
+    initTimers();
+    syncFreeShippingPlacement();
+  });
+  document.addEventListener('shopify:section:unload', (event) => {
+    if (event.target.querySelector(mobileShippingSlotSelector)) restoreFreeShippingPlacement();
+  });
+  document.addEventListener('shopify:section:load', (event) => {
+    initTimers(event.target);
+    syncFreeShippingPlacement();
+  });
+
+  if (typeof mobileShippingQuery.addEventListener === 'function') {
+    mobileShippingQuery.addEventListener('change', syncFreeShippingPlacement);
+  } else {
+    mobileShippingQuery.addListener(syncFreeShippingPlacement);
+  }
 })();

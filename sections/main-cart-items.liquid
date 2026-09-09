@@ -105,6 +105,11 @@
   <div class="page-width">
     {% if section.settings.enable_tg_cart_page_style %}
       {% render 'tg-cart-expiry-notice', section: section, cart: cart %}
+      <div
+        class="tg-cart-page__mobile-shipping-slot tg-cart-summary"
+        data-tg-cart-mobile-free-shipping-slot
+        hidden
+      ></div>
     {% endif %}
     {% if section.settings.enable_tg_cart_page_style and section.settings.tg_cart_show_announcement and section.settings.announcement_text != blank %}
       <div class="tg-cart-page__announcement" role="status">

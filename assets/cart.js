@@ -134,8 +134,10 @@ class CartItems extends window.StandardEvents.createViewEventElement(HTMLElement
         .then((responseText) => {
           const html = new DOMParser().parseFromString(responseText, 'text/html');
           const sourceQty = html.querySelector('cart-items');
+          window.TgCartPage?.restoreFreeShippingPlacement();
           this.innerHTML = sourceQty.innerHTML;
           window.TgCartPage?.initTimers(this);
+          window.TgCartPage?.syncFreeShippingPlacement();
         })
         .catch((e) => {
           console.error(e);
@@ -236,6 +238,7 @@ class CartItems extends window.StandardEvents.createViewEventElement(HTMLElement
               section.selector
             );
           });
+          window.TgCartPage?.syncFreeShippingPlacement();
           cartDrawerWrapper?.initializeTgCartDrawer?.();
           const updatedValue = parsedState.items[line - 1] ? parsedState.items[line - 1].quantity : undefined;
           let message = '';
