@@ -256,8 +256,8 @@
     border-radius: 99rem;
     background: color-mix(in srgb, var(--tg-header-desktop-background) 94%, var(--tg-header-desktop-text));
     color: var(--tg-header-desktop-text);
-    font-size: 1.3rem;
-    font-weight: 500;
+    font-size: var(--tg-header-desktop-utility-size, 1.3rem);
+    font-weight: var(--tg-header-desktop-utility-weight, 500);
     line-height: 1.2;
     text-decoration: none;
     white-space: nowrap;

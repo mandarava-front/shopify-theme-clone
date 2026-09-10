@@ -19,7 +19,7 @@
 
 <section
   class="tg-order-tracking color-{{ section.settings.color_scheme | default: 'scheme-1' }} gradient"
-  style="--tracking-padding-top: {{ section.settings.padding_top }}px; --tracking-padding-bottom: {{ section.settings.padding_bottom }}px;"
+  style="--tracking-padding-top: {{ section.settings.padding_top }}px; --tracking-padding-bottom: {{ section.settings.padding_bottom }}px; --tg-tracking-heading-size: {{ section.settings.heading_font_size }}px; --tg-tracking-heading-size-mobile: {{ section.settings.heading_font_size_mobile }}px; --tg-tracking-heading-weight: {{ section.settings.heading_font_weight }}; --tg-tracking-subtitle-size: {{ section.settings.subtitle_font_size }}px; --tg-tracking-subtitle-size-mobile: {{ section.settings.subtitle_font_size_mobile }}px; --tg-tracking-subtitle-weight: {{ section.settings.subtitle_font_weight }}; --tg-tracking-button-size: {{ section.settings.button_font_size }}px; --tg-tracking-button-size-mobile: {{ section.settings.button_font_size_mobile }}px; --tg-tracking-button-weight: {{ section.settings.button_font_weight }};"
   data-section-id="{{ section.id }}"
 >
   <div class="tg-order-tracking__shell page-width">
@@ -183,7 +183,10 @@
   "tag": "section",
   "class": "section",
   "disabled_on": {
-    "groups": ["header", "footer"]
+    "groups": [
+      "header",
+      "footer"
+    ]
   },
   "settings": [
     {
@@ -200,10 +203,98 @@
       "default": "Track Your Order"
     },
     {
+      "type": "range",
+      "id": "heading_font_size",
+      "label": "t:tg.settings.heading_font_size",
+      "min": 18,
+      "max": 56,
+      "step": 1,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "heading_font_size_mobile",
+      "label": "t:tg.settings.heading_font_size_mobile",
+      "min": 16,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "select",
+      "id": "heading_font_weight",
+      "label": "t:tg.settings.heading_font_weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "t:tg.settings.font_weight_options.regular"
+        },
+        {
+          "value": "500",
+          "label": "t:tg.settings.font_weight_options.medium"
+        },
+        {
+          "value": "600",
+          "label": "t:tg.settings.font_weight_options.semibold"
+        },
+        {
+          "value": "700",
+          "label": "t:tg.settings.font_weight_options.bold"
+        }
+      ],
+      "default": "700"
+    },
+    {
       "type": "textarea",
       "id": "subtitle",
       "label": "t:tg.settings.description",
       "default": "Enter the order number and email address used at checkout to see the latest delivery updates."
+    },
+    {
+      "type": "range",
+      "id": "subtitle_font_size",
+      "label": "t:tg.settings.subtitle_font_size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "subtitle_font_size_mobile",
+      "label": "t:tg.settings.subtitle_font_size_mobile",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "select",
+      "id": "subtitle_font_weight",
+      "label": "t:tg.settings.subtitle_font_weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "t:tg.settings.font_weight_options.regular"
+        },
+        {
+          "value": "500",
+          "label": "t:tg.settings.font_weight_options.medium"
+        },
+        {
+          "value": "600",
+          "label": "t:tg.settings.font_weight_options.semibold"
+        },
+        {
+          "value": "700",
+          "label": "t:tg.settings.font_weight_options.bold"
+        }
+      ],
+      "default": "400"
     },
     {
       "type": "text",
@@ -234,6 +325,50 @@
       "id": "submit_label",
       "label": "t:tg.settings.button_label",
       "default": "TRACK ORDER"
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "label": "t:tg.settings.button_font_size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "button_font_size_mobile",
+      "label": "t:tg.settings.button_font_size_mobile",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "select",
+      "id": "button_font_weight",
+      "label": "t:tg.settings.button_font_weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "t:tg.settings.font_weight_options.regular"
+        },
+        {
+          "value": "500",
+          "label": "t:tg.settings.font_weight_options.medium"
+        },
+        {
+          "value": "600",
+          "label": "t:tg.settings.font_weight_options.semibold"
+        },
+        {
+          "value": "700",
+          "label": "t:tg.settings.font_weight_options.bold"
+        }
+      ],
+      "default": "700"
     },
     {
       "type": "page",

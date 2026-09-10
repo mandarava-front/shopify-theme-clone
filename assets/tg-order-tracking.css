@@ -87,9 +87,9 @@
   margin: 2rem 0 0;
   color: rgb(var(--color-foreground, 39, 35, 40));
   font-family: var(--font-heading-family);
-  font-size: 2.6rem;
+  font-size: var(--tg-tracking-heading-size, 2.6rem);
   font-style: var(--font-heading-style);
-  font-weight: var(--font-heading-weight);
+  font-weight: var(--tg-tracking-heading-weight, var(--font-heading-weight));
   letter-spacing: 0;
   line-height: 1.2;
   overflow-wrap: anywhere;
@@ -99,8 +99,9 @@
   max-width: 54rem;
   margin: 1.2rem 0 0;
   color: var(--tracking-muted);
-  font-size: 1.6rem;
+  font-size: var(--tg-tracking-subtitle-size, 1.6rem);
   line-height: 1.6;
+  font-weight: var(--tg-tracking-subtitle-weight, 400);
 }
 
 .tg-order-tracking__form {
@@ -201,8 +202,8 @@
   color: var(--tracking-on-primary);
   cursor: pointer;
   font: inherit;
-  font-size: 1.4rem;
-  font-weight: 700;
+  font-size: var(--tg-tracking-button-size, 1.4rem);
+  font-weight: var(--tg-tracking-button-weight, 700);
   letter-spacing: 0;
   line-height: 1.3;
   text-align: center;
@@ -814,7 +815,7 @@
   }
 
   .tg-order-tracking__heading {
-    font-size: 3.2rem;
+    font-size: var(--tg-tracking-heading-size, 3.2rem);
   }
 
   .tg-order-tracking__result-card {
@@ -907,4 +908,10 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@media screen and (max-width: 749px) {
+  .tg-order-tracking__heading { font-size: var(--tg-tracking-heading-size-mobile, var(--tg-tracking-heading-size, 2.2rem)); }
+  .tg-order-tracking__subtitle { font-size: var(--tg-tracking-subtitle-size-mobile, var(--tg-tracking-subtitle-size, 1.4rem)); }
+  .tg-order-tracking__submit { font-size: var(--tg-tracking-button-size-mobile, var(--tg-tracking-button-size, 1.3rem)); }
 }

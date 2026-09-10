@@ -214,7 +214,14 @@
         --tg-header-desktop-border-width: {{ section.settings.tg_header_desktop_menu_border_width }}px;
         --tg-header-desktop-panel-width: {{ section.settings.tg_header_desktop_menu_panel_width }}%;
         --tg-header-desktop-panel-columns: {{ section.settings.tg_header_desktop_menu_panel_columns }};
-      "
+        --tg-header-desktop-nav-item-size: {{ section.settings.tg_header_desktop_nav_item_font_size }}px;
+        --tg-header-desktop-nav-item-weight: {{ section.settings.tg_header_desktop_nav_item_font_weight }};
+        --tg-header-desktop-group-size: {{ section.settings.tg_header_desktop_group_font_size }}px;
+        --tg-header-desktop-group-weight: {{ section.settings.tg_header_desktop_group_font_weight }};
+        --tg-header-desktop-menu-link-size: {{ section.settings.tg_header_desktop_menu_link_font_size }}px;
+        --tg-header-desktop-menu-link-weight: {{ section.settings.tg_header_desktop_menu_link_font_weight }};
+        --tg-header-desktop-utility-size: {{ section.settings.tg_header_desktop_utility_font_size }}px;
+        --tg-header-desktop-utility-weight: {{ section.settings.tg_header_desktop_utility_font_weight }};"
     >
       <nav class="tg-header-desktop__nav" aria-label="{{ 'sections.header.tg_header_desktop.navigation_label' | t }}">
         <div class="tg-header-desktop__top">
@@ -436,6 +443,7 @@
     {% if section.settings.enable_tg_header_mobile_menu %}
       style="
         --tg-header-mobile-search-font-size: {{ section.settings.tg_header_mobile_search_font_size | default: 14 }}px;
+        --tg-header-mobile-search-font-weight: {{ section.settings.tg_header_mobile_search_font_weight | default: 400 }};
         --tg-header-mobile-search-placeholder-color: {{ section.settings.tg_header_mobile_search_placeholder_color | default: '#737379' }};
         --tg-header-mobile-search-border-width: {% if section.settings.tg_header_mobile_search_show_border %}{{ section.settings.tg_header_mobile_search_border_width | default: 1 }}px{% else %}0px{% endif %};
         --tg-header-mobile-search-border-color: {{ section.settings.tg_header_mobile_search_border_color | default: '#d7d7db' }};
@@ -944,8 +952,14 @@
       "default": "row",
       "label": "移动端搜索样式",
       "options": [
-        { "value": "row", "label": "单独一行搜索框" },
-        { "value": "icon", "label": "标题旁搜索图标" }
+        {
+          "value": "row",
+          "label": "单独一行搜索框"
+        },
+        {
+          "value": "icon",
+          "label": "标题旁搜索图标"
+        }
       ]
     },
     {
@@ -955,9 +969,18 @@
       "label": "首页移动端搜索样式",
       "info": "仅在首页生效；选择跟随全局设置时，使用上方的移动端搜索样式。",
       "options": [
-        { "value": "inherit", "label": "跟随全局设置" },
-        { "value": "row", "label": "单独一行搜索框" },
-        { "value": "icon", "label": "标题旁搜索图标" }
+        {
+          "value": "inherit",
+          "label": "跟随全局设置"
+        },
+        {
+          "value": "row",
+          "label": "单独一行搜索框"
+        },
+        {
+          "value": "icon",
+          "label": "标题旁搜索图标"
+        }
       ]
     },
     {
@@ -967,9 +990,18 @@
       "label": "商品详情页移动端搜索样式",
       "info": "仅在商品详情页生效；选择跟随全局设置时，使用上方的移动端搜索样式。",
       "options": [
-        { "value": "inherit", "label": "跟随全局设置" },
-        { "value": "row", "label": "单独一行搜索框" },
-        { "value": "icon", "label": "标题旁搜索图标" }
+        {
+          "value": "inherit",
+          "label": "跟随全局设置"
+        },
+        {
+          "value": "row",
+          "label": "单独一行搜索框"
+        },
+        {
+          "value": "icon",
+          "label": "标题旁搜索图标"
+        }
       ]
     },
     {
@@ -1093,6 +1125,228 @@
       "id": "tg_header_mobile_menu_divider",
       "default": "#eeeeff",
       "label": "菜单分隔线颜色"
+    },
+    {
+      "type": "header",
+      "content": "tg | 移动端 | 导航文字样式"
+    },
+    {
+      "type": "range",
+      "id": "tg_header_mobile_menu_title_font_size",
+      "label": "抽屉标题字号",
+      "min": 12,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "select",
+      "id": "tg_header_mobile_menu_title_font_weight",
+      "label": "抽屉标题字重",
+      "options": [
+        {
+          "value": "400",
+          "label": "常规"
+        },
+        {
+          "value": "500",
+          "label": "中等"
+        },
+        {
+          "value": "600",
+          "label": "半粗"
+        },
+        {
+          "value": "700",
+          "label": "加粗"
+        }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "range",
+      "id": "tg_header_mobile_menu_card_font_size",
+      "label": "菜单卡片字号",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "select",
+      "id": "tg_header_mobile_menu_card_font_weight",
+      "label": "菜单卡片字重",
+      "options": [
+        {
+          "value": "400",
+          "label": "常规"
+        },
+        {
+          "value": "500",
+          "label": "中等"
+        },
+        {
+          "value": "600",
+          "label": "半粗"
+        },
+        {
+          "value": "700",
+          "label": "加粗"
+        }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "select",
+      "id": "tg_header_mobile_menu_card_featured_font_weight",
+      "label": "特色卡片字重",
+      "options": [
+        {
+          "value": "400",
+          "label": "常规"
+        },
+        {
+          "value": "500",
+          "label": "中等"
+        },
+        {
+          "value": "600",
+          "label": "半粗"
+        },
+        {
+          "value": "700",
+          "label": "加粗"
+        }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "range",
+      "id": "tg_header_mobile_menu_submenu_title_font_size",
+      "label": "子菜单标题字号",
+      "min": 12,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "select",
+      "id": "tg_header_mobile_menu_submenu_title_font_weight",
+      "label": "子菜单标题字重",
+      "options": [
+        {
+          "value": "400",
+          "label": "常规"
+        },
+        {
+          "value": "500",
+          "label": "中等"
+        },
+        {
+          "value": "600",
+          "label": "半粗"
+        },
+        {
+          "value": "700",
+          "label": "加粗"
+        }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "range",
+      "id": "tg_header_mobile_menu_accordion_font_size",
+      "label": "手风琴项字号",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "select",
+      "id": "tg_header_mobile_menu_accordion_font_weight",
+      "label": "手风琴项字重",
+      "options": [
+        {
+          "value": "400",
+          "label": "常规"
+        },
+        {
+          "value": "500",
+          "label": "中等"
+        },
+        {
+          "value": "600",
+          "label": "半粗"
+        },
+        {
+          "value": "700",
+          "label": "加粗"
+        }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "range",
+      "id": "tg_header_mobile_menu_utility_font_size",
+      "label": "功能链接字号",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "select",
+      "id": "tg_header_mobile_menu_utility_font_weight",
+      "label": "功能链接字重",
+      "options": [
+        {
+          "value": "400",
+          "label": "常规"
+        },
+        {
+          "value": "500",
+          "label": "中等"
+        },
+        {
+          "value": "600",
+          "label": "半粗"
+        },
+        {
+          "value": "700",
+          "label": "加粗"
+        }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "select",
+      "id": "tg_header_mobile_search_font_weight",
+      "label": "搜索文字字重",
+      "options": [
+        {
+          "value": "400",
+          "label": "常规"
+        },
+        {
+          "value": "500",
+          "label": "中等"
+        },
+        {
+          "value": "600",
+          "label": "半粗"
+        },
+        {
+          "value": "700",
+          "label": "加粗"
+        }
+      ],
+      "default": "400"
     },
     {
       "type": "header",
@@ -1283,9 +1537,18 @@
       "default": "center",
       "label": "一级导航对齐方式",
       "options": [
-        { "value": "left", "label": "左对齐" },
-        { "value": "center", "label": "居中" },
-        { "value": "right", "label": "右对齐" }
+        {
+          "value": "left",
+          "label": "左对齐"
+        },
+        {
+          "value": "center",
+          "label": "居中"
+        },
+        {
+          "value": "right",
+          "label": "右对齐"
+        }
       ]
     },
     {
@@ -1326,6 +1589,146 @@
       "unit": "px",
       "default": 1,
       "label": "导航底部分隔线宽度"
+    },
+    {
+      "type": "header",
+      "content": "tg | PC端 | 导航文字样式"
+    },
+    {
+      "type": "range",
+      "id": "tg_header_desktop_nav_item_font_size",
+      "label": "一级导航字号",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "select",
+      "id": "tg_header_desktop_nav_item_font_weight",
+      "label": "一级导航字重",
+      "options": [
+        {
+          "value": "400",
+          "label": "常规"
+        },
+        {
+          "value": "500",
+          "label": "中等"
+        },
+        {
+          "value": "600",
+          "label": "半粗"
+        },
+        {
+          "value": "700",
+          "label": "加粗"
+        }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "range",
+      "id": "tg_header_desktop_group_font_size",
+      "label": "下拉分组标题字号",
+      "min": 10,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "select",
+      "id": "tg_header_desktop_group_font_weight",
+      "label": "下拉分组标题字重",
+      "options": [
+        {
+          "value": "400",
+          "label": "常规"
+        },
+        {
+          "value": "500",
+          "label": "中等"
+        },
+        {
+          "value": "600",
+          "label": "半粗"
+        },
+        {
+          "value": "700",
+          "label": "加粗"
+        }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "range",
+      "id": "tg_header_desktop_menu_link_font_size",
+      "label": "下拉链接字号",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "select",
+      "id": "tg_header_desktop_menu_link_font_weight",
+      "label": "下拉链接字重",
+      "options": [
+        {
+          "value": "400",
+          "label": "常规"
+        },
+        {
+          "value": "500",
+          "label": "中等"
+        },
+        {
+          "value": "600",
+          "label": "半粗"
+        },
+        {
+          "value": "700",
+          "label": "加粗"
+        }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "range",
+      "id": "tg_header_desktop_utility_font_size",
+      "label": "功能链接字号",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "select",
+      "id": "tg_header_desktop_utility_font_weight",
+      "label": "功能链接字重",
+      "options": [
+        {
+          "value": "400",
+          "label": "常规"
+        },
+        {
+          "value": "500",
+          "label": "中等"
+        },
+        {
+          "value": "600",
+          "label": "半粗"
+        },
+        {
+          "value": "700",
+          "label": "加粗"
+        }
+      ],
+      "default": "500"
     },
     {
       "type": "header",
@@ -1550,9 +1953,18 @@
           "label": "入口图标",
           "default": "gift",
           "options": [
-            { "value": "gift", "label": "礼物" },
-            { "value": "track-order", "label": "物流追踪" },
-            { "value": "reviews", "label": "评价" }
+            {
+              "value": "gift",
+              "label": "礼物"
+            },
+            {
+              "value": "track-order",
+              "label": "物流追踪"
+            },
+            {
+              "value": "reviews",
+              "label": "评价"
+            }
           ]
         }
       ]
@@ -1567,11 +1979,26 @@
           "default": "facebook",
           "label": "社交平台",
           "options": [
-            { "value": "facebook", "label": "Facebook" },
-            { "value": "youtube", "label": "YouTube" },
-            { "value": "instagram", "label": "Instagram" },
-            { "value": "tiktok", "label": "TikTok" },
-            { "value": "twitter", "label": "X / Twitter" }
+            {
+              "value": "facebook",
+              "label": "Facebook"
+            },
+            {
+              "value": "youtube",
+              "label": "YouTube"
+            },
+            {
+              "value": "instagram",
+              "label": "Instagram"
+            },
+            {
+              "value": "tiktok",
+              "label": "TikTok"
+            },
+            {
+              "value": "twitter",
+              "label": "X / Twitter"
+            }
           ]
         },
         {

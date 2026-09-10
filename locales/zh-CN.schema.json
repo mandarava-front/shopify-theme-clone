@@ -1127,6 +1127,30 @@
           },
           "border_width": {
             "label": "导航边框宽度"
+          },
+          "nav_item_font_size": {
+            "label": "一级导航字号"
+          },
+          "nav_item_font_weight": {
+            "label": "一级导航字重"
+          },
+          "group_font_size": {
+            "label": "下拉分组标题字号"
+          },
+          "group_font_weight": {
+            "label": "下拉分组标题字重"
+          },
+          "menu_link_font_size": {
+            "label": "下拉链接字号"
+          },
+          "menu_link_font_weight": {
+            "label": "下拉链接字重"
+          },
+          "utility_font_size": {
+            "label": "功能链接字号"
+          },
+          "utility_font_weight": {
+            "label": "功能链接字重"
           }
         },
         "blocks": {
@@ -1282,6 +1306,44 @@
               "tiktok": "TikTok",
               "twitter": "X / Twitter"
             }
+          }
+        },
+        "typography": {
+          "title_font_size": {
+            "label": "抽屉标题字号"
+          },
+          "title_font_weight": {
+            "label": "抽屉标题字重"
+          },
+          "card_font_size": {
+            "label": "菜单卡片字号"
+          },
+          "card_font_weight": {
+            "label": "菜单卡片字重"
+          },
+          "card_featured_font_weight": {
+            "label": "特色卡片字重"
+          },
+          "submenu_title_font_size": {
+            "label": "子菜单标题字号"
+          },
+          "submenu_title_font_weight": {
+            "label": "子菜单标题字重"
+          },
+          "accordion_font_size": {
+            "label": "手风琴项字号"
+          },
+          "accordion_font_weight": {
+            "label": "手风琴项字重"
+          },
+          "utility_font_size": {
+            "label": "功能链接字号"
+          },
+          "utility_font_weight": {
+            "label": "功能链接字重"
+          },
+          "search_font_weight": {
+            "label": "搜索文字字重"
           }
         }
       }
@@ -1729,11 +1791,21 @@
           "label": "Tg | 启用购物车页样式",
           "info": "添加可选的购物车空状态和公告样式，同时保留原生购物车数据。"
         },
-        "announcement": { "label": "公告文案" },
-        "empty_heading": { "label": "空购物车标题" },
-        "empty_text": { "label": "空购物车描述" },
-        "accent": { "label": "强调色" },
-        "surface": { "label": "表面颜色" }
+        "announcement": {
+          "label": "公告文案"
+        },
+        "empty_heading": {
+          "label": "空购物车标题"
+        },
+        "empty_text": {
+          "label": "空购物车描述"
+        },
+        "accent": {
+          "label": "强调色"
+        },
+        "surface": {
+          "label": "表面颜色"
+        }
       }
     },
     "tg_cart_editor": {
@@ -4335,7 +4407,45 @@
       "price": "价格覆盖文案",
       "compare_at_price": "划线价覆盖文案",
       "reviews": "评论数量文案",
-      "default_open_item": "默认展开的 FAQ 条目"
+      "default_open_item": "默认展开的 FAQ 条目",
+      "heading_font_weight": "标题字重",
+      "subheading_font_size": "副标题字号",
+      "subheading_font_size_mobile": "移动端副标题字号",
+      "subheading_font_weight": "副标题字重",
+      "eyebrow_font_size": "眉题字号",
+      "eyebrow_font_size_mobile": "移动端眉题字号",
+      "eyebrow_font_weight": "眉题字重",
+      "text_font_weight": "文案字重",
+      "title_font_weight": "名称字重",
+      "button_font_size_mobile": "移动端按钮字号",
+      "button_font_weight": "按钮字重",
+      "description_font_size": "描述字号",
+      "description_font_size_mobile": "移动端描述字号",
+      "description_font_weight": "描述字重",
+      "label_font_size": "标签字号",
+      "label_font_size_mobile": "移动端标签字号",
+      "label_font_weight": "标签字重",
+      "tab_font_size": "选项卡字号",
+      "tab_font_size_mobile": "移动端选项卡字号",
+      "tab_font_weight": "选项卡字重",
+      "question_font_size": "问题字号",
+      "question_font_size_mobile": "移动端问题字号",
+      "question_font_weight": "问题字重",
+      "answer_font_size": "答案字号",
+      "answer_font_size_mobile": "移动端答案字号",
+      "answer_font_weight": "答案字重",
+      "price_font_size": "价格字号",
+      "price_font_size_mobile": "移动端价格字号",
+      "price_font_weight": "价格字重",
+      "subtitle_font_size": "副标题字号",
+      "subtitle_font_size_mobile": "移动端副标题字号",
+      "subtitle_font_weight": "副标题字重",
+      "font_weight_options": {
+        "regular": "常规",
+        "medium": "中等",
+        "semibold": "半粗",
+        "bold": "加粗"
+      }
     },
     "options": {
       "left": "左侧",

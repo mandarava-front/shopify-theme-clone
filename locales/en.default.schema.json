@@ -1282,6 +1282,30 @@
           },
           "border_width": {
             "label": "Navigation border width"
+          },
+          "nav_item_font_size": {
+            "label": "Primary nav font size"
+          },
+          "nav_item_font_weight": {
+            "label": "Primary nav font weight"
+          },
+          "group_font_size": {
+            "label": "Dropdown group title font size"
+          },
+          "group_font_weight": {
+            "label": "Dropdown group title font weight"
+          },
+          "menu_link_font_size": {
+            "label": "Dropdown link font size"
+          },
+          "menu_link_font_weight": {
+            "label": "Dropdown link font weight"
+          },
+          "utility_font_size": {
+            "label": "Utility link font size"
+          },
+          "utility_font_weight": {
+            "label": "Utility link font weight"
           }
         },
         "blocks": {
@@ -1437,6 +1461,44 @@
               "tiktok": "TikTok",
               "twitter": "X / Twitter"
             }
+          }
+        },
+        "typography": {
+          "title_font_size": {
+            "label": "Drawer title font size"
+          },
+          "title_font_weight": {
+            "label": "Drawer title font weight"
+          },
+          "card_font_size": {
+            "label": "Menu card font size"
+          },
+          "card_font_weight": {
+            "label": "Menu card font weight"
+          },
+          "card_featured_font_weight": {
+            "label": "Featured card font weight"
+          },
+          "submenu_title_font_size": {
+            "label": "Submenu title font size"
+          },
+          "submenu_title_font_weight": {
+            "label": "Submenu title font weight"
+          },
+          "accordion_font_size": {
+            "label": "Accordion item font size"
+          },
+          "accordion_font_weight": {
+            "label": "Accordion item font weight"
+          },
+          "utility_font_size": {
+            "label": "Utility link font size"
+          },
+          "utility_font_weight": {
+            "label": "Utility link font weight"
+          },
+          "search_font_weight": {
+            "label": "Search text font weight"
           }
         }
       }
@@ -4345,7 +4407,45 @@
       "price": "Price text override",
       "compare_at_price": "Compare-at price override",
       "reviews": "Review count text",
-      "default_open_item": "Default open FAQ item"
+      "default_open_item": "Default open FAQ item",
+      "heading_font_weight": "Heading font weight",
+      "subheading_font_size": "Subheading font size",
+      "subheading_font_size_mobile": "Mobile subheading font size",
+      "subheading_font_weight": "Subheading font weight",
+      "eyebrow_font_size": "Eyebrow font size",
+      "eyebrow_font_size_mobile": "Mobile eyebrow font size",
+      "eyebrow_font_weight": "Eyebrow font weight",
+      "text_font_weight": "Text font weight",
+      "title_font_weight": "Title font weight",
+      "button_font_size_mobile": "Mobile button font size",
+      "button_font_weight": "Button font weight",
+      "description_font_size": "Description font size",
+      "description_font_size_mobile": "Mobile description font size",
+      "description_font_weight": "Description font weight",
+      "label_font_size": "Label font size",
+      "label_font_size_mobile": "Mobile label font size",
+      "label_font_weight": "Label font weight",
+      "tab_font_size": "Tab font size",
+      "tab_font_size_mobile": "Mobile tab font size",
+      "tab_font_weight": "Tab font weight",
+      "question_font_size": "Question font size",
+      "question_font_size_mobile": "Mobile question font size",
+      "question_font_weight": "Question font weight",
+      "answer_font_size": "Answer font size",
+      "answer_font_size_mobile": "Mobile answer font size",
+      "answer_font_weight": "Answer font weight",
+      "price_font_size": "Price font size",
+      "price_font_size_mobile": "Mobile price font size",
+      "price_font_weight": "Price font weight",
+      "subtitle_font_size": "Subtitle font size",
+      "subtitle_font_size_mobile": "Mobile subtitle font size",
+      "subtitle_font_weight": "Subtitle font weight",
+      "font_weight_options": {
+        "regular": "Regular",
+        "medium": "Medium",
+        "semibold": "Semibold",
+        "bold": "Bold"
+      }
     },
     "options": {
       "left": "Left",
