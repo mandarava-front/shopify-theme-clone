@@ -4165,6 +4165,9 @@
         "text_color": {
           "label": "Text"
         },
+        "title_color": {
+          "label": "Cor do texto do título"
+        },
         "accent_color": {
           "label": "Accent"
         },

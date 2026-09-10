@@ -4165,6 +4165,9 @@
         "text_color": {
           "label": "Text"
         },
+        "title_color": {
+          "label": "Başlık metni rengi"
+        },
         "accent_color": {
           "label": "Accent"
         },

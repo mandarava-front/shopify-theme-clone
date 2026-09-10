@@ -4155,6 +4155,9 @@
         "text_color": {
           "label": "普通文字"
         },
+        "title_color": {
+          "label": "标题文字颜色"
+        },
         "accent_color": {
           "label": "强调文字"
         },

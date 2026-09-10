@@ -4165,6 +4165,9 @@
         "text_color": {
           "label": "Text"
         },
+        "title_color": {
+          "label": "タイトルの文字色"
+        },
         "accent_color": {
           "label": "Accent"
         },

@@ -14,7 +14,7 @@
   align-items: center;
   gap: 1.6rem;
   margin: 0 0 1.6rem;
-  color: var(--tg-volume-discount-text);
+  color: var(--tg-volume-discount-title-color, var(--tg-volume-discount-text));
 }
 
 .tg-volume-discount__title span {

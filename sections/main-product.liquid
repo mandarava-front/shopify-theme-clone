@@ -585,7 +585,7 @@
                   {%- if block.settings.heading != blank and volume_discount_has_tier -%}
                     <section
                       class="tg-volume-discount tg-volume-discount--tiers-{{ volume_discount_visible_tier_count }}"
-                      style="--tg-volume-discount-columns: {{ volume_discount_visible_tier_count }}; --tg-volume-discount-background: {{ block.settings.background_color }}; --tg-volume-discount-tier-background: {{ block.settings.tier_background_color }}; --tg-volume-discount-border: {{ block.settings.border_color }}; --tg-volume-discount-text: {{ block.settings.text_color }}; --tg-volume-discount-accent: {{ block.settings.accent_color }}; --tg-volume-discount-radius: {{ block.settings.corner_radius }}px; --tg-volume-discount-title-size: {{ block.settings.title_size }}px; --tg-volume-discount-body-size: {{ block.settings.body_size }}px; --tg-volume-discount-mobile-body-size: {{ block.settings.mobile_body_size | default: 12 }}px; --tg-volume-discount-spacing: {{ block.settings.vertical_spacing }}px;"
+                      style="--tg-volume-discount-columns: {{ volume_discount_visible_tier_count }}; --tg-volume-discount-background: {{ block.settings.background_color }}; --tg-volume-discount-tier-background: {{ block.settings.tier_background_color }}; --tg-volume-discount-border: {{ block.settings.border_color }}; --tg-volume-discount-text: {{ block.settings.text_color }}; --tg-volume-discount-title-color: {{ block.settings.title_color | default: block.settings.text_color }}; --tg-volume-discount-accent: {{ block.settings.accent_color }}; --tg-volume-discount-radius: {{ block.settings.corner_radius }}px; --tg-volume-discount-title-size: {{ block.settings.title_size }}px; --tg-volume-discount-body-size: {{ block.settings.body_size }}px; --tg-volume-discount-mobile-body-size: {{ block.settings.mobile_body_size | default: 12 }}px; --tg-volume-discount-spacing: {{ block.settings.vertical_spacing }}px;"
                       {{ block.shopify_attributes }}
                     >
                       <div class="tg-volume-discount__title">
@@ -1301,6 +1301,7 @@
         { "type": "color", "id": "tier_background_color", "label": "t:sections.tg_product.volume_discount.tier_background_color.label", "default": "#eaf2fd" },
         { "type": "color", "id": "border_color", "label": "t:sections.tg_product.volume_discount.border_color.label", "default": "#91cfee" },
         { "type": "color", "id": "text_color", "label": "t:sections.tg_product.volume_discount.text_color.label", "default": "#17263b" },
+        { "type": "color", "id": "title_color", "label": "t:sections.tg_product.volume_discount.title_color.label" },
         { "type": "color", "id": "accent_color", "label": "t:sections.tg_product.volume_discount.accent_color.label", "default": "#244a85" },
         { "type": "range", "id": "corner_radius", "label": "t:sections.tg_product.volume_discount.corner_radius.label", "min": 0, "max": 24, "step": 1, "default": 10, "unit": "px" },
         { "type": "range", "id": "title_size", "label": "t:sections.tg_product.volume_discount.title_size.label", "min": 14, "max": 32, "step": 1, "default": 18, "unit": "px" },
