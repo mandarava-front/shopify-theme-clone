@@ -54,6 +54,15 @@
   {%- endcomment -%}
   {%- if settings.tg_teeinblue_overrides_enabled != false -%}
     <style id="TeeInBlueOverrides">
+      {%- if settings.tg_teeinblue_hide_unavailable_options != false -%}
+        /* TeeInBlue owns availability and selection. Follow its reactive marker,
+           retaining the sold-out presentation when every value is unavailable.
+           Hide the whole radio wrapper so its input also leaves the tab order. */
+        #MainProduct-{{ section.id }} #tee-artwork-form .tee-option-inner:has(> .tee-radio:not(.tee-radio--unavailable)) > .tee-radio--unavailable {
+          display: none !important;
+        }
+      {%- endif -%}
+
       /* TeeInBlue compatibility: prevent duplicate plugin content from
          appearing alongside the theme's native product information. */
       {%- if settings.tg_teeinblue_hide_duplicate_options != false -%}

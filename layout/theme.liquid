@@ -431,6 +431,10 @@
         var inputs = Array.prototype.slice.call(fieldset.querySelectorAll('input[type="radio"]'));
         // 整组全部无货时不隐藏，保留划线展示（避免出现空白行）
         fieldset.classList.toggle("all-unavailable", inputs.length > 0 && inputs.every(isUnavailable));
+        // TeeInBlue owns selection for duplicate groups. Their disabled classes
+        // describe the previous combination until the section response arrives;
+        // correcting them here would overwrite the plugin's new valid variant.
+        if (fieldset.classList.contains("tg-teeinblue-duplicate-option")) return;
         // 当前选中项已无货 → 自动选中第一个有货选项（触发主题自身的联动）
         if (checked && isUnavailable(checked)) {
           for (var i = 0; i < inputs.length; i++) {

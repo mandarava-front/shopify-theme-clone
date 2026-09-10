@@ -1615,6 +1615,13 @@
         "default": true
       },
       {
+        "type": "checkbox",
+        "id": "tg_teeinblue_hide_unavailable_options",
+        "label": "隐藏不可用规格",
+        "info": "隐藏 TeeInBlue 标记为不可用的规格按钮，包括不存在的组合和不可售规格。整组全部不可用时保留展示。",
+        "default": true
+      },
+      {
         "type": "header",
         "content": "隐藏重复内容"
       },
