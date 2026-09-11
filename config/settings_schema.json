@@ -1595,6 +1595,11 @@
         "label": "尺码表图片"
       },
       {
+        "type": "image_picker",
+        "id": "tg_size_chart_image_2",
+        "label": "尺码表图片（第二张）"
+      },
+      {
         "type": "text",
         "id": "tg_size_chart_trigger_tag",
         "label": "触发商品标签",

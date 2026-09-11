@@ -1,19 +1,32 @@
 {%- liquid
   assign tg_size_chart_active = false
+  assign tg_size_chart_has_image = false
   assign tg_size_chart_image = settings.tg_size_chart_image
+  assign tg_size_chart_image_2 = settings.tg_size_chart_image_2
   assign tg_size_chart_trigger_tag = settings.tg_size_chart_trigger_tag | default: 'size-chart' | strip | downcase
   assign tg_size_chart_option_names = settings.tg_size_chart_option_names | default: 'Size,尺码,尺寸'
   assign tg_size_chart_button_label = settings.tg_size_chart_button_label | strip | default: 'Size Chart'
   assign tg_teeinblue_product_base = product.metafields.teeinblue.platform_product.value
 
-  if settings.tg_size_chart_enabled != false and tg_size_chart_image != blank and tg_size_chart_trigger_tag != blank
-    for product_tag in product.tags
-      assign normalized_product_tag = product_tag | strip | downcase
-      if normalized_product_tag == tg_size_chart_trigger_tag
-        assign tg_size_chart_active = true
-        break
+  if tg_size_chart_image != blank
+    assign tg_size_chart_has_image = true
+  endif
+  if tg_size_chart_image_2 != blank
+    assign tg_size_chart_has_image = true
+  endif
+
+  if settings.tg_size_chart_enabled != false
+    if tg_size_chart_trigger_tag != blank
+      if tg_size_chart_has_image
+        for product_tag in product.tags
+          assign normalized_product_tag = product_tag | strip | downcase
+          if normalized_product_tag == tg_size_chart_trigger_tag
+            assign tg_size_chart_active = true
+            break
+          endif
+        endfor
       endif
-    endfor
+    endif
   endif
 -%}
 
@@ -1017,7 +1030,6 @@
       {%- endfor -%}
 
       {%- if tg_size_chart_active -%}
-        {%- assign tg_size_chart_alt = tg_size_chart_image.alt | default: tg_size_chart_button_label -%}
         <modal-dialog id="SizeChartModal-{{ section.id }}" class="product-popup-modal tg-size-chart__modal">
           <div
             role="dialog"
@@ -1038,16 +1050,32 @@
               <h2 id="SizeChartTitle-{{ section.id }}" class="h2 tg-size-chart__title">
                 {{- tg_size_chart_button_label | escape -}}
               </h2>
-              {{
-                tg_size_chart_image
-                | image_url: width: 2200
-                | image_tag:
-                  widths: '375, 550, 750, 900, 1100, 1400, 1800, 2200',
-                  sizes: '(min-width: 990px) 84rem, (min-width: 750px) 70vw, 92vw',
-                  loading: 'lazy',
-                  class: 'tg-size-chart__image',
-                  alt: tg_size_chart_alt
-              }}
+              {%- if tg_size_chart_image != blank -%}
+                {%- assign tg_size_chart_alt = tg_size_chart_image.alt | default: tg_size_chart_button_label -%}
+                {{
+                  tg_size_chart_image
+                  | image_url: width: 2200
+                  | image_tag:
+                    widths: '375, 550, 750, 900, 1100, 1400, 1800, 2200',
+                    sizes: '(min-width: 990px) 84rem, (min-width: 750px) 70vw, 92vw',
+                    loading: 'eager',
+                    class: 'tg-size-chart__image',
+                    alt: tg_size_chart_alt
+                }}
+              {%- endif -%}
+              {%- if tg_size_chart_image_2 != blank -%}
+                {%- assign tg_size_chart_alt_2 = tg_size_chart_image_2.alt | default: tg_size_chart_button_label -%}
+                {{
+                  tg_size_chart_image_2
+                  | image_url: width: 2200
+                  | image_tag:
+                    widths: '375, 550, 750, 900, 1100, 1400, 1800, 2200',
+                    sizes: '(min-width: 990px) 84rem, (min-width: 750px) 70vw, 92vw',
+                    loading: 'eager',
+                    class: 'tg-size-chart__image',
+                    alt: tg_size_chart_alt_2
+                }}
+              {%- endif -%}
             </div>
           </div>
         </modal-dialog>
