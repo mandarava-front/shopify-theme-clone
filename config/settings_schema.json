@@ -1643,13 +1643,6 @@
       },
       {
         "type": "checkbox",
-        "id": "tg_teeinblue_hide_duplicate_options",
-        "label": "隐藏与插件重复的主题选项",
-        "info": "当 TeeInBlue 显示同名变体选项时，隐藏主题原生选项，并同步 Shopify 变体状态。",
-        "default": true
-      },
-      {
-        "type": "checkbox",
         "id": "tg_teeinblue_hide_price",
         "label": "隐藏插件价格区块",
         "info": "保留主题原生价格，隐藏 TeeInBlue 的重复价格。",

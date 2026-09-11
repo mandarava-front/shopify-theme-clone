@@ -4,6 +4,7 @@
   assign tg_size_chart_trigger_tag = settings.tg_size_chart_trigger_tag | default: 'size-chart' | strip | downcase
   assign tg_size_chart_option_names = settings.tg_size_chart_option_names | default: 'Size,尺码,尺寸'
   assign tg_size_chart_button_label = settings.tg_size_chart_button_label | strip | default: 'Size Chart'
+  assign tg_teeinblue_product_base = product.metafields.teeinblue.platform_product.value
 
   if settings.tg_size_chart_enabled != false and tg_size_chart_image != blank and tg_size_chart_trigger_tag != blank
     for product_tag in product.tags
@@ -23,6 +24,9 @@
   data-product-id="{{ product.id }}"
   data-update-url="true"
   data-url="{{ product.url }}"
+  {% if tg_teeinblue_product_base != blank %}
+    data-tg-teeinblue-product-base
+  {% endif %}
   {% if tg_size_chart_active %}
     data-tg-size-chart
     data-tg-size-chart-modal-id="SizeChartModal-{{ section.id }}"
@@ -55,6 +59,146 @@
   {%- assign teeinblue_form_content_background = settings.tg_teeinblue_form_content_background | default: '#FFFFFF' -%}
 
   {%- comment -%}
+    Campaigns by Product Bases render their own complete option UI, so the
+    theme's native variant picker is a duplicate of it. Hide the picker
+    visually but keep it in the DOM: its radios/selects are what the theme's
+    product form submits, and the script below keeps them in sync.
+    Campaigns by Shopify products and plain products keep the native picker.
+  {%- endcomment -%}
+  <style id="TeeInBlueProductBasePicker">
+    product-info[data-tg-teeinblue-product-base] variant-selects {
+      display: none !important;
+    }
+  </style>
+
+  <script>
+    (() => {
+      const productRoot = document.getElementById('MainProduct-{{ section.id }}');
+      if (!productRoot) return;
+
+      const previousTeardown = window.TgTeeInBlueProductBaseTeardown;
+      if (previousTeardown) previousTeardown();
+
+      const normalizeOptionText = (value) => String(value || '').replace(/\s+/g, ' ').trim().toLowerCase();
+
+      const getThemeControlForValue = (group, optionValue) => {
+        const normalizedValue = normalizeOptionText(optionValue);
+        if (!normalizedValue) return;
+
+        const radio = [...group.querySelectorAll('input[type="radio"]')].find(
+          (input) => normalizeOptionText(input.value) === normalizedValue
+        );
+        if (radio) {
+          return {
+            control: radio,
+            isSelected: radio.checked,
+            select: () => {
+              radio.checked = true;
+            },
+          };
+        }
+
+        const select = group.querySelector('select');
+        const matchingOption = [...(select?.options || [])].find(
+          (option) => normalizeOptionText(option.value) === normalizedValue
+        );
+        if (!select || !matchingOption) return;
+
+        return {
+          control: select,
+          isSelected: select.value === matchingOption.value,
+          select: () => {
+            select.value = matchingOption.value;
+          },
+        };
+      };
+
+      const isCurrentProductCampaign = (campaign) =>
+        !campaign.productId ||
+        !productRoot.dataset.productId ||
+        String(campaign.productId) === productRoot.dataset.productId;
+
+      {%- comment -%}
+        `isPlatformProduct` marks a Campaign by Product Bases. It only becomes
+        readable once TeeInBlue boots, so Liquid flags the same case up front
+        from the metafield and this is the fallback for campaigns whose
+        metafield is not populated yet.
+      {%- endcomment -%}
+      const isProductBaseCampaign = () => {
+        const campaign = window.teeinblueCampaign;
+        if (!campaign || campaign.isTeeInBlueProduct !== true || campaign.isPlatformProduct !== true) {
+          return false;
+        }
+        return isCurrentProductCampaign(campaign);
+      };
+
+      const hasProductBaseMarker = () => productRoot.hasAttribute('data-tg-teeinblue-product-base');
+
+      const applyProductBaseState = () => {
+        if (!hasProductBaseMarker() && isProductBaseCampaign()) {
+          productRoot.dataset.tgTeeinblueProductBase = 'true';
+        }
+        return hasProductBaseMarker();
+      };
+
+      /* TeeInBlue owns the selection for Product Bases, but the hidden theme
+         controls are what the product form posts, so mirror its variant onto
+         them. Shopify products campaigns keep the visible picker in sync the
+         same way. */
+      const syncTeeInBlueVariantToTheme = (event) => {
+        const campaign = window.teeinblueCampaign;
+        const variantId = String(event.detail?.variantId || '');
+        if (!variantId || !campaign || !isCurrentProductCampaign(campaign)) return;
+
+        applyProductBaseState();
+
+        const variant = campaign.variantsById?.[variantId];
+        if (!variant) return;
+
+        const themeGroups = [...productRoot.querySelectorAll('variant-selects .product-form__input')];
+        const optionValues = Array.isArray(variant.options)
+          ? variant.options
+          : themeGroups.map((_, index) => variant[`option${index + 1}`]);
+        if (!themeGroups.length || optionValues.length < themeGroups.length) return;
+
+        const themeControls = themeGroups.map((group, index) =>
+          getThemeControlForValue(group, optionValues[index])
+        );
+        if (themeControls.some((entry) => !entry)) return;
+
+        const changedControls = themeControls.filter((entry) => !entry.isSelected);
+        if (!changedControls.length) return;
+
+        changedControls.forEach((entry) => entry.select());
+        changedControls[changedControls.length - 1].control.dispatchEvent(
+          new Event('change', { bubbles: true })
+        );
+      };
+
+      document.addEventListener('teeinblue-event-variant-changed', syncTeeInBlueVariantToTheme);
+
+      /* The campaign object appears once TeeInBlue's script boots, which can be
+         well after this section renders. Poll until it resolves, then stop. */
+      let pollTimer;
+      if (!applyProductBaseState()) {
+        const deadline = Date.now() + 20000;
+        pollTimer = window.setInterval(() => {
+          if (applyProductBaseState() || Date.now() > deadline) {
+            window.clearInterval(pollTimer);
+            pollTimer = undefined;
+          }
+        }, 200);
+      }
+
+      window.TgTeeInBlueProductBaseTeardown = () => {
+        document.removeEventListener('teeinblue-event-variant-changed', syncTeeInBlueVariantToTheme);
+        if (pollTimer) window.clearInterval(pollTimer);
+        window.TgTeeInBlueProductBaseTeardown = undefined;
+      };
+    })();
+  </script>
+
+  {%- comment -%}
     TeeInBlue settings might be absent in an existing settings_data.json until
     the merchant saves the Theme settings once. Treat an absent checkbox as its
     schema default (enabled); an explicitly saved false still disables it.
@@ -66,14 +210,6 @@
            retaining the sold-out presentation when every value is unavailable.
            Hide the whole radio wrapper so its input also leaves the tab order. */
         #MainProduct-{{ section.id }} #tee-artwork-form .tee-option-inner:has(> .tee-radio:not(.tee-radio--unavailable)) > .tee-radio--unavailable {
-          display: none !important;
-        }
-      {%- endif -%}
-
-      /* TeeInBlue compatibility: prevent duplicate plugin content from
-         appearing alongside the theme's native product information. */
-      {%- if settings.tg_teeinblue_hide_duplicate_options != false -%}
-        body:has(main[data-template='product']) .tg-teeinblue-duplicate-option {
           display: none !important;
         }
       {%- endif -%}
@@ -105,13 +241,6 @@
         const previousObserver = window.TgTeeInBlueColorOverrideObserver;
         if (previousObserver) previousObserver.disconnect();
 
-        const previousVariantSyncHandler = window.TgTeeInBlueVariantSyncHandler;
-        if (previousVariantSyncHandler) {
-          document.removeEventListener('change', previousVariantSyncHandler);
-          document.removeEventListener('teeinblue-event-variant-changed', previousVariantSyncHandler);
-          window.TgTeeInBlueVariantSyncHandler = undefined;
-        }
-
         const buttonColor = {{ teeinblue_button_color | json }};
         const headerBackground = {{ teeinblue_form_header_background | json }};
         const contentBackground = {{ teeinblue_form_content_background | json }};
@@ -124,129 +253,6 @@
           ['#tee-artwork-form > .tee-customize-main-form > .tee-form-header', 'background', headerBackground],
           ['#tee-artwork-form > .tee-customize-main-form > #teeFormInputs.tee-customization-form', 'background', contentBackground],
         ];
-
-        {%- if settings.tg_teeinblue_hide_duplicate_options != false -%}
-          const normalizeOptionText = (value) =>
-            String(value || '')
-              .replace(/\s+/g, ' ')
-              .trim()
-              .toLowerCase();
-
-          const getThemeOptionName = (group) => {
-            const namedControl = group.querySelector('[data-option-name]');
-            if (namedControl?.dataset.optionName) return normalizeOptionText(namedControl.dataset.optionName);
-
-            const selectName = group.querySelector('select[name^="options["]')?.getAttribute('name') || '';
-            const match = selectName.match(/^options\[(.*)]$/);
-            return normalizeOptionText(match?.[1]);
-          };
-
-          const getTeeInBlueOptionName = (option) =>
-            normalizeOptionText(option.querySelector('.tee-option__title')?.textContent);
-
-          const isTeeInBlueOptionVisible = (option) => {
-            if (option.hidden || option.classList.contains('sr-only')) return false;
-
-            const style = window.getComputedStyle(option);
-            const bounds = option.getBoundingClientRect();
-            return (
-              style.display !== 'none' &&
-              style.visibility !== 'hidden' &&
-              style.opacity !== '0' &&
-              bounds.width > 1 &&
-              bounds.height > 1
-            );
-          };
-
-          const syncDuplicateOptionVisibility = () => {
-            const productRoot = document.getElementById('MainProduct-{{ section.id }}');
-            if (!productRoot) return;
-
-            const visibleTeeInBlueOptions = new Set(
-              [...productRoot.querySelectorAll('#tee-artwork-form .tee-option')]
-                .filter(isTeeInBlueOptionVisible)
-                .map(getTeeInBlueOptionName)
-                .filter(Boolean)
-            );
-
-            productRoot.querySelectorAll('variant-selects .product-form__input').forEach((group) => {
-              const hasVisibleDuplicate = visibleTeeInBlueOptions.has(getThemeOptionName(group));
-              group.classList.toggle('tg-teeinblue-duplicate-option', hasVisibleDuplicate);
-            });
-          };
-
-          const getThemeControlForValue = (group, optionValue) => {
-            const normalizedValue = normalizeOptionText(optionValue);
-            if (!normalizedValue) return;
-
-            const radio = [...group.querySelectorAll('input[type="radio"]')].find(
-              (input) => normalizeOptionText(input.value) === normalizedValue
-            );
-            if (radio) {
-              return {
-                control: radio,
-                isSelected: radio.checked,
-                select: () => {
-                  radio.checked = true;
-                },
-              };
-            }
-
-            const select = group.querySelector('select');
-            const matchingOption = [...(select?.options || [])].find(
-              (option) => normalizeOptionText(option.value) === normalizedValue
-            );
-            if (!select || !matchingOption) return;
-
-            return {
-              control: select,
-              isSelected: select.value === matchingOption.value,
-              select: () => {
-                select.value = matchingOption.value;
-              },
-            };
-          };
-
-          const syncTeeInBlueVariantToTheme = (event) => {
-            const productRoot = document.getElementById('MainProduct-{{ section.id }}');
-            const campaign = window.teeinblueCampaign;
-            const variantId = String(event.detail?.variantId || '');
-            if (!productRoot || !variantId || !campaign) return;
-
-            if (
-              campaign.productId &&
-              productRoot.dataset.productId &&
-              String(campaign.productId) !== productRoot.dataset.productId
-            ) {
-              return;
-            }
-
-            const variant = campaign.variantsById?.[variantId];
-            if (!variant) return;
-
-            const themeGroups = [...productRoot.querySelectorAll('variant-selects .product-form__input')];
-            const optionValues = Array.isArray(variant.options)
-              ? variant.options
-              : themeGroups.map((_, index) => variant[`option${index + 1}`]);
-            if (!themeGroups.length || optionValues.length < themeGroups.length) return;
-
-            const themeControls = themeGroups.map((group, index) =>
-              getThemeControlForValue(group, optionValues[index])
-            );
-            if (themeControls.some((entry) => !entry)) return;
-
-            const changedControls = themeControls.filter((entry) => !entry.isSelected);
-            if (!changedControls.length) return;
-
-            changedControls.forEach((entry) => entry.select());
-            changedControls[changedControls.length - 1].control.dispatchEvent(
-              new Event('change', { bubbles: true })
-            );
-          };
-
-          document.addEventListener('teeinblue-event-variant-changed', syncTeeInBlueVariantToTheme);
-          window.TgTeeInBlueVariantSyncHandler = syncTeeInBlueVariantToTheme;
-        {%- endif -%}
 
         const applyOverrides = () => {
           if (!document.querySelector('main[data-template="product"]')) return;
@@ -266,10 +272,6 @@
               }
             });
           });
-
-          {%- if settings.tg_teeinblue_hide_duplicate_options != false -%}
-            syncDuplicateOptionVisibility();
-          {%- endif -%}
         };
 
         let animationFrame;
