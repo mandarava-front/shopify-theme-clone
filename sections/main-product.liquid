@@ -6,7 +6,16 @@
   assign tg_size_chart_trigger_tag = settings.tg_size_chart_trigger_tag | default: 'size-chart' | strip | downcase
   assign tg_size_chart_option_names = settings.tg_size_chart_option_names | default: 'Size,尺码,尺寸'
   assign tg_size_chart_button_label = settings.tg_size_chart_button_label | strip | default: 'Size Chart'
-  assign tg_teeinblue_product_base = product.metafields.teeinblue.platform_product.value
+  # TeeInBlue calls a Campaign by Shopify products a "platform product", so a
+  # TeeInBlue product without that metafield is a Campaign by Product Bases.
+  # campaign_version is written for every TeeInBlue product, Product Bases or
+  # not, so it is what separates a campaign from a plain product here.
+  assign tg_teeinblue_product_base = false
+  if product.metafields.teeinblue.campaign_version.value != blank
+    if product.metafields.teeinblue.platform_product.value == blank
+      assign tg_teeinblue_product_base = true
+    endif
+  endif
 
   if tg_size_chart_image != blank
     assign tg_size_chart_has_image = true
@@ -37,7 +46,7 @@
   data-product-id="{{ product.id }}"
   data-update-url="true"
   data-url="{{ product.url }}"
-  {% if tg_teeinblue_product_base != blank %}
+  {% if tg_teeinblue_product_base %}
     data-tg-teeinblue-product-base
   {% endif %}
   {% if tg_size_chart_active %}
@@ -132,26 +141,27 @@
         String(campaign.productId) === productRoot.dataset.productId;
 
       {%- comment -%}
-        `isPlatformProduct` marks a Campaign by Product Bases. It only becomes
-        readable once TeeInBlue boots, so Liquid flags the same case up front
-        from the metafield and this is the fallback for campaigns whose
-        metafield is not populated yet.
+        `isPlatformProduct` marks a Campaign by Shopify products, so a TeeInBlue
+        product with it false is a Campaign by Product Bases. TeeInBlue publishes
+        the campaign in the document head, before this section renders, so it is
+        the authority over the metafield marker Liquid added above: it both sets
+        the marker and clears a wrong one. Returns whether it could decide.
       {%- endcomment -%}
-      const isProductBaseCampaign = () => {
+      const getProductBaseVerdict = () => {
         const campaign = window.teeinblueCampaign;
-        if (!campaign || campaign.isTeeInBlueProduct !== true || campaign.isPlatformProduct !== true) {
-          return false;
+        if (!campaign || campaign.isTeeInBlueProduct === undefined || !isCurrentProductCampaign(campaign)) {
+          return;
         }
-        return isCurrentProductCampaign(campaign);
+        return campaign.isTeeInBlueProduct === true && campaign.isPlatformProduct === false;
       };
 
-      const hasProductBaseMarker = () => productRoot.hasAttribute('data-tg-teeinblue-product-base');
-
       const applyProductBaseState = () => {
-        if (!hasProductBaseMarker() && isProductBaseCampaign()) {
-          productRoot.dataset.tgTeeinblueProductBase = 'true';
-        }
-        return hasProductBaseMarker();
+        const isProductBase = getProductBaseVerdict();
+        if (isProductBase === undefined) return false;
+
+        if (isProductBase) productRoot.dataset.tgTeeinblueProductBase = 'true';
+        else productRoot.removeAttribute('data-tg-teeinblue-product-base');
+        return true;
       };
 
       /* TeeInBlue owns the selection for Product Bases, but the hidden theme
@@ -190,8 +200,9 @@
 
       document.addEventListener('teeinblue-event-variant-changed', syncTeeInBlueVariantToTheme);
 
-      /* The campaign object appears once TeeInBlue's script boots, which can be
-         well after this section renders. Poll until it resolves, then stop. */
+      /* The app embed normally publishes the campaign in the head, so the verdict
+         is already in before the picker paints. Poll only for the case where the
+         embed sits after this section. */
       let pollTimer;
       if (!applyProductBaseState()) {
         const deadline = Date.now() + 20000;
