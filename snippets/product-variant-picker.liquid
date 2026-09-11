@@ -38,6 +38,40 @@
             assign picker_type = 'swatch'
           endif
         endif
+
+        # A group down to a single visible value leaves the shopper nothing to
+        # pick, so hide the whole group. Count what actually reaches the screen:
+        # values the current combination cannot reach render as .disabled and
+        # layout/theme.liquid hides those outright — except when every value is
+        # unavailable, where it keeps the struck-through row on purpose.
+        # Dropdowns never hide their options, they only relabel them.
+        if settings.tg_hide_single_value_options != false
+          assign rendered_value_count = 0
+          assign unavailable_value_count = 0
+
+          for option_value in option.values
+            if block.settings.hide_unavailable_options and option_value.available == false and option_value.selected == false
+              continue
+            endif
+
+            assign rendered_value_count = rendered_value_count | plus: 1
+
+            if option_value.available == false
+              assign unavailable_value_count = unavailable_value_count | plus: 1
+            endif
+          endfor
+
+          assign visible_value_count = rendered_value_count
+          if picker_type == 'button' or picker_type == 'swatch'
+            if unavailable_value_count < rendered_value_count
+              assign visible_value_count = rendered_value_count | minus: unavailable_value_count
+            endif
+          endif
+
+          if visible_value_count <= 1
+            assign hide_single_value_option = true
+          endif
+        endif
       -%}
       {%- if picker_type == 'swatch' -%}
         <fieldset class="js product-form__input product-form__input--swatch"{% if hide_single_value_option %} hidden{% endif %}>

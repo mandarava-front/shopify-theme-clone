@@ -29,6 +29,13 @@
     data-tg-size-chart-option-names="{{ tg_size_chart_option_names | escape }}"
     data-tg-size-chart-label="{{ tg_size_chart_button_label | escape }}"
   {% endif %}
+  {% comment %}
+    The native picker hides its own single-value groups in Liquid. This flag is
+    only for the plugin options TeeInBlue and Customily inject client-side.
+  {% endcomment %}
+  {% if settings.tg_hide_single_value_options != false %}
+    data-tg-hide-single-options
+  {% endif %}
   {% if section.settings.image_zoom == 'hover' %}
     data-zoom-on-hover
   {% endif %}

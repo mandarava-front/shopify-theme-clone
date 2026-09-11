@@ -1561,6 +1561,22 @@
     ]
   },
   {
+    "name": "商品选项显示",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "仅影响商品详情页上的规格选项，同时作用于主题原生选项和 TeeInBlue、Customily 插件注入的选项。"
+      },
+      {
+        "type": "checkbox",
+        "id": "tg_hide_single_value_options",
+        "label": "隐藏只剩一个可选值的选项",
+        "info": "按当前实际可见的值数量判断：只剩一个值时整组隐藏，顾客无需选择。不影响上传图片、文字输入等非选值类选项。该组挂有尺码表入口时，入口会一并隐藏。",
+        "default": true
+      }
+    ]
+  },
+  {
     "name": "商品尺码表",
     "settings": [
       {

@@ -126,6 +126,19 @@
   margin-bottom: 0.8rem;
 }
 
+/* Set by tg-product.js on a TeeInBlue/Customily option group that is down to a
+   single visible value. The native picker hides its own groups in Liquid. */
+[data-template='product'] .tg-single-value-option {
+  display: none !important;
+}
+
+/* product-variant-picker marks those native groups with [hidden], but the
+   browser default it relies on loses to .product-form__input--swatch's own
+   display:flex. Make the attribute win for every picker type. */
+[data-template='product'] variant-selects .product-form__input[hidden] {
+  display: none !important;
+}
+
 [data-template='product'] .tg-size-chart-option > legend.form__label {
   display: flex;
   align-items: center;

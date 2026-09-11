@@ -439,6 +439,153 @@ function bindTgSizeCharts(container = document) {
   });
 }
 
+// TeeInBlue and Customily inject their option groups client-side, so the
+// single-value check in product-variant-picker.liquid never sees them. Mirror
+// that rule here: once a group is down to one visible value there is nothing
+// left to pick, so hide the group instead of leaving a dead row on the page.
+const TG_SINGLE_VALUE_GROUP_SELECTOR = '#tee-artwork-form .tee-option, .customily_option';
+const TG_SINGLE_VALUE_CLASS = 'tg-single-value-option';
+
+// Ordered from plugin-specific to generic: the first selector that matches
+// anything defines what counts as a value for that group, so a plugin's own
+// markup wins over the fallbacks.
+const TG_SINGLE_VALUE_CANDIDATE_SELECTORS = [
+  '.tee-radio',
+  '.cl-swatch',
+  '.customily-swatch',
+  '[role="radio"]',
+  'input[type="radio"]',
+  'input[type="checkbox"]',
+];
+
+class TgSingleValueOptions {
+  constructor(root) {
+    this.root = root;
+    this.animationFrame = null;
+    this.scheduleSync = this.scheduleSync.bind(this);
+
+    // Availability usually flips through a class or an inline style rather than
+    // a node insertion, so watch attributes as well and let the frame throttle
+    // absorb the churn.
+    this.observer = new MutationObserver(this.scheduleSync);
+    this.observe();
+    this.sync();
+  }
+
+  observe() {
+    this.observer.observe(this.root, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['class', 'style', 'hidden'],
+    });
+  }
+
+  isVisible(element) {
+    if (element.hidden) return false;
+
+    const style = window.getComputedStyle(element);
+    if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') return false;
+
+    const bounds = element.getBoundingClientRect();
+    return bounds.width > 1 && bounds.height > 1;
+  }
+
+  countValues(group) {
+    // A select keeps its values in option elements, which have no box to
+    // measure. Customily prefixes its dropdowns with an empty placeholder
+    // ("Choose an Option") that is not a pickable value.
+    const select = group.querySelector('select');
+    if (select) return [...select.options].filter((option) => option.value !== '').length;
+
+    for (const selector of TG_SINGLE_VALUE_CANDIDATE_SELECTORS) {
+      const candidates = [...group.querySelectorAll(selector)];
+      if (candidates.length) return candidates.filter((candidate) => this.isVisible(candidate)).length;
+    }
+
+    // Upload, text and date fields hold no values at all. Reporting zero keeps
+    // them out of the rule instead of hiding the control the shopper needs.
+    return 0;
+  }
+
+  // Hiding a required group with nothing selected would strand the shopper: the
+  // plugin refuses to add to cart and the offending field is off screen. Both
+  // branches are idempotent, so a re-sync after the plugin repaints is a no-op.
+  // Returns whether the plugin was handed an event it may repaint against.
+  selectOnlyValue(group) {
+    const select = group.querySelector('select');
+    if (select) {
+      const onlyOption = [...select.options].find((option) => option.value !== '');
+      if (!onlyOption || select.value === onlyOption.value) return false;
+
+      select.value = onlyOption.value;
+      select.dispatchEvent(new Event('change', { bubbles: true }));
+      return true;
+    }
+
+    const input = group.querySelector('input[type="radio"], input[type="checkbox"]');
+    if (!input || input.checked) return false;
+
+    input.click();
+    return true;
+  }
+
+  sync() {
+    let selectionChanged = false;
+
+    this.root.querySelectorAll(TG_SINGLE_VALUE_GROUP_SELECTOR).forEach((group) => {
+      // Measure with our own class off: while it is on, display:none collapses
+      // every child's box, the group reads as valueless and it would flip back
+      // to visible. Removing and re-adding within one task never paints.
+      group.classList.remove(TG_SINGLE_VALUE_CLASS);
+
+      // The plugin already hides groups whose conditions are unmet. Leave those
+      // alone rather than selecting values inside a field nobody can see.
+      if (!this.isVisible(group)) return;
+      if (this.countValues(group) !== 1) return;
+
+      selectionChanged = this.selectOnlyValue(group) || selectionChanged;
+      group.classList.add(TG_SINGLE_VALUE_CLASS);
+    });
+
+    // Drop the records this pass just generated so toggling our own class does
+    // not schedule the next pass forever.
+    this.observer.takeRecords();
+
+    // Selecting a value runs the plugin's own handler synchronously, and the
+    // records for whatever it rebuilt were just discarded. Re-evaluate once so
+    // that repaint is not missed; the idempotent branches above end the chain.
+    if (selectionChanged) this.scheduleSync();
+  }
+
+  scheduleSync() {
+    if (this.animationFrame) return;
+    this.animationFrame = window.requestAnimationFrame(() => {
+      this.animationFrame = null;
+      this.sync();
+    });
+  }
+
+  destroy() {
+    this.observer.disconnect();
+    if (this.animationFrame) window.cancelAnimationFrame(this.animationFrame);
+    this.root.querySelectorAll(`.${TG_SINGLE_VALUE_CLASS}`).forEach((group) => {
+      group.classList.remove(TG_SINGLE_VALUE_CLASS);
+    });
+  }
+}
+
+function bindTgSingleValueOptions(container = document) {
+  const roots = [];
+  if (container.matches?.('product-info[data-tg-hide-single-options]')) roots.push(container);
+  roots.push(...container.querySelectorAll('product-info[data-tg-hide-single-options]'));
+
+  roots.forEach((root) => {
+    if (root.tgSingleValueOptions) return;
+    root.tgSingleValueOptions = new TgSingleValueOptions(root);
+  });
+}
+
 document.addEventListener('click', releaseTgCustomilyFollow, true);
 document.addEventListener('click', trackTgCustomilyInteraction, true);
 document.addEventListener('change', trackTgCustomilyInteraction, true);
@@ -447,6 +594,7 @@ document.addEventListener('DOMContentLoaded', () => {
   bindTgProductAddOnForms();
   bindTgCustomilyPreviewSync();
   bindTgSizeCharts();
+  bindTgSingleValueOptions();
   window.TgTeeInBlueCartBridge ||= new TgTeeInBlueCartBridge();
 });
 
@@ -454,10 +602,14 @@ document.addEventListener('shopify:section:load', (event) => {
   bindTgProductAddOnForms(event.target);
   bindTgCustomilyPreviewSync(event.target);
   bindTgSizeCharts(event.target);
+  bindTgSingleValueOptions(event.target);
 });
 
 document.addEventListener('shopify:section:unload', (event) => {
   event.target.querySelectorAll('product-info[data-tg-size-chart]').forEach((root) => {
     root.tgSizeChart?.destroy();
+  });
+  event.target.querySelectorAll('product-info[data-tg-hide-single-options]').forEach((root) => {
+    root.tgSingleValueOptions?.destroy();
   });
 });
