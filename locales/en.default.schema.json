@@ -3958,6 +3958,26 @@
         }
       },
       "breadcrumbs": {
+        "font_size": {
+          "label": "Breadcrumb font size (desktop)"
+        },
+        "font_size_mobile": {
+          "label": "Breadcrumb font size (mobile)"
+        },
+        "font_weight": {
+          "label": "Breadcrumb font weight",
+          "inherit": "Use theme font weight"
+        },
+        "text_color": {
+          "label": "Breadcrumb text color"
+        },
+        "link_color": {
+          "label": "Breadcrumb link color"
+        },
+        "link_hover_color": {
+          "label": "Breadcrumb link hover color"
+        },
+        "color_info": "Leave blank to use the existing color.",
         "heading": "tg | Breadcrumbs",
         "show": {
           "label": "Show breadcrumbs"

@@ -2,7 +2,7 @@
 {{ 'tg-collection.css' | asset_url | stylesheet_tag }}
 <section class="tg-collection tg-collection-header" style="--mcc-background: {{ section.settings.background }}; --mcc-text: {{ section.settings.text_color }}; --mcc-muted: {{ section.settings.muted_color }}; --mcc-accent: {{ section.settings.accent_color }}; --mcc-header-top: {{ section.settings.padding_top }}px; --mcc-header-bottom: {{ section.settings.padding_bottom }}px; --mcc-title-size: {{ section.settings.title_font_size }}px; --mcc-title-size-mobile: {{ section.settings.title_font_size_mobile }}px; --mcc-title-weight: {{ section.settings.title_font_weight }}; --mcc-description-size: {{ section.settings.description_font_size }}px; --mcc-description-size-mobile: {{ section.settings.description_font_size_mobile }}px; --mcc-description-weight: {{ section.settings.description_font_weight }};" {{ section.shopify_attributes }}>
   <div class="tg-collection__width">
-    {% if section.settings.show_breadcrumbs %}<nav class="tg-collection__breadcrumb" aria-label="{{ 'tg_collection.a11y.breadcrumb' | t }}"><a href="{{ routes.root_url }}">{{ section.settings.home_label | escape }}</a><span aria-hidden="true">/</span><span aria-current="page">{{ collection.title | escape }}</span></nav>{% endif %}
+    {% if section.settings.show_breadcrumbs %}<nav class="tg-collection__breadcrumb" style="{% render 'tg-breadcrumb-text-style', section: section %}" aria-label="{{ 'tg_collection.a11y.breadcrumb' | t }}"><a href="{{ routes.root_url }}">{{ section.settings.home_label | escape }}</a><span aria-hidden="true">/</span><span aria-current="page">{{ collection.title | escape }}</span></nav>{% endif %}
     <h1 class="tg-collection__title">{% if section.settings.title != blank %}{{ section.settings.title }}{% else %}{{ collection.title | escape }}{% endif %}</h1>
     {% if section.settings.show_description and collection.description != blank %}<div class="tg-collection__description rte">{{ collection.description }}</div>{% elsif section.settings.description != blank %}<div class="tg-collection__description rte">{{ section.settings.description }}</div>{% endif %}
   </div>
@@ -24,6 +24,72 @@
       "id": "home_label",
       "label": "t:tg_collection.settings.home_label",
       "default": "Home"
+    },
+    {
+      "type": "range",
+      "id": "breadcrumb_font_size",
+      "label": "t:sections.tg_product.breadcrumbs.font_size.label",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "range",
+      "id": "breadcrumb_font_size_mobile",
+      "label": "t:sections.tg_product.breadcrumbs.font_size_mobile.label",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "select",
+      "id": "breadcrumb_font_weight",
+      "label": "t:sections.tg_product.breadcrumbs.font_weight.label",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "t:sections.tg_product.breadcrumbs.font_weight.inherit"
+        },
+        {
+          "value": "400",
+          "label": "t:tg.settings.font_weight_options.regular"
+        },
+        {
+          "value": "500",
+          "label": "t:tg.settings.font_weight_options.medium"
+        },
+        {
+          "value": "600",
+          "label": "t:tg.settings.font_weight_options.semibold"
+        },
+        {
+          "value": "700",
+          "label": "t:tg.settings.font_weight_options.bold"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "color",
+      "id": "breadcrumb_text_color",
+      "label": "t:sections.tg_product.breadcrumbs.text_color.label",
+      "info": "t:sections.tg_product.breadcrumbs.color_info"
+    },
+    {
+      "type": "color",
+      "id": "breadcrumb_link_color",
+      "label": "t:sections.tg_product.breadcrumbs.link_color.label",
+      "info": "t:sections.tg_product.breadcrumbs.color_info"
+    },
+    {
+      "type": "color",
+      "id": "breadcrumb_link_hover_color",
+      "label": "t:sections.tg_product.breadcrumbs.link_hover_color.label",
+      "info": "t:sections.tg_product.breadcrumbs.color_info"
     },
     {
       "type": "inline_richtext",

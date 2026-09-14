@@ -5,15 +5,15 @@
 
 .cuszoo-breadcrumb {
   align-items: center;
-  color: #637381;
+  color: var(--breadcrumb-text-color, #637381);
   display: flex;
-  font-size: 1.3rem;
+  font-size: var(--breadcrumb-font-size, 1.3rem); font-weight: var(--breadcrumb-font-weight, inherit);
   gap: 0.8rem;
   min-height: 4.4rem;
 }
 
 .cuszoo-breadcrumb a {
-  color: #087edb;
+  color: var(--breadcrumb-link-color, #087edb);
   text-decoration: none;
 }
 
@@ -247,5 +247,15 @@
 
   [data-template='collection'] #product-grid .card__heading {
     font-size: 1.35rem;
+  }
+}
+
+.cuszoo-breadcrumb a:hover {
+  color: var(--breadcrumb-link-hover-color, var(--breadcrumb-link-color, #087edb));
+}
+
+@media screen and (max-width: 749px) {
+  .cuszoo-breadcrumb {
+    font-size: var(--breadcrumb-font-size-mobile, 1.3rem);
   }
 }

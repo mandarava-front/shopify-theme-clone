@@ -24,9 +24,9 @@
 .tg-collection__width { width: min(136rem, calc(100% - 8rem)); margin: 0 auto; }
 
 .tg-collection-header { min-height: 7.55rem; padding: var(--mcc-header-top, 2rem) 0 var(--mcc-header-bottom, 0rem); }
-.tg-collection__breadcrumb { display: flex; align-items: center; gap: .7rem; margin-bottom: 1.2rem; color: var(--mcc-muted); font-size: 1.3rem; }
-.tg-collection__breadcrumb a { color: inherit; text-decoration: none; }
-.tg-collection__breadcrumb a:hover { color: var(--mcc-accent); }
+.tg-collection__breadcrumb { display: flex; align-items: center; gap: .7rem; margin-bottom: 1.2rem; color: var(--breadcrumb-text-color, var(--mcc-muted)); font-size: var(--breadcrumb-font-size, 1.3rem); font-weight: var(--breadcrumb-font-weight, inherit); }
+.tg-collection__breadcrumb a { color: var(--breadcrumb-link-color, inherit); text-decoration: none; }
+.tg-collection__breadcrumb a:hover { color: var(--breadcrumb-link-hover-color, var(--mcc-accent)); }
 .tg-collection__title { margin: 0; color: var(--mcc-text); font-size: var(--mcc-title-size, 3.2rem); font-weight: var(--mcc-title-weight, 700); line-height: 1.25; }
 .tg-collection__description { max-width: 76rem; margin: .8rem 0 0; color: var(--mcc-muted); font-size: var(--mcc-description-size, 1.4rem); font-weight: var(--mcc-description-weight, 400); line-height: 1.6; }
 
@@ -265,4 +265,10 @@
   .tg-collection *,
   .tg-collection *::before,
   .tg-collection *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
+
+@media screen and (max-width: 749px) {
+  .tg-collection__breadcrumb {
+    font-size: var(--breadcrumb-font-size-mobile, 1.3rem);
+  }
 }

@@ -3958,6 +3958,26 @@
         }
       },
       "breadcrumbs": {
+        "font_size": {
+          "label": "面包屑文字大小（桌面端）"
+        },
+        "font_size_mobile": {
+          "label": "面包屑文字大小（移动端）"
+        },
+        "font_weight": {
+          "label": "面包屑文字粗细",
+          "inherit": "跟随主题字重"
+        },
+        "text_color": {
+          "label": "面包屑文字颜色"
+        },
+        "link_color": {
+          "label": "面包屑链接颜色"
+        },
+        "link_hover_color": {
+          "label": "面包屑链接悬停颜色"
+        },
+        "color_info": "留空时沿用原有颜色。",
         "heading": "tg | 面包屑导航",
         "show": {
           "label": "显示面包屑导航"

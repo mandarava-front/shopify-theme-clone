@@ -385,7 +385,7 @@
   <product-component view-event-payload="{{ product | standard_event_data: 'view', context: 'page' | escape }}">
     <div class="page-width">
       {%- if section.settings.show_breadcrumbs -%}
-        <nav class="tg-breadcrumb tg-product-breadcrumb" aria-label="Breadcrumb">
+        <nav class="tg-breadcrumb tg-product-breadcrumb" style="{% render 'tg-breadcrumb-text-style', section: section %}" aria-label="Breadcrumb">
           <a href="{{ routes.root_url }}">{{ section.settings.breadcrumb_home_label | escape }}</a>
           <span class="svg-wrapper" aria-hidden="true">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
           {%- if product.collections.first -%}
@@ -2795,6 +2795,72 @@
       "id": "breadcrumb_home_label",
       "default": "Home",
       "label": "t:sections.tg_product.breadcrumbs.home_label.label"
+    },
+    {
+      "type": "range",
+      "id": "breadcrumb_font_size",
+      "label": "t:sections.tg_product.breadcrumbs.font_size.label",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "range",
+      "id": "breadcrumb_font_size_mobile",
+      "label": "t:sections.tg_product.breadcrumbs.font_size_mobile.label",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "select",
+      "id": "breadcrumb_font_weight",
+      "label": "t:sections.tg_product.breadcrumbs.font_weight.label",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "t:sections.tg_product.breadcrumbs.font_weight.inherit"
+        },
+        {
+          "value": "400",
+          "label": "t:tg.settings.font_weight_options.regular"
+        },
+        {
+          "value": "500",
+          "label": "t:tg.settings.font_weight_options.medium"
+        },
+        {
+          "value": "600",
+          "label": "t:tg.settings.font_weight_options.semibold"
+        },
+        {
+          "value": "700",
+          "label": "t:tg.settings.font_weight_options.bold"
+        }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "color",
+      "id": "breadcrumb_text_color",
+      "label": "t:sections.tg_product.breadcrumbs.text_color.label",
+      "info": "t:sections.tg_product.breadcrumbs.color_info"
+    },
+    {
+      "type": "color",
+      "id": "breadcrumb_link_color",
+      "label": "t:sections.tg_product.breadcrumbs.link_color.label",
+      "info": "t:sections.tg_product.breadcrumbs.color_info"
+    },
+    {
+      "type": "color",
+      "id": "breadcrumb_link_hover_color",
+      "label": "t:sections.tg_product.breadcrumbs.link_hover_color.label",
+      "info": "t:sections.tg_product.breadcrumbs.color_info"
     },
     {
       "type": "header",

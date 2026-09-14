@@ -1,0 +1,13 @@
+{%- comment -%}Shared, nav-scoped text settings. Blank colors retain each section's palette.{%- endcomment -%}
+--breadcrumb-font-size: {{ section.settings.breadcrumb_font_size | default: 13 | divided_by: 10.0 }}rem;
+--breadcrumb-font-size-mobile: {{ section.settings.breadcrumb_font_size_mobile | default: 13 | divided_by: 10.0 }}rem;
+--breadcrumb-font-weight: {{ section.settings.breadcrumb_font_weight | default: 'inherit' }};
+{%- if section.settings.breadcrumb_text_color != blank -%}
+  --breadcrumb-text-color: {{ section.settings.breadcrumb_text_color }};
+{%- endif -%}
+{%- if section.settings.breadcrumb_link_color != blank -%}
+  --breadcrumb-link-color: {{ section.settings.breadcrumb_link_color }};
+{%- endif -%}
+{%- if section.settings.breadcrumb_link_hover_color != blank -%}
+  --breadcrumb-link-hover-color: {{ section.settings.breadcrumb_link_hover_color }};
+{%- endif -%}

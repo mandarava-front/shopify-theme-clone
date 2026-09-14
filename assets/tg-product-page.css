@@ -1,14 +1,14 @@
 .tg-breadcrumb {
   align-items: center;
-  color: #637381;
+  color: var(--breadcrumb-text-color, #637381);
   display: flex;
-  font-size: 1.3rem;
+  font-size: var(--breadcrumb-font-size, 1.3rem); font-weight: var(--breadcrumb-font-weight, inherit);
   gap: 0.8rem;
   min-height: 4.4rem;
 }
 
 .tg-breadcrumb a {
-  color: #087edb;
+  color: var(--breadcrumb-link-color, #087edb);
   text-decoration: none;
 }
 
@@ -1016,4 +1016,14 @@ product-recommendations.related-products:not(:has(.grid)) {
 [data-template='product'] .tg-product__purchase-actions .shopify-payment-button__button--unbranded:focus-visible {
   outline: 0.2rem solid rgb(var(--tg-purchase-button-hover-color));
   outline-offset: 0.3rem;
+}
+
+.tg-breadcrumb a:hover {
+  color: var(--breadcrumb-link-hover-color, var(--breadcrumb-link-color, #087edb));
+}
+
+@media screen and (max-width: 749px) {
+  .tg-breadcrumb {
+    font-size: var(--breadcrumb-font-size-mobile, 1.3rem);
+  }
 }
