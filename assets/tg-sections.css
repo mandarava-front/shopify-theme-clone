@@ -78,7 +78,7 @@
 .tg-featured-card__image--secondary { position: absolute; inset: 0; opacity: 0; }
 .tg-featured-card__media:hover .tg-featured-card__image--primary { opacity: 0; }
 .tg-featured-card__media:hover .tg-featured-card__image--secondary { opacity: 1; }
-.tg-featured-card__badge { position: absolute; z-index: 1; top: .9rem; left: .8rem; border-radius: .2rem; padding: .4rem .7rem; background: var(--tg-badge-background); color: var(--tg-badge-text); font-size: 1.1rem; font-weight: 700; line-height: 1.2; }
+.tg-featured-card__badge { position: absolute; z-index: 1; top: .9rem; left: .8rem; border-radius: var(--tg-badge-radius, .2rem); padding: calc(.4rem * var(--tg-badge-scale, 1)) calc(.7rem * var(--tg-badge-scale, 1)); background: var(--tg-badge-background); color: var(--tg-badge-text); font-size: calc(1.1rem * var(--tg-badge-scale, 1)); font-weight: 700; line-height: 1.2; }
 .tg-featured-card__meta { padding-top: 1.1rem; }
 .tg-featured-card__title { display: -webkit-box; height: 3.9rem; overflow: hidden; color: var(--tg-text); font-size: var(--tg-card-title-size, 1.3rem); font-weight: var(--tg-card-title-weight, 600); line-height: 1.45; text-decoration: none; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .tg-featured-card__reviews { margin-top: .7rem; color: var(--tg-muted); font-size: 1.1rem; line-height: 1.3; }
@@ -232,7 +232,7 @@
   .tg-product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3.2rem 1.6rem; margin-top: 2.4rem; }
   .tg-featured-products { padding: var(--tg-mobile-padding-top) 0 var(--tg-mobile-padding-bottom); }
   .tg-featured-products .tg-product-grid { grid-template-columns: repeat(var(--tg-columns-mobile, 2), minmax(0, 1fr)); gap: 5.8rem 1.6rem; margin-top: 2.2rem; }
-  .tg-featured-card__badge { top: .5rem; left: .5rem; padding: .2rem .4rem; font-size: .7rem; }
+  .tg-featured-card__badge { top: .5rem; left: .5rem; padding: calc(.2rem * var(--tg-badge-scale-mobile, 1)) calc(.4rem * var(--tg-badge-scale-mobile, 1)); font-size: calc(.7rem * var(--tg-badge-scale-mobile, 1)); }
   .tg-featured-card__meta { padding-top: .6rem; }
   .tg-featured-card__title { height: 4.16rem; font-size: var(--tg-card-title-size-mobile, var(--tg-card-title-size, 1.3rem)); line-height: 1.6; }
   .tg-featured-card__reviews { margin-top: .3rem; font-size: 1rem; }

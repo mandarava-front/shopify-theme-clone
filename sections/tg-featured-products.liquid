@@ -1,5 +1,5 @@
 {{ 'tg-sections.css' | asset_url | stylesheet_tag }}
-<section class="tg-section tg-featured-products" style="--tg-background: {{ section.settings.background }}; --tg-text: {{ section.settings.text_color }}; --tg-muted: {{ section.settings.muted_color }}; --tg-accent: {{ section.settings.button_color }}; --tg-button-text: {{ section.settings.button_text_color }}; --tg-price-color: {{ section.settings.price_color }}; --tg-badge-background: {{ section.settings.badge_background }}; --tg-badge-text: {{ section.settings.badge_text_color }}; --tg-star-color: {{ section.settings.star_color }}; --tg-columns: {{ section.settings.columns_desktop }}; --tg-columns-mobile: {{ section.settings.columns_mobile }}; --tg-card-radius: {{ section.settings.card_radius }}px; --tg-padding-top: {{ section.settings.padding_top }}px; --tg-padding-bottom: {{ section.settings.padding_bottom }}px; --tg-mobile-padding-top: {{ section.settings.mobile_padding_top }}px; --tg-mobile-padding-bottom: {{ section.settings.mobile_padding_bottom }}px; --tg-heading-size: {{ section.settings.heading_font_size }}px; --tg-heading-size-mobile: {{ section.settings.heading_font_size_mobile }}px; --tg-heading-weight: {{ section.settings.heading_font_weight }}; --tg-subheading-size: {{ section.settings.subheading_font_size }}px; --tg-subheading-size-mobile: {{ section.settings.subheading_font_size_mobile }}px; --tg-subheading-weight: {{ section.settings.subheading_font_weight }}; --tg-button-font-size: {{ section.settings.button_font_size }}px; --tg-button-font-size-mobile: {{ section.settings.button_font_size_mobile }}px; --tg-button-font-weight: {{ section.settings.button_font_weight }}; --tg-card-title-size: {{ section.settings.title_font_size }}px; --tg-card-title-size-mobile: {{ section.settings.title_font_size_mobile }}px; --tg-card-title-weight: {{ section.settings.title_font_weight }}; --tg-card-price-size: {{ section.settings.price_font_size }}px; --tg-card-price-size-mobile: {{ section.settings.price_font_size_mobile }}px; --tg-card-price-weight: {{ section.settings.price_font_weight }};" {{ section.shopify_attributes }}>
+<section class="tg-section tg-featured-products" style="--tg-background: {{ section.settings.background }}; --tg-text: {{ section.settings.text_color }}; --tg-muted: {{ section.settings.muted_color }}; --tg-accent: {{ section.settings.button_color }}; --tg-button-text: {{ section.settings.button_text_color }}; --tg-price-color: {{ section.settings.price_color }}; --tg-badge-background: {{ section.settings.badge_background }}; --tg-badge-text: {{ section.settings.badge_text_color }}; --tg-badge-radius: {{ section.settings.badge_radius | default: 2 }}px; --tg-badge-scale: {{ section.settings.badge_scale | default: 100 | divided_by: 100.0 }}; --tg-badge-scale-mobile: {{ section.settings.badge_scale_mobile | default: 100 | divided_by: 100.0 }}; --tg-star-color: {{ section.settings.star_color }}; --tg-columns: {{ section.settings.columns_desktop }}; --tg-columns-mobile: {{ section.settings.columns_mobile }}; --tg-card-radius: {{ section.settings.card_radius }}px; --tg-padding-top: {{ section.settings.padding_top }}px; --tg-padding-bottom: {{ section.settings.padding_bottom }}px; --tg-mobile-padding-top: {{ section.settings.mobile_padding_top }}px; --tg-mobile-padding-bottom: {{ section.settings.mobile_padding_bottom }}px; --tg-heading-size: {{ section.settings.heading_font_size }}px; --tg-heading-size-mobile: {{ section.settings.heading_font_size_mobile }}px; --tg-heading-weight: {{ section.settings.heading_font_weight }}; --tg-subheading-size: {{ section.settings.subheading_font_size }}px; --tg-subheading-size-mobile: {{ section.settings.subheading_font_size_mobile }}px; --tg-subheading-weight: {{ section.settings.subheading_font_weight }}; --tg-button-font-size: {{ section.settings.button_font_size }}px; --tg-button-font-size-mobile: {{ section.settings.button_font_size_mobile }}px; --tg-button-font-weight: {{ section.settings.button_font_weight }}; --tg-card-title-size: {{ section.settings.title_font_size }}px; --tg-card-title-size-mobile: {{ section.settings.title_font_size_mobile }}px; --tg-card-title-weight: {{ section.settings.title_font_weight }}; --tg-card-price-size: {{ section.settings.price_font_size }}px; --tg-card-price-size-mobile: {{ section.settings.price_font_size_mobile }}px; --tg-card-price-weight: {{ section.settings.price_font_weight }};" {{ section.shopify_attributes }}>
   <div class="tg-page-width">
     <header class="tg-products__header">
       {%- if section.settings.heading != blank -%}<h2 class="tg-heading">{{ section.settings.heading }}</h2>{%- endif -%}
@@ -186,6 +186,50 @@
       "id": "show_badges",
       "label": "t:tg.settings.show_badges",
       "default": true
+    },
+    {
+      "type": "range",
+      "id": "badge_scale",
+      "label": "Sale 标签大小（桌面端）",
+      "info": "同时缩放标签文字和内边距，100% 为原始大小。",
+      "min": 50,
+      "max": 200,
+      "step": 10,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "badge_scale_mobile",
+      "label": "Sale 标签大小（手机端）",
+      "info": "同时缩放标签文字和内边距，100% 为原始大小。",
+      "min": 50,
+      "max": 200,
+      "step": 10,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "badge_radius",
+      "label": "Sale 标签圆角",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 2
+    },
+    {
+      "type": "color",
+      "id": "badge_background",
+      "label": "t:tg.settings.badge_background",
+      "default": "#ffc400"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "t:tg.settings.badge_text_color",
+      "default": "#111111"
     },
     {
       "type": "checkbox",
@@ -375,18 +419,6 @@
       "id": "price_color",
       "label": "t:tg.settings.price_color",
       "default": "#e18a00"
-    },
-    {
-      "type": "color",
-      "id": "badge_background",
-      "label": "t:tg.settings.badge_background",
-      "default": "#ffc400"
-    },
-    {
-      "type": "color",
-      "id": "badge_text_color",
-      "label": "t:tg.settings.badge_text_color",
-      "default": "#111111"
     },
     {
       "type": "color",

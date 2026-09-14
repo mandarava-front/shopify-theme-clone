@@ -312,8 +312,6 @@ button.shopify-payment-button__button--unbranded {
 }
 
 .cart-count-bubble {
-  background-color: rgb(var(--cuszoo-cyan));
-  color: rgb(var(--cuszoo-navy));
   font-weight: 700;
 }
 
