@@ -734,7 +734,11 @@
                         {{ block.settings.page.content }}
                     {%- endcase -%}
                   {%- endcapture -%}
-                  <div class="product__accordion accordion quick-add-hidden tg-product-accordion" {{ block.shopify_attributes }}>
+                  <div
+                    class="product__accordion accordion quick-add-hidden tg-product-accordion"
+                    style="--tg-accordion-title-size: {{ block.settings.title_font_size | default: 13 | divided_by: 10.0 }}rem; --tg-accordion-title-size-mobile: {{ block.settings.title_font_size_mobile | default: 11 | divided_by: 10.0 }}rem; --tg-accordion-title-weight: {{ block.settings.title_font_weight | default: '600' }}; --tg-accordion-title-color: {{ block.settings.title_color | default: '#202024' }};"
+                    {{ block.shopify_attributes }}
+                  >
                     <details id="Details-{{ block.id }}-{{ section.id }}"{% if block.settings.open_by_default %} open{% endif %}>
                       <summary>
                         <div class="summary__title">
@@ -1647,6 +1651,44 @@
           "id": "heading",
           "default": "t:sections.main-product.blocks.collapsible_tab.settings.heading.default",
           "label": "t:sections.main-product.blocks.collapsible_tab.settings.heading.label"
+        },
+        {
+          "type": "range",
+          "id": "title_font_size",
+          "min": 11,
+          "max": 40,
+          "step": 1,
+          "default": 13,
+          "unit": "px",
+          "label": "t:sections.tg_product.title.desktop_size.label"
+        },
+        {
+          "type": "range",
+          "id": "title_font_size_mobile",
+          "min": 11,
+          "max": 32,
+          "step": 1,
+          "default": 11,
+          "unit": "px",
+          "label": "t:sections.tg_product.title.mobile_size.label"
+        },
+        {
+          "type": "select",
+          "id": "title_font_weight",
+          "default": "600",
+          "label": "t:sections.tg_product.title.font_weight.label",
+          "options": [
+            { "value": "400", "label": "t:sections.tg_product.title.font_weight.options.regular" },
+            { "value": "500", "label": "t:sections.tg_product.title.font_weight.options.medium" },
+            { "value": "600", "label": "t:sections.tg_product.title.font_weight.options.semibold" },
+            { "value": "700", "label": "t:sections.tg_product.title.font_weight.options.bold" }
+          ]
+        },
+        {
+          "type": "color",
+          "id": "title_color",
+          "default": "#202024",
+          "label": "t:sections.tg_product.title.color.label"
         },
         {
           "type": "select",

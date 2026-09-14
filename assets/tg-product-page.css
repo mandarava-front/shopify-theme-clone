@@ -386,9 +386,9 @@
 }
 
 [data-template='product'] .tg-product-accordion .accordion__title {
-  color: #202024;
-  font-size: 1.3rem;
-  font-weight: 600;
+  color: var(--tg-accordion-title-color, #202024);
+  font-size: var(--tg-accordion-title-size, 1.3rem);
+  font-weight: var(--tg-accordion-title-weight, 600);
   line-height: 1.5;
 }
 
@@ -696,7 +696,7 @@ product-recommendations.related-products:not(:has(.grid)) {
   }
 
   [data-template='product'] .tg-product-accordion .accordion__title {
-    font-size: 1.1rem;
+    font-size: var(--tg-accordion-title-size-mobile, 1.1rem);
   }
 
   [data-template='product'] .tg-product__purchase-row {
