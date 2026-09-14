@@ -2,6 +2,10 @@ product-info {
   display: block;
 }
 
+product-info .product-media-container {
+  --media-radius: var(--tg-product-media-radius, var(--media-radius));
+}
+
 .product {
   margin: 0;
 }

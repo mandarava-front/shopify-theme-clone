@@ -65,6 +65,7 @@
   {% if section.settings.image_zoom == 'hover' %}
     data-zoom-on-hover
   {% endif %}
+  style="--tg-product-media-radius: {{ section.settings.product_media_radius }}px;"
 >
   {{ 'section-main-product.css' | asset_url | stylesheet_tag }}
   {{ 'tg-product.css' | asset_url | stylesheet_tag }}
@@ -1295,14 +1296,14 @@
         { "type": "text", "id": "order_label", "label": "t:sections.tg_product.delivery_estimate.copy.order_label.label", "default": "Order placed" },
         { "type": "text", "id": "ship_label", "label": "t:sections.tg_product.delivery_estimate.copy.ship_label.label", "default": "Order ships" },
         { "type": "text", "id": "delivery_label", "label": "t:sections.tg_product.delivery_estimate.copy.delivery_label.label", "default": "Delivered" },
-        { "type": "header", "content": "Tg | Delivery icons / 预计送达图标" },
-        { "type": "select", "id": "summary_icon", "label": "Tg | Summary icon / 摘要图标", "options": [{ "value": "checkmark", "label": "Checkmark / 勾选" }, { "value": "truck", "label": "Truck / 货车" }, { "value": "box", "label": "Package / 包裹" }, { "value": "map-pin", "label": "Location / 地址" }, { "value": "plane", "label": "Plane / 飞机" }, { "value": "stopwatch", "label": "Stopwatch / 秒表" }, { "value": "return", "label": "Return / 退货" }, { "value": "heart", "label": "Heart / 爱心" }, { "value": "star", "label": "Star / 星星" }], "default": "truck" },
-        { "type": "select", "id": "order_icon", "label": "Tg | Order step icon / 下单步骤图标", "options": [{ "value": "checkmark", "label": "Checkmark / 勾选" }, { "value": "truck", "label": "Truck / 货车" }, { "value": "box", "label": "Package / 包裹" }, { "value": "map-pin", "label": "Location / 地址" }, { "value": "plane", "label": "Plane / 飞机" }, { "value": "stopwatch", "label": "Stopwatch / 秒表" }, { "value": "return", "label": "Return / 退货" }, { "value": "heart", "label": "Heart / 爱心" }, { "value": "star", "label": "Star / 星星" }], "default": "checkmark" },
-        { "type": "select", "id": "ship_icon", "label": "Tg | Shipping step icon / 发货步骤图标", "options": [{ "value": "checkmark", "label": "Checkmark / 勾选" }, { "value": "truck", "label": "Truck / 货车" }, { "value": "box", "label": "Package / 包裹" }, { "value": "map-pin", "label": "Location / 地址" }, { "value": "plane", "label": "Plane / 飞机" }, { "value": "stopwatch", "label": "Stopwatch / 秒表" }, { "value": "return", "label": "Return / 退货" }, { "value": "heart", "label": "Heart / 爱心" }, { "value": "star", "label": "Star / 星星" }], "default": "truck" },
-        { "type": "select", "id": "arrival_icon", "label": "Tg | Delivery step icon / 送达步骤图标", "options": [{ "value": "checkmark", "label": "Checkmark / 勾选" }, { "value": "truck", "label": "Truck / 货车" }, { "value": "box", "label": "Package / 包裹" }, { "value": "map-pin", "label": "Location / 地址" }, { "value": "plane", "label": "Plane / 飞机" }, { "value": "stopwatch", "label": "Stopwatch / 秒表" }, { "value": "return", "label": "Return / 退货" }, { "value": "heart", "label": "Heart / 爱心" }, { "value": "star", "label": "Star / 星星" }], "default": "box" },
-        { "type": "color", "id": "icon_background_color", "label": "Tg | Icon background color / 图标背景色", "default": "#c9f2f8" },
-        { "type": "color", "id": "svg_icon_color", "label": "Tg | SVG icon line color / SVG 图标线条颜色", "default": "#087edb" },
-        { "type": "color", "id": "icon_line_color", "label": "Tg | Dotted line color / 流程虚线颜色", "default": "#18bfe5" }
+        { "type": "header", "content": "预计送达图标" },
+        { "type": "select", "id": "summary_icon", "label": "摘要图标", "options": [{ "value": "checkmark", "label": "勾选" }, { "value": "truck", "label": "货车" }, { "value": "box", "label": "包裹" }, { "value": "map-pin", "label": "地址" }, { "value": "plane", "label": "飞机" }, { "value": "stopwatch", "label": "秒表" }, { "value": "return", "label": "退货" }, { "value": "heart", "label": "爱心" }, { "value": "star", "label": "星星" }], "default": "truck" },
+        { "type": "select", "id": "order_icon", "label": "下单步骤图标", "options": [{ "value": "checkmark", "label": "勾选" }, { "value": "truck", "label": "货车" }, { "value": "box", "label": "包裹" }, { "value": "map-pin", "label": "地址" }, { "value": "plane", "label": "飞机" }, { "value": "stopwatch", "label": "秒表" }, { "value": "return", "label": "退货" }, { "value": "heart", "label": "爱心" }, { "value": "star", "label": "星星" }], "default": "checkmark" },
+        { "type": "select", "id": "ship_icon", "label": "发货步骤图标", "options": [{ "value": "checkmark", "label": "勾选" }, { "value": "truck", "label": "货车" }, { "value": "box", "label": "包裹" }, { "value": "map-pin", "label": "地址" }, { "value": "plane", "label": "飞机" }, { "value": "stopwatch", "label": "秒表" }, { "value": "return", "label": "退货" }, { "value": "heart", "label": "爱心" }, { "value": "star", "label": "星星" }], "default": "truck" },
+        { "type": "select", "id": "arrival_icon", "label": "送达步骤图标", "options": [{ "value": "checkmark", "label": "勾选" }, { "value": "truck", "label": "货车" }, { "value": "box", "label": "包裹" }, { "value": "map-pin", "label": "地址" }, { "value": "plane", "label": "飞机" }, { "value": "stopwatch", "label": "秒表" }, { "value": "return", "label": "退货" }, { "value": "heart", "label": "爱心" }, { "value": "star", "label": "星星" }], "default": "box" },
+        { "type": "color", "id": "icon_background_color", "label": "图标背景色", "default": "#c9f2f8" },
+        { "type": "color", "id": "svg_icon_color", "label": "图标线条颜色", "default": "#087edb" },
+        { "type": "color", "id": "icon_line_color", "label": "流程虚线颜色", "default": "#18bfe5" }
       ]
     },
     {
@@ -2892,20 +2893,30 @@
       "label": "t:sections.main-product.settings.media_fit.label"
     },
     {
+      "type": "range",
+      "id": "product_media_radius",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 12,
+      "label": "商品图片圆角"
+    },
+    {
       "type": "select",
       "id": "mobile_gallery_aspect_ratio",
-      "label": "Mobile gallery image ratio / 移动端图库图片比例",
+      "label": "移动端图库图片比例",
       "info": "Images are center-cropped to fill this frame / 图片将从中心裁剪并填满画框",
       "options": [
-        { "value": "square", "label": "1:1 / 正方形" },
-        { "value": "landscape_5_4", "label": "5:4 / 横向" },
-        { "value": "portrait_4_5", "label": "4:5 / 竖向" },
-        { "value": "landscape_4_3", "label": "4:3 / 横向" },
-        { "value": "portrait_3_4", "label": "3:4 / 竖向" },
-        { "value": "landscape_3_2", "label": "3:2 / 横向" },
-        { "value": "portrait_2_3", "label": "2:3 / 竖向" },
-        { "value": "landscape_16_9", "label": "16:9 / 宽屏" },
-        { "value": "portrait_9_16", "label": "9:16 / 竖屏" }
+        { "value": "square", "label": "1:1 正方形" },
+        { "value": "landscape_5_4", "label": "5:4 横向" },
+        { "value": "portrait_4_5", "label": "4:5 竖向" },
+        { "value": "landscape_4_3", "label": "4:3 横向" },
+        { "value": "portrait_3_4", "label": "3:4 竖向" },
+        { "value": "landscape_3_2", "label": "3:2 横向" },
+        { "value": "portrait_2_3", "label": "2:3 竖向" },
+        { "value": "landscape_16_9", "label": "16:9 宽屏" },
+        { "value": "portrait_9_16", "label": "9:16 竖向" }
       ],
       "default": "square"
     },

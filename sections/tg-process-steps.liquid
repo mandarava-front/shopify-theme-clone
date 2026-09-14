@@ -1,6 +1,6 @@
 {{ 'tg-sections.css' | asset_url | stylesheet_tag }}
-<section class="tg-section tg-process-steps" style="--tg-background: {{ section.settings.background }}; --tg-text: {{ section.settings.text_color }}; --tg-accent: {{ section.settings.accent_color }}; --tg-arrow-color: {{ section.settings.arrow_color }}; --tg-columns: {{ section.settings.columns }}; --tg-padding-top: {{ section.settings.padding_top }}px; --tg-padding-bottom: {{ section.settings.padding_bottom }}px; --tg-mobile-padding-top: {{ section.settings.mobile_padding_top }}px; --tg-mobile-padding-bottom: {{ section.settings.mobile_padding_bottom }}px; --tg-heading-size: {{ section.settings.heading_font_size }}px; --tg-heading-size-mobile: {{ section.settings.heading_font_size_mobile }}px; --tg-heading-weight: {{ section.settings.heading_font_weight }}; --tg-step-title-size: {{ section.settings.title_font_size }}px; --tg-step-title-size-mobile: {{ section.settings.title_font_size_mobile }}px; --tg-step-title-weight: {{ section.settings.title_font_weight }};" {{ section.shopify_attributes }}>
- <div class="tg-page-width"><div class="tg-steps__header">{%- if section.settings.heading != blank -%}<h2 class="tg-heading">{{ section.settings.heading }}</h2>{%- endif -%}</div><div class="tg-steps__grid" data-columns="{{ section.settings.columns }}">
+<section class="tg-section tg-process-steps" style="--tg-background: {{ section.settings.background }}; --tg-text: {{ section.settings.text_color }}; --tg-accent: {{ section.settings.accent_color }}; --tg-arrow-color: {{ section.settings.arrow_color }}; --tg-columns: {{ section.settings.columns_desktop }}; --tg-columns-mobile: {{ section.settings.columns_mobile }}; --tg-step-image-size-mobile: {{ section.settings.step_image_size_mobile }}px; --tg-padding-top: {{ section.settings.padding_top }}px; --tg-padding-bottom: {{ section.settings.padding_bottom }}px; --tg-mobile-padding-top: {{ section.settings.mobile_padding_top }}px; --tg-mobile-padding-bottom: {{ section.settings.mobile_padding_bottom }}px; --tg-heading-size: {{ section.settings.heading_font_size }}px; --tg-heading-size-mobile: {{ section.settings.heading_font_size_mobile }}px; --tg-heading-weight: {{ section.settings.heading_font_weight }}; --tg-step-title-size: {{ section.settings.title_font_size }}px; --tg-step-title-size-mobile: {{ section.settings.title_font_size_mobile }}px; --tg-step-title-weight: {{ section.settings.title_font_weight }};" {{ section.shopify_attributes }}>
+ <div class="tg-page-width"><div class="tg-steps__header">{%- if section.settings.heading != blank -%}<h2 class="tg-heading">{{ section.settings.heading }}</h2>{%- endif -%}</div><div class="tg-steps__grid" data-columns="{{ section.settings.columns_desktop }}">
  {%- for block in section.blocks -%}<article class="tg-step" {{ block.shopify_attributes }}>{% if section.settings.show_numbers %}<span class="tg-step__number">{{ forloop.index }}</span>{% endif %}<span class="tg-step__image">{% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 600 | image_tag: widths: '160, 320, 600', loading: 'lazy', alt: block.settings.title }}{% else %}{{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}{% endif %}</span><h3 class="tg-step__title">{{ block.settings.title | escape }}</h3>{% if section.settings.show_arrows %}{% unless forloop.last %}<span class="tg-step__arrow" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></span>{% endunless %}{% endif %}</article>{%- endfor -%}
  </div></div>
 </section>
@@ -118,12 +118,32 @@
     },
     {
       "type": "range",
-      "id": "columns",
-      "label": "t:tg.settings.columns",
+      "id": "columns_desktop",
+      "label": "t:tg.settings.desktop_columns",
       "min": 2,
       "max": 5,
       "step": 1,
       "default": 4
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "t:tg.settings.mobile_columns",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "range",
+      "id": "step_image_size_mobile",
+      "label": "移动端图片最大宽度",
+      "min": 48,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 80
     },
     {
       "type": "color",
