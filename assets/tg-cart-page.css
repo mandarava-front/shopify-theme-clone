@@ -1621,7 +1621,7 @@
 
 .tg-cart-expiry,
 .tg-cart-page__announcement {
-  background: #f7f5f6;
+  background: var(--tg-cart-expiry-background, #f7f5f6);
   border: 0;
   border-radius: 8px;
   color: var(--tg-cart-heading);
@@ -1634,8 +1634,12 @@
   text-align: left;
 }
 
+.tg-cart-expiry {
+  color: var(--tg-cart-expiry-text, var(--tg-cart-heading));
+}
+
 .tg-cart-expiry__time {
-  color: var(--tg-cart-timer);
+  color: var(--tg-cart-expiry-time, var(--tg-cart-timer));
 }
 
 .tg-cart-items {

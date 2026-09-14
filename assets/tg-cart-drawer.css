@@ -212,8 +212,8 @@
   padding: 1.25rem 1.6rem;
   border: 0.1rem solid var(--tg-cart-drawer-border);
   border-radius: 0.6rem;
-  color: var(--tg-cart-drawer-text);
-  background: var(--tg-cart-drawer-subtle);
+  color: var(--tg-cart-drawer-urgency-text, var(--tg-cart-drawer-text));
+  background: var(--tg-cart-drawer-urgency-background, var(--tg-cart-drawer-subtle));
   font-size: 1.45rem;
   line-height: 1.4;
 }
@@ -225,7 +225,7 @@
 }
 
 .tg-cart-drawer__urgency-row strong {
-  color: inherit;
+  color: var(--tg-cart-drawer-urgency-time, inherit);
   font-variant-numeric: tabular-nums;
 }
 

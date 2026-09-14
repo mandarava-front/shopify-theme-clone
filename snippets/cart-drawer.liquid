@@ -109,6 +109,7 @@
                 {%- capture tg_cart_drawer_urgency_time -%}<strong data-tg-cart-urgency-value></strong>{%- endcapture -%}
                 <div
                   class="tg-cart-drawer__urgency-row"
+                  style="--tg-cart-drawer-urgency-background: {{ settings.tg_cart_drawer_urgency_background_color | default: '#f7f5f6' }}; --tg-cart-drawer-urgency-text: {{ settings.tg_cart_drawer_urgency_text_color | default: '#1f2933' }}; --tg-cart-drawer-urgency-time: {{ settings.tg_cart_drawer_urgency_time_color | default: '#1f2933' }};"
                   data-tg-cart-urgency
                   data-tg-cart-urgency-minutes="{{ settings.tg_cart_drawer_urgency_minutes | default: 50 }}"
                   role="status"

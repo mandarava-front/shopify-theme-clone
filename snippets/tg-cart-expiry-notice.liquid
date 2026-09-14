@@ -13,6 +13,7 @@
 {%- if section.settings.enable_tg_cart_page_style and section.settings.tg_cart_expiry_enabled and cart != empty -%}
   <div
     class="tg-cart-expiry"
+    style="--tg-cart-expiry-background: {{ section.settings.tg_cart_expiry_background_color | default: '#f7f5f6' }}; --tg-cart-expiry-text: {{ section.settings.tg_cart_expiry_text_color | default: 'var(--tg-cart-heading)' }}; --tg-cart-expiry-time: {{ section.settings.tg_cart_expiry_time_color | default: 'var(--tg-cart-timer)' }};"
     data-tg-cart-timer
     data-tg-cart-timer-seconds="{{ section.settings.tg_cart_expiry_minutes | times: 60 }}"
     data-tg-cart-timer-key="tg-cart-expiry-{{ cart.token | default: request.host | escape }}"

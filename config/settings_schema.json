@@ -1491,6 +1491,24 @@
         "default": "Hurry! You have {{ time }} minutes remaining"
       },
       {
+        "type": "color",
+        "id": "tg_cart_drawer_urgency_text_color",
+        "label": "购物车抽屉倒计时文案颜色",
+        "default": "#1f2933"
+      },
+      {
+        "type": "color",
+        "id": "tg_cart_drawer_urgency_time_color",
+        "label": "购物车抽屉倒计时时间颜色",
+        "default": "#1f2933"
+      },
+      {
+        "type": "color",
+        "id": "tg_cart_drawer_urgency_background_color",
+        "label": "购物车抽屉倒计时背景颜色",
+        "default": "#f7f5f6"
+      },
+      {
         "type": "text",
         "id": "tg_cart_drawer_product_label",
         "label": "商品列表标题",
