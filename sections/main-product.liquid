@@ -572,7 +572,6 @@
                   <div class="tg-sales-proof" {{ block.shopify_attributes }}>
                     {%- if block.settings.sales_text != blank -%}
                       <p class="tg-sales-proof__count">
-                        <span class="svg-wrapper" aria-hidden="true">{{- 'icon-fire.svg' | inline_asset_content -}}</span>
                         {{ block.settings.sales_text }}
                       </p>
                     {%- endif -%}

@@ -176,7 +176,7 @@
             {%- endcomment -%}
             <div id="predictive-search-option-search-keywords" class="predictive-search__search-for-button">
               <a
-                href="{{ routes.search_url }}?q={{ storefront_search_terms | url_encode }}&amp;type=product%2Cpage%2Carticle&amp;options%5Bunavailable_products%5D=last"
+                href="{{ routes.search_url }}?q={{ storefront_search_terms | url_encode }}&amp;type=product&amp;options%5Bunavailable_products%5D=last"
                 class="predictive-search__item predictive-search__item--term tg-predictive-search__view-all"
                 data-tg-view-all-results
                 tabindex="-1"
@@ -273,7 +273,7 @@
     {%- if total_results == 0 -%}
       <div id="predictive-search-option-search-keywords" class="predictive-search__search-for-button">
         <a
-          href="{{ routes.search_url }}?q={{ storefront_search_terms | url_encode }}&amp;type=product%2Cpage%2Carticle&amp;options%5Bunavailable_products%5D=last"
+          href="{{ routes.search_url }}?q={{ storefront_search_terms | url_encode }}&amp;type=product&amp;options%5Bunavailable_products%5D=last"
           class="predictive-search__item predictive-search__item--term tg-predictive-search__view-all"
           tabindex="-1"
           role="option"

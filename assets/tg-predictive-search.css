@@ -21,22 +21,23 @@
   --tg-ps-text-subtle: #85888d;
   --tg-ps-title: #3b4148;
   --tg-ps-price: #e78534;
-  --tg-ps-border: #eaeaea;
+  --tg-ps-border: var(--tg-search-border, #eaeaea);
   --tg-ps-surface-subtle: #f5f5f6;
-  --tg-ps-surface-hover: #f3fbfc;
+  --tg-ps-surface-hover: var(--tg-search-hover-background, #f3fbfc);
   /* core-bg-accent - a step deeper than the hover tint so group headings read as
      structure rather than as an active row. */
-  --tg-ps-surface-heading: #e8f7f9;
-  --tg-ps-accent: #0c94a4;
+  --tg-ps-surface-heading: var(--tg-search-heading-background, #e8f7f9);
+  --tg-ps-accent: var(--tg-search-selected-text, rgb(var(--color-link)));
+  --tg-ps-selected-background: var(--tg-search-selected-background, #e8f7f9);
   --tg-ps-radius: 1rem;
   --tg-ps-shadow: 0 2rem 2.4rem -0.4rem rgba(16, 24, 40, 0.06), 0 0.8rem 0.8rem -0.4rem rgba(16, 24, 40, 0.04);
 
   /* Primary action colour. Not wired to --color-button on purpose: this shop's
      scheme-1 button is blue (#087EDB), which fights the orange/teal palette the
      rest of these headers use. Change here to retheme the button. */
-  --tg-ps-btn: #f4993d;
-  --tg-ps-btn-hover: #e78534;
-  --tg-ps-btn-text: #fff;
+  --tg-ps-btn: var(--tg-search-button-background, var(--tg-ps-accent));
+  --tg-ps-btn-hover: var(--tg-search-button-hover-background, var(--tg-ps-btn));
+  --tg-ps-btn-text: var(--tg-search-button-text, #fff);
 }
 
 .tg-predictive-search .predictive-search {

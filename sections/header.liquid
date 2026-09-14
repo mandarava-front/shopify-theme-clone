@@ -291,6 +291,7 @@
                   {%- endif -%}
                 >
                 <input type="hidden" name="options[prefix]" value="last">
+                <input type="hidden" name="type" value="product">
                 <button type="reset" class="tg-header-desktop__search-reset focus-inset{% if search.terms == blank %} hidden{% endif %}" aria-label="{{ 'general.search.reset' | t }}"><span class="svg-wrapper" aria-hidden="true">{{- 'icon-reset.svg' | inline_asset_content -}}</span></button>
                 <button type="submit" class="tg-header-desktop__search-submit focus-inset" aria-label="{{ section.settings.tg_header_desktop_search_label | escape }}"><span class="svg-wrapper" aria-hidden="true">{{- 'icon-search.svg' | inline_asset_content -}}</span></button>
 

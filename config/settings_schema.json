@@ -1381,7 +1381,15 @@
         "default": true,
         "label": "t:settings_schema.search_input.settings.predictive_search_show_price.label",
         "info": "t:settings_schema.search_input.settings.predictive_search_show_price.info"
-      }
+      },
+      {"type":"color","id":"search_border_color","default":"#eaeaea","label":"搜索框边框颜色"},
+      {"type":"color","id":"search_heading_background","default":"#e8f7f9","label":"分类标题背景色"},
+      {"type":"color","id":"search_hover_background","default":"#f3fbfc","label":"搜索结果悬停背景色"},
+      {"type":"color","id":"search_selected_background","default":"#e8f7f9","label":"搜索结果选中背景色"},
+      {"type":"color","id":"search_selected_text","default":"#0c94a4","label":"搜索结果选中文字颜色"},
+      {"type":"color","id":"search_button_background","default":"#f4993d","label":"查看全部结果按钮背景色"},
+      {"type":"color","id":"search_button_hover_background","default":"#e78534","label":"查看全部结果按钮悬停背景色"},
+      {"type":"color","id":"search_button_text","default":"#ffffff","label":"查看全部结果按钮文字颜色"}
     ]
   },
   {

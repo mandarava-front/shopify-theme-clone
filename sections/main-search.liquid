@@ -329,12 +329,16 @@
               >
                 {%- assign skip_card_product_styles = false -%}
                 {%- for item in search.results -%}
-                  {% assign lazy_load = false %}
-                  {%- if forloop.index > 2 -%}
-                    {%- assign lazy_load = true -%}
-                  {%- endif -%}
-
-                  <li
+                  {%- comment -%}
+                    Search also returns Shopify pages. FAQ content is published as a
+                    page, so keep page results out of the storefront search listing.
+                  {%- endcomment -%}
+                  {%- if item.object_type == 'product' or item.object_type == 'article' -%}
+                    {% assign lazy_load = false %}
+                    {%- if forloop.index > 2 -%}
+                      {%- assign lazy_load = true -%}
+                    {%- endif -%}
+                    <li
                     class="grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
                     {% if settings.animations_reveal_on_scroll %}
                       data-cascade
@@ -365,30 +369,9 @@
                           media_aspect_ratio: 1,
                           lazy_load: lazy_load
                         %}
-                      {%- when 'page' -%}
-                        <div class="article-card-wrapper card-wrapper underline-links-hover">
-                          <div
-                            class="card card--card card--text ratio color-{{ settings.blog_card_color_scheme }}"
-                            style="--ratio-percent: 100%;"
-                          >
-                            <div class="card__content">
-                              <div class="card__information">
-                                <h3 class="card__heading">
-                                  <a href="{{ item.url }}" class="full-unstyled-link">
-                                    {{ item.title | truncate: 50 | escape }}
-                                  </a>
-                                </h3>
-                              </div>
-                              <div class="card__badge {{ settings.badge_position }}">
-                                <span class="badge color-{{ settings.color_schemes | first }}">
-                                  {{- 'templates.search.page' | t -}}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
                     {%- endcase -%}
-                  </li>
+                    </li>
+                  {%- endif -%}
                 {%- endfor -%}
               </ul>
               {%- if paginate.pages > 1 -%}

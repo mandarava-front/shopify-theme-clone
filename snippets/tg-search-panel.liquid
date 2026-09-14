@@ -62,7 +62,7 @@
             >
               <a
                 class="tg-search-idle__link focus-inset"
-                href="{{ routes.search_url }}?q={{ block.settings.term | url_encode }}&amp;options%5Bprefix%5D=last"
+                href="{{ routes.search_url }}?q={{ block.settings.term | url_encode }}&amp;type=product&amp;options%5Bprefix%5D=last"
               >
                 <span class="svg-wrapper" aria-hidden="true">
                   {{- 'icon-search.svg' | inline_asset_content -}}

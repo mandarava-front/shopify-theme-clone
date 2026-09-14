@@ -89,7 +89,7 @@ class TgRecentSearches extends HTMLElement {
     this.list.innerHTML = terms
       .map((term) => {
         const safeTerm = tgEscapeHtml(term);
-        const href = `${searchUrl}?q=${encodeURIComponent(term)}&options%5Bprefix%5D=last`;
+        const href = `${searchUrl}?q=${encodeURIComponent(term)}&type=product&options%5Bprefix%5D=last`;
 
         return `
           <li class="tg-search-idle__item tg-search-idle__item--recent" role="option" aria-selected="false">
