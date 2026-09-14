@@ -141,6 +141,13 @@ button.shopify-payment-button__button--unbranded {
   color: rgb(var(--cuszoo-blue));
 }
 
+@media screen and (max-width: 989px) {
+  .header .header__icon--menu,
+  .header .header__icon--menu:hover {
+    color: rgb(var(--color-foreground));
+  }
+}
+
 .cuszoo-header-links {
   display: flex;
   align-items: center;
