@@ -4167,6 +4167,49 @@
         },
         "color": {
           "label": "Title color"
+        },
+        "line_height": {
+          "label": "Line height"
+        },
+        "letter_spacing": {
+          "label": "Letter spacing"
+        },
+        "text_transform": {
+          "label": "Text case",
+          "options": {
+            "none": "Default",
+            "uppercase": "UPPERCASE",
+            "capitalize": "Capitalize Each Word"
+          }
+        }
+      },
+      "price": {
+        "current": {
+          "heading": "tg | Current price"
+        },
+        "compare": {
+          "heading": "tg | Compare-at price (struck through)"
+        },
+        "desktop_size": {
+          "label": "Desktop font size"
+        },
+        "mobile_size": {
+          "label": "Mobile font size"
+        },
+        "font_weight": {
+          "label": "Font weight",
+          "options": {
+            "regular": "Regular",
+            "medium": "Medium",
+            "semibold": "Semibold",
+            "bold": "Bold"
+          }
+        },
+        "color": {
+          "label": "Text color"
+        },
+        "letter_spacing": {
+          "label": "Letter spacing"
         }
       },
       "accordion": {

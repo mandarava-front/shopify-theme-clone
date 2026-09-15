@@ -428,7 +428,7 @@
                   <div
                     class="product__title tg-product-title{% if block.settings.enable_tg_title_style %} tg-product-title--styled{% endif %}"
                     {% if block.settings.enable_tg_title_style %}
-                      style="--tg-product-title-color: {{ block.settings.title_color }}; --tg-product-title-size: {{ block.settings.title_font_size }}px; --tg-product-title-size-mobile: {{ block.settings.title_font_size_mobile }}px; --tg-product-title-weight: {{ block.settings.title_font_weight }};"
+                      style="--tg-product-title-color: {{ block.settings.title_color }}; --tg-product-title-size: {{ block.settings.title_font_size }}px; --tg-product-title-size-mobile: {{ block.settings.title_font_size_mobile }}px; --tg-product-title-weight: {{ block.settings.title_font_weight }}; --tg-product-title-line-height: {{ block.settings.title_line_height | default: 150 | divided_by: 100.0 }};{% if block.settings.title_letter_spacing != blank and block.settings.title_letter_spacing != 0 %} --tg-product-title-letter-spacing: {{ block.settings.title_letter_spacing | divided_by: 100.0 }}em;{% endif %} --tg-product-title-transform: {{ block.settings.title_text_transform | default: 'none' }};"
                     {% endif %}
                     {{ block.shopify_attributes }}
                   >
@@ -440,7 +440,12 @@
                     </a>
                   </div>
                 {%- when 'price' -%}
-                  <div id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
+                  <div
+                    id="price-{{ section.id }}"
+                    role="status"
+                    style="--tg-price-size: {{ block.settings.price_font_size | default: 24 | divided_by: 10.0 }}rem; --tg-price-size-mobile: {{ block.settings.price_font_size_mobile | default: 24 | divided_by: 10.0 }}rem; --tg-price-weight: {{ block.settings.price_font_weight | default: '700' }}; --tg-price-color: {{ block.settings.price_color | default: '#102a43' }};{% if block.settings.price_letter_spacing != blank and block.settings.price_letter_spacing != 0 %} --tg-price-letter-spacing: {{ block.settings.price_letter_spacing | divided_by: 100.0 }}em;{% endif %} --tg-price-compare-size: {{ block.settings.compare_price_font_size | default: 24 | divided_by: 10.0 }}rem; --tg-price-compare-size-mobile: {{ block.settings.compare_price_font_size_mobile | default: 24 | divided_by: 10.0 }}rem; --tg-price-compare-weight: {{ block.settings.compare_price_font_weight | default: '700' }}; --tg-price-compare-color: {{ block.settings.compare_price_color | default: '#102a43' }};{% if block.settings.compare_price_letter_spacing != blank and block.settings.compare_price_letter_spacing != 0 %} --tg-price-compare-letter-spacing: {{ block.settings.compare_price_letter_spacing | divided_by: 100.0 }}em;{% endif %}"
+                    {{ block.shopify_attributes }}
+                  >
                     {%- render 'price',
                       product: product,
                       use_variant: true,
@@ -1264,13 +1269,150 @@
           "id": "title_color",
           "default": "#202024",
           "label": "t:sections.tg_product.title.color.label"
+        },
+        {
+          "type": "range",
+          "id": "title_line_height",
+          "min": 100,
+          "max": 220,
+          "step": 5,
+          "default": 150,
+          "unit": "%",
+          "label": "t:sections.tg_product.title.line_height.label"
+        },
+        {
+          "type": "range",
+          "id": "title_letter_spacing",
+          "min": -5,
+          "max": 20,
+          "step": 1,
+          "default": 0,
+          "unit": "%",
+          "label": "t:sections.tg_product.title.letter_spacing.label"
+        },
+        {
+          "type": "select",
+          "id": "title_text_transform",
+          "default": "none",
+          "label": "t:sections.tg_product.title.text_transform.label",
+          "options": [
+            { "value": "none", "label": "t:sections.tg_product.title.text_transform.options.none" },
+            { "value": "uppercase", "label": "t:sections.tg_product.title.text_transform.options.uppercase" },
+            { "value": "capitalize", "label": "t:sections.tg_product.title.text_transform.options.capitalize" }
+          ]
         }
       ]
     },
     {
       "type": "price",
       "name": "t:sections.main-product.blocks.price.name",
-      "limit": 1
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "t:sections.tg_product.price.current.heading"
+        },
+        {
+          "type": "range",
+          "id": "price_font_size",
+          "min": 12,
+          "max": 60,
+          "step": 1,
+          "default": 24,
+          "unit": "px",
+          "label": "t:sections.tg_product.price.desktop_size.label"
+        },
+        {
+          "type": "range",
+          "id": "price_font_size_mobile",
+          "min": 12,
+          "max": 48,
+          "step": 1,
+          "default": 24,
+          "unit": "px",
+          "label": "t:sections.tg_product.price.mobile_size.label"
+        },
+        {
+          "type": "select",
+          "id": "price_font_weight",
+          "default": "700",
+          "label": "t:sections.tg_product.price.font_weight.label",
+          "options": [
+            { "value": "400", "label": "t:sections.tg_product.price.font_weight.options.regular" },
+            { "value": "500", "label": "t:sections.tg_product.price.font_weight.options.medium" },
+            { "value": "600", "label": "t:sections.tg_product.price.font_weight.options.semibold" },
+            { "value": "700", "label": "t:sections.tg_product.price.font_weight.options.bold" }
+          ]
+        },
+        {
+          "type": "color",
+          "id": "price_color",
+          "default": "#102a43",
+          "label": "t:sections.tg_product.price.color.label"
+        },
+        {
+          "type": "range",
+          "id": "price_letter_spacing",
+          "min": -5,
+          "max": 20,
+          "step": 1,
+          "default": 0,
+          "unit": "%",
+          "label": "t:sections.tg_product.price.letter_spacing.label"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.tg_product.price.compare.heading"
+        },
+        {
+          "type": "range",
+          "id": "compare_price_font_size",
+          "min": 12,
+          "max": 60,
+          "step": 1,
+          "default": 24,
+          "unit": "px",
+          "label": "t:sections.tg_product.price.desktop_size.label"
+        },
+        {
+          "type": "range",
+          "id": "compare_price_font_size_mobile",
+          "min": 12,
+          "max": 48,
+          "step": 1,
+          "default": 24,
+          "unit": "px",
+          "label": "t:sections.tg_product.price.mobile_size.label"
+        },
+        {
+          "type": "select",
+          "id": "compare_price_font_weight",
+          "default": "700",
+          "label": "t:sections.tg_product.price.font_weight.label",
+          "options": [
+            { "value": "400", "label": "t:sections.tg_product.price.font_weight.options.regular" },
+            { "value": "500", "label": "t:sections.tg_product.price.font_weight.options.medium" },
+            { "value": "600", "label": "t:sections.tg_product.price.font_weight.options.semibold" },
+            { "value": "700", "label": "t:sections.tg_product.price.font_weight.options.bold" }
+          ]
+        },
+        {
+          "type": "color",
+          "id": "compare_price_color",
+          "default": "#102a43",
+          "label": "t:sections.tg_product.price.color.label"
+        },
+        {
+          "type": "range",
+          "id": "compare_price_letter_spacing",
+          "min": -5,
+          "max": 20,
+          "step": 1,
+          "default": 0,
+          "unit": "%",
+          "label": "t:sections.tg_product.price.letter_spacing.label"
+        }
+      ]
     },
     {
       "type": "delivery_estimate",

@@ -4167,6 +4167,49 @@
         },
         "color": {
           "label": "标题颜色"
+        },
+        "line_height": {
+          "label": "行高"
+        },
+        "letter_spacing": {
+          "label": "字间距"
+        },
+        "text_transform": {
+          "label": "字母大小写",
+          "options": {
+            "none": "默认",
+            "uppercase": "全部大写",
+            "capitalize": "首字母大写"
+          }
+        }
+      },
+      "price": {
+        "current": {
+          "heading": "tg | 现价"
+        },
+        "compare": {
+          "heading": "tg | 划线价（原价）"
+        },
+        "desktop_size": {
+          "label": "桌面端字号"
+        },
+        "mobile_size": {
+          "label": "移动端字号"
+        },
+        "font_weight": {
+          "label": "字重",
+          "options": {
+            "regular": "常规",
+            "medium": "中等",
+            "semibold": "半粗",
+            "bold": "粗体"
+          }
+        },
+        "color": {
+          "label": "文字颜色"
+        },
+        "letter_spacing": {
+          "label": "字间距"
         }
       },
       "accordion": {

@@ -101,7 +101,9 @@
   color: var(--tg-product-title-color, #202024);
   font-size: var(--tg-product-title-size, 16px);
   font-weight: var(--tg-product-title-weight, 400);
-  line-height: 24px;
+  line-height: var(--tg-product-title-line-height, 1.5);
+  letter-spacing: var(--tg-product-title-letter-spacing, inherit);
+  text-transform: var(--tg-product-title-transform, none);
 }
 
 [data-template='product'] .rating-wrapper {
@@ -117,6 +119,26 @@
   color: #102a43;
   font-size: 2.4rem;
   font-weight: 700;
+}
+
+/* Current price: the regular price when not on sale, the sale price when on
+   sale. `:not(s)` keeps the volume-pricing compare-at <s> out of this rule. */
+[data-template='product'] .price--large .price__regular .price-item--regular:not(s),
+[data-template='product'] .price--large .price__sale .price-item--sale {
+  color: var(--tg-price-color, #102a43);
+  font-size: var(--tg-price-size, 2.4rem);
+  font-weight: var(--tg-price-weight, 700);
+  letter-spacing: var(--tg-price-letter-spacing, inherit);
+}
+
+/* Compare-at (struck through) price, both in the sale layout and in the
+   volume-pricing layout. */
+[data-template='product'] .price--large .price__sale s.price-item--regular,
+[data-template='product'] .price--large s.variant-item__old-price {
+  color: var(--tg-price-compare-color, #102a43);
+  font-size: var(--tg-price-compare-size, 2.4rem);
+  font-weight: var(--tg-price-compare-weight, 700);
+  letter-spacing: var(--tg-price-compare-letter-spacing, inherit);
 }
 
 [data-template='product'] variant-selects .form__label,
@@ -887,6 +909,20 @@ product-recommendations.related-products:not(:has(.grid)) {
 
   [data-template='product'] .product__title h1 {
     font-size: 2.8rem;
+  }
+
+  [data-template='product'] .tg-product-title--styled h1 {
+    font-size: var(--tg-product-title-size-mobile, 12px);
+  }
+
+  [data-template='product'] .price--large .price__regular .price-item--regular:not(s),
+  [data-template='product'] .price--large .price__sale .price-item--sale {
+    font-size: var(--tg-price-size-mobile, 2.4rem);
+  }
+
+  [data-template='product'] .price--large .price__sale s.price-item--regular,
+  [data-template='product'] .price--large s.variant-item__old-price {
+    font-size: var(--tg-price-compare-size-mobile, 2.4rem);
   }
 
   [data-template='product'] .product-form__input,
