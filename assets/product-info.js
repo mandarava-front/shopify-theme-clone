@@ -68,6 +68,12 @@ if (!customElements.get('product-info')) {
         const productUrl = target.dataset.productUrl || this.pendingRequestUrl || this.dataset.url;
         this.pendingRequestUrl = productUrl;
         const shouldSwapProduct = this.dataset.url !== productUrl;
+        // Plugin lifecycle events are global and lack a product identifier.
+        // A full navigation gives combined listings a fresh, isolated lifecycle.
+        if (shouldSwapProduct && this.hasAttribute('data-tg-requires-customization')) {
+          window.location.assign(this.buildRequestUrlWithParams(productUrl, selectedOptionValues, true));
+          return;
+        }
         const shouldFetchFullPage = this.dataset.updateUrl === 'true' && shouldSwapProduct;
 
         this.renderProductInfo({
@@ -82,6 +88,7 @@ if (!customElements.get('product-info')) {
       resetProductFormState() {
         const productForm = this.productForm;
         productForm?.toggleSubmitButton(true);
+        this.tgCustomizationGuard?.setVariantState(false, true);
         productForm?.handleErrorMessage();
       }
 
@@ -213,7 +220,7 @@ if (!customElements.get('product-info')) {
           this.querySelector(`#Volume-Note-${this.dataset.section}`)?.classList.remove('hidden');
 
           this.productForm?.toggleSubmitButton(
-            html.getElementById(`ProductSubmitButton-${this.sectionId}`)?.hasAttribute('disabled') ?? true,
+            html.getElementById(`ProductSubmitButton-${this.sectionId}`)?.hasAttribute('data-tg-stock-disabled') ?? true,
             window.variantStrings.soldOut
           );
 
@@ -248,6 +255,7 @@ if (!customElements.get('product-info')) {
 
       setUnavailable() {
         this.productForm?.toggleSubmitButton(true, window.variantStrings.unavailable);
+        this.tgCustomizationGuard?.setVariantState(true);
 
         const selectors = ['price', 'Inventory', 'Sku', 'Price-Per-Item', 'Volume-Note', 'Volume', 'Quantity-Rules']
           .map((id) => `#${id}-${this.dataset.section}`)

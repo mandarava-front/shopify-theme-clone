@@ -1730,5 +1730,44 @@
         "default": "#FFFFFF"
       }
     ]
+  },
+  {
+    "name": "定制商品加购守卫",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "定制插件异步加载，在它渲染出定制项之前加购会产生缺少定制信息的订单。开启后，所有商品首屏禁用加购；确认使用 TeeInBlue 或 Customily 后，只等待该插件就绪。普通商品确认两者均不适用后恢复。插件加载失败时保持禁用。"
+      },
+      {
+        "type": "checkbox",
+        "id": "tg_customization_guard_enabled",
+        "label": "启用加购守卫",
+        "info": "关闭后定制商品的加购按钮不再等待插件，可能产生缺少定制信息的订单。",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "tg_customization_guard_timeout",
+        "label": "等待插件超时",
+        "info": "超过该时长插件仍未就绪，按钮保持禁用并显示加载失败提示。",
+        "min": 5,
+        "max": 60,
+        "step": 5,
+        "unit": "s",
+        "default": 20
+      },
+      {
+        "type": "text",
+        "id": "tg_customization_guard_loading_text",
+        "label": "等待中按钮文案",
+        "default": "Loading options..."
+      },
+      {
+        "type": "text",
+        "id": "tg_customization_guard_error_text",
+        "label": "加载失败提示文案",
+        "default": "Couldn't load customization options. Please refresh the page."
+      }
+    ]
   }
 ]

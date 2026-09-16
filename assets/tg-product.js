@@ -82,6 +82,30 @@ function bindTgProductAddOnForms(container = document) {
   });
 }
 
+// Whether TeeInBlue has published a campaign for this product. The campaign is
+// the plugin's own verdict on what the product is, so it also corrects a stale
+// `teeinblue.campaign_version` metafield that main-product.liquid matched on.
+// Returns undefined while the plugin has not reported yet, which is exactly the
+// window the guard below exists to cover — callers must not read that as "no".
+function tgGetTeeInBlueVerdict(productRoot) {
+  const campaign = window.teeinblueCampaign;
+  if (!campaign || campaign.isTeeInBlueProduct === undefined) return undefined;
+  // A campaign for some other product says nothing about this one, so it stays
+  // undecided rather than counting as "needs no customization".
+  if (campaign.productId && productRoot?.dataset.productId) {
+    if (String(campaign.productId) !== productRoot.dataset.productId) return undefined;
+  }
+  return campaign.isTeeInBlueProduct === true;
+}
+
+// TeeInBlue is ready once the form it adds to cart through is actually mounted.
+function tgGetTeeInBlueForm(productRoot) {
+  const customizationForm = productRoot?.querySelector('#tee-artwork-form');
+  const pluginButton = customizationForm?.querySelector('#teeAtcButton');
+  if (!customizationForm || !pluginButton) return null;
+  return { customizationForm, pluginButton };
+}
+
 // TeeInBlue mounts its customization controls outside Shopify's product form.
 // Its own add-to-cart action creates the customization and submits the line
 // item with the generated properties. When the plugin action area is visually
@@ -124,16 +148,13 @@ class TgTeeInBlueCartBridge {
     }
 
     const productRoot = form?.closest('product-info[data-product-id]');
-    const campaign = window.teeinblueCampaign;
     if (!button || !productRoot || !productRoot.contains(button)) return null;
-    if (campaign?.isTeeInBlueProduct !== true) return null;
-    if (campaign.productId && String(campaign.productId) !== productRoot.dataset.productId) return null;
+    if (tgGetTeeInBlueVerdict(productRoot) !== true) return null;
 
-    const customizationForm = productRoot.querySelector('#tee-artwork-form');
-    const pluginButton = customizationForm?.querySelector('#teeAtcButton');
-    if (!customizationForm || !pluginButton) return null;
+    const pluginForm = tgGetTeeInBlueForm(productRoot);
+    if (!pluginForm) return null;
 
-    return { form, button, pluginButton, customizationForm };
+    return { form, button, ...pluginForm };
   }
 
   preventThemeSubmit(event) {
@@ -196,6 +217,11 @@ class TgTeeInBlueCartBridge {
     }
   }
 
+  // A null context means either "not a TeeInBlue product" or "TeeInBlue has not
+  // loaded yet". The second case must not reach the theme's submit, or it adds
+  // the base variant with no customization properties — but tg-customization-
+  // bootstrap already blocks every unready product in the capture phase, before
+  // this listener runs. Here a null context only ever means the first case.
   onClick(event) {
     const context = this.getContext(event);
     if (!context) return;
@@ -235,6 +261,181 @@ class TgTeeInBlueCartBridge {
     window.clearTimeout(this.validationTimer);
     window.clearTimeout(this.fallbackTimer);
   }
+}
+
+// All products start locked in Liquid. Each customized product uses one plugin;
+// once identified, only that plugin's readiness controls the purchase buttons.
+//
+// Failing to load keeps the buttons disabled rather than opening that window on
+// a timer: an order missing its customization cannot be fulfilled as placed, so
+// it costs more than the lost sale.
+const TG_CUSTOMIZATION_POLL_INTERVAL = 200;
+
+class TgCustomizationGuard {
+  constructor(root) {
+    this.root = root;
+    this.loadingText = root.dataset.tgCustomizationLoading || '';
+    this.errorText = root.dataset.tgCustomizationError || '';
+    this.state = 'pending';
+    this.stockDisabled = Boolean(this.submitButton?.hasAttribute('data-tg-stock-disabled'));
+    this.variantPending = false;
+    this.check = this.check.bind(this);
+    this.observer = new MutationObserver(this.check);
+    this.observe();
+    this.pollTimer = window.setInterval(this.check, TG_CUSTOMIZATION_POLL_INTERVAL);
+    document.addEventListener('tg:customization-state', this.check);
+    this.armDeadline();
+    this.check();
+  }
+
+  get lifecycle() {
+    const state = window.TgCustomizationLifecycle;
+    return state?.productId === this.root.dataset.productId ? state : null;
+  }
+
+  get submitButton() {
+    return this.root.querySelector('button.product-form__submit[type="submit"]');
+  }
+
+  get buttons() {
+    return this.root.querySelectorAll('.product-form__submit, #customily-cart-btn, #customily-buy-now-btn');
+  }
+
+  get customized() {
+    return tgGetTeeInBlueVerdict(this.root) === true || this.lifecycle?.customily === 'required';
+  }
+
+  isReady() {
+    const state = this.lifecycle;
+    const teeVerdict = tgGetTeeInBlueVerdict(this.root);
+    if (!state) return false;
+    if (teeVerdict === true) {
+      const form = tgGetTeeInBlueForm(this.root);
+      return Boolean(state.teeMounted && form && !form.pluginButton.disabled && !form.pluginButton.classList.contains('tee-processing'));
+    }
+    if (state.customily === 'required') {
+      return state.optionsReady && (!state.loaders || state.cartPending) && !state.preview && !state.customization &&
+        Boolean(this.root.querySelector('#customily-cart-btn, #customily-personalize-button'));
+    }
+    // A negative verdict alone cannot establish that this is a plain product.
+    return teeVerdict === false && state.customily === 'absent';
+  }
+
+  observe() {
+    this.observer.observe(this.root, {
+      childList: true, subtree: true, attributes: true,
+      attributeFilter: ['disabled', 'aria-disabled', 'class']
+    });
+  }
+
+  armDeadline() {
+    window.clearTimeout(this.deadlineTimer);
+    this.deadlineTimer = window.setTimeout(() => {
+      this.state = 'failed';
+      this.apply();
+    }, (Number(this.root.dataset.tgCustomizationTimeout) || 20) * 1000);
+  }
+
+  check() {
+    if (!this.root.isConnected) return this.destroy();
+    const ready = this.isReady();
+    if (ready && this.state !== 'ready') {
+      this.state = 'ready';
+      window.clearTimeout(this.deadlineTimer);
+      // The poll only covers a verdict that lands on a global
+      // (window.teeinblueCampaign) with neither an event nor a DOM change, which
+      // can only happen before the first ready. Every later transition arrives
+      // through the observer or tg:customization-state.
+      window.clearInterval(this.pollTimer);
+      const wrapper = this.root.querySelector('.product-form__error-message-wrapper');
+      if (wrapper?.dataset.tgGuardError === 'true') {
+        wrapper.hidden = true;
+        delete wrapper.dataset.tgGuardError;
+      }
+    } else if (!ready && this.state === 'ready') {
+      this.state = 'pending';
+      this.armDeadline();
+    }
+    this.apply();
+  }
+
+  // Called synchronously by the theme, including the unavailable-variant path
+  // that does not publish variantChange.
+  setVariantState(disabled, pending = false) {
+    this.stockDisabled = disabled;
+    this.variantPending = pending;
+    this.check();
+  }
+
+  apply() {
+    // Disconnect during our own writes to avoid a MutationObserver feedback loop.
+    this.observer.disconnect();
+    const blocked = this.state !== 'ready' || this.stockDisabled || this.variantPending;
+    this.root.dataset.tgCustomizationGuard = blocked ? (this.state === 'failed' ? 'failed' : 'pending') : 'ready';
+    this.root.querySelectorAll('[data-tg-customization-guard-hidden]').forEach((wrapper) => {
+      wrapper.hidden = blocked || this.customized;
+    });
+    this.buttons.forEach((button) => {
+      if (blocked) {
+        button.dataset.tgGuardLocked = 'true';
+        button.disabled = true;
+        button.setAttribute('aria-disabled', 'true');
+        const loading = !this.stockDisabled && this.state === 'pending';
+        button.classList.toggle('loading', loading);
+        button.querySelector('.loading__spinner')?.classList.toggle('hidden', !loading);
+        if (loading) this.setLabel(button, this.loadingText);
+        // Mirror the theme button's sold-out/unavailable text onto the plugin's
+        // cloned buttons, which keep whatever label they were cloned with.
+        else if (this.stockDisabled) this.setLabel(button, this.submitButton?.querySelector('span')?.textContent);
+      } else if (button.dataset.tgGuardLocked === 'true' || button.dataset.tgCustomizationGuard === 'pending') {
+        // Release only a lock we own. Never clear an in-flight cart operation.
+        if (button.dataset.tgTeeinbluePending !== 'true' && !this.root.querySelector('product-form')?.tgSubmitting) {
+          delete button.dataset.tgGuardLocked;
+          button.dataset.tgCustomizationGuard = 'ready';
+          button.disabled = false;
+          button.removeAttribute('aria-disabled');
+          button.classList.remove('loading');
+          button.querySelector('.loading__spinner')?.classList.add('hidden');
+          this.setLabel(button, window.variantStrings?.addToCart);
+        }
+      }
+    });
+    if (this.state === 'failed' && !this.stockDisabled) this.showError();
+    this.observe();
+  }
+
+  setLabel(button, text) {
+    const label = button.querySelector('span');
+    if (label && text && label.textContent !== text) label.textContent = text;
+  }
+
+  showError() {
+    const wrapper = this.root.querySelector('.product-form__error-message-wrapper');
+    const message = wrapper?.querySelector('.product-form__error-message');
+    if (!wrapper || !message || !this.errorText) return;
+    message.textContent = this.errorText;
+    wrapper.dataset.tgGuardError = 'true';
+    wrapper.hidden = false;
+  }
+
+  destroy() {
+    this.observer.disconnect();
+    window.clearInterval(this.pollTimer);
+    window.clearTimeout(this.deadlineTimer);
+    document.removeEventListener('tg:customization-state', this.check);
+    delete this.root.tgCustomizationGuard;
+  }
+}
+
+function bindTgCustomizationGuards(container = document) {
+  const roots = [];
+  if (container.matches?.('product-info[data-tg-requires-customization]')) roots.push(container);
+  roots.push(...container.querySelectorAll('product-info[data-tg-requires-customization]'));
+
+  roots.forEach((root) => {
+    if (root.tgCustomizationGuard) return;
+    root.tgCustomizationGuard = new TgCustomizationGuard(root);
+  });
 }
 
 // Customily renders its live preview onto a canvas mounted inside one of the
@@ -595,6 +796,7 @@ document.addEventListener('DOMContentLoaded', () => {
   bindTgCustomilyPreviewSync();
   bindTgSizeCharts();
   bindTgSingleValueOptions();
+  bindTgCustomizationGuards();
   window.TgTeeInBlueCartBridge ||= new TgTeeInBlueCartBridge();
 });
 
@@ -603,6 +805,7 @@ document.addEventListener('shopify:section:load', (event) => {
   bindTgCustomilyPreviewSync(event.target);
   bindTgSizeCharts(event.target);
   bindTgSingleValueOptions(event.target);
+  bindTgCustomizationGuards(event.target);
 });
 
 document.addEventListener('shopify:section:unload', (event) => {
@@ -611,5 +814,8 @@ document.addEventListener('shopify:section:unload', (event) => {
   });
   event.target.querySelectorAll('product-info[data-tg-hide-single-options]').forEach((root) => {
     root.tgSingleValueOptions?.destroy();
+  });
+  event.target.querySelectorAll('product-info[data-tg-requires-customization]').forEach((root) => {
+    root.tgCustomizationGuard?.destroy();
   });
 });

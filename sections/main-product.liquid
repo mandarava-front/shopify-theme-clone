@@ -17,6 +17,21 @@
     endif
   endif
 
+  # Lock every product in server-rendered HTML; the plugins decide applicability.
+  assign tg_requires_customization = false
+  assign tg_customization_guard_timeout = settings.tg_customization_guard_timeout | default: 20
+  assign tg_customization_guard_loading_text = settings.tg_customization_guard_loading_text | strip
+  assign tg_customization_guard_error_text = settings.tg_customization_guard_error_text | strip
+  if tg_customization_guard_loading_text == blank
+    assign tg_customization_guard_loading_text = 'Loading options...'
+  endif
+  if tg_customization_guard_error_text == blank
+    assign tg_customization_guard_error_text = "Couldn't load customization options. Please refresh the page."
+  endif
+  if settings.tg_customization_guard_enabled != false
+    assign tg_requires_customization = true
+  endif
+
   if tg_size_chart_image != blank
     assign tg_size_chart_has_image = true
   endif
@@ -48,6 +63,13 @@
   data-url="{{ product.url }}"
   {% if tg_teeinblue_product_base %}
     data-tg-teeinblue-product-base
+  {% endif %}
+  {% if tg_requires_customization %}
+    data-tg-requires-customization
+    data-tg-customization-guard="pending"
+    data-tg-customization-timeout="{{ tg_customization_guard_timeout }}"
+    data-tg-customization-loading="{{ tg_customization_guard_loading_text | escape }}"
+    data-tg-customization-error="{{ tg_customization_guard_error_text | escape }}"
   {% endif %}
   {% if tg_size_chart_active %}
     data-tg-size-chart
@@ -807,7 +829,9 @@
                     section_id: section.id,
                     quantity_block: quantity_selector_block,
                     inline_purchase_actions: inline_purchase_actions,
-                    show_pickup_availability: true
+                    show_pickup_availability: true,
+                    requires_customization: tg_requires_customization,
+                    customization_loading_text: tg_customization_guard_loading_text
                   -%}
                 {%- when 'trust_message' -%}
                   <div class="tg-trust-message" {{ block.shopify_attributes }}>

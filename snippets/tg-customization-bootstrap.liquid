@@ -1,0 +1,102 @@
+{% comment %}Capture plugin lifecycle before app embeds execute in content_for_header.{% endcomment %}
+<script>
+  (() => {
+    if (window.TgCustomizationLifecycle) return;
+    const state = {
+      productId: {{ product.id | append: '' | json }},
+      handle: {{ product.handle | json }},
+      teeMounted: false,
+      customily: 'unknown',
+      optionsReady: false,
+      loaders: false,
+      preview: false,
+      customization: false,
+      cartPending: false
+    };
+    window.TgCustomizationLifecycle = state;
+    const notify = () => document.dispatchEvent(new Event('tg:customization-state'));
+    document.addEventListener('teeinblue-event-page-changed', () => {
+      state.teeMounted = false;
+      notify();
+    });
+    document.addEventListener('teeinblue-event-component-injected', () => {
+      if (String(window.teeinblueCampaign?.productId) !== state.productId) return;
+      state.teeMounted = true;
+      notify();
+    });
+    const listen = (name, callback) => window.addEventListener(name, () => { callback(); notify(); });
+    listen('customily-app-will-load', () => {
+      state.customily = 'required';
+      state.optionsReady = false;
+      state.cartPending = false;
+    });
+    // Customily also emits "won't load" on network errors. Confirm its product
+    // configuration before interpreting that event as a non-customized product.
+    listen('customily-app-wont-load', async () => {
+      const campaign = window.teeinblueCampaign;
+      if (campaign?.isTeeInBlueProduct === true && String(campaign.productId) === state.productId) return;
+      if (state.customily === 'required' || state.verifying) return;
+      state.verifying = true;
+      try {
+        const url = new URL('https://sh.customily.com/api/settings/unified/' + encodeURIComponent(state.handle));
+        url.searchParams.set('shop', window.Shopify.shop);
+        url.searchParams.set('productId', state.productId);
+        const response = await fetch(url);
+        if (!response.ok) return;
+        const data = await response.json();
+        const config = data.supplierUnifiedSettings?.productConfig || data.productConfig;
+        if (data.productHandle !== state.handle || !config || !Array.isArray(config.assignedSets)) return;
+        if (state.customily !== 'required') {
+          state.customily = config.assignedSets.length || config.initial_product_id ? 'required' : 'absent';
+        }
+      } catch (_) {
+        // Unknown remains locked. A transport failure is not a negative verdict.
+      } finally {
+        state.verifying = false;
+        notify();
+      }
+    });
+    listen('customily-options-loaded', () => { state.optionsReady = true; });
+    for (const [start, end, key] of [
+      ['customily-loaders-shown', 'customily-loaders-hidden', 'loaders'],
+      ['customily-preview-load-started', 'customily-preview-load-finished', 'preview'],
+      ['customily-load-customization-started', 'customily-load-customization-finished', 'customization']
+    ]) {
+      listen(start, () => { state[key] = true; });
+      listen(end, () => {
+        state[key] = false;
+        if (key === 'loaders') state.cartPending = false;
+      });
+    }
+    let cartTimer;
+    const beginCart = () => {
+      state.cartPending = true;
+      window.clearTimeout(cartTimer);
+      cartTimer = window.setTimeout(() => { state.cartPending = false; notify(); }, 60000);
+    };
+    // This listener exists even before deferred theme scripts initialize. It
+    // also catches Customily's cloned type="button" purchase controls.
+    document.addEventListener('click', (event) => {
+      const button = event.target.closest?.('.product-form__submit, #customily-cart-btn, #customily-buy-now-btn, .shopify-payment-button');
+      const root = button?.closest('product-info[data-tg-requires-customization]');
+      if (root && root.dataset.tgCustomizationGuard !== 'ready') {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      } else if (root && state.customily === 'required' && button.matches('#customily-cart-btn, .product-form__submit')) {
+        // Customily shows its generic loader while generating line properties,
+        // then clicks the original button. This is a cart transaction, not an
+        // options reload. Preserve the plugin's own busy button and handoff.
+        beginCart();
+      }
+    }, true);
+    document.addEventListener('submit', (event) => {
+      const root = event.target.closest?.('product-info[data-tg-requires-customization]');
+      if (event.target.matches?.('form[data-type="add-to-cart-form"]') && root && root.dataset.tgCustomizationGuard !== 'ready') {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      } else if (root && state.customily === 'required' && event.target.matches?.('form[data-type="add-to-cart-form"]')) {
+        beginCart();
+      }
+    }, true);
+  })();
+</script>

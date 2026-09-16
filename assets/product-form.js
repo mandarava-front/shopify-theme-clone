@@ -17,12 +17,22 @@ if (!customElements.get('product-form')) {
         this.hideErrors = this.dataset.hideErrors === 'true';
       }
 
+      refreshSubmitButton() {
+        // Customily replaces the original button while retaining the form.
+        this.submitButton = this.querySelector('button.product-form__submit[type="submit"]') || this.submitButton;
+        this.submitButtonText = this.submitButton.querySelector('span');
+      }
+
       onSubmitHandler(evt) {
+        this.refreshSubmitButton();
         // Accelerated checkout owns its submit flow; don't put the add-to-cart button into loading state.
         if (evt.submitter?.closest('.shopify-payment-button')) return;
 
         evt.preventDefault();
-        if (this.submitButton.getAttribute('aria-disabled') === 'true') return;
+        // tg-customization-bootstrap blocks submits for a product whose
+        // customization plugin is not ready yet, before this listener runs.
+        if (this.submitButton.disabled || this.submitButton.getAttribute('aria-disabled') === 'true') return;
+        this.tgSubmitting = true;
 
         this.handleErrorMessage();
 
@@ -114,10 +124,12 @@ if (!customElements.get('product-form')) {
             linesUpdateDeferred?.reject(e);
           })
           .finally(() => {
+            this.tgSubmitting = false;
             this.submitButton.classList.remove('loading');
             if (this.cart && this.cart.classList.contains('is-empty')) this.cart.classList.remove('is-empty');
             if (!this.error) this.submitButton.removeAttribute('aria-disabled');
             this.querySelector('.loading__spinner').classList.add('hidden');
+            this.closest('product-info')?.tgCustomizationGuard?.check();
 
             CartPerformance.measureFromEvent("add:user-action", evt);
           });
@@ -139,6 +151,7 @@ if (!customElements.get('product-form')) {
       }
 
       toggleSubmitButton(disable = true, text) {
+        this.refreshSubmitButton();
         if (disable) {
           this.submitButton.setAttribute('disabled', 'disabled');
           if (text) this.submitButtonText.textContent = text;
@@ -146,6 +159,7 @@ if (!customElements.get('product-form')) {
           this.submitButton.removeAttribute('disabled');
           this.submitButtonText.textContent = window.variantStrings.addToCart;
         }
+        this.closest('product-info')?.tgCustomizationGuard?.setVariantState(disable);
       }
 
       createCartLinesUpdateEvent(variantId, quantity) {

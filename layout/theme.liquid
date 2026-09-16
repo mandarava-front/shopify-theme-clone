@@ -65,6 +65,9 @@
       <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
+    {%- if request.page_type == 'product' and settings.tg_customization_guard_enabled != false -%}
+      {% render 'tg-customization-bootstrap', product: product %}
+    {%- endif -%}
     {{ content_for_header }}
 
     {%- liquid

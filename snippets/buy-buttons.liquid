@@ -8,6 +8,8 @@
   - quantity_block: {Object} quantity selector block used by the inline layout (optional).
   - inline_purchase_actions: {Boolean} render the quantity selector beside the add-to-cart button (optional).
   - show_pickup_availability: {Boolean} for the pickup availability. If true the pickup availability is rendered, false - not rendered (optional).
+  - requires_customization: {Boolean} the product needs a customization plugin, so ship the buttons disabled until it is ready (optional).
+  - customization_loading_text: {String} button label shown while waiting for that plugin (optional).
 
   Usage:
   {% render 'buy-buttons', block: block, product: product, product_form_id: product_form_id, section_id: section.id, show_pickup_availability: true %}
@@ -79,31 +81,74 @@
           {%- if inline_purchase_actions -%}
             {% render 'tg-product-quantity', block: quantity_block, product: product, product_form_id: product_form_id, section: section, inline_purchase_actions: true %}
           {%- endif -%}
+          {%- liquid
+            assign variant_unavailable = false
+            if product.selected_or_first_available_variant == null
+              assign variant_unavailable = true
+            elsif product.selected_or_first_available_variant.available == false or quantity_rule_soldout
+              assign variant_unavailable = true
+            endif
+          -%}
+          {%- comment -%}
+            A customization plugin loads asynchronously, so an enabled button is
+            a window in which the shopper can submit the base variant without
+            the plugin's line item properties. Render it disabled and let
+            tg-product.js enable it once the plugin is ready.
+
+            That makes `disabled` ambiguous: product-info.js re-renders this
+            section on every variant change and reads the attribute back as
+            "sold out". data-tg-stock-disabled keeps the stock verdict readable
+            on its own so the guard can tell the two reasons apart.
+          {%- endcomment -%}
           <button
             id="ProductSubmitButton-{{ section_id }}"
             type="submit"
             name="add"
-            class="product-form__submit button button--full-width {% if show_dynamic_checkout %}button--secondary{% else %}button--primary{% endif %}"
-            {% if product.selected_or_first_available_variant.available == false
-              or quantity_rule_soldout
-              or product.selected_or_first_available_variant == null
-            %}
+            class="product-form__submit button button--full-width {% if show_dynamic_checkout %}button--secondary{% else %}button--primary{% endif %}{% if requires_customization and variant_unavailable == false %} loading{% endif %}"
+            {% if requires_customization %}
+              data-tg-customization-guard="pending"
+              {% unless variant_unavailable %}
+                aria-disabled="true"
+              {% endunless %}
+            {% endif %}
+            {% if variant_unavailable %}
+              data-tg-stock-disabled="true"
+            {% endif %}
+            {% if variant_unavailable or requires_customization %}
               disabled
             {% endif %}
           >
             <span>
               {%- if product.selected_or_first_available_variant == null -%}
                 {{ 'products.product.unavailable' | t }}
-              {%- elsif product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
+              {%- elsif variant_unavailable -%}
                 {{ 'products.product.sold_out' | t }}
+              {%- elsif requires_customization -%}
+                {{ customization_loading_text | default: 'Loading options...' }}
               {%- else -%}
                 {{ 'products.product.add_to_cart' | t }}
               {%- endif -%}
             </span>
-            {%- render 'loading-spinner' -%}
+            {%- comment -%}
+              The default spinner ships hidden for product-form.js to reveal on
+              submit. The pending state needs it visible from first paint.
+            {%- endcomment -%}
+            {%- if requires_customization and variant_unavailable == false -%}
+              {%- render 'loading-spinner', class: 'loading__spinner' -%}
+            {%- else -%}
+              {%- render 'loading-spinner' -%}
+            {%- endif -%}
           </button>
           {%- if show_dynamic_checkout -%}
-            {{ form | payment_button }}
+            {%- comment -%}
+              Accelerated checkout submits the form on its own, bypassing the
+              plugin entirely, so it has to wait for the plugin too.
+            {%- endcomment -%}
+            {%- if requires_customization -%}
+              <div data-tg-customization-guard-hidden hidden>{{ form | payment_button }}</div>
+            {%- else -%}
+              {{ form | payment_button }}
+            {%- endif -%}
           {%- endif -%}
         </div>
       {%- endform -%}
