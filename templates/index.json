@@ -108,13 +108,19 @@
       "name": "t:tg.sections.category.name",
       "settings": {
         "heading": "",
+        "heading_font_size": 30,
+        "heading_font_size_mobile": 21,
+        "heading_font_weight": "700",
+        "label_font_size": 15,
+        "label_font_size_mobile": 15,
+        "label_font_weight": "700",
         "card_alignment": "center",
         "background": "#ffffff",
         "text_color": "#0b2a4a",
         "border_color": "#deded8",
         "gap": 24,
-        "padding_top": 36,
-        "padding_bottom": 36
+        "padding_top": 32,
+        "padding_bottom": 32
       }
     },
     "tg_image_banner_gEfTpT": {
@@ -143,7 +149,7 @@
           "type": "step",
           "settings": {
             "image": "shopify://shop_images/66ea9961-4039-4387-adf0-92ef29e767fa.png",
-            "title": "Chooes & Customize Your Preview"
+            "title": "Chooes & Customize  Your Preview"
           }
         },
         "step_mVyk6e": {
@@ -156,7 +162,7 @@
         "step_EfQdef": {
           "type": "step",
           "settings": {
-            "image": "shopify://shop_images/49362d3b-8fae-4c2b-ad73-1ccac7a6d187.png",
+            "image": "shopify://shop_images/2e478be1-a3f3-491c-8bca-bd43c829a0ec.png",
             "title": "Final Product Packaged With Care"
           }
         },
@@ -185,18 +191,24 @@
       "name": "t:tg.sections.steps.name",
       "settings": {
         "heading": "How To Custom",
+        "heading_font_size": 30,
+        "heading_font_size_mobile": 25,
+        "heading_font_weight": "700",
+        "title_font_size": 14,
+        "title_font_size_mobile": 12,
+        "title_font_weight": "700",
         "show_numbers": false,
         "show_arrows": true,
         "columns_desktop": 4,
         "columns_mobile": "2",
-        "step_image_size_mobile": 80,
+        "step_image_size_mobile": 120,
         "background": "#ffffff",
         "text_color": "#18181e",
         "accent_color": "#ffb700",
         "arrow_color": "#18181e",
-        "padding_top": 76,
+        "padding_top": 48,
         "padding_bottom": 48,
-        "mobile_padding_top": 24,
+        "mobile_padding_top": 20,
         "mobile_padding_bottom": 20
       }
     },
@@ -313,30 +325,48 @@
       "settings": {
         "collection": "all",
         "heading": "Best Sellers",
+        "heading_font_size": 30,
+        "heading_font_size_mobile": 25,
+        "heading_font_weight": "700",
         "subheading": "Shop our most-loved personalized gifts, perfect for every occasion!",
+        "subheading_font_size": 14,
+        "subheading_font_size_mobile": 13,
+        "subheading_font_weight": "400",
         "products_to_show": 8,
         "columns_desktop": 4,
         "columns_mobile": 2,
         "show_secondary_image": true,
         "show_badges": true,
+        "badge_scale": 130,
+        "badge_scale_mobile": 150,
+        "badge_radius": 8,
+        "badge_background": "#ffc400",
+        "badge_text_color": "#000000",
         "show_rating": true,
         "show_view_all": true,
         "button_label": "VIEW MORE",
+        "button_font_size": 15,
+        "button_font_size_mobile": 15,
+        "button_font_weight": "700",
+        "title_font_size": 15,
+        "title_font_size_mobile": 13,
+        "title_font_weight": "600",
+        "price_font_size": 15,
+        "price_font_size_mobile": 15,
+        "price_font_weight": "700",
         "button_link": "shopify://collections/best-sellers",
         "card_radius": 4,
         "background": "#f8f8ed",
         "text_color": "#18181e",
         "muted_color": "#707070",
         "price_color": "#f36352",
-        "badge_background": "#ffc400",
-        "badge_text_color": "#000000",
         "star_color": "#ffb400",
         "button_color": "#ffb700",
         "button_text_color": "#ffffff",
-        "padding_top": 80,
-        "padding_bottom": 64,
-        "mobile_padding_top": 38,
-        "mobile_padding_bottom": 34
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "mobile_padding_top": 20,
+        "mobile_padding_bottom": 20
       }
     },
     "tg_category_rail_7X8dmR": {
@@ -408,13 +438,19 @@
       "name": "t:tg.sections.category.name",
       "settings": {
         "heading": "",
+        "heading_font_size": 30,
+        "heading_font_size_mobile": 21,
+        "heading_font_weight": "700",
+        "label_font_size": 15,
+        "label_font_size_mobile": 15,
+        "label_font_weight": "700",
         "card_alignment": "center",
         "background": "#ffffff",
         "text_color": "#0b2a4a",
         "border_color": "#deded8",
         "gap": 24,
-        "padding_top": 36,
-        "padding_bottom": 36
+        "padding_top": 20,
+        "padding_bottom": 20
       }
     },
     "tg_image_banner_mdYn7i": {
@@ -462,8 +498,17 @@
         "desktop_image": "shopify://shop_images/2-pc.png",
         "image_position": "left",
         "eyebrow": "",
+        "eyebrow_font_size": 13,
+        "eyebrow_font_size_mobile": 12,
+        "eyebrow_font_weight": "700",
         "heading": "",
+        "heading_font_size": 28,
+        "heading_font_size_mobile": 15,
+        "heading_font_weight": "700",
         "text": "",
+        "text_font_size": 14,
+        "text_font_size_mobile": 13,
+        "text_font_weight": "400",
         "button_label": "Shop now",
         "link": "",
         "background": "#ffffff",
@@ -476,6 +521,8 @@
         "button_padding_vertical": 9,
         "button_padding_horizontal": 20,
         "button_font_size": 12,
+        "button_font_size_mobile": 12,
+        "button_font_weight": "700",
         "padding_top": 36,
         "padding_bottom": 0
       }
@@ -593,30 +640,48 @@
       "settings": {
         "collection": "all",
         "heading": "New Arrivals",
+        "heading_font_size": 30,
+        "heading_font_size_mobile": 25,
+        "heading_font_weight": "700",
         "subheading": "Shop our most-loved personalized gifts, perfect for every occasion!",
+        "subheading_font_size": 15,
+        "subheading_font_size_mobile": 13,
+        "subheading_font_weight": "400",
         "products_to_show": 8,
         "columns_desktop": 4,
         "columns_mobile": 2,
         "show_secondary_image": true,
         "show_badges": true,
+        "badge_scale": 100,
+        "badge_scale_mobile": 100,
+        "badge_radius": 2,
+        "badge_background": "#ffc400",
+        "badge_text_color": "#111111",
         "show_rating": true,
         "show_view_all": true,
         "button_label": "VIEW MORE",
+        "button_font_size": 15,
+        "button_font_size_mobile": 12,
+        "button_font_weight": "700",
+        "title_font_size": 15,
+        "title_font_size_mobile": 13,
+        "title_font_weight": "600",
+        "price_font_size": 15,
+        "price_font_size_mobile": 15,
+        "price_font_weight": "700",
         "button_link": "shopify://collections/new-arrivals",
         "card_radius": 4,
         "background": "#f8f8ed",
         "text_color": "#18181e",
         "muted_color": "#707070",
         "price_color": "#f36352",
-        "badge_background": "#ffc400",
-        "badge_text_color": "#111111",
         "star_color": "#ffb400",
         "button_color": "#ffb700",
         "button_text_color": "#ffffff",
-        "padding_top": 80,
-        "padding_bottom": 64,
-        "mobile_padding_top": 38,
-        "mobile_padding_bottom": 34
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "mobile_padding_top": 20,
+        "mobile_padding_bottom": 20
       }
     },
     "tg_benefits_MA8VNh": {
@@ -629,11 +694,13 @@
             "title": "On-Time Delivery",
             "title_font_size": 15,
             "title_font_size_mobile": 12,
+            "title_font_weight": "700",
             "title_color": "#18181e",
             "title_hover_color": "#e7a400",
             "text": "We ensure gifts arrive promptly for celebrations.",
             "text_font_size": 13,
-            "text_font_size_mobile": 10
+            "text_font_size_mobile": 10,
+            "text_font_weight": "400"
           }
         },
         "benefit_dGQAAG": {
@@ -643,11 +710,13 @@
             "title": "30-Day Refund",
             "title_font_size": 15,
             "title_font_size_mobile": 12,
+            "title_font_weight": "700",
             "title_color": "#18181e",
             "title_hover_color": "#e7a400",
             "text": "Free replacement or full refund - no return needed.",
             "text_font_size": 13,
-            "text_font_size_mobile": 10
+            "text_font_size_mobile": 10,
+            "text_font_weight": "400"
           }
         },
         "benefit_DNJ4BR": {
@@ -657,11 +726,13 @@
             "title": "Superior Quality",
             "title_font_size": 15,
             "title_font_size_mobile": 12,
+            "title_font_weight": "700",
             "title_color": "#18181e",
             "title_hover_color": "#e7a400",
             "text": "Made with premium materials for lasting beauty.",
             "text_font_size": 13,
-            "text_font_size_mobile": 10
+            "text_font_size_mobile": 10,
+            "text_font_weight": "400"
           }
         },
         "benefit_mh8Dyc": {
@@ -671,11 +742,13 @@
             "title": "Holiday Support",
             "title_font_size": 15,
             "title_font_size_mobile": 12,
+            "title_font_weight": "700",
             "title_color": "#18181e",
             "title_hover_color": "#e7a400",
             "text": "Friendly help anytime during the holidays.",
             "text_font_size": 13,
-            "text_font_size_mobile": 10
+            "text_font_size_mobile": 10,
+            "text_font_weight": "400"
           }
         }
       },
@@ -689,7 +762,8 @@
       "settings": {
         "heading": "Why Us",
         "heading_font_size": 30,
-        "heading_font_size_mobile": 18,
+        "heading_font_size_mobile": 25,
+        "heading_font_weight": "700",
         "heading_color": "#18181e",
         "heading_hover_color": "#e7a400",
         "columns": 4,
@@ -702,7 +776,7 @@
         "accent_color": "#e7a400",
         "border_color": "#dedecf",
         "padding_top": 48,
-        "padding_bottom": 36
+        "padding_bottom": 48
       }
     },
     "interesting_strangers": {
@@ -800,8 +874,18 @@
         "heading": "MogCustom Interesting Strangers",
         "heading_font_size": 30,
         "heading_font_size_mobile": 21,
+        "heading_font_weight": "700",
         "heading_alignment": "center",
         "subheading": "",
+        "subheading_font_size": 14,
+        "subheading_font_size_mobile": 13,
+        "subheading_font_weight": "400",
+        "description_font_size": 13,
+        "description_font_size_mobile": 12,
+        "description_font_weight": "400",
+        "button_font_size": 12,
+        "button_font_size_mobile": 12,
+        "button_font_weight": "700",
         "background": "#ffffff",
         "text_color": "#18181e",
         "button_color": "#ffb700",
@@ -846,7 +930,13 @@
       "name": "t:tg.sections.tabs.name",
       "settings": {
         "heading": "A Gift Only You Can Give",
+        "heading_font_size": 30,
+        "heading_font_size_mobile": 21,
+        "heading_font_weight": "700",
         "subheading": "",
+        "subheading_font_size": 14,
+        "subheading_font_size_mobile": 13,
+        "subheading_font_weight": "400",
         "tab_style": "pills",
         "products_to_show": 8,
         "columns_desktop": 4,
@@ -855,6 +945,12 @@
         "show_rating": true,
         "show_view_all": true,
         "button_label": "View more",
+        "button_font_size": 12,
+        "button_font_size_mobile": 12,
+        "button_font_weight": "700",
+        "tab_font_size": 13,
+        "tab_font_size_mobile": 12,
+        "tab_font_weight": "400",
         "background": "#fffaf1",
         "text_color": "#18181e",
         "accent_color": "#ffb700",
@@ -898,7 +994,13 @@
       "name": "t:tg.sections.tabs.name",
       "settings": {
         "heading": "A Gift Only You Can Give",
+        "heading_font_size": 30,
+        "heading_font_size_mobile": 21,
+        "heading_font_weight": "700",
         "subheading": "",
+        "subheading_font_size": 14,
+        "subheading_font_size_mobile": 13,
+        "subheading_font_weight": "400",
         "tab_style": "tabs_nav",
         "products_to_show": 8,
         "columns_desktop": 4,
@@ -907,6 +1009,12 @@
         "show_rating": true,
         "show_view_all": true,
         "button_label": "View more",
+        "button_font_size": 12,
+        "button_font_size_mobile": 12,
+        "button_font_weight": "700",
+        "tab_font_size": 13,
+        "tab_font_size_mobile": 12,
+        "tab_font_weight": "400",
         "background": "#fffaf1",
         "text_color": "#18181e",
         "accent_color": "#ffb700",
@@ -976,8 +1084,18 @@
         "heading": "Featured video",
         "heading_font_size": 30,
         "heading_font_size_mobile": 21,
+        "heading_font_weight": "700",
         "heading_alignment": "center",
         "subheading": "",
+        "subheading_font_size": 14,
+        "subheading_font_size_mobile": 13,
+        "subheading_font_weight": "400",
+        "description_font_size": 13,
+        "description_font_size_mobile": 12,
+        "description_font_weight": "400",
+        "button_font_size": 12,
+        "button_font_size_mobile": 12,
+        "button_font_weight": "700",
         "background": "#ffffff",
         "text_color": "#18181e",
         "button_color": "#ffb700",
@@ -995,21 +1113,21 @@
           "type": "faq",
           "settings": {
             "question": "Is customization free?",
-            "t:tg.settings.answer": "Yes, all personalized customizations are included in the product price."
+            "answer": "Yes, all personalized customizations are included in the product price."
           }
         },
         "faq_RJVQgR": {
           "type": "faq",
           "settings": {
             "question": "Is customization free?",
-            "t:tg.settings.answer": "Yes, all personalized customizations are included in the product price."
+            "answer": "Yes, all personalized customizations are included in the product price."
           }
         },
         "faq_3KTJXL": {
           "type": "faq",
           "settings": {
             "question": "Is customization free?",
-            "t:tg.settings.answer": "Yes, all personalized customizations are included in the product price."
+            "answer": "Yes, all personalized customizations are included in the product price."
           }
         }
       },
@@ -1023,6 +1141,15 @@
       "settings": {
         "image_alt": "",
         "heading": "FAQ",
+        "heading_font_size": 48,
+        "heading_font_size_mobile": 28,
+        "heading_font_weight": "700",
+        "question_font_size": 16,
+        "question_font_size_mobile": 14,
+        "question_font_weight": "400",
+        "answer_font_size": 15,
+        "answer_font_size_mobile": 14,
+        "answer_font_weight": "400",
         "open_item": 1,
         "background": "#ffffff",
         "text_color": "#000000",
