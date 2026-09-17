@@ -11,9 +11,9 @@
   "current": {
     "logo_width": 160,
     "favicon": "shopify://shop_images/20260903-183643.png",
-    "type_header_font": "proza_libre_n4",
+    "type_header_font": "quicksand_n7",
     "heading_scale": 100,
-    "type_body_font": "archivo_n4",
+    "type_body_font": "quicksand_n5",
     "body_scale": 100,
     "page_width": 1600,
     "spacing_sections": 20,
@@ -268,9 +268,9 @@
           }
         }
       },
-      "type_header_font": "proza_libre_n4",
+      "type_header_font": "quicksand_n7",
       "heading_scale": 100,
-      "type_body_font": "archivo_n4",
+      "type_body_font": "quicksand_n5",
       "body_scale": 100,
       "page_width": 1600,
       "spacing_sections": 20,

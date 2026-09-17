@@ -59,6 +59,22 @@
         "secure_payment"
       ],
       "settings": {
+        "background_color": "#31251c",
+        "text_color": "#ffffff",
+        "link_color": "#d6d3d2",
+        "link_hover_color": "#ffffff",
+        "border_color": "#5a5149",
+        "copyright_color": "#ada8a4",
+        "title_size": 16,
+        "title_size_mobile": 14,
+        "body_size": 16,
+        "body_size_mobile": 14,
+        "copyright_size": 16,
+        "copyright_size_mobile": 12,
+        "title_weight": "700",
+        "body_weight": "500",
+        "monochrome_logo": true,
+        "mobile_menu_layout": "expanded",
         "logo": "shopify://shop_images/0e44a1e857d737112dc14a2239bda79c.png",
         "trustpilot_url": "",
         "trustpilot_reviews": "13,578 reviews",
@@ -66,7 +82,7 @@
         "dmca_url": "",
         "single_open": true,
         "show_social": true,
-        "social_alignment": "center",
+        "social_alignment": "left",
         "social_facebook_link": "https://www.facebook.com/profile.php?id=61593551440607",
         "social_instagram_link": "https://www.instagram.com/heartlune_official/",
         "social_youtube_link": "",
@@ -77,7 +93,7 @@
         "social_tumblr_link": "",
         "social_vimeo_link": "",
         "enable_country_selector": true,
-        "show_policy": true
+        "show_policy": false
       }
     }
   },

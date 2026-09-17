@@ -1,7 +1,7 @@
 {{ 'tg-sections.css' | asset_url | stylesheet_tag }}
 <section
   class="tg-section tg-benefits"
-  style="--tg-background: {{ section.settings.background }}; --tg-text: {{ section.settings.text_color }}; --tg-accent: {{ section.settings.accent_color }}; --tg-border: {{ section.settings.border_color }}; --tg-columns: {{ section.settings.columns }}; --tg-heading-size: {{ section.settings.heading_font_size }}px; --tg-heading-size-mobile: {{ section.settings.heading_font_size_mobile }}px; --tg-heading-color: {{ section.settings.heading_color }}; --tg-heading-hover-color: {{ section.settings.heading_hover_color }}; --tg-benefit-content-background: {{ section.settings.content_background }}; --tg-benefit-content-padding: {{ section.settings.content_padding }}px; --tg-benefit-content-radius: {{ section.settings.content_radius }}px; --tg-benefit-image-overlap: {{ section.settings.image_overlap }}px; padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px; --tg-heading-weight: {{ section.settings.heading_font_weight }};"
+  style="--tg-background: {{ section.settings.background }}; --tg-muted: {{ section.settings.muted_color }}; --tg-text: {{ section.settings.text_color }}; --tg-accent: {{ section.settings.accent_color }}; --tg-border: {{ section.settings.border_color }}; --tg-columns: {{ section.settings.columns }}; --tg-heading-size: {{ section.settings.heading_font_size }}px; --tg-heading-size-mobile: {{ section.settings.heading_font_size_mobile }}px; --tg-heading-color: {{ section.settings.heading_color }}; --tg-heading-hover-color: {{ section.settings.heading_hover_color }}; --tg-benefit-content-background: {{ section.settings.content_background }}; --tg-benefit-content-padding: {{ section.settings.content_padding }}px; --tg-benefit-content-radius: {{ section.settings.content_radius }}px; --tg-benefit-image-overlap: {{ section.settings.image_overlap }}px; --tg-padding-top: {{ section.settings.padding_top }}px; --tg-padding-bottom: {{ section.settings.padding_bottom }}px; --tg-mobile-padding-top: {{ section.settings.mobile_padding_top }}px; --tg-mobile-padding-bottom: {{ section.settings.mobile_padding_bottom }}px; --tg-benefit-icon-size: {{ section.settings.icon_size }}px; --tg-benefit-icon-size-mobile: {{ section.settings.icon_size_mobile }}px; --tg-heading-weight: {{ section.settings.heading_font_weight }};"
   {{ section.shopify_attributes }}
 >
   <div class="tg-page-width">
@@ -14,7 +14,7 @@
       {%- for block in section.blocks -%}
         <article
           class="tg-benefit"
-          style="--tg-benefit-title-size: {{ block.settings.title_font_size }}px; --tg-benefit-title-size-mobile: {{ block.settings.title_font_size_mobile }}px; --tg-benefit-title-weight: {{ block.settings.title_font_weight }}; --tg-benefit-title-color: {{ block.settings.title_color }}; --tg-benefit-title-hover-color: {{ block.settings.title_hover_color }}; --tg-benefit-text-size: {{ block.settings.text_font_size }}px; --tg-benefit-text-size-mobile: {{ block.settings.text_font_size_mobile }}px; --tg-benefit-text-weight: {{ block.settings.text_font_weight }};"
+          style="--tg-benefit-title-size: {{ block.settings.title_font_size }}px; --tg-benefit-title-size-mobile: {{ block.settings.title_font_size_mobile }}px; --tg-benefit-title-weight: {{ block.settings.title_font_weight }}; --tg-benefit-title-weight-mobile: {{ block.settings.title_font_weight_mobile }}; --tg-benefit-title-color: {{ block.settings.title_color }}; --tg-benefit-title-hover-color: {{ block.settings.title_hover_color }}; --tg-benefit-text-size: {{ block.settings.text_font_size }}px; --tg-benefit-text-size-mobile: {{ block.settings.text_font_size_mobile }}px; --tg-benefit-text-weight: {{ block.settings.text_font_weight }};"
           {{ block.shopify_attributes }}
         >
           <div class="tg-benefit__content">
@@ -22,7 +22,7 @@
               {% if block.settings.image != blank %}
                 {{
                   block.settings.image
-                  | image_url: width: 120
+                  | image_url: width: 240
                   | image_tag: loading: 'lazy', alt: block.settings.title
                 }}
               {% else %}
@@ -49,7 +49,7 @@
       "type": "inline_richtext",
       "id": "heading",
       "label": "t:tg.settings.heading",
-      "default": "Why Us"
+      "default": "Why Choose Us"
     },
     {
       "type": "range",
@@ -59,7 +59,7 @@
       "max": 48,
       "step": 1,
       "unit": "px",
-      "default": 30
+      "default": 42
     },
     {
       "type": "range",
@@ -69,7 +69,7 @@
       "max": 32,
       "step": 1,
       "unit": "px",
-      "default": 18
+      "default": 28
     },
     {
       "type": "select",
@@ -99,13 +99,13 @@
       "type": "color",
       "id": "heading_color",
       "label": "t:tg.settings.heading_color",
-      "default": "#18181e"
+      "default": "#000000"
     },
     {
       "type": "color",
       "id": "heading_hover_color",
       "label": "t:tg.settings.heading_hover_color",
-      "default": "#e7a400"
+      "default": "#000000"
     },
     {
       "type": "range",
@@ -120,13 +120,13 @@
       "type": "color",
       "id": "background",
       "label": "t:tg.settings.background",
-      "default": "#f8f8ed"
+      "default": "#ffffff"
     },
     {
       "type": "color",
       "id": "content_background",
       "label": "t:tg.settings.content_background",
-      "default": "#f8f8ed"
+      "default": "#fcf9f5"
     },
     {
       "type": "range",
@@ -156,19 +156,19 @@
       "max": 40,
       "step": 2,
       "unit": "px",
-      "default": 20
+      "default": 0
     },
     {
       "type": "color",
       "id": "text_color",
       "label": "t:tg.settings.text_color",
-      "default": "#18181e"
+      "default": "#000000"
     },
     {
       "type": "color",
       "id": "accent_color",
       "label": "t:tg.settings.accent_color",
-      "default": "#e7a400"
+      "default": "#f36352"
     },
     {
       "type": "color",
@@ -184,7 +184,7 @@
       "max": 120,
       "step": 4,
       "unit": "px",
-      "default": 48
+      "default": 80
     },
     {
       "type": "range",
@@ -194,7 +194,53 @@
       "max": 120,
       "step": 4,
       "unit": "px",
-      "default": 36
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Desktop icon size",
+      "min": 40,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "icon_size_mobile",
+      "label": "Mobile icon size",
+      "min": 30,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_top",
+      "label": "Mobile top padding",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_bottom",
+      "label": "Mobile bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "color",
+      "id": "muted_color",
+      "label": "Description color",
+      "default": "#656462"
     }
   ],
   "blocks": [
@@ -221,7 +267,7 @@
           "max": 28,
           "step": 1,
           "unit": "px",
-          "default": 15
+          "default": 20
         },
         {
           "type": "range",
@@ -231,7 +277,7 @@
           "max": 22,
           "step": 1,
           "unit": "px",
-          "default": 12
+          "default": 16
         },
         {
           "type": "select",
@@ -261,13 +307,13 @@
           "type": "color",
           "id": "title_color",
           "label": "t:tg.settings.title_color",
-          "default": "#18181e"
+          "default": "#000000"
         },
         {
           "type": "color",
           "id": "title_hover_color",
           "label": "t:tg.settings.title_hover_color",
-          "default": "#e7a400"
+          "default": "#000000"
         },
         {
           "type": "textarea",
@@ -282,7 +328,7 @@
           "max": 20,
           "step": 1,
           "unit": "px",
-          "default": 13
+          "default": 16
         },
         {
           "type": "range",
@@ -292,7 +338,7 @@
           "max": 18,
           "step": 1,
           "unit": "px",
-          "default": 10
+          "default": 12
         },
         {
           "type": "select",
@@ -316,7 +362,31 @@
               "label": "t:tg.settings.font_weight_options.bold"
             }
           ],
-          "default": "400"
+          "default": "500"
+        },
+        {
+          "type": "select",
+          "id": "title_font_weight_mobile",
+          "label": "Mobile title weight",
+          "options": [
+            {
+              "value": "400",
+              "label": "400"
+            },
+            {
+              "value": "500",
+              "label": "500"
+            },
+            {
+              "value": "600",
+              "label": "600"
+            },
+            {
+              "value": "700",
+              "label": "700"
+            }
+          ],
+          "default": "600"
         }
       ]
     }

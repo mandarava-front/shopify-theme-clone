@@ -1,5 +1,5 @@
 {{ 'tg-sections.css' | asset_url | stylesheet_tag }}
-<section class="tg-section tg-featured-products" style="--tg-background: {{ section.settings.background }}; --tg-text: {{ section.settings.text_color }}; --tg-muted: {{ section.settings.muted_color }}; --tg-accent: {{ section.settings.button_color }}; --tg-button-text: {{ section.settings.button_text_color }}; --tg-price-color: {{ section.settings.price_color }}; --tg-badge-background: {{ section.settings.badge_background }}; --tg-badge-text: {{ section.settings.badge_text_color }}; --tg-badge-radius: {{ section.settings.badge_radius | default: 2 }}px; --tg-badge-scale: {{ section.settings.badge_scale | default: 100 | divided_by: 100.0 }}; --tg-badge-scale-mobile: {{ section.settings.badge_scale_mobile | default: 100 | divided_by: 100.0 }}; --tg-star-color: {{ section.settings.star_color }}; --tg-columns: {{ section.settings.columns_desktop }}; --tg-columns-mobile: {{ section.settings.columns_mobile }}; --tg-card-radius: {{ section.settings.card_radius }}px; --tg-padding-top: {{ section.settings.padding_top }}px; --tg-padding-bottom: {{ section.settings.padding_bottom }}px; --tg-mobile-padding-top: {{ section.settings.mobile_padding_top }}px; --tg-mobile-padding-bottom: {{ section.settings.mobile_padding_bottom }}px; --tg-heading-size: {{ section.settings.heading_font_size }}px; --tg-heading-size-mobile: {{ section.settings.heading_font_size_mobile }}px; --tg-heading-weight: {{ section.settings.heading_font_weight }}; --tg-subheading-size: {{ section.settings.subheading_font_size }}px; --tg-subheading-size-mobile: {{ section.settings.subheading_font_size_mobile }}px; --tg-subheading-weight: {{ section.settings.subheading_font_weight }}; --tg-button-font-size: {{ section.settings.button_font_size }}px; --tg-button-font-size-mobile: {{ section.settings.button_font_size_mobile }}px; --tg-button-font-weight: {{ section.settings.button_font_weight }}; --tg-card-title-size: {{ section.settings.title_font_size }}px; --tg-card-title-size-mobile: {{ section.settings.title_font_size_mobile }}px; --tg-card-title-weight: {{ section.settings.title_font_weight }}; --tg-card-price-size: {{ section.settings.price_font_size }}px; --tg-card-price-size-mobile: {{ section.settings.price_font_size_mobile }}px; --tg-card-price-weight: {{ section.settings.price_font_weight }};" {{ section.shopify_attributes }}>
+<section class="tg-section tg-featured-products" style="--tg-background: {{ section.settings.background }}; --tg-text: {{ section.settings.text_color }}; --tg-muted: {{ section.settings.muted_color }}; --tg-compare: {{ section.settings.compare_color }}; --tg-accent: {{ section.settings.button_color }}; --tg-button-text: {{ section.settings.button_text_color }}; --tg-price-color: {{ section.settings.price_color }}; --tg-badge-background: {{ section.settings.badge_background }}; --tg-badge-text: {{ section.settings.badge_text_color }}; --tg-badge-radius: {{ section.settings.badge_radius | default: 2 }}px; --tg-badge-scale: {{ section.settings.badge_scale | default: 100 | divided_by: 100.0 }}; --tg-badge-scale-mobile: {{ section.settings.badge_scale_mobile | default: 100 | divided_by: 100.0 }}; --tg-star-color: {{ section.settings.star_color }}; --tg-columns: {{ section.settings.columns_desktop }}; --tg-columns-mobile: {{ section.settings.columns_mobile }}; --tg-card-radius-mobile: {{ section.settings.card_radius_mobile }}px; --tg-card-compare-size: {{ section.settings.compare_font_size }}px; --tg-card-compare-size-mobile: {{ section.settings.compare_font_size_mobile }}px; --tg-card-radius: {{ section.settings.card_radius }}px; --tg-padding-top: {{ section.settings.padding_top }}px; --tg-padding-bottom: {{ section.settings.padding_bottom }}px; --tg-mobile-padding-top: {{ section.settings.mobile_padding_top }}px; --tg-mobile-padding-bottom: {{ section.settings.mobile_padding_bottom }}px; --tg-heading-size: {{ section.settings.heading_font_size }}px; --tg-heading-size-mobile: {{ section.settings.heading_font_size_mobile }}px; --tg-heading-weight: {{ section.settings.heading_font_weight }}; --tg-subheading-size: {{ section.settings.subheading_font_size }}px; --tg-subheading-size-mobile: {{ section.settings.subheading_font_size_mobile }}px; --tg-subheading-weight: {{ section.settings.subheading_font_weight }}; --tg-button-font-size: {{ section.settings.button_font_size }}px; --tg-button-font-size-mobile: {{ section.settings.button_font_size_mobile }}px; --tg-button-font-weight: {{ section.settings.button_font_weight }}; --tg-card-title-size: {{ section.settings.title_font_size }}px; --tg-card-title-size-mobile: {{ section.settings.title_font_size_mobile }}px; --tg-card-title-weight: {{ section.settings.title_font_weight }}; --tg-card-price-size: {{ section.settings.price_font_size }}px; --tg-card-price-size-mobile: {{ section.settings.price_font_size_mobile }}px; --tg-card-price-weight: {{ section.settings.price_font_weight }};" {{ section.shopify_attributes }}>
   <div class="tg-page-width">
     <header class="tg-products__header">
       {%- if section.settings.heading != blank -%}<h2 class="tg-heading">{{ section.settings.heading }}</h2>{%- endif -%}
@@ -31,7 +31,7 @@
     {%- assign view_all_url = section.settings.button_link | default: section.settings.collection.url -%}
     {%- if section.settings.show_view_all and view_all_url != blank -%}
       <div class="tg-products__footer">
-        <a class="tg-button" href="{{ view_all_url }}">{{ section.settings.button_label | escape }}</a>
+        <a class="tg-button" href="{{ view_all_url }}">{{ section.settings.button_label | escape }}<span class="tg-button__arrow" aria-hidden="true">{{ 'tg-home-arrow.svg' | inline_asset_content }}</span></a>
       </div>
     {%- endif -%}
   </div>
@@ -52,7 +52,7 @@
       "type": "inline_richtext",
       "id": "heading",
       "label": "t:tg.settings.heading",
-      "default": "🎁 2026 Trending Now - Customer Favorites"
+      "default": "Best Sellers"
     },
     {
       "type": "range",
@@ -62,7 +62,7 @@
       "max": 48,
       "step": 1,
       "unit": "px",
-      "default": 30
+      "default": 42
     },
     {
       "type": "range",
@@ -72,7 +72,7 @@
       "max": 32,
       "step": 1,
       "unit": "px",
-      "default": 21
+      "default": 28
     },
     {
       "type": "select",
@@ -112,7 +112,7 @@
       "max": 24,
       "step": 1,
       "unit": "px",
-      "default": 14
+      "default": 18
     },
     {
       "type": "range",
@@ -122,7 +122,7 @@
       "max": 20,
       "step": 1,
       "unit": "px",
-      "default": 13
+      "default": 14
     },
     {
       "type": "select",
@@ -146,7 +146,7 @@
           "label": "t:tg.settings.font_weight_options.bold"
         }
       ],
-      "default": "400"
+      "default": "500"
     },
     {
       "type": "range",
@@ -217,25 +217,25 @@
       "max": 40,
       "step": 1,
       "unit": "px",
-      "default": 2
+      "default": 8
     },
     {
       "type": "color",
       "id": "badge_background",
       "label": "t:tg.settings.badge_background",
-      "default": "#ffc400"
+      "default": "#f8a93e"
     },
     {
       "type": "color",
       "id": "badge_text_color",
       "label": "t:tg.settings.badge_text_color",
-      "default": "#111111"
+      "default": "#000000"
     },
     {
       "type": "checkbox",
       "id": "show_rating",
       "label": "t:tg.settings.show_rating",
-      "default": true
+      "default": false
     },
     {
       "type": "checkbox",
@@ -247,7 +247,7 @@
       "type": "text",
       "id": "button_label",
       "label": "t:tg.settings.button_label",
-      "default": "VIEW MORE"
+      "default": "View More"
     },
     {
       "type": "range",
@@ -257,7 +257,7 @@
       "max": 24,
       "step": 1,
       "unit": "px",
-      "default": 12
+      "default": 18
     },
     {
       "type": "range",
@@ -267,7 +267,7 @@
       "max": 20,
       "step": 1,
       "unit": "px",
-      "default": 12
+      "default": 16
     },
     {
       "type": "select",
@@ -301,7 +301,7 @@
       "max": 24,
       "step": 1,
       "unit": "px",
-      "default": 13
+      "default": 14
     },
     {
       "type": "range",
@@ -311,7 +311,7 @@
       "max": 20,
       "step": 1,
       "unit": "px",
-      "default": 13
+      "default": 14
     },
     {
       "type": "select",
@@ -345,7 +345,7 @@
       "max": 24,
       "step": 1,
       "unit": "px",
-      "default": 13
+      "default": 24
     },
     {
       "type": "range",
@@ -355,7 +355,7 @@
       "max": 20,
       "step": 1,
       "unit": "px",
-      "default": 13
+      "default": 18
     },
     {
       "type": "select",
@@ -394,31 +394,31 @@
       "max": 24,
       "step": 2,
       "unit": "px",
-      "default": 4
+      "default": 16
     },
     {
       "type": "color",
       "id": "background",
       "label": "t:tg.settings.background",
-      "default": "#f8f8ed"
+      "default": "#fcf9f5"
     },
     {
       "type": "color",
       "id": "text_color",
       "label": "t:tg.settings.text_color",
-      "default": "#18181e"
+      "default": "#000000"
     },
     {
       "type": "color",
       "id": "muted_color",
       "label": "t:tg.settings.muted_color",
-      "default": "#707070"
+      "default": "#656462"
     },
     {
       "type": "color",
       "id": "price_color",
       "label": "t:tg.settings.price_color",
-      "default": "#e18a00"
+      "default": "#f36555"
     },
     {
       "type": "color",
@@ -430,7 +430,7 @@
       "type": "color",
       "id": "button_color",
       "label": "t:tg.settings.button_color",
-      "default": "#ffb700"
+      "default": "#f36352"
     },
     {
       "type": "color",
@@ -456,7 +456,7 @@
       "max": 140,
       "step": 4,
       "unit": "px",
-      "default": 64
+      "default": 80
     },
     {
       "type": "range",
@@ -466,7 +466,7 @@
       "max": 100,
       "step": 2,
       "unit": "px",
-      "default": 38
+      "default": 30
     },
     {
       "type": "range",
@@ -476,7 +476,43 @@
       "max": 100,
       "step": 2,
       "unit": "px",
-      "default": 34
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "card_radius_mobile",
+      "label": "Mobile image corner radius",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "compare_font_size",
+      "label": "Compare-at price size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "compare_font_size_mobile",
+      "label": "Mobile compare-at price size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "compare_color",
+      "label": "Compare-at price color",
+      "default": "#979593"
     }
   ],
   "blocks": [

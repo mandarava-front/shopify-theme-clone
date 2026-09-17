@@ -201,6 +201,8 @@
     <tg-header-desktop
       class="tg-header-desktop"
       style="
+        --tg-header-search-button-background: {{ section.settings.tg_header_search_button_background }};
+        --tg-header-search-button-text: {{ section.settings.tg_header_search_button_text }};
         --tg-header-desktop-background: {{ section.settings.tg_header_desktop_background }};
         --tg-header-desktop-text: {{ section.settings.tg_header_desktop_text }};
         --tg-header-desktop-hover: {{ section.settings.tg_header_desktop_hover }};
@@ -210,6 +212,8 @@
         --tg-header-desktop-max-width: {{ section.settings.tg_header_desktop_max_width }}px;
         --tg-header-desktop-logo-width: {{ section.settings.tg_header_desktop_logo_width }}px;
         --tg-header-desktop-nav-height: {{ section.settings.tg_header_desktop_nav_height }}px;
+        --tg-header-desktop-search-width: {{ section.settings.tg_header_desktop_search_width | default: 460 }}px;
+        --tg-header-desktop-menu-height: {{ section.settings.tg_header_desktop_menu_height | default: 48 }}px;
         --tg-header-desktop-nav-gap: {{ section.settings.tg_header_desktop_menu_gap }}px;
         --tg-header-desktop-border-width: {{ section.settings.tg_header_desktop_menu_border_width }}px;
         --tg-header-desktop-panel-width: {{ section.settings.tg_header_desktop_menu_panel_width }}%;
@@ -345,8 +349,8 @@
             {%- endif -%}
             {%- if section.settings.tg_header_desktop_show_cart -%}
               <a href="{{ routes.cart_url }}" class="tg-header-desktop__action tg-header-desktop__cart focus-inset" aria-label="{{ section.settings.tg_header_desktop_cart_label | escape }}">
-                <span class="svg-wrapper" aria-hidden="true">{{- 'icon-cart.svg' | inline_asset_content -}}</span>
-                <span class="tg-header-desktop__cart-count" aria-hidden="true" data-tg-cart-count>{% if cart.item_count < 100 %}{{ cart.item_count }}{% endif %}</span>
+                <span class="svg-wrapper" aria-hidden="true">{{- 'tg-home-cart.svg' | inline_asset_content -}}</span>
+                <span class="tg-header-desktop__cart-count" aria-hidden="true" data-tg-cart-count{% if cart.item_count == 0 %} hidden{% endif %}>{% if cart.item_count > 0 and cart.item_count < 100 %}{{ cart.item_count }}{% endif %}</span>
                 <span class="visually-hidden" data-tg-cart-count-label>{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
               </a>
             {%- endif -%}
@@ -601,9 +605,9 @@
 
       <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble">
         {% if cart == empty %}
-          <span class="svg-wrapper">{{ 'icon-cart-empty.svg' | inline_asset_content }}</span>
+          <span class="svg-wrapper">{{ 'tg-home-cart.svg' | inline_asset_content }}</span>
         {% else %}
-          <span class="svg-wrapper">{{ 'icon-cart.svg' | inline_asset_content }}</span>
+          <span class="svg-wrapper">{{ 'tg-home-cart.svg' | inline_asset_content }}</span>
         {% endif %}
         <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
         {%- if cart != empty -%}
@@ -919,10 +923,10 @@
       "type": "range",
       "id": "tg_header_mobile_logo_width",
       "min": 80,
-      "max": 260,
-      "step": 4,
+      "max": 180,
+      "step": 1,
       "unit": "px",
-      "default": 136,
+      "default": 97,
       "label": "移动端 Logo 宽度"
     },
     {
@@ -950,7 +954,7 @@
     {
       "type": "select",
       "id": "tg_header_mobile_search_mode",
-      "default": "row",
+      "default": "icon",
       "label": "移动端搜索样式",
       "options": [
         {
@@ -1464,6 +1468,18 @@
     },
     {
       "type": "color",
+      "id": "tg_header_search_button_background",
+      "label": "搜索按钮背景",
+      "default": "#f36352"
+    },
+    {
+      "type": "color",
+      "id": "tg_header_search_button_text",
+      "label": "搜索按钮图标",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
       "id": "tg_header_desktop_background",
       "default": "#ffffff",
       "label": "t:sections.header.tg_header_desktop.appearance.background.label"
@@ -1471,25 +1487,25 @@
     {
       "type": "color",
       "id": "tg_header_desktop_text",
-      "default": "#202024",
+      "default": "#000000",
       "label": "t:sections.header.tg_header_desktop.appearance.text.label"
     },
     {
       "type": "color",
       "id": "tg_header_desktop_hover",
-      "default": "#f76e4a",
+      "default": "#f36352",
       "label": "t:sections.header.tg_header_desktop.appearance.hover.label"
     },
     {
       "type": "color",
       "id": "tg_header_desktop_border",
-      "default": "#eef0f0",
+      "default": "#e7e7e7",
       "label": "t:sections.header.tg_header_desktop.appearance.border.label"
     },
     {
       "type": "color",
       "id": "tg_header_desktop_badge_background",
-      "default": "#ee860f",
+      "default": "#f36352",
       "label": "t:sections.header.tg_header_desktop.appearance.badge_background.label"
     },
     {
@@ -1505,7 +1521,7 @@
       "max": 1800,
       "step": 20,
       "unit": "px",
-      "default": 1440,
+      "default": 1320,
       "label": "t:sections.header.tg_header_desktop.appearance.max_width.label"
     },
     {
@@ -1513,9 +1529,9 @@
       "id": "tg_header_desktop_logo_width",
       "min": 80,
       "max": 260,
-      "step": 4,
+      "step": 2,
       "unit": "px",
-      "default": 136,
+      "default": 162,
       "label": "t:sections.header.tg_header_desktop.appearance.logo_width.label"
     },
     {
@@ -1525,8 +1541,28 @@
       "max": 96,
       "step": 2,
       "unit": "px",
-      "default": 72,
+      "default": 70,
       "label": "t:sections.header.tg_header_desktop.appearance.nav_height.label"
+    },
+    {
+      "type": "range",
+      "id": "tg_header_desktop_search_width",
+      "min": 200,
+      "max": 700,
+      "step": 10,
+      "unit": "px",
+      "default": 460,
+      "label": "桌面端搜索框最大宽度"
+    },
+    {
+      "type": "range",
+      "id": "tg_header_desktop_menu_height",
+      "min": 40,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 48,
+      "label": "桌面端导航栏高度"
     },
     {
       "type": "header",
@@ -1603,7 +1639,7 @@
       "max": 24,
       "step": 1,
       "unit": "px",
-      "default": 13
+      "default": 14
     },
     {
       "type": "select",
@@ -1627,7 +1663,7 @@
           "label": "加粗"
         }
       ],
-      "default": "400"
+      "default": "500"
     },
     {
       "type": "range",
@@ -1705,7 +1741,7 @@
       "max": 24,
       "step": 1,
       "unit": "px",
-      "default": 13
+      "default": 12
     },
     {
       "type": "select",
@@ -1729,7 +1765,7 @@
           "label": "加粗"
         }
       ],
-      "default": "500"
+      "default": "600"
     },
     {
       "type": "header",
@@ -1859,17 +1895,17 @@
       "step": 4,
       "unit": "px",
       "label": "t:sections.all.padding.padding_top",
-      "default": 20
+      "default": 4
     },
     {
       "type": "range",
       "id": "padding_bottom",
       "min": 0,
       "max": 36,
-      "step": 4,
+      "step": 2,
       "unit": "px",
       "label": "t:sections.all.padding.padding_bottom",
-      "default": 20
+      "default": 6
     }
   ],
   "blocks": [

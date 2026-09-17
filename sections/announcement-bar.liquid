@@ -27,6 +27,10 @@
 
 {% style %}
   {{ section.settings.tg_announcement_font | font_face: font_display: 'swap' }}
+  @media screen and (max-width: 749px) {
+    #shopify-section-{{ section.id }} .utility-bar__grid.page-width { padding-inline: 4px; }
+    #shopify-section-{{ section.id }} .announcement-bar__content { white-space: nowrap; overflow-x: auto; scrollbar-width: none; }
+  }
   {{ tg_announcement_font_bold | font_face: font_display: 'swap' }}
 
   #shopify-section-{{ section.id }} .utility-bar {
@@ -566,7 +570,7 @@
       "type": "font_picker",
       "id": "tg_announcement_font",
       "label": "字体",
-      "default": "assistant_n4"
+      "default": "quicksand_n5"
     },
     {
       "type": "range",
@@ -586,7 +590,7 @@
       "step": 1,
       "unit": "px",
       "label": "移动端字体大小",
-      "default": 14
+      "default": 12
     },
     {
       "type": "range",
@@ -595,7 +599,7 @@
       "max": 900,
       "step": 100,
       "label": "常规文字字重",
-      "default": 700
+      "default": 500
     },
     {
       "type": "select",
@@ -603,10 +607,11 @@
       "label": "行高",
       "options": [
         { "value": "1.2", "label": "紧凑" },
+        { "value": "1.25", "label": "设计稿" },
         { "value": "1.4", "label": "标准" },
         { "value": "1.6", "label": "宽松" }
       ],
-      "default": "1.4"
+      "default": "1.25"
     },
     {
       "type": "range",
@@ -626,7 +631,7 @@
         { "value": "none", "label": "保持原样" },
         { "value": "uppercase", "label": "全部大写" }
       ],
-      "default": "uppercase"
+      "default": "none"
     },
     {
       "type": "range",
@@ -666,18 +671,18 @@
       "type": "color",
       "id": "tg_announcement_background_color",
       "label": "背景色",
-      "default": "#fef1e2"
+      "default": "#fef1d8"
     },
     {
       "type": "color",
       "id": "tg_announcement_text_color",
       "label": "文字颜色",
-      "default": "#202024"
+      "default": "#000000"
     },
     {
       "type": "checkbox",
       "id": "show_line_separator",
-      "default": true,
+      "default": false,
       "label": "t:sections.header.settings.show_line_separator.label"
     },
     {

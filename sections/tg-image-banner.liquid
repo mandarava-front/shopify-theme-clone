@@ -3,7 +3,10 @@
   assign tg_banner_margin_left = section.settings.image_margin_left
   assign tg_banner_margin_right = section.settings.image_margin_right
 
-  assign tg_banner_max_width = 'var(--page-width)'
+  assign tg_banner_max_width = section.settings.image_max_width | append: 'px'
+  if section.settings.image_max_width_percent != blank and section.settings.image_max_width_percent > 0
+    assign tg_banner_max_width = section.settings.image_max_width_percent | append: 'vw'
+  endif
   if section.settings.image_max_width_percent != blank
     unless section.settings.image_max_width_percent == 0
       assign tg_banner_width_percent = section.settings.image_max_width_percent | at_least: 1 | at_most: 100
@@ -27,40 +30,223 @@
     assign tg_desktop_source = section.settings.mobile_image
   endif
 
-  assign tg_crop_enabled = false
-  if tg_height_percent < 100
-    assign tg_crop_enabled = true
+  assign tg_desktop_ratio = tg_desktop_source.aspect_ratio | default: 2 | times: 100.0 | divided_by: tg_height_percent
+  assign tg_mobile_ratio = tg_mobile_source.aspect_ratio | default: 2 | times: 100.0 | divided_by: tg_mobile_height_percent
+  if section.settings.desktop_aspect_ratio != 'auto' and section.settings.desktop_aspect_ratio != blank
+    assign tg_desktop_ratio = section.settings.desktop_aspect_ratio
   endif
-  if tg_mobile_height_percent < 100
-    assign tg_crop_enabled = true
+  if section.settings.mobile_aspect_ratio != 'auto' and section.settings.mobile_aspect_ratio != blank
+    assign tg_mobile_ratio = section.settings.mobile_aspect_ratio
   endif
-  if tg_desktop_source == blank
-    assign tg_crop_enabled = false
-  endif
-
-  assign tg_crop_class = ''
-  assign tg_crop_style = ''
-  if tg_crop_enabled
-    assign tg_crop_class = ' tg-banner--crop'
-    assign tg_desktop_ratio = tg_desktop_source.aspect_ratio | times: 100.0 | divided_by: tg_height_percent
-    assign tg_mobile_ratio = tg_mobile_source.aspect_ratio | times: 100.0 | divided_by: tg_mobile_height_percent
-    assign tg_crop_style = ' --tg-banner-ratio: ' | append: tg_desktop_ratio | append: '; --tg-banner-ratio-mobile: ' | append: tg_mobile_ratio | append: ';'
-  endif
+  assign tg_crop_class = ' tg-banner--crop'
+  assign tg_crop_style = ' --tg-banner-ratio: ' | append: tg_desktop_ratio | append: '; --tg-banner-ratio-mobile: ' | append: tg_mobile_ratio | append: ';'
 -%}
 <section class="tg-section" style="--tg-background: {{ section.settings.background }}; padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;" {{ section.shopify_attributes }}>
   <div class="page-width tg-image-banner__page-width" style="--tg-image-banner-max-width: {{ tg_banner_max_width }};">
-    <a class="tg-banner{{ tg_crop_class }}" href="{{ section.settings.link | default: routes.all_products_collection_url }}" style="--tg-banner-margin-left: {{ tg_banner_margin_left }}px; --tg-banner-margin-right: {{ tg_banner_margin_right }}px; --tg-banner-radius: {{ section.settings.image_radius }}px;{{ tg_crop_style }}">
+    <a class="tg-banner{{ tg_crop_class }}" href="{{ section.settings.link | default: routes.all_products_collection_url }}" style="--tg-banner-margin-mobile: {{ section.settings.image_margin_mobile }}px; --tg-banner-radius-mobile: {{ section.settings.image_radius_mobile }}px; --tg-banner-margin-left: {{ tg_banner_margin_left }}px; --tg-banner-margin-right: {{ tg_banner_margin_right }}px; --tg-banner-radius: {{ section.settings.image_radius }}px;{{ tg_crop_style }}">
       <picture>
         {%- if section.settings.mobile_image != blank -%}<source media="(max-width: 749px)" srcset="{{ section.settings.mobile_image | image_url: width: 900 }}">{%- endif -%}
-        {%- if section.settings.desktop_image != blank -%}{{ section.settings.desktop_image | image_url: width: 2200 | image_tag: widths: '750, 1100, 1500, 2200', loading: 'lazy', alt: section.settings.alt }}{%- else -%}{{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}{%- endif -%}
+        {%- if tg_desktop_source != blank -%}{{ tg_desktop_source | image_url: width: 2200 | image_tag: widths: '750, 1100, 1500, 2200', loading: 'lazy', alt: section.settings.alt }}{%- else -%}{{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}{%- endif -%}
       </picture>
     </a>
   </div>
 </section>
 {% schema %}
-{"name":"t:tg.sections.banner.name","tag":"section","class":"section","settings":[{"type":"image_picker","id":"desktop_image","label":"t:tg.settings.desktop_image"},{"type":"image_picker","id":"mobile_image","label":"t:tg.settings.mobile_image"},{"type":"text","id":"alt","label":"t:tg.settings.alt"},{"type":"url","id":"link","label":"t:tg.settings.link"},{"type":"header","content":"Tg | Image width / 图片宽度"},{"type":"range","id":"image_max_width_percent","label":"Tg | Viewport width / 视口宽度占比","info":"83% 时，1440px 视口下约为 1195px，1920px 视口下约为 1594px。0% 表示跟随主题 page-width，100% 表示铺满视口宽度。","min":0,"max":100,"step":1,"unit":"%","default":0},{"type":"header","content":"Tg | Image height / 图片显示高度"},{"type":"paragraph","content":"100% = 完整显示原图；调低后按该比例压缩显示高度，图片上下居中等比裁剪（左右不裁）。"},{"type":"range","id":"image_height_percent","label":"Tg | Desktop height / 桌面端高度占比","min":20,"max":100,"step":5,"unit":"%","default":100},{"type":"range","id":"mobile_image_height_percent","label":"Tg | Mobile height / 移动端高度占比","min":20,"max":100,"step":5,"unit":"%","default":100},{"type":"range","id":"image_margin_left","label":"t:tg.settings.image_margin_left","min":0,"max":240,"step":4,"unit":"px","default":0},{"type":"range","id":"image_margin_right","label":"t:tg.settings.image_margin_right","min":0,"max":240,"step":4,"unit":"px","default":0},{"type":"range","id":"image_radius","label":"t:tg.settings.image_radius","min":0,"max":32,"step":2,"unit":"px","default":0},{"type":"color","id":"background","label":"t:tg.settings.background","default":"#ffffff"},{"type":"range","id":"padding_top","label":"t:tg.settings.padding_top","min":0,"max":120,"step":4,"unit":"px","default":0},{"type":"range","id":"padding_bottom","label":"t:tg.settings.padding_bottom","min":0,"max":120,"step":4,"unit":"px","default":0}],"presets": [
-  {
-    "name": "t:tg.sections.banner.name"
-  }
-]}
+{
+  "name": "t:tg.sections.banner.name",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "desktop_image",
+      "label": "t:tg.settings.desktop_image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "t:tg.settings.mobile_image"
+    },
+    {
+      "type": "text",
+      "id": "alt",
+      "label": "t:tg.settings.alt"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "t:tg.settings.link"
+    },
+    {
+      "type": "header",
+      "content": "Tg | Image width / 图片宽度"
+    },
+    {
+      "type": "range",
+      "id": "image_max_width_percent",
+      "label": "Tg | Viewport width / 视口宽度占比",
+      "info": "83% 时，1440px 视口下约为 1195px，1920px 视口下约为 1594px。0% 表示跟随主题 page-width，100% 表示铺满视口宽度。",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Tg | Image height / 图片显示高度"
+    },
+    {
+      "type": "paragraph",
+      "content": "100% = 完整显示原图；调低后按该比例压缩显示高度，图片上下居中等比裁剪（左右不裁）。"
+    },
+    {
+      "type": "range",
+      "id": "image_height_percent",
+      "label": "Tg | Desktop height / 桌面端高度占比",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "mobile_image_height_percent",
+      "label": "Tg | Mobile height / 移动端高度占比",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "image_margin_left",
+      "label": "t:tg.settings.image_margin_left",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "image_margin_right",
+      "label": "t:tg.settings.image_margin_right",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "image_radius",
+      "label": "t:tg.settings.image_radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "t:tg.settings.background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:tg.settings.padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:tg.settings.padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "image_max_width",
+      "label": "Desktop maximum width",
+      "min": 1000,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "default": 1320
+    },
+    {
+      "type": "range",
+      "id": "image_margin_mobile",
+      "label": "Mobile side margin",
+      "min": 0,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "image_radius_mobile",
+      "label": "Mobile corner radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "desktop_aspect_ratio",
+      "label": "Desktop image ratio",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Original image / height setting"
+        },
+        {
+          "value": "2 / 1",
+          "label": "2:1"
+        }
+      ],
+      "default": "2 / 1"
+    },
+    {
+      "type": "select",
+      "id": "mobile_aspect_ratio",
+      "label": "Mobile image ratio",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Original image / height setting"
+        },
+        {
+          "value": "343 / 400",
+          "label": "Portrait (343:400)"
+        },
+        {
+          "value": "2 / 1",
+          "label": "Landscape (2:1)"
+        }
+      ],
+      "default": "343 / 400"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:tg.sections.banner.name"
+    }
+  ]
+}
 {% endschema %}

@@ -1,6 +1,6 @@
 {%- liquid
   assign mobile_logo = section.settings.tg_header_mobile_logo
-  assign mobile_logo_width = section.settings.tg_header_mobile_logo_width | default: 136
+  assign mobile_logo_width = section.settings.tg_header_mobile_logo_width | default: 97
   assign mobile_logo_width_2x = mobile_logo_width | times: 2
   assign mobile_logo_width_1_5x = mobile_logo_width | times: 1.5 | round
   assign logo_class = 'header__heading-logo'
@@ -60,7 +60,10 @@
   </div>
   <span class="h2 tg-header-desktop-only-logo-fallback">{{ shop.name }}</span>
 {%- elsif settings.logo != blank -%}
-  <div class="header__heading-logo-wrapper">
+  <div
+    class="header__heading-logo-wrapper tg-header-responsive-logo-wrapper"
+    style="--tg-header-mobile-logo-width: {{ mobile_logo_width }}px; --tg-header-desktop-logo-width: {{ settings.logo_width }}px;"
+  >
     {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
     {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
     {{

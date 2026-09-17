@@ -8,6 +8,7 @@
   assign card_price = price
   assign card_compare_at_price = compare_at_price
   assign card_reviews = reviews
+  assign discount_percent = 0
 
   if card_product != blank
     if card_title == blank
@@ -23,7 +24,7 @@
       assign card_secondary_image = card_product.media[1]
     endif
     if card_badge == blank and card_product.compare_at_price > card_product.price
-      assign card_badge = 'Sale'
+      assign discount_percent = card_product.compare_at_price | minus: card_product.price | times: 100.0 | divided_by: card_product.compare_at_price | round
     endif
   endif
 
@@ -32,7 +33,7 @@
 -%}
 <li class="tg-featured-card-item" {{ shopify_attributes }}>
   <article class="tg-featured-card">
-    <a class="tg-featured-card__media" href="{{ card_link }}" aria-label="{{ card_title | escape }}">
+    <a class="tg-featured-card__media{% if show_secondary_image and card_secondary_image != blank %} tg-featured-card__media--has-secondary{% endif %}" href="{{ card_link }}" aria-label="{{ card_title | escape }}">
       {%- if placeholder_image != blank -%}
         {{ placeholder_image | placeholder_svg_tag: 'tg-featured-card__placeholder' }}
       {%- elsif card_image != blank -%}
@@ -64,6 +65,9 @@
           <del>{{ card_compare_at_price | escape }}</del>
         {%- elsif card_product != blank and card_product.compare_at_price > card_product.price -%}
           <del>{{ card_product.compare_at_price | money }}</del>
+        {%- endif -%}
+        {%- if show_badge and discount_percent > 0 -%}
+          <span class="tg-featured-card__discount">-{{ discount_percent }}%</span>
         {%- endif -%}
       </div>
     </div>

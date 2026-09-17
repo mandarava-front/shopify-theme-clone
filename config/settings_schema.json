@@ -110,8 +110,14 @@
       },
       {
         "type": "font_picker",
+        "id": "tg_home_design_font",
+        "default": "quicksand_n5",
+        "label": "首页与公共页头页脚字体"
+      },
+      {
+        "type": "font_picker",
         "id": "type_header_font",
-        "default": "proza_libre_n4",
+        "default": "quicksand_n7",
         "label": "t:settings_schema.typography.settings.type_header_font.label"
       },
       {
@@ -131,7 +137,7 @@
       {
         "type": "font_picker",
         "id": "type_body_font",
-        "default": "archivo_n4",
+        "default": "quicksand_n5",
         "label": "t:settings_schema.typography.settings.type_body_font.label"
       },
       {

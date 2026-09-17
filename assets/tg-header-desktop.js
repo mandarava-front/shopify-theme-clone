@@ -15,9 +15,19 @@ class TgHeaderDesktop extends HTMLElement {
   }
 
   updateCartCount(event) {
-    const count = event?.cartData?.item_count;
+    let count = event?.cartData?.item_count;
+    // Add-to-cart responses contain rendered sections rather than item_count.
+    if (!Number.isFinite(count) && event?.cartData?.sections?.['cart-icon-bubble']) {
+      const fragment = new DOMParser().parseFromString(event.cartData.sections['cart-icon-bubble'], 'text/html');
+      const bubble = fragment.querySelector('.cart-count-bubble');
+      const value = bubble?.querySelector('[aria-hidden="true"]')?.textContent;
+      count = bubble ? (value ? Number(value.trim()) : 100) : 0;
+    }
     if (!Number.isFinite(count)) return;
-    if (this.cartCount) this.cartCount.textContent = count < 100 ? String(count) : '';
+    if (this.cartCount) {
+      this.cartCount.textContent = count > 0 && count < 100 ? String(count) : '';
+      this.cartCount.hidden = count === 0;
+    }
     if (this.cartCountLabel) this.cartCountLabel.textContent = `${count} ${count === 1 ? 'item' : 'items'}`;
   }
 }

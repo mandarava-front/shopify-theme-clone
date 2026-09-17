@@ -41,9 +41,11 @@
 -%}
 
 <footer
-  class="mc-accordion-footer"
+  class="mc-accordion-footer{% if section.settings.monochrome_logo %} mc-accordion-footer--monochrome-logo{% endif %}"
   data-mc-accordion-footer
   data-mc-accordion-single-open="{{ section.settings.single_open }}"
+  data-mc-mobile-menu-layout="{{ section.settings.mobile_menu_layout }}"
+  style="--mc-footer-background: {{ section.settings.background_color }}; --mc-footer-text: {{ section.settings.text_color }}; --mc-footer-link: {{ section.settings.link_color }}; --mc-footer-link-hover: {{ section.settings.link_hover_color }}; --mc-footer-border: {{ section.settings.border_color }}; --mc-footer-copyright: {{ section.settings.copyright_color }}; --mc-footer-title-size: {{ section.settings.title_size }}px; --mc-footer-title-size-mobile: {{ section.settings.title_size_mobile }}px; --mc-footer-body-size: {{ section.settings.body_size }}px; --mc-footer-body-size-mobile: {{ section.settings.body_size_mobile }}px; --mc-footer-copyright-size: {{ section.settings.copyright_size }}px; --mc-footer-copyright-size-mobile: {{ section.settings.copyright_size_mobile }}px; --mc-footer-title-weight: {{ section.settings.title_weight }}; --mc-footer-body-weight: {{ section.settings.body_weight }};"
 >
   <div class="mc-accordion-footer__inner page-width">
     <div class="mc-accordion-footer__brand">
@@ -85,40 +87,6 @@
           <span class="mc-accordion-footer__dmca-fallback"><span>DMCA</span><span>PROTECTED</span></span>
         </span>
       {%- endif -%}
-    </div>
-
-    {%- if menu_blocks.size > 0 -%}
-      <div class="mc-accordion-footer__groups">
-        {%- for block in menu_blocks -%}
-          {%- if block.settings.menu != blank -%}
-            <details
-              class="mc-accordion-footer__group"
-              data-mc-accordion-footer-group
-              {% if block.settings.open_by_default %}
-                open
-              {% endif %}
-              {{ block.shopify_attributes }}
-            >
-              <summary class="mc-accordion-footer__summary">
-                <span class="mc-accordion-footer__heading">
-                  <span class="mc-accordion-footer__title">{{ block.settings.heading | default: block.settings.menu.title }}</span>
-                  <span class="svg-wrapper mc-accordion-footer__chevron" aria-hidden="true">
-                    {{- 'icon-caret.svg' | inline_asset_content -}}
-                  </span>
-                </span>
-              </summary>
-              <ul class="mc-accordion-footer__links">
-                {%- for link in block.settings.menu.links -%}
-                  <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
-                {%- endfor -%}
-              </ul>
-            </details>
-          {%- endif -%}
-        {%- endfor -%}
-      </div>
-    {%- endif -%}
-
-    <div class="mc-accordion-footer__bottom">
       {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
         <div class="mc-accordion-footer__localization">
           <localization-form>
@@ -209,10 +177,37 @@
         </ul>
       {%- endif -%}
 
+    </div>
+
+    {%- if menu_blocks.size > 0 -%}
+      <div class="mc-accordion-footer__groups">
+        {%- for block in menu_blocks -%}
+          {%- if block.settings.menu != blank -%}
+            {%- if section.settings.mobile_menu_layout == 'expanded' -%}
+              <div class="mc-accordion-footer__group" {{ block.shopify_attributes }}>
+                <h2 class="mc-accordion-footer__title">{{ block.settings.heading | default: block.settings.menu.title }}</h2>
+            {%- else -%}
+              <details class="mc-accordion-footer__group" data-mc-accordion-footer-group {% if block.settings.open_by_default %}open{% endif %} {{ block.shopify_attributes }}>
+                <summary class="mc-accordion-footer__summary">
+                  <span class="mc-accordion-footer__title">{{ block.settings.heading | default: block.settings.menu.title }}</span>
+                  <span class="svg-wrapper mc-accordion-footer__chevron" aria-hidden="true">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+                </summary>
+            {%- endif -%}
+                <ul class="mc-accordion-footer__links">
+                  {%- for link in block.settings.menu.links -%}
+                    <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+                  {%- endfor -%}
+                </ul>
+            {%- if section.settings.mobile_menu_layout == 'expanded' -%}</div>{%- else -%}</details>{%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    <div class="mc-accordion-footer__bottom">
       <div class="mc-accordion-footer__copyright">
         <div class="mc-accordion-footer__copyright-content">
           <span>&copy; {{ 'now' | date: '%Y' }}, {{ shop.name | link_to: routes.root_url }}. All Rights Reserved.</span>
-          <br>
           <span>{{ powered_by_link }}</span>
           {%- if section.settings.show_policy -%}
             <ul class="mc-accordion-footer__policies">
@@ -285,6 +280,22 @@
     }
   ],
   "settings": [
+    { "type": "header", "content": "颜色" },
+    { "type": "color", "id": "background_color", "label": "背景颜色", "default": "#31251c" },
+    { "type": "color", "id": "text_color", "label": "标题颜色", "default": "#ffffff" },
+    { "type": "color", "id": "link_color", "label": "正文与链接颜色", "default": "#d6d3d2" },
+    { "type": "color", "id": "link_hover_color", "label": "链接悬停颜色", "default": "#ffffff" },
+    { "type": "color", "id": "border_color", "label": "分隔线颜色", "default": "#5a5149" },
+    {"type": "color", "id": "copyright_color", "label": "版权文字颜色", "default": "#ada8a4"},
+    {"type": "header", "content": "字体排版"},
+    {"type": "range", "id": "title_size", "min": 10, "max": 24, "step": 1, "unit": "px", "label": "菜单标题字号（桌面）", "default": 16},
+    {"type": "range", "id": "title_size_mobile", "min": 10, "max": 24, "step": 1, "unit": "px", "label": "菜单标题字号（移动端）", "default": 14},
+    {"type": "range", "id": "body_size", "min": 10, "max": 24, "step": 1, "unit": "px", "label": "正文与国家选择器字号（桌面）", "default": 16},
+    {"type": "range", "id": "body_size_mobile", "min": 10, "max": 24, "step": 1, "unit": "px", "label": "正文与国家选择器字号（移动端）", "default": 14},
+    {"type": "range", "id": "copyright_size", "min": 10, "max": 24, "step": 1, "unit": "px", "label": "版权字号（桌面）", "default": 16},
+    {"type": "range", "id": "copyright_size_mobile", "min": 10, "max": 24, "step": 1, "unit": "px", "label": "版权字号（移动端）", "default": 12},
+    {"type": "select", "id": "title_weight", "label": "菜单标题字重", "options": [{"value": "400", "label": "400"}, {"value": "500", "label": "500"}, {"value": "600", "label": "600"}, {"value": "700", "label": "700"}], "default": "700"},
+    {"type": "select", "id": "body_weight", "label": "正文与版权字重", "options": [{"value": "400", "label": "400"}, {"value": "500", "label": "500"}, {"value": "600", "label": "600"}, {"value": "700", "label": "700"}], "default": "500"},
     {
       "type": "header",
       "content": "品牌"
@@ -294,6 +305,7 @@
       "id": "logo",
       "label": "Logo 图片"
     },
+    { "type": "checkbox", "id": "monochrome_logo", "label": "Logo 显示为白色", "default": true, "info": "适用于透明背景 Logo；关闭可保留图片原色。" },
     {
       "type": "text",
       "id": "trustpilot_url",
@@ -308,7 +320,7 @@
     {
       "type": "checkbox",
       "id": "show_dmca_badge",
-      "default": true,
+      "default": false,
       "label": "显示 DMCA 标识"
     },
     {
@@ -324,6 +336,16 @@
     {
       "type": "header",
       "content": "手风琴"
+    },
+    {
+      "type": "select",
+      "id": "mobile_menu_layout",
+      "label": "移动端菜单布局",
+      "default": "expanded",
+      "options": [
+        { "value": "expanded", "label": "两列展开" },
+        { "value": "accordion", "label": "手风琴" }
+      ]
     },
     {
       "type": "checkbox",
@@ -345,7 +367,7 @@
       "type": "select",
       "id": "social_alignment",
       "label": "社交媒体对齐方式",
-      "default": "center",
+      "default": "left",
       "options": [
         { "value": "left", "label": "左对齐" },
         { "value": "center", "label": "居中" },
@@ -414,7 +436,7 @@
     {
       "type": "checkbox",
       "id": "show_policy",
-      "default": true,
+      "default": false,
       "label": "显示政策链接"
     }
   ],
