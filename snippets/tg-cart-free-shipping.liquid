@@ -26,10 +26,11 @@
   <div
     class="tg-cart-free-shipping{% if surface == 'drawer' %} tg-cart-drawer__progress{% else %} tg-cart-summary__shipping-progress{% endif %}"
     data-tg-cart-free-shipping
-    style="--tg-cart-free-shipping-progress: {{ tg_cart_shipping_progress }}%; --tg-cart-free-shipping-color: {{ block.settings.progress_color | default: '#A50C43' }}; --tg-cart-free-shipping-track: {{ block.settings.track_color | default: '#E9DCE1' }}; --tg-cart-free-shipping-surface: {{ block.settings.surface_color | default: '#F7F5F6' }}; --tg-cart-free-shipping-border-width: {% if block.settings.show_border %}1px{% else %}0{% endif %}; --tg-cart-free-shipping-border-color: {{ block.settings.border_color | default: '#E6E1E3' }}; --tg-cart-free-shipping-padding-inline: {{ block.settings.padding_inline | default: 0 }}px;"
+    style="--tg-cart-free-shipping-gradient-start: {{ block.settings.gradient_start_color | default: '#FD872E' }}; --tg-cart-free-shipping-progress: {{ tg_cart_shipping_progress }}%; --tg-cart-free-shipping-color: {{ block.settings.progress_color | default: '#A50C43' }}; --tg-cart-free-shipping-track: {{ block.settings.track_color | default: '#E9DCE1' }}; --tg-cart-free-shipping-surface: {{ block.settings.surface_color | default: '#F7F5F6' }}; --tg-cart-free-shipping-border-width: {% if block.settings.show_border %}1px{% else %}0{% endif %}; --tg-cart-free-shipping-border-color: {{ block.settings.border_color | default: '#E6E1E3' }}; --tg-cart-free-shipping-padding-inline: {{ block.settings.padding_inline | default: 0 }}px;"
     role="status"
     aria-live="polite"
   >
+    {% if surface == 'page' %}<span class="tg-cart-free-shipping__truck" aria-hidden="true">{{ 'tg-cart-truck.svg' | inline_asset_content }}</span>{% endif %}
     <p class="tg-cart-free-shipping__message{% if surface == 'drawer' %} tg-cart-drawer__progress-message{% endif %}">
       {%- if tg_cart_shipping_remaining_cents > 0 -%}
         {%- capture tg_cart_shipping_remaining_money -%}{{- tg_cart_shipping_remaining_cents | money -}}{%- endcapture -%}
@@ -55,5 +56,15 @@
     >
       <span class="tg-cart-free-shipping__value{% if surface == 'drawer' %} tg-cart-drawer__progress-value{% endif %}"></span>
     </div>
+    {% if surface == 'page' %}
+      <div class="tg-cart-free-shipping__scale" aria-hidden="true"><span>{{ 0 | money_without_trailing_zeros }}</span><span>{{ tg_cart_shipping_target_cents | money_without_trailing_zeros }}</span></div>
+      <div class="tg-cart-free-shipping__parcel" aria-hidden="true">
+        {% if block.settings.parcel_image != blank %}
+          {{ block.settings.parcel_image | image_url: width: 160 | image_tag: widths: '80, 160', sizes: '80px', loading: 'lazy', alt: '' }}
+        {% else %}
+          <img src="{{ 'tg-cart-shipping-parcel.png' | asset_url }}" alt="" width="80" height="74" loading="lazy">
+        {% endif %}
+      </div>
+    {% endif %}
   </div>
 {%- endif -%}

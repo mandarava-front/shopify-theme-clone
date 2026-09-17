@@ -1,7 +1,7 @@
 <section class="tg-cart-payment">
   {%- if block.settings.show_secure_line and block.settings.secure_text != blank -%}
     <p class="tg-cart-payment__secure">
-      <span class="svg-wrapper" aria-hidden="true">{{- 'icon-padlock.svg' | inline_asset_content -}}</span>
+      <span class="svg-wrapper" aria-hidden="true">{% if surface == 'page' %}{{ 'tg-cart-secure.svg' | inline_asset_content }}{% else %}{{- 'icon-padlock.svg' | inline_asset_content -}}{% endif %}</span>
       {{ block.settings.secure_text | escape }}
     </p>
   {%- endif -%}

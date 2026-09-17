@@ -3,16 +3,25 @@
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
 {{ 'component-discounts.css' | asset_url | stylesheet_tag }}
 {% if section.settings.enable_tg_cart_page_style %}
+  {%- assign tg_cart_font_medium = section.settings.tg_cart_font | font_modify: 'weight', '500' -%}
+  {%- assign tg_cart_font_semibold = section.settings.tg_cart_font | font_modify: 'weight', '600' -%}
   {%- assign tg_cart_font_bold = section.settings.tg_cart_font | font_modify: 'weight', '700' -%}
   {% style %}
     {{ section.settings.tg_cart_font | font_face: font_display: 'swap' }}
+    {{ tg_cart_font_medium | font_face: font_display: 'swap' }}
+    {{ tg_cart_font_semibold | font_face: font_display: 'swap' }}
     {{ tg_cart_font_bold | font_face: font_display: 'swap' }}
   {% endstyle %}
   {{ 'tg-cart-page.css' | asset_url | stylesheet_tag }}
+  {{ 'tg-cart-summary-design.css' | asset_url | stylesheet_tag }}
 {% endif %}
 <script src="{{ 'tg-cart-addons.js' | asset_url }}" defer="defer"></script>
 
 {%- liquid
+  assign tg_cart_summary_surface = blank
+  if section.settings.enable_tg_cart_page_style
+    assign tg_cart_summary_surface = 'page'
+  endif
   assign tg_cart_protection_requires_terms = false
   assign tg_cart_terms_accepted = false
 
@@ -46,7 +55,7 @@
   class="gradient color-{{ section.settings.color_scheme }}{% if section.settings.enable_tg_cart_page_style %} tg-cart-footer{% if section.settings.tg_cart_summary_sticky %} tg-cart-footer--sticky{% endif %}{% endif %}{% if cart == empty %} is-empty{% endif %}"
   id="main-cart-footer"
   data-id="{{ section.id }}"
-  {% if section.settings.enable_tg_cart_page_style %}style="--tg-cart-accent: {{ section.settings.tg_cart_page_accent_color }}; --tg-cart-surface: {{ section.settings.tg_cart_page_surface_color }}; --tg-cart-card: {{ section.settings.tg_cart_page_card_color }}; --tg-cart-summary-surface: {{ section.settings.tg_cart_summary_surface_color }}; --tg-cart-border: {{ section.settings.tg_cart_page_border_color }}; --tg-cart-text: {{ section.settings.tg_cart_page_text_color }}; --tg-cart-muted: {{ section.settings.tg_cart_page_muted_color }}; --tg-cart-total-price-color: {{ section.settings.tg_cart_total_price_color }}; --tg-cart-radius: {{ section.settings.tg_cart_card_radius }}px; --tg-cart-summary-width: {{ section.settings.tg_cart_summary_width }}px; --tg-cart-summary-padding-block: {{ section.settings.tg_cart_summary_padding_block }}px; --tg-cart-summary-padding-inline: {{ section.settings.tg_cart_summary_padding_inline }}px; --tg-cart-font: {{ section.settings.tg_cart_font.family }}, {{ section.settings.tg_cart_font.fallback_families }};"{% endif %}
+  {% if section.settings.enable_tg_cart_page_style %}style="--tg-cart-section-padding-top: {{ section.settings.padding_top }}px; --tg-cart-section-padding-bottom: {{ section.settings.padding_bottom }}px; --tg-cart-accent: {{ section.settings.tg_cart_page_accent_color }}; --tg-cart-surface: {{ section.settings.tg_cart_page_surface_color }}; --tg-cart-card: {{ section.settings.tg_cart_page_card_color }}; --tg-cart-summary-surface: {{ section.settings.tg_cart_summary_surface_color }}; --tg-cart-border: {{ section.settings.tg_cart_page_border_color }}; --tg-cart-text: {{ section.settings.tg_cart_page_text_color }}; --tg-cart-muted: {{ section.settings.tg_cart_page_muted_color }}; --tg-cart-total-price-color: {{ section.settings.tg_cart_total_price_color }}; --tg-cart-radius: {{ section.settings.tg_cart_card_radius }}px; --tg-cart-summary-width: {{ section.settings.tg_cart_summary_width }}px; --tg-cart-summary-padding-block: {{ section.settings.tg_cart_summary_padding_block }}px; --tg-cart-summary-padding-inline: {{ section.settings.tg_cart_summary_padding_inline }}px; --tg-cart-summary-radius-mobile: {{ section.settings.tg_cart_card_radius_mobile }}px; --tg-cart-summary-padding-inline-mobile: {{ section.settings.tg_cart_summary_padding_inline_mobile }}px; --tg-cart-total-size: {{ section.settings.tg_cart_total_font_size }}px; --tg-cart-total-size-mobile: {{ section.settings.tg_cart_total_font_size_mobile }}px; --tg-cart-shipping-font-size: {{ section.settings.tg_cart_shipping_font_size }}px; --tg-cart-shipping-font-size-mobile: {{ section.settings.tg_cart_shipping_font_size_mobile }}px; --tg-cart-payment-font-size: {{ section.settings.tg_cart_payment_font_size }}px; --tg-cart-secure-color: {{ section.settings.tg_cart_secure_color }}; --tg-cart-font: {{ section.settings.tg_cart_font.family }}, {{ section.settings.tg_cart_font.fallback_families }};"{% endif %}
 >
   <div class="page-width">
     <div class="cart__footer tg-cart-summary isolate section-{{ section.id }}-padding">
@@ -71,32 +80,18 @@
               {% render block %}
             {%- else -%}
               <div
-                class="tg-cart-summary__block"
+                class="tg-cart-summary__block tg-cart-summary__block--{{ block.type }}"
                 style="--tg-cart-block-width: {{ block.settings.block_width | default: 100 }}%; --tg-cart-block-margin-top: {{ block.settings.margin_top | default: 0 }}px; --tg-cart-block-margin-bottom: {{ block.settings.margin_bottom | default: 0 }}px;"
                 {% if block.type == 'free_shipping_progress' %}data-tg-cart-free-shipping-page-block{% endif %}
                 {{ block.shopify_attributes }}
               >
               {%- case block.type -%}
                 {%- when 'promotion' -%}
-                  {% render 'tg-cart-promotion', block: block, cart: cart %}
+                  {% render 'tg-cart-promotion', block: block, cart: cart, surface: tg_cart_summary_surface %}
                 {%- when 'free_shipping_progress' -%}
-                  {% render 'tg-cart-free-shipping', block: block, cart: cart, surface: 'page' %}
+                  {% render 'tg-cart-free-shipping', block: block, cart: cart, surface: tg_cart_summary_surface %}
                 {%- when 'subtotal' -%}
                   <div class="js-contents tg-cart-summary__totals">
-                <div>
-                  {%- if block.settings.show_cart_discounts != false and cart.cart_level_discount_applications.size > 0 -%}
-                    <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
-                      {%- for discount in cart.cart_level_discount_applications -%}
-                        <li class="discounts__discount discounts__discount--position">
-                          {{- 'icon-discount.svg' | inline_asset_content -}}
-                          {{ discount.title | escape }}
-                          (-{{ discount.total_allocated_amount | money }})
-                        </li>
-                      {%- endfor -%}
-                    </ul>
-                  {%- endif -%}
-                </div>
-
                 <div class="totals tg-cart-summary__total-row">
                   <h2 class="totals__total">
                     {% if block.settings.label != blank %}
@@ -115,51 +110,6 @@
                   </p>
                 </div>
 
-                {% if block.settings.show_tax_note %}
-                  <small class="tax-note tg-cart-summary__tax-note caption-large rte">
-                  {% if block.settings.custom_tax_note != blank %}
-                    {{ block.settings.custom_tax_note | escape }}
-                  {% else %}
-                  {%- if cart.duties_included and cart.taxes_included -%}
-                    {%- if shop.shipping_policy.body == blank -%}
-                      {{ 'sections.cart.duties_and_taxes_included_shipping_at_checkout_without_policy' | t }}
-                    {%- else -%}
-                      {{
-                        'sections.cart.duties_and_taxes_included_shipping_at_checkout_with_policy_html'
-                        | t: link: shop.shipping_policy.url
-                      }}
-                    {%- endif -%}
-                  {%- elsif cart.duties_included == false and cart.taxes_included -%}
-                    {%- if shop.shipping_policy.body == blank -%}
-                      {{ 'sections.cart.taxes_included_shipping_at_checkout_without_policy' | t }}
-                    {%- else -%}
-                      {{
-                        'sections.cart.taxes_included_shipping_at_checkout_with_policy_html'
-                        | t: link: shop.shipping_policy.url
-                      }}
-                    {%- endif -%}
-                  {%- elsif cart.duties_included and cart.taxes_included == false -%}
-                    {%- if shop.shipping_policy.body == blank -%}
-                      {{ 'sections.cart.duties_included_taxes_at_checkout_shipping_at_checkout_without_policy' | t }}
-                    {%- else -%}
-                      {{
-                        'sections.cart.duties_included_taxes_at_checkout_shipping_at_checkout_with_policy_html'
-                        | t: link: shop.shipping_policy.url
-                      }}
-                    {%- endif -%}
-                  {%- elsif cart.duties_included == false and cart.taxes_included == false -%}
-                    {%- if shop.shipping_policy.body == blank -%}
-                      {{ 'sections.cart.taxes_at_checkout_shipping_at_checkout_without_policy' | t }}
-                    {%- else -%}
-                      {{
-                        'sections.cart.taxes_at_checkout_shipping_at_checkout_with_policy_html'
-                        | t: link: shop.shipping_policy.url
-                      }}
-                    {%- endif -%}
-                  {%- endif -%}
-                  {% endif %}
-                  </small>
-                {% endif %}
                   </div>
                 {%- when 'buttons' -%}
                   <div
@@ -200,7 +150,7 @@
                     </div>
                   {%- endif -%}
                 {%- when 'payment_methods' -%}
-                  {% render 'tg-cart-payment-methods', block: block %}
+                  {% render 'tg-cart-payment-methods', block: block, surface: tg_cart_summary_surface %}
                 {%- when 'shipping_protection' -%}
                   {% render 'tg-cart-shipping-protection', block: block, cart: cart, surface: 'page' %}
                 {%- when 'assurance' -%}
@@ -228,7 +178,7 @@
         {% for block in section.blocks %}
           {%- if block.type == 'buyer_protection' -%}
             <div
-              class="tg-cart-summary__block"
+              class="tg-cart-summary__block tg-cart-summary__block--{{ block.type }}"
               style="--tg-cart-block-width: {{ block.settings.block_width | default: 100 }}%; --tg-cart-block-margin-top: {{ block.settings.margin_top | default: 0 }}px; --tg-cart-block-margin-bottom: {{ block.settings.margin_bottom | default: 0 }}px;"
               {{ block.shopify_attributes }}
             >
@@ -269,7 +219,9 @@
   "name": "t:sections.tg_cart_editor.labels.cart_summary",
   "class": "cart__footer-wrapper tg-cart-footer-section",
   "enabled_on": {
-    "templates": ["cart"]
+    "templates": [
+      "cart"
+    ]
   },
   "settings": [
     {
@@ -277,7 +229,7 @@
       "id": "enable_tg_cart_page_style",
       "label": "t:sections.tg_cart_editor.labels.enable_prints10_summary",
       "info": "t:sections.tg_cart_editor.labels.keep_shopify_checkout_and_cart_updates",
-      "default": false
+      "default": true
     },
     {
       "type": "checkbox",
@@ -289,7 +241,7 @@
       "type": "checkbox",
       "id": "tg_cart_show_continue_link",
       "label": "t:sections.tg_cart_editor.labels.show_continue_shopping_link",
-      "default": true
+      "default": false
     },
     {
       "type": "text",
@@ -306,7 +258,7 @@
       "type": "checkbox",
       "id": "tg_cart_summary_sticky",
       "label": "t:sections.tg_cart_editor.labels.sticky_summary_on_desktop",
-      "default": true
+      "default": false
     },
     {
       "type": "range",
@@ -316,7 +268,7 @@
       "step": 10,
       "unit": "px",
       "label": "t:sections.tg_cart_editor.labels.summary_width",
-      "default": 480
+      "default": 460
     },
     {
       "type": "header",
@@ -350,13 +302,13 @@
       "type": "font_picker",
       "id": "tg_cart_font",
       "label": "t:sections.tg_cart_editor.labels.cart_font",
-      "default": "poppins_n4"
+      "default": "quicksand_n5"
     },
     {
       "type": "color",
       "id": "tg_cart_page_accent_color",
       "label": "t:sections.tg_cart_editor.labels.accent_color",
-      "default": "#A50C43"
+      "default": "#F36352"
     },
     {
       "type": "color",
@@ -368,37 +320,37 @@
       "type": "color",
       "id": "tg_cart_page_card_color",
       "label": "t:sections.tg_cart_editor.labels.item_card_background",
-      "default": "#ffffff"
+      "default": "#F5F5F5"
     },
     {
       "type": "color",
       "id": "tg_cart_summary_surface_color",
       "label": "t:sections.tg_cart_editor.labels.summary_background",
-      "default": "#F7F5F6"
+      "default": "#F5F5F5"
     },
     {
       "type": "color",
       "id": "tg_cart_total_price_color",
       "label": "t:sections.tg_cart_editor.labels.total_price_color",
-      "default": "#A50C43"
+      "default": "#000000"
     },
     {
       "type": "color",
       "id": "tg_cart_page_border_color",
       "label": "t:sections.tg_cart_editor.labels.border_color",
-      "default": "#E6E1E3"
+      "default": "#DDDDDD"
     },
     {
       "type": "color",
       "id": "tg_cart_page_text_color",
       "label": "t:sections.tg_cart_editor.labels.primary_text_color",
-      "default": "#1F2933"
+      "default": "#000000"
     },
     {
       "type": "color",
       "id": "tg_cart_page_muted_color",
       "label": "t:sections.tg_cart_editor.labels.secondary_text_color",
-      "default": "#667085"
+      "default": "#666666"
     },
     {
       "type": "range",
@@ -408,7 +360,7 @@
       "step": 2,
       "unit": "px",
       "label": "t:sections.tg_cart_editor.labels.card_corner_radius",
-      "default": 8
+      "default": 16
     },
     {
       "type": "color_scheme",
@@ -419,7 +371,7 @@
     {
       "type": "header",
       "content": "t:sections.all.padding.section_padding_heading"
-    },    
+    },
     {
       "type": "range",
       "id": "padding_top",
@@ -428,7 +380,7 @@
       "step": 4,
       "unit": "px",
       "label": "t:sections.all.padding.padding_top",
-      "default": 40
+      "default": 0
     },
     {
       "type": "range",
@@ -438,7 +390,83 @@
       "step": 4,
       "unit": "px",
       "label": "t:sections.all.padding.padding_bottom",
-      "default": 40
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_card_radius_mobile",
+      "label": "Mobile summary corner radius",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_summary_padding_inline_mobile",
+      "label": "Mobile summary horizontal padding",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_total_font_size",
+      "label": "Subtotal text size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_total_font_size_mobile",
+      "label": "Mobile subtotal text size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_shipping_font_size",
+      "label": "Free shipping text size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_shipping_font_size_mobile",
+      "label": "Mobile free shipping text size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_payment_font_size",
+      "label": "Secure payment text size",
+      "min": 10,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "tg_cart_secure_color",
+      "label": "Secure payment text color",
+      "default": "#188D53"
     }
   ],
   "blocks": [
@@ -452,7 +480,7 @@
           "id": "target",
           "label": "t:sections.tg_cart_editor.labels.free_shipping_threshold",
           "info": "t:sections.tg_cart_editor.labels.set_to_0_to_hide_this_component_the_amount_uses_the_shop_currency",
-          "default": 75
+          "default": 69
         },
         {
           "type": "text",
@@ -471,19 +499,19 @@
           "type": "color",
           "id": "progress_color",
           "label": "t:sections.tg_cart_editor.labels.progress_color",
-          "default": "#A50C43"
+          "default": "#FD5225"
         },
         {
           "type": "color",
           "id": "track_color",
           "label": "t:sections.tg_cart_editor.labels.progress_track_color",
-          "default": "#E9DCE1"
+          "default": "#FDD4CD"
         },
         {
           "type": "color",
           "id": "surface_color",
           "label": "t:sections.tg_cart_editor.labels.component_background_color",
-          "default": "#F7F5F6"
+          "default": "#F5F5F5"
         },
         {
           "type": "checkbox",
@@ -529,7 +557,7 @@
           "step": 2,
           "unit": "px",
           "label": "t:sections.tg_cart_editor.labels.top_margin",
-          "default": 24
+          "default": 0
         },
         {
           "type": "range",
@@ -540,6 +568,17 @@
           "unit": "px",
           "label": "t:sections.tg_cart_editor.labels.bottom_margin",
           "default": 0
+        },
+        {
+          "type": "color",
+          "id": "gradient_start_color",
+          "label": "Progress gradient start",
+          "default": "#FD872E"
+        },
+        {
+          "type": "image_picker",
+          "id": "parcel_image",
+          "label": "Mobile parcel illustration"
         }
       ]
     },
@@ -557,24 +596,8 @@
         {
           "type": "color",
           "id": "total_price_color",
-          "label": "t:sections.tg_cart_editor.labels.total_price_color"
-        },
-        {
-          "type": "checkbox",
-          "id": "show_tax_note",
-          "label": "t:sections.tg_cart_editor.labels.show_tax_and_shipping_note",
-          "default": false
-        },
-        {
-          "type": "textarea",
-          "id": "custom_tax_note",
-          "label": "t:sections.tg_cart_editor.labels.custom_tax_and_shipping_note"
-        },
-        {
-          "type": "checkbox",
-          "id": "show_cart_discounts",
-          "label": "Tg | Show cart discounts",
-          "default": true
+          "label": "t:sections.tg_cart_editor.labels.total_price_color",
+          "default": "#000000"
         },
         {
           "type": "range",
@@ -598,7 +621,7 @@
           "step": 2,
           "unit": "px",
           "label": "t:sections.tg_cart_editor.labels.top_margin",
-          "default": 24
+          "default": 20
         },
         {
           "type": "range",
@@ -637,13 +660,13 @@
           "type": "color",
           "id": "checkout_background_color",
           "label": "t:sections.tg_cart_editor.labels.button_background",
-          "default": "#A50C43"
+          "default": "#F36352"
         },
         {
           "type": "color",
           "id": "checkout_hover_background_color",
           "label": "t:sections.tg_cart_editor.labels.button_hover_background",
-          "default": "#850936"
+          "default": "#E65747"
         },
         {
           "type": "color",
@@ -655,7 +678,7 @@
           "type": "color",
           "id": "checkout_border_color",
           "label": "t:sections.tg_cart_editor.labels.button_border_color",
-          "default": "#A50C43"
+          "default": "#F36352"
         },
         {
           "type": "range",
@@ -671,11 +694,11 @@
           "type": "range",
           "id": "checkout_radius",
           "min": 0,
-          "max": 24,
-          "step": 1,
+          "max": 100,
+          "step": 2,
           "unit": "px",
           "label": "t:sections.tg_cart_editor.labels.button_corner_radius",
-          "default": 9
+          "default": 100
         },
         {
           "type": "range",
@@ -685,7 +708,7 @@
           "step": 2,
           "unit": "px",
           "label": "t:sections.tg_cart_editor.labels.button_height",
-          "default": 54
+          "default": 50
         },
         {
           "type": "range",
@@ -695,7 +718,7 @@
           "step": 1,
           "unit": "px",
           "label": "t:sections.tg_cart_editor.labels.button_font_size",
-          "default": 24
+          "default": 18
         },
         {
           "type": "range",
@@ -719,7 +742,7 @@
           "step": 2,
           "unit": "px",
           "label": "t:sections.tg_cart_editor.labels.top_margin",
-          "default": 24
+          "default": 16
         },
         {
           "type": "range",
@@ -775,7 +798,7 @@
           "type": "checkbox",
           "id": "tier_1_enabled",
           "label": "t:sections.tg_cart_editor.labels.enable_tier_1",
-          "default": false
+          "default": true
         },
         {
           "type": "range",
@@ -796,7 +819,7 @@
           "type": "checkbox",
           "id": "tier_2_enabled",
           "label": "t:sections.tg_cart_editor.labels.enable_tier_2",
-          "default": false
+          "default": true
         },
         {
           "type": "range",
@@ -817,7 +840,7 @@
           "type": "checkbox",
           "id": "tier_3_enabled",
           "label": "t:sections.tg_cart_editor.labels.enable_tier_3",
-          "default": false
+          "default": true
         },
         {
           "type": "range",
@@ -888,31 +911,31 @@
           "type": "color",
           "id": "promotion_background_start_color",
           "label": "t:sections.tg_cart_editor.labels.background_start_color",
-          "default": "#F9EEF2"
+          "default": "#F5F5F5"
         },
         {
           "type": "color",
           "id": "promotion_background_end_color",
           "label": "t:sections.tg_cart_editor.labels.background_end_color",
-          "default": "#F9EEF2"
+          "default": "#F5F5F5"
         },
         {
           "type": "color",
           "id": "promotion_text_color",
           "label": "t:sections.tg_cart_editor.labels.text_color",
-          "default": "#6E1535"
+          "default": "#000000"
         },
         {
           "type": "color",
           "id": "promotion_link_color",
           "label": "t:sections.tg_cart_editor.labels.link_color",
-          "default": "#A50C43"
+          "default": "#F36352"
         },
         {
           "type": "color",
           "id": "promotion_border_color",
           "label": "t:sections.tg_cart_editor.labels.border_color",
-          "default": "#E8CBD5"
+          "default": "#F36352"
         },
         {
           "type": "range",
@@ -922,7 +945,7 @@
           "step": 1,
           "unit": "px",
           "label": "t:sections.tg_cart_editor.labels.border_width",
-          "default": 1
+          "default": 0
         },
         {
           "type": "range",
@@ -932,7 +955,7 @@
           "step": 1,
           "unit": "px",
           "label": "t:sections.tg_cart_editor.labels.corner_radius",
-          "default": 8
+          "default": 0
         },
         {
           "type": "range",
@@ -942,7 +965,7 @@
           "step": 1,
           "unit": "px",
           "label": "t:sections.tg_cart_editor.labels.text_size",
-          "default": 16
+          "default": 14
         },
         {
           "type": "range",
@@ -966,7 +989,7 @@
           "step": 2,
           "unit": "px",
           "label": "t:sections.tg_cart_editor.labels.top_margin",
-          "default": 24
+          "default": 20
         },
         {
           "type": "range",
@@ -977,6 +1000,74 @@
           "unit": "px",
           "label": "t:sections.tg_cart_editor.labels.bottom_margin",
           "default": 0
+        },
+        {
+          "type": "color",
+          "id": "tier_inactive_color",
+          "label": "Incomplete tier color",
+          "default": "#999999"
+        },
+        {
+          "type": "color",
+          "id": "tier_background_color",
+          "label": "Tier background color",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "range",
+          "id": "promotion_font_size_mobile",
+          "label": "Mobile promotion text size",
+          "min": 12,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "default": 14
+        },
+        {
+          "type": "range",
+          "id": "tier_label_size",
+          "label": "Tier quantity text size",
+          "min": 10,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "default": 14
+        },
+        {
+          "type": "range",
+          "id": "tier_label_size_mobile",
+          "label": "Mobile tier quantity text size",
+          "min": 10,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "default": 12
+        },
+        {
+          "type": "range",
+          "id": "tier_benefit_size",
+          "label": "Tier benefit text size",
+          "min": 10,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "tier_benefit_size_mobile",
+          "label": "Mobile tier benefit text size",
+          "min": 10,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "default": 14
+        },
+        {
+          "type": "text",
+          "id": "tier_quantity_template",
+          "label": "Tier quantity label ([count])",
+          "default": "[count] items"
         }
       ]
     },
@@ -1000,7 +1091,6 @@
         {
           "type": "text",
           "id": "heading",
-          "default": "Payment Methods",
           "label": "t:sections.tg_cart_editor.labels.payment_heading"
         },
         {
@@ -1031,7 +1121,7 @@
           "step": 2,
           "unit": "px",
           "label": "t:sections.tg_cart_editor.labels.top_margin",
-          "default": 24
+          "default": 16
         },
         {
           "type": "range",
@@ -1094,13 +1184,13 @@
           "type": "color",
           "id": "surface_color",
           "label": "t:sections.tg_cart_editor.labels.card_background_color",
-          "default": "#FFFFFF"
+          "default": "#F5F5F5"
         },
         {
           "type": "checkbox",
           "id": "show_border",
           "label": "t:sections.tg_cart_editor.labels.show_card_border",
-          "default": true
+          "default": false
         },
         {
           "type": "color",
@@ -1122,13 +1212,13 @@
           "type": "color",
           "id": "toggle_off_color",
           "label": "t:sections.tg_cart_editor.labels.toggle_off_color",
-          "default": "#D4CED1"
+          "default": "#CCCCCC"
         },
         {
           "type": "color",
           "id": "toggle_on_color",
           "label": "t:sections.tg_cart_editor.labels.toggle_on_color",
-          "default": "#A50C43"
+          "default": "#F36352"
         },
         {
           "type": "checkbox",
@@ -1164,7 +1254,7 @@
           "step": 2,
           "unit": "px",
           "label": "t:sections.tg_cart_editor.labels.top_margin",
-          "default": 24
+          "default": 20
         },
         {
           "type": "range",

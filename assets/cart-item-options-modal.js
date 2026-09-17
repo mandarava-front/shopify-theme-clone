@@ -109,17 +109,28 @@ if (!customElements.get('cart-item-options-modal')) {
       this.setAttribute('open', '');
       this.opener?.setAttribute('aria-expanded', 'true');
 
-      if (typeof trapFocus === 'function') {
-        trapFocus(this, this.dialog);
-      } else {
-        this.dialog?.focus();
-      }
+      // Wait for the open state to become visible before moving focus.
+      // Focusing during the hidden-to-visible transition can leave focus on
+      // the opener, preventing Escape and keyboard navigation in the dialog.
+      const focusDialog = () => {
+        if (!this.isConnected || !this.hasAttribute('open')) return;
+        if (this.contains(document.activeElement)) return;
+        if (typeof trapFocus === 'function') {
+          trapFocus(this, this.dialog);
+        } else {
+          this.dialog?.focus();
+        }
+      };
+      requestAnimationFrame(focusDialog);
+      clearTimeout(this.focusTimer);
+      this.focusTimer = setTimeout(focusDialog, 200);
 
       window.pauseAllMedia?.();
     }
 
     hide(restoreFocus = true) {
       if (!this.hasAttribute('open')) return;
+      clearTimeout(this.focusTimer);
 
       this.removeAttribute('open');
       this.opener?.setAttribute('aria-expanded', 'false');

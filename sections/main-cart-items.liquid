@@ -5,12 +5,29 @@
 {{ 'component-discounts.css' | asset_url | stylesheet_tag }}
 {{ 'quantity-popover.css' | asset_url | stylesheet_tag }}
 {% if section.settings.enable_tg_cart_page_style %}
+  {%- assign tg_cart_font_semibold = section.settings.tg_cart_font | font_modify: 'weight', '600' -%}
   {%- assign tg_cart_font_bold = section.settings.tg_cart_font | font_modify: 'weight', '700' -%}
   {% style %}
     {{ section.settings.tg_cart_font | font_face: font_display: 'swap' }}
+    {{ tg_cart_font_semibold | font_face: font_display: 'swap' }}
     {{ tg_cart_font_bold | font_face: font_display: 'swap' }}
+    main[data-template='cart']:has(.tg-cart-page) {
+      --tg-cart-layout-width: {{ section.settings.tg_cart_layout_width }}px;
+      --tg-cart-column-gap: {{ section.settings.tg_cart_column_gap }}px;
+      --tg-cart-mobile-gutter: {{ section.settings.tg_cart_mobile_gutter }}px;
+      --tg-cart-bottom-space: {{ section.settings.tg_cart_bottom_space }}px;
+      --tg-cart-top-space: {{ section.settings.tg_cart_top_space }}px;
+    }
+    @media (max-width: 989px) {
+      main[data-template='cart']:has(.tg-cart-page) {
+        --tg-cart-bottom-space: {{ section.settings.tg_cart_bottom_space_mobile }}px;
+        --tg-cart-top-space: {{ section.settings.tg_cart_top_space_mobile }}px;
+      }
+    }
+
   {% endstyle %}
   {{ 'tg-cart-page.css' | asset_url | stylesheet_tag }}
+  {{ 'tg-cart-items-design.css' | asset_url | stylesheet_tag }}
   <script src="{{ 'tg-cart-page.js' | asset_url }}" defer="defer"></script>
 {% endif %}
 
@@ -99,7 +116,7 @@
 
 <cart-items
   class="gradient color-{{ section.settings.color_scheme }} isolate{% if section.settings.enable_tg_cart_page_style %} tg-cart-page{% endif %}{% if cart == empty %} is-empty{% else %} section-{{ section.id }}-padding{% endif %}"
-  {% if section.settings.enable_tg_cart_page_style %}style="--tg-cart-accent: {{ section.settings.tg_cart_page_accent_color }}; --tg-cart-surface: {{ section.settings.tg_cart_page_surface_color }}; --tg-cart-card: {{ section.settings.tg_cart_page_card_color }}; --tg-cart-border: {{ section.settings.tg_cart_page_border_color }}; --tg-cart-text: {{ section.settings.tg_cart_page_text_color }}; --tg-cart-muted: {{ section.settings.tg_cart_page_muted_color }}; --tg-cart-radius: {{ section.settings.tg_cart_card_radius }}px; --tg-cart-font: {{ section.settings.tg_cart_font.family }}, {{ section.settings.tg_cart_font.fallback_families }}; --tg-cart-empty-button-background: {{ section.settings.empty_button_background_color }}; --tg-cart-empty-button-hover-background: {{ section.settings.empty_button_hover_background_color }}; --tg-cart-empty-button-text: {{ section.settings.empty_button_text_color }}; --tg-cart-empty-button-border: {{ section.settings.empty_button_border_color }}; --tg-cart-empty-button-border-width: {{ section.settings.empty_button_border_width }}px; --tg-cart-empty-button-radius: {{ section.settings.empty_button_radius }}px; --tg-cart-empty-button-height: {{ section.settings.empty_button_height }}px; --tg-cart-empty-button-font-size: {{ section.settings.empty_button_font_size }}px;"{% endif %}
+  {% if section.settings.enable_tg_cart_page_style %}style="--tg-cart-radius-mobile: {{ section.settings.tg_cart_card_radius_mobile }}px; --tg-cart-image-size: {{ section.settings.tg_cart_image_size }}px; --tg-cart-image-size-mobile: {{ section.settings.tg_cart_image_size_mobile }}px; --tg-cart-title-size: {{ section.settings.tg_cart_title_size }}px; --tg-cart-title-size-mobile: {{ section.settings.tg_cart_title_size_mobile }}px; --tg-cart-detail-size: {{ section.settings.tg_cart_detail_size }}px; --tg-cart-detail-size-mobile: {{ section.settings.tg_cart_detail_size_mobile }}px; --tg-cart-price-size: {{ section.settings.tg_cart_price_size }}px; --tg-cart-price-size-mobile: {{ section.settings.tg_cart_price_size_mobile }}px; --tg-cart-compare-size: {{ section.settings.tg_cart_compare_size }}px; --tg-cart-compare-size-mobile: {{ section.settings.tg_cart_compare_size_mobile }}px; --tg-cart-item-gap: {{ section.settings.tg_cart_item_gap }}px; --tg-cart-item-padding: {{ section.settings.tg_cart_item_padding }}px; --tg-cart-item-padding-mobile: {{ section.settings.tg_cart_item_padding_mobile }}px; --tg-cart-price-color: {{ section.settings.tg_cart_price_color }}; --tg-cart-compare-color: {{ section.settings.tg_cart_compare_color }}; --tg-cart-accent: {{ section.settings.tg_cart_page_accent_color }}; --tg-cart-surface: {{ section.settings.tg_cart_page_surface_color }}; --tg-cart-card: {{ section.settings.tg_cart_page_card_color }}; --tg-cart-border: {{ section.settings.tg_cart_page_border_color }}; --tg-cart-text: {{ section.settings.tg_cart_page_text_color }}; --tg-cart-muted: {{ section.settings.tg_cart_page_muted_color }}; --tg-cart-radius: {{ section.settings.tg_cart_card_radius }}px; --tg-cart-font: {{ section.settings.tg_cart_font.family }}, {{ section.settings.tg_cart_font.fallback_families }}; --tg-cart-empty-button-background: {{ section.settings.empty_button_background_color }}; --tg-cart-empty-button-hover-background: {{ section.settings.empty_button_hover_background_color }}; --tg-cart-empty-button-text: {{ section.settings.empty_button_text_color }}; --tg-cart-empty-button-border: {{ section.settings.empty_button_border_color }}; --tg-cart-empty-button-border-width: {{ section.settings.empty_button_border_width }}px; --tg-cart-empty-button-radius: {{ section.settings.empty_button_radius }}px; --tg-cart-empty-button-height: {{ section.settings.empty_button_height }}px; --tg-cart-empty-button-font-size: {{ section.settings.empty_button_font_size }}px;"{% endif %}
   view-event-payload="{{ cart | standard_event_data: 'view', context: 'page' | escape }}"
 >
   <div class="page-width">
@@ -131,7 +148,7 @@
         href="{% if section.settings.enable_tg_cart_page_style and section.settings.tg_cart_continue_link != blank %}{{ section.settings.tg_cart_continue_link }}{% else %}{{ routes.all_products_collection_url }}{% endif %}"
         class="underlined-link tg-cart-page__continue"
       >
-        <span class="tg-cart-inline-icon" aria-hidden="true">{{- 'icon-discount.svg' | inline_asset_content -}}</span>
+        <span class="tg-cart-inline-icon" aria-hidden="true">{% if section.settings.enable_tg_cart_page_style %}{{- 'tg-cart-continue.svg' | inline_asset_content -}}{% else %}{{- 'icon-discount.svg' | inline_asset_content -}}{% endif %}</span>
         {% if section.settings.enable_tg_cart_page_style and section.settings.tg_cart_continue_label != blank %}
           {{ section.settings.tg_cart_continue_label | escape }}
         {% else %}
@@ -225,7 +242,7 @@
                             {% unless tg_cart_item_image_is_customized %}
                               srcset="{{ tg_cart_item_image | image_url: width: 180 }} 180w, {{ tg_cart_item_image | image_url: width: 360 }} 360w, {{ tg_cart_item_image | image_url: width: 600 }} 600w"
                             {% endunless %}
-                            sizes="(min-width: 990px) 168px, 104px"
+                            sizes="(min-width: 990px) {{ section.settings.tg_cart_image_size }}px, {{ section.settings.tg_cart_image_size_mobile }}px"
                             class="cart-item__image"
                             alt="{{ tg_cart_item_image_alt | escape }}"
                             {% if tg_cart_item_image_is_customized and tg_cart_preview_fallback_image != blank %}
@@ -261,6 +278,24 @@
                     </div>
 
                     <div class="cart-item-content tg-cart-item-content">
+                          <cart-remove-button
+                            id="Remove-{{ item.index | plus: 1 }}"
+                            data-index="{{ item.index | plus: 1 }}"
+                            {% assign can_remove = item.instructions.can_remove | default: true, allow_false: true %}
+                            {% if can_remove == false %}
+                              class="hidden"
+                            {% endif %}
+                          >
+                            <a
+                              href="{{ item.url_to_remove }}"
+                              class="button button--tertiary"
+                              aria-label="{{ 'sections.cart.remove_title' | t: title: item.title | escape }}"
+                            >
+                              <span class="svg-wrapper">
+                                {% if section.settings.enable_tg_cart_page_style %}{{- 'tg-cart-remove.svg' | inline_asset_content -}}{% else %}{{- 'icon-remove.svg' | inline_asset_content -}}{% endif %}
+                              </span>
+                            </a>
+                          </cart-remove-button>
                     <div class="cart-item__details tg-cart-item__details">
                       {%- if settings.show_vendor and section.settings.tg_cart_show_vendor -%}
                         <p class="caption-with-letter-spacing">{{ item.product.vendor }}</p>
@@ -364,7 +399,7 @@
                               </button>
                             {%- endif -%}
                             <quantity-input class="quantity cart-quantity">
-                              {% assign can_update_quantity = item.instructions.can_update_quantity | default: true %}
+                              {% assign can_update_quantity = item.instructions.can_update_quantity | default: true, allow_false: true %}
                               <button
                                 class="quantity__button"
                                 name="minus"
@@ -420,24 +455,7 @@
                               </button>
                             </quantity-input>
                           </div>
-                          <cart-remove-button
-                            id="Remove-{{ item.index | plus: 1 }}"
-                            data-index="{{ item.index | plus: 1 }}"
-                            {% assign can_remove = item.instructions.can_remove | default: true %}
-                            {% if can_remove == false %}
-                              class="hidden"
-                            {% endif %}
-                          >
-                            <a
-                              href="{{ item.url_to_remove }}"
-                              class="button button--tertiary"
-                              aria-label="{{ 'sections.cart.remove_title' | t: title: item.title | escape }}"
-                            >
-                              <span class="svg-wrapper">
-                                {{- 'icon-remove.svg' | inline_asset_content -}}
-                              </span>
-                            </a>
-                          </cart-remove-button>
+
                         </div>
                         {%- if has_qty_rules or has_vol_pricing -%}
                           <button
@@ -536,27 +554,23 @@
                     <div class="cart-item__totals right tg-cart-item__totals">
                       {%- render 'loading-spinner', initially_hidden: true -%}
                       <div class="cart-item__price-wrapper">
-                        {%- if item.original_line_price != item.final_line_price -%}
+                        {%- liquid
+                          assign tg_cart_compare_line_price = 0
+                          if item.original_line_price > item.final_line_price
+                            assign tg_cart_compare_line_price = item.original_line_price
+                          elsif item.variant.compare_at_price > item.final_price
+                            assign tg_cart_compare_line_price = item.variant.compare_at_price | times: item.quantity
+                          endif
+                        -%}
+                        {%- if tg_cart_compare_line_price > item.final_line_price -%}
                           <dl class="cart-item__discounted-prices">
-                            <dt class="visually-hidden">
-                              {{ 'products.product.price.regular_price' | t }}
-                            </dt>
-                            <dd>
-                              <s class="cart-item__old-price price price--end">
-                                {{ item.original_line_price | money }}
-                              </s>
-                            </dd>
-                            <dt class="visually-hidden">
-                              {{ 'products.product.price.sale_price' | t }}
-                            </dt>
-                            <dd class="price price--end">
-                              {{ item.final_line_price | money }}
-                            </dd>
+                            <dt class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</dt>
+                            <dd><s class="cart-item__old-price price price--end">{{ tg_cart_compare_line_price | money }}</s></dd>
+                            <dt class="visually-hidden">{{ 'products.product.price.sale_price' | t }}</dt>
+                            <dd class="price price--end">{{ item.final_line_price | money }}</dd>
                           </dl>
                         {%- else -%}
-                          <span class="price price--end">
-                            {{ item.original_line_price | money }}
-                          </span>
+                          <span class="price price--end">{{ item.final_line_price | money }}</span>
                         {%- endif -%}
 
                         {%- if item.variant.available and item.unit_price_measurement -%}
@@ -597,7 +611,7 @@
       "id": "enable_tg_cart_page_style",
       "label": "t:sections.tg_cart_editor.labels.enable_prints10_cart",
       "info": "t:sections.tg_cart_editor.labels.keep_shopify_cart_updates",
-      "default": false
+      "default": true
     },
     {
       "type": "header",
@@ -619,7 +633,7 @@
       "type": "text",
       "id": "tg_cart_continue_label",
       "label": "t:sections.tg_cart_editor.labels.continue_shopping_label",
-      "default": "Keep shopping"
+      "default": "Keep Shopping"
     },
     {
       "type": "url",
@@ -669,7 +683,7 @@
       "type": "color",
       "id": "tg_cart_expiry_background_color",
       "label": "倒计时背景颜色",
-      "default": "#f7f5f6"
+      "default": "#F5F5F5"
     },
     {
       "type": "textarea",
@@ -754,13 +768,13 @@
       "type": "color",
       "id": "empty_button_background_color",
       "label": "t:sections.tg_cart_editor.labels.button_background",
-      "default": "#A50C43"
+      "default": "#F36352"
     },
     {
       "type": "color",
       "id": "empty_button_hover_background_color",
       "label": "t:sections.tg_cart_editor.labels.button_hover_background",
-      "default": "#850936"
+      "default": "#D95142"
     },
     {
       "type": "color",
@@ -772,7 +786,7 @@
       "type": "color",
       "id": "empty_button_border_color",
       "label": "t:sections.tg_cart_editor.labels.button_border_color",
-      "default": "#A50C43"
+      "default": "#F36352"
     },
     {
       "type": "range",
@@ -782,7 +796,7 @@
       "step": 1,
       "unit": "px",
       "label": "t:sections.tg_cart_editor.labels.button_border_width",
-      "default": 1
+      "default": 0
     },
     {
       "type": "range",
@@ -792,7 +806,7 @@
       "step": 1,
       "unit": "px",
       "label": "t:sections.tg_cart_editor.labels.button_corner_radius",
-      "default": 8
+      "default": 24
     },
     {
       "type": "range",
@@ -802,7 +816,7 @@
       "step": 2,
       "unit": "px",
       "label": "t:sections.tg_cart_editor.labels.button_height",
-      "default": 48
+      "default": 50
     },
     {
       "type": "range",
@@ -812,7 +826,7 @@
       "step": 1,
       "unit": "px",
       "label": "t:sections.tg_cart_editor.labels.button_font_size",
-      "default": 16
+      "default": 18
     },
     {
       "type": "header",
@@ -822,13 +836,13 @@
       "type": "font_picker",
       "id": "tg_cart_font",
       "label": "t:sections.tg_cart_editor.labels.cart_font",
-      "default": "poppins_n4"
+      "default": "quicksand_n5"
     },
     {
       "type": "color",
       "id": "tg_cart_page_accent_color",
       "label": "t:sections.tg_cart_editor.labels.accent_color",
-      "default": "#A50C43"
+      "default": "#F36352"
     },
     {
       "type": "color",
@@ -840,25 +854,25 @@
       "type": "color",
       "id": "tg_cart_page_card_color",
       "label": "t:sections.tg_cart_editor.labels.card_background",
-      "default": "#ffffff"
+      "default": "#F5F5F5"
     },
     {
       "type": "color",
       "id": "tg_cart_page_border_color",
       "label": "t:sections.tg_cart_editor.labels.border_color",
-      "default": "#E6E1E3"
+      "default": "#CCCCCC"
     },
     {
       "type": "color",
       "id": "tg_cart_page_text_color",
       "label": "t:sections.tg_cart_editor.labels.primary_text_color",
-      "default": "#1F2933"
+      "default": "#000000"
     },
     {
       "type": "color",
       "id": "tg_cart_page_muted_color",
       "label": "t:sections.tg_cart_editor.labels.secondary_text_color",
-      "default": "#667085"
+      "default": "#666666"
     },
     {
       "type": "range",
@@ -868,7 +882,7 @@
       "step": 2,
       "unit": "px",
       "label": "t:sections.tg_cart_editor.labels.card_corner_radius",
-      "default": 8
+      "default": 16
     },
     {
       "type": "color_scheme",
@@ -888,7 +902,7 @@
       "step": 4,
       "unit": "px",
       "label": "t:sections.all.padding.padding_top",
-      "default": 36
+      "default": 40
     },
     {
       "type": "range",
@@ -898,7 +912,237 @@
       "step": 4,
       "unit": "px",
       "label": "t:sections.all.padding.padding_bottom",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "商品卡片双端样式"
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_card_radius_mobile",
+      "label": "移动端圆角",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_image_size",
+      "label": "桌面商品图片尺寸",
+      "min": 100,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "default": 160
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_image_size_mobile",
+      "label": "移动端商品图片尺寸",
+      "min": 80,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_title_size",
+      "label": "桌面商品标题字号",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_title_size_mobile",
+      "label": "移动端商品标题字号",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_detail_size",
+      "label": "桌面详情字号",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_detail_size_mobile",
+      "label": "移动端详情字号",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_price_size",
+      "label": "桌面售价字号",
+      "min": 14,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_price_size_mobile",
+      "label": "移动端售价字号",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_compare_size",
+      "label": "桌面划线价字号",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_compare_size_mobile",
+      "label": "移动端划线价字号",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_item_gap",
+      "label": "商品卡片间距",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_item_padding",
+      "label": "桌面商品内容内边距",
+      "min": 8,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_item_padding_mobile",
+      "label": "移动端商品内容内边距",
+      "min": 8,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "tg_cart_price_color",
+      "label": "商品售价颜色",
+      "default": "#F36555"
+    },
+    {
+      "type": "color",
+      "id": "tg_cart_compare_color",
+      "label": "商品划线价颜色",
+      "default": "#999999"
+    },
+    {
+      "type": "header",
+      "content": "购物车页面布局"
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_layout_width",
+      "label": "桌面最大内容宽度",
+      "min": 1000,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "default": 1320
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_column_gap",
+      "label": "桌面结算区间距",
+      "min": 16,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_mobile_gutter",
+      "label": "移动端两侧留白",
+      "min": 8,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_bottom_space",
+      "label": "桌面底部留白",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 68
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_bottom_space_mobile",
+      "label": "移动端底部留白",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
       "default": 36
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_top_space",
+      "label": "桌面顶部留白",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "tg_cart_top_space_mobile",
+      "label": "移动端顶部留白",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 16
     }
   ]
 }

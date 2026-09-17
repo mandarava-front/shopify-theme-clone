@@ -182,11 +182,12 @@
 {%- if tg_cart_promo_message != blank -%}
   <aside
     class="tg-cart-promotion{% if tg_cart_promo_has_tiers %} tg-cart-promotion--tiers{% endif %}"
-    style="--tg-cart-promotion-background-start: {{ block.settings.promotion_background_start_color }}; --tg-cart-promotion-background-end: {{ block.settings.promotion_background_end_color }}; --tg-cart-promotion-text: {{ block.settings.promotion_text_color }}; --tg-cart-promotion-link: {{ block.settings.promotion_link_color }}; --tg-cart-promotion-border: {{ block.settings.promotion_border_color }}; --tg-cart-promotion-border-width: {{ block.settings.promotion_border_width }}px; --tg-cart-promotion-radius: {{ block.settings.promotion_radius }}px; --tg-cart-promotion-font-size: {{ block.settings.promotion_font_size }}px;"
+    style="--tg-cart-tier-inactive: {{ block.settings.tier_inactive_color | default: '#999999' }}; --tg-cart-tier-background: {{ block.settings.tier_background_color | default: '#FFFFFF' }}; --tg-cart-promotion-font-size-mobile: {{ block.settings.promotion_font_size_mobile | default: 14 }}px; --tg-cart-tier-label-size: {{ block.settings.tier_label_size | default: 14 }}px; --tg-cart-tier-label-size-mobile: {{ block.settings.tier_label_size_mobile | default: 12 }}px; --tg-cart-tier-benefit-size: {{ block.settings.tier_benefit_size | default: 16 }}px; --tg-cart-tier-benefit-size-mobile: {{ block.settings.tier_benefit_size_mobile | default: 14 }}px; --tg-cart-promotion-background-start: {{ block.settings.promotion_background_start_color }}; --tg-cart-promotion-background-end: {{ block.settings.promotion_background_end_color }}; --tg-cart-promotion-text: {{ block.settings.promotion_text_color }}; --tg-cart-promotion-link: {{ block.settings.promotion_link_color }}; --tg-cart-promotion-border: {{ block.settings.promotion_border_color }}; --tg-cart-promotion-border-width: {{ block.settings.promotion_border_width }}px; --tg-cart-promotion-radius: {{ block.settings.promotion_radius }}px; --tg-cart-promotion-font-size: {{ block.settings.promotion_font_size }}px;"
   >
-    <p class="tg-cart-promotion__message" role="status" aria-live="polite">{{ tg_cart_promo_message | escape }}</p>
+    <p class="tg-cart-promotion__message" role="status" aria-live="polite">{% if surface == 'page' %}<span class="tg-cart-promotion__icon" aria-hidden="true">{{ 'tg-cart-promotion.svg' | inline_asset_content }}</span>{% endif %}<span>{{ tg_cart_promo_message | escape }}</span></p>
 
     {%- if tg_cart_promo_has_tiers -%}
+      {% unless surface == 'page' %}
       <div
         class="tg-cart-promotion__progress"
         role="progressbar"
@@ -210,28 +211,29 @@
         {%- endif -%}
       </div>
 
+      {% endunless %}
       <ol class="tg-cart-promotion__tiers" aria-label="Promotion tiers">
         {%- if tg_cart_tier_1_configured -%}
           <li class="tg-cart-promotion__tier{% if tg_cart_item_count >= block.settings.tier_1_minimum_item_count %} is-complete{% elsif tg_cart_next_threshold == block.settings.tier_1_minimum_item_count %} is-next{% endif %}" style="left: {{ tg_cart_tier_1_position }}%;">
-            <span class="tg-cart-promotion__tier-marker" aria-hidden="true">{{ block.settings.tier_1_minimum_item_count }}</span>
+            {% if surface == 'page' %}<span class="tg-cart-promotion__tier-status" aria-hidden="true">{% if tg_cart_item_count >= block.settings.tier_1_minimum_item_count %}{{ 'tg-cart-check.svg' | inline_asset_content }}{% endif %}</span><span class="tg-cart-promotion__tier-quantity">{{ block.settings.tier_quantity_template | default: '[count] items' | escape | replace: '[count]', block.settings.tier_1_minimum_item_count }}</span>{% else %}<span class="tg-cart-promotion__tier-marker" aria-hidden="true">{{ block.settings.tier_1_minimum_item_count }}</span>{% endif %}
             <span class="tg-cart-promotion__tier-label">{{ block.settings.tier_1_benefit | escape }}</span>
           </li>
         {%- endif -%}
         {%- if tg_cart_tier_2_configured -%}
           <li class="tg-cart-promotion__tier{% if tg_cart_item_count >= block.settings.tier_2_minimum_item_count %} is-complete{% elsif tg_cart_next_threshold == block.settings.tier_2_minimum_item_count %} is-next{% endif %}" style="left: {{ tg_cart_tier_2_position }}%;">
-            <span class="tg-cart-promotion__tier-marker" aria-hidden="true">{{ block.settings.tier_2_minimum_item_count }}</span>
+            {% if surface == 'page' %}<span class="tg-cart-promotion__tier-status" aria-hidden="true">{% if tg_cart_item_count >= block.settings.tier_2_minimum_item_count %}{{ 'tg-cart-check.svg' | inline_asset_content }}{% endif %}</span><span class="tg-cart-promotion__tier-quantity">{{ block.settings.tier_quantity_template | default: '[count] items' | escape | replace: '[count]', block.settings.tier_2_minimum_item_count }}</span>{% else %}<span class="tg-cart-promotion__tier-marker" aria-hidden="true">{{ block.settings.tier_2_minimum_item_count }}</span>{% endif %}
             <span class="tg-cart-promotion__tier-label">{{ block.settings.tier_2_benefit | escape }}</span>
           </li>
         {%- endif -%}
         {%- if tg_cart_tier_3_configured -%}
           <li class="tg-cart-promotion__tier{% if tg_cart_item_count >= block.settings.tier_3_minimum_item_count %} is-complete{% elsif tg_cart_next_threshold == block.settings.tier_3_minimum_item_count %} is-next{% endif %}" style="left: {{ tg_cart_tier_3_position }}%;">
-            <span class="tg-cart-promotion__tier-marker" aria-hidden="true">{{ block.settings.tier_3_minimum_item_count }}</span>
+            {% if surface == 'page' %}<span class="tg-cart-promotion__tier-status" aria-hidden="true">{% if tg_cart_item_count >= block.settings.tier_3_minimum_item_count %}{{ 'tg-cart-check.svg' | inline_asset_content }}{% endif %}</span><span class="tg-cart-promotion__tier-quantity">{{ block.settings.tier_quantity_template | default: '[count] items' | escape | replace: '[count]', block.settings.tier_3_minimum_item_count }}</span>{% else %}<span class="tg-cart-promotion__tier-marker" aria-hidden="true">{{ block.settings.tier_3_minimum_item_count }}</span>{% endif %}
             <span class="tg-cart-promotion__tier-label">{{ block.settings.tier_3_benefit | escape }}</span>
           </li>
         {%- endif -%}
         {%- if tg_cart_tier_4_configured -%}
           <li class="tg-cart-promotion__tier{% if tg_cart_item_count >= block.settings.tier_4_minimum_item_count %} is-complete{% elsif tg_cart_next_threshold == block.settings.tier_4_minimum_item_count %} is-next{% endif %}" style="left: {{ tg_cart_tier_4_position }}%;">
-            <span class="tg-cart-promotion__tier-marker" aria-hidden="true">{{ block.settings.tier_4_minimum_item_count }}</span>
+            {% if surface == 'page' %}<span class="tg-cart-promotion__tier-status" aria-hidden="true">{% if tg_cart_item_count >= block.settings.tier_4_minimum_item_count %}{{ 'tg-cart-check.svg' | inline_asset_content }}{% endif %}</span><span class="tg-cart-promotion__tier-quantity">{{ block.settings.tier_quantity_template | default: '[count] items' | escape | replace: '[count]', block.settings.tier_4_minimum_item_count }}</span>{% else %}<span class="tg-cart-promotion__tier-marker" aria-hidden="true">{{ block.settings.tier_4_minimum_item_count }}</span>{% endif %}
             <span class="tg-cart-promotion__tier-label">{{ block.settings.tier_4_benefit | escape }}</span>
           </li>
         {%- endif -%}
