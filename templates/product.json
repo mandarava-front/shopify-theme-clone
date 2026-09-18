@@ -82,7 +82,8 @@
             "corner_radius": 8,
             "title_size": 14,
             "body_size": 14,
-            "mobile_body_size": 12,
+            "mobile_quantity_size": 10,
+            "mobile_discount_size": 10,
             "vertical_spacing": 20
           }
         },

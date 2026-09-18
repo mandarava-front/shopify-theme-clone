@@ -676,7 +676,7 @@
                   {%- if block.settings.heading != blank and volume_discount_has_tier -%}
                     <section
                       class="tg-volume-discount tg-volume-discount--tiers-{{ volume_discount_visible_tier_count }}"
-                      style="--tg-volume-discount-columns: {{ volume_discount_visible_tier_count }}; --tg-volume-discount-background: {{ block.settings.background_color }}; --tg-volume-discount-tier-background: {{ block.settings.tier_background_color }}; --tg-volume-discount-border: {{ block.settings.border_color }}; --tg-volume-discount-text: {{ block.settings.text_color }}; --tg-volume-discount-title-color: {{ block.settings.title_color | default: block.settings.text_color }}; --tg-volume-discount-accent: {{ block.settings.accent_color }}; --tg-volume-discount-radius: {{ block.settings.corner_radius }}px; --tg-volume-discount-title-size: {{ block.settings.title_size }}px; --tg-volume-discount-body-size: {{ block.settings.body_size }}px; --tg-volume-discount-mobile-body-size: {{ block.settings.mobile_body_size | default: 12 }}px; --tg-volume-discount-spacing: {{ block.settings.vertical_spacing }}px;"
+                      style="--tg-volume-discount-columns: {{ volume_discount_visible_tier_count }}; --tg-volume-discount-background: {{ block.settings.background_color }}; --tg-volume-discount-tier-background: {{ block.settings.tier_background_color }}; --tg-volume-discount-border: {{ block.settings.border_color }}; --tg-volume-discount-text: {{ block.settings.text_color }}; --tg-volume-discount-title-color: {{ block.settings.title_color | default: block.settings.text_color }}; --tg-volume-discount-accent: {{ block.settings.accent_color }}; --tg-volume-discount-radius: {{ block.settings.corner_radius }}px; --tg-volume-discount-title-size: {{ block.settings.title_size }}px; --tg-volume-discount-body-size: {{ block.settings.body_size }}px; --tg-volume-discount-mobile-quantity-size: {{ block.settings.mobile_quantity_size | default: 10 }}px; --tg-volume-discount-mobile-discount-size: {{ block.settings.mobile_discount_size | default: 10 }}px; --tg-volume-discount-spacing: {{ block.settings.vertical_spacing }}px;"
                       {{ block.shopify_attributes }}
                     >
                       {%- if section.settings.enable_tg_product_style -%}
@@ -1659,7 +1659,8 @@
           "default": 14,
           "unit": "px"
         },
-        { "type": "range", "id": "mobile_body_size", "label": "t:sections.tg_product.volume_discount.mobile_body_size.label", "min": 10, "max": 24, "step": 1, "default": 12, "unit": "px" },
+        { "type": "range", "id": "mobile_quantity_size", "label": "移动端数量文案字号", "min": 10, "max": 24, "step": 1, "default": 10, "unit": "px" },
+        { "type": "range", "id": "mobile_discount_size", "label": "移动端折扣文案字号", "min": 10, "max": 24, "step": 1, "default": 10, "unit": "px" },
         {
           "type": "range",
           "id": "vertical_spacing",
