@@ -1,0 +1,44 @@
+{%- liquid
+  assign recommendation_variant = card_product.selected_or_first_available_variant
+  assign sale_price = recommendation_variant.price
+  assign compare_price = recommendation_variant.compare_at_price
+  assign discount_percent = 0
+  if compare_price > sale_price
+    assign discount_percent = compare_price | minus: sale_price | times: 100.0 | divided_by: compare_price | round
+  endif
+  assign primary_image = card_product.featured_media.preview_image
+  assign secondary_image = card_product.media[1].preview_image
+  assign image_ratio_value = 1
+  if media_aspect_ratio == 'portrait'
+    assign image_ratio_value = 0.8
+  elsif media_aspect_ratio == 'adapt' and primary_image
+    assign image_ratio_value = primary_image.aspect_ratio
+  endif
+-%}
+<article class="tg-rec-card">
+  <a class="tg-rec-card__media{% if image_shape != blank and image_shape != 'default' %} shape--{{ image_shape }}{% endif %}{% if show_secondary_image and secondary_image %} tg-rec-card__media--secondary{% endif %}" href="{{ card_product.url }}" aria-label="{{ card_product.title | escape }}" style="--tg-rec-image-ratio: {{ image_ratio_value }};">
+    {%- if primary_image -%}
+      {{ primary_image | image_url: width: 960 | image_tag: class: 'tg-rec-card__image', widths: '163, 240, 316, 480, 632, 960', sizes: '(min-width: 990px) 25vw, 50vw', loading: 'lazy', alt: card_product.title }}
+      {%- if show_secondary_image and secondary_image -%}
+        {{ secondary_image | image_url: width: 960 | image_tag: class: 'tg-rec-card__image tg-rec-card__image--secondary', widths: '163, 240, 316, 480, 632, 960', sizes: '(min-width: 990px) 25vw, 50vw', loading: 'lazy', alt: card_product.title }}
+      {%- endif -%}
+    {%- else -%}
+      {{ 'product-apparel-1' | placeholder_svg_tag: 'tg-rec-card__image' }}
+    {%- endif -%}
+  </a>
+  <div class="tg-rec-card__info">
+    {%- if show_vendor -%}<p class="tg-rec-card__vendor">{{ card_product.vendor | escape }}</p>{%- endif -%}
+    <a class="tg-rec-card__title" href="{{ card_product.url }}">{{ card_product.title | escape }}</a>
+    {%- if show_rating and card_product.metafields.reviews.rating.value != blank -%}
+      <p class="tg-rec-card__rating">{{ card_product.metafields.reviews.rating.value.rating }} / {{ card_product.metafields.reviews.rating.value.scale_max }} ({{ card_product.metafields.reviews.rating_count | default: 0 }})</p>
+    {%- endif -%}
+    <div class="tg-rec-card__prices">
+      <span class="tg-rec-card__price"><span class="visually-hidden">{{ 'products.product.price.sale_price' | t }}</span>{% if settings.currency_code_enabled %}{{ sale_price | money_with_currency }}{% else %}{{ sale_price | money }}{% endif %}</span>
+      {%- if compare_price > sale_price -%}
+        <s class="tg-rec-card__compare"><span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>{% if settings.currency_code_enabled %}{{ compare_price | money_with_currency }}{% else %}{{ compare_price | money }}{% endif %}</s>
+        <span class="tg-rec-card__discount">-{{ discount_percent }}%</span>
+      {%- endif -%}
+    </div>
+    {%- unless card_product.available -%}<span class="tg-rec-card__availability">{{ 'products.product.sold_out' | t }}</span>{%- endunless -%}
+  </div>
+</article>

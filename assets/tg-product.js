@@ -448,7 +448,7 @@ function bindTgCustomizationGuards(container = document) {
 // carousel to whichever slide currently hosts the canvas.
 const TG_CUSTOMILY_CANVAS_SELECTOR = '.cl-canvas-container';
 const TG_CUSTOMILY_OPTION_SELECTOR = '.customily_option, .customily-swatch, .cl-option-content';
-const TG_GALLERY_NAV_SELECTOR = '.slider-button, .thumbnail-list__item button';
+const TG_GALLERY_NAV_SELECTOR = '.slider-button, .thumbnail-list__item button, .tg-gallery-dot';
 const TG_CUSTOMILY_RESPONSE_WINDOW = 2000;
 const TG_CUSTOMILY_DEBOUNCE_DELAY = 150;
 const TG_CUSTOMILY_POSITION_EPSILON = 4;

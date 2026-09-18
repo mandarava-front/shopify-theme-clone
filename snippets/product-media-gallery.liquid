@@ -55,6 +55,7 @@
 -%}
 
 <media-gallery
+  class="tg-design-gallery"
   id="MediaGallery-{{ section.id }}"
   role="region"
   aria-label="{{ 'products.product.media.gallery_viewer' | t }}"
@@ -142,6 +143,9 @@
         name="previous"
         aria-label="{{ 'general.slider.previous_slide' | t }}"
       >
+        {% if section.settings.enable_tg_product_style %}
+          <span class="tg-gallery-chevron" aria-hidden="true">{{ 'icon-caret.svg' | inline_asset_content }}</span>
+        {% endif %}
         <svg class="flickity-button-icon" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
           <path d="M 10,50 L 60,100 L 70,90 L 30,50  L 70,10 L 60,0 Z" class="arrow"></path>
         </svg>
@@ -152,6 +156,9 @@
         name="next"
         aria-label="{{ 'general.slider.next_slide' | t }}"
       >
+        {% if section.settings.enable_tg_product_style %}
+          <span class="tg-gallery-chevron" aria-hidden="true">{{ 'icon-caret.svg' | inline_asset_content }}</span>
+        {% endif %}
         <svg class="flickity-button-icon" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
           <path
             d="M 10,50 L 60,100 L 70,90 L 30,50  L 70,10 L 60,0 Z"
@@ -162,6 +169,9 @@
       </button>
     </div>
   </slider-component>
+  {% if section.settings.enable_tg_product_style %}
+    <tg-gallery-pagination class="tg-gallery-pagination" aria-label="{{ 'products.product.media.gallery_viewer' | t }}"></tg-gallery-pagination>
+  {% endif %}
   {%- if first_3d_model -%}
     <button
       class="button button--full-width product__xr-button"
@@ -254,7 +264,6 @@
                   widths: '54, 74, 104, 162, 208, 324, 416',
                   id: thumbnail_id,
                   alt: featured_media.alt
-                | escape
               }}
             </button>
           </li>
@@ -316,7 +325,6 @@
                     widths: '54, 74, 104, 162, 208, 324, 416',
                     id: thumbnail_id,
                     alt: media.alt
-                  | escape
                 }}
               </button>
             </li>

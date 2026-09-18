@@ -56,7 +56,7 @@
 
 <product-info
   id="MainProduct-{{ section.id }}"
-  class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}{% if section.settings.enable_tg_product_style %} tg-product{% endif %}"
+  class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}{% if section.settings.enable_tg_product_style %} tg-product tg-product-design{% if section.settings.show_breadcrumbs_mobile %} tg-product-design--mobile-breadcrumb{% endif %}{% endif %}"
   data-section="{{ section.id }}"
   data-product-id="{{ product.id }}"
   data-update-url="true"
@@ -87,7 +87,7 @@
   {% if section.settings.image_zoom == 'hover' %}
     data-zoom-on-hover
   {% endif %}
-  style="--tg-product-media-radius: {{ section.settings.product_media_radius }}px;"
+  style="--tg-product-font: {{ section.settings.tg_product_font.family }}, {{ section.settings.tg_product_font.fallback_families }}; --tg-product-width: {{ section.settings.tg_product_width }}px; --tg-product-gap: {{ section.settings.tg_product_gap }}px; --tg-product-gutter: {{ section.settings.tg_product_gutter }}px; --tg-product-thumb-size: {{ section.settings.tg_product_thumb_size }}px; --tg-product-thumb-gap: {{ section.settings.tg_product_thumb_gap }}px; --tg-product-green-background: {{ section.settings.tg_product_green_background }}; --tg-product-green-border: {{ section.settings.tg_product_green_border }}; --tg-product-green-color: {{ section.settings.tg_product_green_color }}; --tg-product-discount-background: {{ section.settings.tg_product_discount_background }}; --tg-product-media-radius: {{ section.settings.product_media_radius }}px;"
 >
   {{ 'section-main-product.css' | asset_url | stylesheet_tag }}
   {{ 'tg-product.css' | asset_url | stylesheet_tag }}
@@ -405,7 +405,26 @@
 
   {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
   <product-component view-event-payload="{{ product | standard_event_data: 'view', context: 'page' | escape }}">
-    <div class="page-width">
+    {%- if section.settings.enable_tg_product_style -%}
+    {%- liquid
+      assign tg_variant_block = section.blocks | where: 'type', 'variant_picker' | first
+      assign tg_product_font_500 = section.settings.tg_product_font | font_modify: 'weight', '500'
+      assign tg_product_font_600 = section.settings.tg_product_font | font_modify: 'weight', '600'
+      assign tg_product_font_700 = section.settings.tg_product_font | font_modify: 'weight', '700'
+    -%}
+    {%- style -%}
+      #MainProduct-{{ section.id }} { --tg-option-text: {{ tg_variant_block.settings.option_text | default: '#000000' }}; --tg-option-bg: {{ tg_variant_block.settings.option_background | default: '#FFFFFF' }}; --tg-option-border: {{ tg_variant_block.settings.option_border | default: '#CCCCCC' }}; --tg-option-selected-bg: {{ tg_variant_block.settings.option_selected_background | default: '#000000' }}; --tg-option-selected-text: {{ tg_variant_block.settings.option_selected_text | default: '#FFFFFF' }}; --tg-option-radius: {{ tg_variant_block.settings.option_radius | default: 8 }}px; }
+      {{ section.settings.tg_product_font | font_face: font_display: 'swap' }}
+      {{ tg_product_font_500 | font_face: font_display: 'swap' }}
+      {{ tg_product_font_600 | font_face: font_display: 'swap' }}
+      {{ tg_product_font_700 | font_face: font_display: 'swap' }}
+    {%- endstyle -%}
+    {{ 'tg-product-design.css' | asset_url | stylesheet_tag }}
+    {{ 'tg-product-gallery-design.css' | asset_url | stylesheet_tag }}
+    {{ 'tg-product-info-design.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'tg-product-gallery-design.js' | asset_url }}" defer="defer"></script>
+  {%- endif -%}
+  <div class="page-width">
       {%- if section.settings.show_breadcrumbs -%}
         <nav class="tg-breadcrumb tg-product-breadcrumb" style="{% render 'tg-breadcrumb-text-style', section: section %}" aria-label="Breadcrumb">
           <a href="{{ routes.root_url }}">{{ section.settings.breadcrumb_home_label | escape }}</a>
@@ -464,6 +483,7 @@
                 {%- when 'price' -%}
                   <div
                     id="price-{{ section.id }}"
+                    class="tg-product-price"
                     role="status"
                     style="--tg-price-size: {{ block.settings.price_font_size | default: 24 | divided_by: 10.0 }}rem; --tg-price-size-mobile: {{ block.settings.price_font_size_mobile | default: 24 | divided_by: 10.0 }}rem; --tg-price-weight: {{ block.settings.price_font_weight | default: '700' }}; --tg-price-color: {{ block.settings.price_color | default: '#102a43' }};{% if block.settings.price_letter_spacing != blank and block.settings.price_letter_spacing != 0 %} --tg-price-letter-spacing: {{ block.settings.price_letter_spacing | divided_by: 100.0 }}em;{% endif %} --tg-price-compare-size: {{ block.settings.compare_price_font_size | default: 24 | divided_by: 10.0 }}rem; --tg-price-compare-size-mobile: {{ block.settings.compare_price_font_size_mobile | default: 24 | divided_by: 10.0 }}rem; --tg-price-compare-weight: {{ block.settings.compare_price_font_weight | default: '700' }}; --tg-price-compare-color: {{ block.settings.compare_price_color | default: '#102a43' }};{% if block.settings.compare_price_letter_spacing != blank and block.settings.compare_price_letter_spacing != 0 %} --tg-price-compare-letter-spacing: {{ block.settings.compare_price_letter_spacing | divided_by: 100.0 }}em;{% endif %}"
                     {{ block.shopify_attributes }}
@@ -474,6 +494,13 @@
                       show_badges: true,
                       price_class: 'price--large'
                     -%}
+                    {%- if section.settings.enable_tg_product_style -%}
+                      {%- assign tg_price_variant = product.selected_or_first_available_variant -%}
+                      {%- if tg_price_variant.compare_at_price > tg_price_variant.price -%}
+                        {%- assign tg_discount_percent = tg_price_variant.compare_at_price | minus: tg_price_variant.price | times: 100.0 | divided_by: tg_price_variant.compare_at_price | round -%}
+                        <span class="tg-product-discount" aria-label="{{ tg_discount_percent }}% {{ 'products.product.on_sale' | t }}">-{{ tg_discount_percent }}%</span>
+                      {%- endif -%}
+                    {%- endif -%}
                   </div>
                   {%- if product.quantity_price_breaks_configured? -%}
                     <div class="volume-pricing-note" id="Volume-Note-{{ section.id }}">
@@ -494,6 +521,7 @@
                       {%- endif -%}
                     </div>
                   {%- endif -%}
+                  {%- unless section.settings.enable_tg_product_style -%}
                   <div {{ block.shopify_attributes }}>
                     {%- assign product_form_installment_id = 'product-form-installment-' | append: section.id -%}
                     {%- form 'product', product, id: product_form_installment_id, class: 'installment caption-large' -%}
@@ -501,6 +529,7 @@
                       {{ form | payment_terms }}
                     {%- endform -%}
                   </div>
+                  {%- endunless -%}
                 {%- when 'inventory' -%}
                   <p
                     class="product__inventory{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}{% if product.selected_or_first_available_variant.inventory_management != 'shopify' %} visibility-hidden{% endif %}"
@@ -602,6 +631,7 @@
                         {{ block.settings.sales_text }}
                       </p>
                     {%- endif -%}
+                    {%- unless section.settings.enable_tg_product_style -%}
                     {%- if block.settings.assurance_text != blank -%}
                       <ul class="tg-sales-proof__assurances">
                         {%- assign assurances = block.settings.assurance_text | split: '|' -%}
@@ -613,6 +643,7 @@
                         {%- endfor -%}
                       </ul>
                     {%- endif -%}
+                    {%- endunless -%}
                   </div>
                 {%- when 'volume_discount' -%}
                   {%- assign volume_discount_tier_count = block.settings.tier_count | default: 3 | plus: 0 -%}
@@ -648,11 +679,20 @@
                       style="--tg-volume-discount-columns: {{ volume_discount_visible_tier_count }}; --tg-volume-discount-background: {{ block.settings.background_color }}; --tg-volume-discount-tier-background: {{ block.settings.tier_background_color }}; --tg-volume-discount-border: {{ block.settings.border_color }}; --tg-volume-discount-text: {{ block.settings.text_color }}; --tg-volume-discount-title-color: {{ block.settings.title_color | default: block.settings.text_color }}; --tg-volume-discount-accent: {{ block.settings.accent_color }}; --tg-volume-discount-radius: {{ block.settings.corner_radius }}px; --tg-volume-discount-title-size: {{ block.settings.title_size }}px; --tg-volume-discount-body-size: {{ block.settings.body_size }}px; --tg-volume-discount-mobile-body-size: {{ block.settings.mobile_body_size | default: 12 }}px; --tg-volume-discount-spacing: {{ block.settings.vertical_spacing }}px;"
                       {{ block.shopify_attributes }}
                     >
+                      {%- if section.settings.enable_tg_product_style -%}
+                      <details class="tg-volume-discount__details">
+                        <summary class="tg-volume-discount__summary">
+                          <span class="svg-wrapper" aria-hidden="true">{{ 'tg-cart-promotion.svg' | inline_asset_content }}</span>
+                          <span>{{ block.settings.heading | escape }}</span>
+                          <span class="svg-wrapper tg-volume-discount__caret" aria-hidden="true">{{ 'icon-caret.svg' | inline_asset_content }}</span>
+                        </summary>
+                      {%- else -%}
                       <div class="tg-volume-discount__title">
                         <span aria-hidden="true"></span>
                         <h2>{{ block.settings.heading | escape }}</h2>
                         <span aria-hidden="true"></span>
                       </div>
+                      {%- endif -%}
                       <ul class="tg-volume-discount__tiers" role="list">
                         {%- if volume_discount_tier_count >= 1 -%}
                           {%- unless block.settings.tier_1_quantity == blank and block.settings.tier_1_discount == blank -%}
@@ -703,6 +743,7 @@
                           {%- endunless -%}
                         {%- endif -%}
                       </ul>
+                      {%- if section.settings.enable_tg_product_style -%}</details>{%- endif -%}
                     </section>
                   {%- endif -%}
                 {%- when 'tg_product_addon' -%}
@@ -833,6 +874,27 @@
                     requires_customization: tg_requires_customization,
                     customization_loading_text: tg_customization_guard_loading_text
                   -%}
+                  {%- if section.settings.enable_tg_product_style -%}
+                    {%- assign tg_assurance_block = section.blocks | where: 'type', 'sales_proof' | first -%}
+                    <div class="tg-product-assurances">
+                      {%- if tg_assurance_block.settings.assurance_text != blank -%}
+                        <ul class="tg-sales-proof__assurances" role="list">
+                          {%- assign assurances = tg_assurance_block.settings.assurance_text | split: '|' -%}
+                          {%- for item in assurances -%}
+                            {%- assign assurance = item | strip -%}
+                            {%- if assurance != blank -%}
+                              <li><span class="svg-wrapper" aria-hidden="true">{{ 'icon-checkmark.svg' | inline_asset_content }}</span>{{ assurance | escape }}</li>
+                            {%- endif -%}
+                          {%- endfor -%}
+                        </ul>
+                      {%- endif -%}
+                      {%- assign product_form_installment_id = 'product-form-installment-' | append: section.id -%}
+                      {%- form 'product', product, id: product_form_installment_id, class: 'installment caption-large' -%}
+                        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                        {{ form | payment_terms }}
+                      {%- endform -%}
+                    </div>
+                  {%- endif -%}
                 {%- when 'trust_message' -%}
                   <div class="tg-trust-message" {{ block.shopify_attributes }}>
                     <span class="svg-wrapper" aria-hidden="true">{{- 'icon-checkmark.svg' | inline_asset_content -}}</span>
@@ -1262,7 +1324,7 @@
           "min": 12,
           "max": 40,
           "step": 1,
-          "default": 16,
+          "default": 28,
           "unit": "px",
           "label": "t:sections.tg_product.title.desktop_size.label"
         },
@@ -1272,14 +1334,14 @@
           "min": 12,
           "max": 32,
           "step": 1,
-          "default": 12,
+          "default": 18,
           "unit": "px",
           "label": "t:sections.tg_product.title.mobile_size.label"
         },
         {
           "type": "select",
           "id": "title_font_weight",
-          "default": "400",
+          "default": "600",
           "label": "t:sections.tg_product.title.font_weight.label",
           "options": [
             { "value": "400", "label": "t:sections.tg_product.title.font_weight.options.regular" },
@@ -1291,7 +1353,7 @@
         {
           "type": "color",
           "id": "title_color",
-          "default": "#202024",
+          "default": "#000000",
           "label": "t:sections.tg_product.title.color.label"
         },
         {
@@ -1300,7 +1362,7 @@
           "min": 100,
           "max": 220,
           "step": 5,
-          "default": 150,
+          "default": 125,
           "unit": "%",
           "label": "t:sections.tg_product.title.line_height.label"
         },
@@ -1342,7 +1404,7 @@
           "min": 12,
           "max": 60,
           "step": 1,
-          "default": 24,
+          "default": 32,
           "unit": "px",
           "label": "t:sections.tg_product.price.desktop_size.label"
         },
@@ -1371,7 +1433,7 @@
         {
           "type": "color",
           "id": "price_color",
-          "default": "#102a43",
+          "default": "#F36555",
           "label": "t:sections.tg_product.price.color.label"
         },
         {
@@ -1394,7 +1456,7 @@
           "min": 12,
           "max": 60,
           "step": 1,
-          "default": 24,
+          "default": 16,
           "unit": "px",
           "label": "t:sections.tg_product.price.desktop_size.label"
         },
@@ -1404,14 +1466,14 @@
           "min": 12,
           "max": 48,
           "step": 1,
-          "default": 24,
+          "default": 14,
           "unit": "px",
           "label": "t:sections.tg_product.price.mobile_size.label"
         },
         {
           "type": "select",
           "id": "compare_price_font_weight",
-          "default": "700",
+          "default": "500",
           "label": "t:sections.tg_product.price.font_weight.label",
           "options": [
             { "value": "400", "label": "t:sections.tg_product.price.font_weight.options.regular" },
@@ -1423,7 +1485,7 @@
         {
           "type": "color",
           "id": "compare_price_color",
-          "default": "#102a43",
+          "default": "#999999",
           "label": "t:sections.tg_product.price.color.label"
         },
         {
@@ -1470,9 +1532,24 @@
         { "type": "select", "id": "order_icon", "label": "下单步骤图标", "options": [{ "value": "checkmark", "label": "勾选" }, { "value": "truck", "label": "货车" }, { "value": "box", "label": "包裹" }, { "value": "map-pin", "label": "地址" }, { "value": "plane", "label": "飞机" }, { "value": "stopwatch", "label": "秒表" }, { "value": "return", "label": "退货" }, { "value": "heart", "label": "爱心" }, { "value": "star", "label": "星星" }], "default": "checkmark" },
         { "type": "select", "id": "ship_icon", "label": "发货步骤图标", "options": [{ "value": "checkmark", "label": "勾选" }, { "value": "truck", "label": "货车" }, { "value": "box", "label": "包裹" }, { "value": "map-pin", "label": "地址" }, { "value": "plane", "label": "飞机" }, { "value": "stopwatch", "label": "秒表" }, { "value": "return", "label": "退货" }, { "value": "heart", "label": "爱心" }, { "value": "star", "label": "星星" }], "default": "truck" },
         { "type": "select", "id": "arrival_icon", "label": "送达步骤图标", "options": [{ "value": "checkmark", "label": "勾选" }, { "value": "truck", "label": "货车" }, { "value": "box", "label": "包裹" }, { "value": "map-pin", "label": "地址" }, { "value": "plane", "label": "飞机" }, { "value": "stopwatch", "label": "秒表" }, { "value": "return", "label": "退货" }, { "value": "heart", "label": "爱心" }, { "value": "star", "label": "星星" }], "default": "box" },
-        { "type": "color", "id": "icon_background_color", "label": "图标背景色", "default": "#c9f2f8" },
-        { "type": "color", "id": "svg_icon_color", "label": "图标线条颜色", "default": "#087edb" },
-        { "type": "color", "id": "icon_line_color", "label": "流程虚线颜色", "default": "#18bfe5" }
+        {
+          "type": "color",
+          "id": "icon_background_color",
+          "label": "图标背景色",
+          "default": "#E8F0E9"
+        },
+        {
+          "type": "color",
+          "id": "svg_icon_color",
+          "label": "图标线条颜色",
+          "default": "#000000"
+        },
+        {
+          "type": "color",
+          "id": "icon_line_color",
+          "label": "流程虚线颜色",
+          "default": "#CCCCCC"
+        }
       ]
     },
     {
@@ -1515,17 +1592,83 @@
         { "type": "text", "id": "tier_4_quantity", "label": "t:sections.tg_product.volume_discount.quantity.label", "default": "5+ ITEMS" },
         { "type": "text", "id": "tier_4_discount", "label": "t:sections.tg_product.volume_discount.discount.label", "default": "SAVE 25%" },
         { "type": "header", "content": "t:sections.tg_product.volume_discount.style.heading" },
-        { "type": "color", "id": "background_color", "label": "t:sections.tg_product.volume_discount.background_color.label", "default": "#f7faff" },
-        { "type": "color", "id": "tier_background_color", "label": "t:sections.tg_product.volume_discount.tier_background_color.label", "default": "#eaf2fd" },
-        { "type": "color", "id": "border_color", "label": "t:sections.tg_product.volume_discount.border_color.label", "default": "#91cfee" },
-        { "type": "color", "id": "text_color", "label": "t:sections.tg_product.volume_discount.text_color.label", "default": "#17263b" },
-        { "type": "color", "id": "title_color", "label": "t:sections.tg_product.volume_discount.title_color.label" },
-        { "type": "color", "id": "accent_color", "label": "t:sections.tg_product.volume_discount.accent_color.label", "default": "#244a85" },
-        { "type": "range", "id": "corner_radius", "label": "t:sections.tg_product.volume_discount.corner_radius.label", "min": 0, "max": 24, "step": 1, "default": 10, "unit": "px" },
-        { "type": "range", "id": "title_size", "label": "t:sections.tg_product.volume_discount.title_size.label", "min": 14, "max": 32, "step": 1, "default": 18, "unit": "px" },
-        { "type": "range", "id": "body_size", "label": "t:sections.tg_product.volume_discount.body_size.label", "min": 12, "max": 24, "step": 1, "default": 15, "unit": "px" },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "t:sections.tg_product.volume_discount.background_color.label",
+          "default": "#FCF9F5"
+        },
+        {
+          "type": "color",
+          "id": "tier_background_color",
+          "label": "t:sections.tg_product.volume_discount.tier_background_color.label",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "color",
+          "id": "border_color",
+          "label": "t:sections.tg_product.volume_discount.border_color.label",
+          "default": "#E8E3DC"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "t:sections.tg_product.volume_discount.text_color.label",
+          "default": "#000000"
+        },
+        {
+          "type": "color",
+          "id": "title_color",
+          "label": "t:sections.tg_product.volume_discount.title_color.label",
+          "default": "#F36555"
+        },
+        {
+          "type": "color",
+          "id": "accent_color",
+          "label": "t:sections.tg_product.volume_discount.accent_color.label",
+          "default": "#F36555"
+        },
+        {
+          "type": "range",
+          "id": "corner_radius",
+          "label": "t:sections.tg_product.volume_discount.corner_radius.label",
+          "min": 0,
+          "max": 24,
+          "step": 1,
+          "default": 8,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "title_size",
+          "label": "t:sections.tg_product.volume_discount.title_size.label",
+          "min": 14,
+          "max": 32,
+          "step": 1,
+          "default": 14,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "body_size",
+          "label": "t:sections.tg_product.volume_discount.body_size.label",
+          "min": 12,
+          "max": 24,
+          "step": 1,
+          "default": 14,
+          "unit": "px"
+        },
         { "type": "range", "id": "mobile_body_size", "label": "t:sections.tg_product.volume_discount.mobile_body_size.label", "min": 10, "max": 24, "step": 1, "default": 12, "unit": "px" },
-        { "type": "range", "id": "vertical_spacing", "label": "t:sections.tg_product.volume_discount.vertical_spacing.label", "min": 0, "max": 40, "step": 1, "default": 18, "unit": "px" }
+        {
+          "type": "range",
+          "id": "vertical_spacing",
+          "label": "t:sections.tg_product.volume_discount.vertical_spacing.label",
+          "min": 0,
+          "max": 40,
+          "step": 1,
+          "default": 20,
+          "unit": "px"
+        }
       ]
     },
     {
@@ -1666,6 +1809,53 @@
           "id": "hide_unavailable_options",
           "default": false,
           "label": "t:sections.main-product.blocks.variant_picker.settings.hide_unavailable_options.label"
+        },
+        {
+          "type": "text",
+          "id": "dropdown_option_names",
+          "label": "使用下拉框的选项名称",
+          "info": "多个名称用英文逗号分隔，不区分大小写。",
+          "default": "Title"
+        },
+        {
+          "type": "color",
+          "id": "option_background",
+          "label": "选项背景",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "color",
+          "id": "option_text",
+          "label": "选项文字",
+          "default": "#000000"
+        },
+        {
+          "type": "color",
+          "id": "option_selected_background",
+          "label": "选中选项背景",
+          "default": "#000000"
+        },
+        {
+          "type": "color",
+          "id": "option_selected_text",
+          "label": "选中选项文字",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "range",
+          "id": "option_radius",
+          "label": "选项圆角",
+          "min": 0,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "default": 8
+        },
+        {
+          "type": "color",
+          "id": "option_border",
+          "label": "Option border",
+          "default": "#CCCCCC"
         }
       ]
     },
@@ -1824,7 +2014,7 @@
           "min": 11,
           "max": 40,
           "step": 1,
-          "default": 13,
+          "default": 14,
           "unit": "px",
           "label": "t:sections.tg_product.title.desktop_size.label"
         },
@@ -1834,7 +2024,7 @@
           "min": 11,
           "max": 32,
           "step": 1,
-          "default": 11,
+          "default": 14,
           "unit": "px",
           "label": "t:sections.tg_product.title.mobile_size.label"
         },
@@ -1853,7 +2043,7 @@
         {
           "type": "color",
           "id": "title_color",
-          "default": "#202024",
+          "default": "#000000",
           "label": "t:sections.tg_product.title.color.label"
         },
         {
@@ -2984,9 +3174,95 @@
     {
       "type": "checkbox",
       "id": "enable_tg_product_style",
-      "default": false,
+      "default": true,
       "label": "t:sections.tg_product.appearance.enable.label",
       "info": "t:sections.tg_product.appearance.enable.info"
+    },
+    {
+      "type": "font_picker",
+      "id": "tg_product_font",
+      "label": "商品页字体",
+      "default": "quicksand_n5"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumbs_mobile",
+      "label": "移动端显示面包屑",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "tg_product_width",
+      "label": "内容最大宽度",
+      "min": 1000,
+      "max": 1600,
+      "step": 20,
+      "default": 1320,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "tg_product_gap",
+      "label": "桌面双栏间距",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "default": 20,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "tg_product_gutter",
+      "label": "移动端两侧留白",
+      "min": 8,
+      "max": 32,
+      "step": 1,
+      "default": 16,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "tg_product_thumb_size",
+      "label": "桌面缩略图尺寸",
+      "min": 60,
+      "max": 140,
+      "step": 2,
+      "default": 100,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "tg_product_thumb_gap",
+      "label": "缩略图间距",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "default": 16,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "tg_product_green_background",
+      "label": "保障与配送背景",
+      "default": "#F5FCF6"
+    },
+    {
+      "type": "color",
+      "id": "tg_product_green_border",
+      "label": "保障与配送边框",
+      "default": "#E0E9E1"
+    },
+    {
+      "type": "color",
+      "id": "tg_product_green_color",
+      "label": "保障图标颜色",
+      "default": "#27A66A"
+    },
+    {
+      "type": "color",
+      "id": "tg_product_discount_background",
+      "label": "折扣标签背景",
+      "default": "#F8A93E"
     },
     {
       "type": "header",
@@ -3050,19 +3326,21 @@
           "label": "t:tg.settings.font_weight_options.bold"
         }
       ],
-      "default": "inherit"
+      "default": "500"
     },
     {
       "type": "color",
       "id": "breadcrumb_text_color",
       "label": "t:sections.tg_product.breadcrumbs.text_color.label",
-      "info": "t:sections.tg_product.breadcrumbs.color_info"
+      "info": "t:sections.tg_product.breadcrumbs.color_info",
+      "default": "#999999"
     },
     {
       "type": "color",
       "id": "breadcrumb_link_color",
       "label": "t:sections.tg_product.breadcrumbs.link_color.label",
-      "info": "t:sections.tg_product.breadcrumbs.color_info"
+      "info": "t:sections.tg_product.breadcrumbs.color_info",
+      "default": "#000000"
     },
     {
       "type": "color",
@@ -3092,7 +3370,7 @@
     {
       "type": "color",
       "id": "purchase_button_background",
-      "default": "#EE860F",
+      "default": "#F36352",
       "label": "t:sections.tg_product.purchase_actions.colors.background.label"
     },
     {
@@ -3104,7 +3382,7 @@
     {
       "type": "color",
       "id": "purchase_button_hover",
-      "default": "#D97408",
+      "default": "#DF5140",
       "label": "t:sections.tg_product.purchase_actions.colors.hover.label"
     },
     {
@@ -3146,7 +3424,7 @@
     {
       "type": "checkbox",
       "id": "constrain_to_viewport",
-      "default": true,
+      "default": false,
       "label": "t:sections.main-product.settings.constrain_to_viewport.label"
     },
     {
@@ -3172,7 +3450,7 @@
       "max": 40,
       "step": 1,
       "unit": "px",
-      "default": 12,
+      "default": 24,
       "label": "商品图片圆角"
     },
     {
@@ -3214,7 +3492,7 @@
           "label": "t:sections.main-product.settings.gallery_layout.options__4.label"
         }
       ],
-      "default": "stacked",
+      "default": "thumbnail_slider",
       "label": "t:sections.main-product.settings.gallery_layout.label"
     },
     {
@@ -3297,7 +3575,7 @@
       "step": 4,
       "unit": "px",
       "label": "t:sections.all.padding.padding_top",
-      "default": 36
+      "default": 20
     },
     {
       "type": "range",
@@ -3307,24 +3585,24 @@
       "step": 4,
       "unit": "px",
       "label": "t:sections.all.padding.padding_bottom",
-      "default": 36
+      "default": 40
     }
   ],
   "presets": [
     {
       "name": "Tg | 商品详情默认",
       "settings": {
-        "enable_tg_product_style": false,
+        "enable_tg_product_style": true,
         "show_breadcrumbs": true,
         "breadcrumb_home_label": "Home",
         "purchase_actions_layout": "inline",
-        "purchase_button_background": "#ee860f",
+        "purchase_button_background": "#F36352",
         "purchase_button_text": "#ffffff",
-        "purchase_button_hover": "#d97408",
+        "purchase_button_hover": "#DF5140",
         "enable_sticky_info": true,
         "color_scheme": "scheme-1",
         "media_size": "small",
-        "constrain_to_viewport": true,
+        "constrain_to_viewport": false,
         "media_fit": "contain",
         "mobile_gallery_aspect_ratio": "square",
         "gallery_layout": "thumbnail_slider",
@@ -3334,7 +3612,11 @@
         "hide_variants": false,
         "enable_video_looping": false,
         "padding_top": 20,
-        "padding_bottom": 24
+        "padding_bottom": 40,
+        "product_media_radius": 24,
+        "breadcrumb_font_weight": "500",
+        "breadcrumb_text_color": "#999999",
+        "breadcrumb_link_color": "#000000"
       },
       "blocks": [
         {
@@ -3348,10 +3630,11 @@
           "type": "title",
           "settings": {
             "enable_tg_title_style": true,
-            "title_font_size": 16,
-            "title_font_size_mobile": 12,
-            "title_font_weight": "400",
-            "title_color": "#202024"
+            "title_font_size": 28,
+            "title_font_size_mobile": 18,
+            "title_font_weight": "600",
+            "title_color": "#000000",
+            "title_line_height": 125
           }
         },
         {
@@ -3379,14 +3662,23 @@
             "summary_suffix": "if you order today.",
             "order_label": "Order placed",
             "ship_label": "Order ships",
-            "delivery_label": "Delivered"
+            "delivery_label": "Delivered",
+            "icon_background_color": "#E8F0E9",
+            "svg_icon_color": "#000000",
+            "icon_line_color": "#CCCCCC"
           }
         },
         {
           "type": "variant_picker",
           "settings": {
             "picker_type": "button",
-            "swatch_shape": "circle"
+            "swatch_shape": "circle",
+            "dropdown_option_names": "Title",
+            "option_background": "#FFFFFF",
+            "option_text": "#000000",
+            "option_selected_background": "#000000",
+            "option_selected_text": "#FFFFFF",
+            "option_radius": 8
           }
         },
         {
@@ -3416,7 +3708,10 @@
             "heading": "Description",
             "icon": "none",
             "content": "",
-            "page": ""
+            "page": "",
+            "title_font_size": 14,
+            "title_font_size_mobile": 14,
+            "title_color": "#000000"
           }
         },
         {
@@ -3427,7 +3722,10 @@
             "heading": "Shipping & Return",
             "icon": "none",
             "content": "<p>Add shipping and return information in the theme editor.</p>",
-            "page": ""
+            "page": "",
+            "title_font_size": 14,
+            "title_font_size_mobile": 14,
+            "title_color": "#000000"
           }
         },
         {
@@ -3438,7 +3736,10 @@
             "heading": "Satisfaction Guarantee",
             "icon": "none",
             "content": "<p>Add your satisfaction guarantee in the theme editor.</p>",
-            "page": ""
+            "page": "",
+            "title_font_size": 14,
+            "title_font_size_mobile": 14,
+            "title_color": "#000000"
           }
         }
       ]

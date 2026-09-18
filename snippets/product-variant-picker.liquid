@@ -8,10 +8,14 @@
   Usage:
   {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
 {% endcomment %}
+{%- if request.page_type == 'product' -%}
+  {{ 'tg-product-variants-design.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
 {%- unless product.has_only_default_variant -%}
   <variant-selects
     id="variant-selects-{{ section.id }}"
     data-section="{{ section.id }}"
+    style="--tg-option-text: {{ block.settings.option_text }}; --tg-option-bg: {{ block.settings.option_background }}; --tg-option-border: {{ block.settings.option_border }}; --tg-option-selected-bg: {{ block.settings.option_selected_background }}; --tg-option-selected-text: {{ block.settings.option_selected_text }}; --tg-option-radius: {{ block.settings.option_radius }}px;"
     data-product-handle="{{ product.handle }}"
     data-product-title="{{ product.title | escape }}"
     data-product-id="{{ product.id }}"
@@ -37,6 +41,21 @@
           else
             assign picker_type = 'swatch'
           endif
+        endif
+
+        if request.page_type == 'product'
+          assign dropdown_option_names = block.settings.dropdown_option_names | downcase | split: ','
+          assign normalized_option_name = option.name | downcase | strip
+          for dropdown_option_name in dropdown_option_names
+            assign normalized_dropdown_name = dropdown_option_name | strip
+            if normalized_dropdown_name == normalized_option_name
+              assign picker_type = 'dropdown'
+              if swatch_count > 0 and block.settings.swatch_shape != 'none'
+                assign picker_type = 'swatch_dropdown'
+              endif
+              break
+            endif
+          endfor
         endif
 
         # A group down to a single visible value leaves the shopper nothing to

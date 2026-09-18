@@ -24,10 +24,11 @@
           "type": "title",
           "settings": {
             "enable_tg_title_style": true,
-            "title_font_size": 16,
-            "title_font_size_mobile": 12,
-            "title_font_weight": "400",
-            "title_color": "#202024"
+            "title_font_size": 28,
+            "title_font_size_mobile": 18,
+            "title_font_weight": "600",
+            "title_color": "#000000",
+            "title_line_height": 125
           }
         },
         "rating": {
@@ -36,7 +37,16 @@
         },
         "price": {
           "type": "price",
-          "settings": {}
+          "settings": {
+            "price_font_size": 32,
+            "price_font_size_mobile": 24,
+            "price_color": "#F36555",
+            "price_font_weight": "700",
+            "compare_price_font_size": 16,
+            "compare_price_font_size_mobile": 14,
+            "compare_price_font_weight": "500",
+            "compare_price_color": "#999999"
+          }
         },
         "sales_proof": {
           "type": "sales_proof",
@@ -48,7 +58,7 @@
         "volume_discount": {
           "type": "volume_discount",
           "settings": {
-            "heading": "BUY MORE SAVE MORE",
+            "heading": "Buy more save more",
             "tier_count": 3,
             "tier_1_quantity": "Buy 2 Get 10% OFF",
             "tier_1_discount": "",
@@ -58,23 +68,31 @@
             "tier_3_discount": "",
             "tier_4_quantity": "",
             "tier_4_discount": "",
-            "background_color": "#f7faff",
-            "tier_background_color": "#fef6f0",
-            "border_color": "#fef6f0",
-            "text_color": "#f36352",
-            "accent_color": "#000000",
-            "corner_radius": 10,
-            "title_size": 18,
-            "body_size": 15,
-            "mobile_body_size": 10,
-            "vertical_spacing": 18
+            "background_color": "#FCF9F5",
+            "tier_background_color": "#FFFFFF",
+            "border_color": "#E8E3DC",
+            "text_color": "#000000",
+            "accent_color": "#F36555",
+            "corner_radius": 8,
+            "title_size": 14,
+            "body_size": 14,
+            "mobile_body_size": 12,
+            "vertical_spacing": 20,
+            "title_color": "#F36555"
           }
         },
         "variant_picker": {
           "type": "variant_picker",
           "settings": {
             "picker_type": "button",
-            "swatch_shape": "circle"
+            "swatch_shape": "circle",
+            "dropdown_option_names": "Title",
+            "option_background": "#FFFFFF",
+            "option_text": "#000000",
+            "option_selected_background": "#000000",
+            "option_selected_text": "#FFFFFF",
+            "option_border": "#CCCCCC",
+            "option_radius": 8
           }
         },
         "quantity_selector": {
@@ -105,9 +123,9 @@
             "order_icon": "checkmark",
             "ship_icon": "truck",
             "arrival_icon": "box",
-            "icon_background_color": "#fef6f0",
-            "svg_icon_color": "#f36352",
-            "icon_line_color": "#f36352"
+            "icon_background_color": "#E8F0E9",
+            "svg_icon_color": "#000000",
+            "icon_line_color": "#CCCCCC"
           }
         },
         "accordion_description": {
@@ -118,7 +136,11 @@
             "heading": "Description",
             "icon": "none",
             "content": "",
-            "page": ""
+            "page": "",
+            "title_font_size": 14,
+            "title_font_size_mobile": 14,
+            "title_font_weight": "600",
+            "title_color": "#000000"
           }
         },
         "accordion_shipping": {
@@ -129,7 +151,11 @@
             "heading": "Shipping & Return",
             "icon": "none",
             "content": "<ul><li>The above time frame applies only to orders shipped to the US with standard shipping methods.</li><li>International orders may take 2-5 days longer due to the customs clearance process.</li><li>For more information about Shipping and Delivery, <a href=\"/pages/shipping-policy\" target=\"_blank\" title=\"Shipping Policy\">click here</a>.</li><li>To learn more about Replacement and Refund, <a href=\"/pages/refund-policy\" target=\"_blank\" title=\"Refund Policy\">click here</a>.</li></ul>",
-            "page": ""
+            "page": "",
+            "title_font_size": 14,
+            "title_font_size_mobile": 14,
+            "title_font_weight": "600",
+            "title_color": "#000000"
           }
         },
         "accordion_guarantee": {
@@ -140,7 +166,11 @@
             "heading": "Satisfaction Guarantee",
             "icon": "none",
             "content": "<p>We want you to be<strong> </strong>satisfied with the products you buy from us. </p><p>We have 24/7/365 ticket and email support. Please contact us at <a href=\"mailto:support@heartlune.com\">support@heartlune.com</a>. if you need any assistance.</p>",
-            "page": ""
+            "page": "",
+            "title_font_size": 14,
+            "title_font_size_mobile": 14,
+            "title_font_weight": "600",
+            "title_color": "#000000"
           }
         }
       },
@@ -160,17 +190,17 @@
         "accordion_guarantee"
       ],
       "settings": {
-        "enable_tg_product_style": false,
+        "enable_tg_product_style": true,
         "show_breadcrumbs": true,
         "breadcrumb_home_label": "Home",
         "purchase_actions_layout": "inline",
-        "purchase_button_background": "#ee860f",
+        "purchase_button_background": "#F36352",
         "purchase_button_text": "#ffffff",
-        "purchase_button_hover": "#d97408",
+        "purchase_button_hover": "#DF5140",
         "enable_sticky_info": true,
         "color_scheme": "scheme-1",
         "media_size": "small",
-        "constrain_to_viewport": true,
+        "constrain_to_viewport": false,
         "media_fit": "contain",
         "mobile_gallery_aspect_ratio": "square",
         "gallery_layout": "thumbnail_slider",
@@ -180,7 +210,25 @@
         "hide_variants": false,
         "enable_video_looping": false,
         "padding_top": 20,
-        "padding_bottom": 24
+        "padding_bottom": 0,
+        "product_media_radius": 24,
+        "breadcrumb_font_weight": "500",
+        "breadcrumb_text_color": "#999999",
+        "breadcrumb_link_color": "#000000",
+        "tg_product_font": "quicksand_n5",
+        "tg_product_width": 1320,
+        "tg_product_gap": 20,
+        "tg_product_gutter": 16,
+        "tg_product_thumb_size": 100,
+        "tg_product_thumb_gap": 16,
+        "tg_product_green_background": "#F5FCF6",
+        "tg_product_green_border": "#E0E9E1",
+        "tg_product_green_color": "#27A66A",
+        "tg_product_discount_background": "#F8A93E",
+        "breadcrumb_font_size": 14,
+        "breadcrumb_font_size_mobile": 12,
+        "breadcrumb_link_hover_color": "#F36352",
+        "show_breadcrumbs_mobile": false
       }
     },
     "disclosures": {
@@ -198,9 +246,9 @@
       "type": "related-products",
       "settings": {
         "heading": "More Items to Consider",
-        "heading_size": "h2",
-        "products_to_show": 5,
-        "columns_desktop": 5,
+        "heading_size": "h1",
+        "products_to_show": 4,
+        "columns_desktop": 4,
         "columns_mobile": "2",
         "color_scheme": "scheme-1",
         "image_ratio": "square",
@@ -208,8 +256,23 @@
         "show_secondary_image": true,
         "show_vendor": false,
         "show_rating": false,
-        "padding_top": 32,
-        "padding_bottom": 64
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "design_font": "quicksand_n5",
+        "heading_size_desktop": 42,
+        "heading_size_mobile": 28,
+        "title_size_desktop": 14,
+        "title_size_mobile": 12,
+        "price_size_desktop": 24,
+        "price_size_mobile": 18,
+        "image_radius": 16,
+        "image_radius_mobile": 8,
+        "padding_top_mobile": 40,
+        "padding_bottom_mobile": 40,
+        "text_color": "#000000",
+        "price_color": "#F36555",
+        "compare_color": "#999999",
+        "badge_color": "#F8A93E"
       }
     }
   },

@@ -1,18 +1,47 @@
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
 {{ 'section-related-products.css' | asset_url | stylesheet_tag }}
+{{ 'tg-product-recommendations.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign recommendation_font = section.settings.design_font
+  assign recommendation_font_semibold = recommendation_font | font_modify: 'weight', '600'
+  assign recommendation_font_bold = recommendation_font | font_modify: 'weight', '700'
+-%}
 
 {% if section.settings.image_shape == 'blob' %}
   {{ 'mask-blobs.css' | asset_url | stylesheet_tag }}
 {%- endif -%}
 
 {%- style -%}
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  {{ recommendation_font | font_face: font_display: 'swap' }}
+  {{ recommendation_font_semibold | font_face: font_display: 'swap' }}
+  {{ recommendation_font_bold | font_face: font_display: 'swap' }}
+  #shopify-section-{{ section.id }} { margin-top: 0; }
+  #shopify-section-{{ section.id }} .tg-product-recommendations {
+    --tg-rec-font: {{ recommendation_font.family }}, {{ recommendation_font.fallback_families }};
+    --tg-rec-heading-size: {{ section.settings.heading_size_desktop }}px;
+    --tg-rec-heading-size-mobile: {{ section.settings.heading_size_mobile }}px;
+    --tg-rec-title-size: {{ section.settings.title_size_desktop }}px;
+    --tg-rec-title-size-mobile: {{ section.settings.title_size_mobile }}px;
+    --tg-rec-price-size: {{ section.settings.price_size_desktop }}px;
+    --tg-rec-price-size-mobile: {{ section.settings.price_size_mobile }}px;
+    --tg-rec-radius: {{ section.settings.image_radius }}px;
+    --tg-rec-radius-mobile: {{ section.settings.image_radius_mobile }}px;
+    --tg-rec-text: {{ section.settings.text_color }};
+    --tg-rec-price: {{ section.settings.price_color }};
+    --tg-rec-compare: {{ section.settings.compare_color }};
+    --tg-rec-badge: {{ section.settings.badge_color }};
+    --tg-rec-columns: {{ section.settings.columns_desktop }};
+    --tg-rec-columns-mobile: {{ section.settings.columns_mobile }};
+    --tg-rec-discount-mask: url({{ 'tg-home-discount.svg' | asset_url }});
   }
 
-  @media screen and (min-width: 750px) {
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top_mobile }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+  }
+
+  @media screen and (min-width: 990px) {
     .section-{{ section.id }}-padding {
       padding-top: {{ section.settings.padding_top }}px;
       padding-bottom: {{ section.settings.padding_bottom }}px;
@@ -22,7 +51,7 @@
 
 <div class="color-{{ section.settings.color_scheme }} gradient">
   <product-recommendations
-    class="related-products page-width section-{{ section.id }}-padding isolate{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+    class="tg-product-recommendations related-products page-width section-{{ section.id }}-padding isolate{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
     data-url="{{ routes.product_recommendations_url }}?limit={{ section.settings.products_to_show }}"
     data-section-id="{{ section.id }}"
     data-product-id="{{ product.id }}"
@@ -38,7 +67,7 @@
         {% assign skip_card_product_styles = false %}
         {% for recommendation in recommendations.products %}
           <li class="grid__item">
-            {% render 'card-product',
+            {% render 'tg-product-recommendation-card',
               card_product: recommendation,
               media_aspect_ratio: section.settings.image_ratio,
               image_shape: section.settings.image_shape,
@@ -79,7 +108,7 @@
             {%- if fallback_product.id == product.id -%}{%- continue -%}{%- endif -%}
             {%- if shown >= section.settings.products_to_show -%}{%- break -%}{%- endif -%}
             <li class="grid__item">
-              {% render 'card-product',
+              {% render 'tg-product-recommendation-card',
                 card_product: fallback_product,
                 media_aspect_ratio: section.settings.image_ratio,
                 image_shape: section.settings.image_shape,
@@ -178,7 +207,7 @@
           "value": "2",
           "label": "t:sections.related-products.settings.columns_mobile.options__2.label"
         }
-      ]    
+      ]
     },
     {
       "type": "color_scheme",
@@ -208,7 +237,7 @@
           "label": "t:sections.related-products.settings.image_ratio.options__3.label"
         }
       ],
-      "default": "adapt",
+      "default": "square",
       "label": "t:sections.related-products.settings.image_ratio.label"
     },
     {
@@ -282,7 +311,7 @@
       "step": 4,
       "unit": "px",
       "label": "t:sections.all.padding.padding_top",
-      "default": 36
+      "default": 80
     },
     {
       "type": "range",
@@ -292,7 +321,141 @@
       "step": 4,
       "unit": "px",
       "label": "t:sections.all.padding.padding_bottom",
-      "default": 36
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "商品推荐设计"
+    },
+    {
+      "type": "font_picker",
+      "id": "design_font",
+      "label": "字体",
+      "default": "quicksand_n5"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_desktop",
+      "label": "标题字号（PC）",
+      "default": 42,
+      "min": 16,
+      "max": 64,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "label": "标题字号（移动端）",
+      "default": 28,
+      "min": 16,
+      "max": 48,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "title_size_desktop",
+      "label": "商品标题字号（PC）",
+      "default": 14,
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "title_size_mobile",
+      "label": "商品标题字号（移动端）",
+      "default": 12,
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "price_size_desktop",
+      "label": "售价字号（PC）",
+      "default": 24,
+      "min": 12,
+      "max": 36,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "price_size_mobile",
+      "label": "售价字号（移动端）",
+      "default": 18,
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "image_radius",
+      "label": "图片圆角（PC）",
+      "default": 16,
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "image_radius_mobile",
+      "label": "图片圆角（移动端）",
+      "default": 8,
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "上方间距（移动端）",
+      "default": 40,
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "下方间距（移动端）",
+      "default": 40,
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "标题颜色",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "price_color",
+      "label": "售价颜色",
+      "default": "#F36555"
+    },
+    {
+      "type": "color",
+      "id": "compare_color",
+      "label": "划线价颜色",
+      "default": "#999999"
+    },
+    {
+      "type": "color",
+      "id": "badge_color",
+      "label": "折扣标签颜色",
+      "default": "#F8A93E"
     }
   ],
   "presets": [
@@ -301,8 +464,8 @@
       "settings": {
         "heading": "More Items to Consider",
         "heading_size": "h2",
-        "products_to_show": 5,
-        "columns_desktop": 5,
+        "products_to_show": 4,
+        "columns_desktop": 4,
         "columns_mobile": "2",
         "color_scheme": "scheme-1",
         "image_ratio": "square",
@@ -310,8 +473,8 @@
         "show_secondary_image": true,
         "show_vendor": false,
         "show_rating": false,
-        "padding_top": 32,
-        "padding_bottom": 64
+        "padding_top": 80,
+        "padding_bottom": 80
       }
     }
   ]

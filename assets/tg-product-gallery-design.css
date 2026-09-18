@@ -1,0 +1,296 @@
+/* Preserve Dawn's real media slides and carousel; only change their presentation. */
+.tg-gallery-pagination, .tg-gallery-chevron { display: none; }
+[data-template='product'] .tg-product-design .tg-design-gallery {
+  min-width: 0;
+  width: 100%;
+}
+[data-template='product'] .tg-product-design .tg-design-gallery [id^='GalleryViewer'] {
+  position: relative;
+  min-width: 0;
+  width: 100%;
+  margin: 0;
+}
+[data-template='product'] .tg-product-design .tg-design-gallery .product__media-list {
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 0;
+  border-radius: var(--tg-product-media-radius, 24px);
+}
+[data-template='product'] .tg-product-design .tg-design-gallery .product__media-list::after { display: none; }
+[data-template='product'] .tg-product-design .tg-design-gallery .product__media-list .product__media-item {
+  display: flex;
+  flex: 0 0 100%;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  padding: 0;
+  margin: 0;
+  scroll-snap-align: start;
+}
+[data-template='product'] .tg-product-design .tg-design-gallery .product-media-container {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  aspect-ratio: var(--tg-mobile-gallery-aspect-ratio, 1 / 1);
+  border: 0;
+  border-radius: var(--tg-product-media-radius, 24px);
+  overflow: hidden;
+}
+[data-template='product'] .tg-product-design .tg-design-gallery .product-media-container::after { display: none; }
+[data-template='product'] .tg-product-design .tg-design-gallery .product__modal-opener,
+[data-template='product'] .tg-product-design .tg-design-gallery .product-media-container .media {
+  height: 100%;
+  padding-top: 0;
+}
+[data-template='product'] .tg-product-design .tg-design-gallery .product-media-container.media-fit-contain .product__media img { object-fit: contain; }
+[data-template='product'] .tg-product-design .tg-design-gallery .product-media-container.media-fit-cover .product__media img { object-fit: cover; }
+[data-template='product'] .tg-product-design .tg-design-gallery .product__media-icon--lightbox { display: none; }
+[data-template='product'] .tg-product-design .tg-design-gallery [id^='GalleryViewer'] > .slider-buttons {
+  padding: 0 16px;
+}
+[data-template='product'] .tg-product-design .tg-design-gallery [id^='GalleryViewer'] > .slider-buttons .slider-button {
+  width: 46px;
+  height: 46px;
+  flex-basis: 46px;
+  border: 0;
+  border-radius: 50%;
+  background: rgb(254 249 239 / 80%);
+  box-shadow: none;
+  color: #000;
+}
+[data-template='product'] .tg-product-design .tg-design-gallery [id^='GalleryViewer'] > .slider-buttons .flickity-button-icon {
+  display: none;
+}
+[data-template='product'] .tg-product-design .tg-gallery-chevron {
+  display: flex;
+  width: 18px;
+  height: 18px;
+  align-items: center;
+  justify-content: center;
+}
+[data-template='product'] .tg-product-design .tg-gallery-chevron svg { width: 14px; height: 9px; transform: none; }
+[data-template='product'] .tg-product-design .slider-button--prev .tg-gallery-chevron { transform: rotate(90deg); }
+[data-template='product'] .tg-product-design .slider-button--next .tg-gallery-chevron { transform: rotate(-90deg); }
+[data-template='product'] .tg-product-design .tg-design-gallery [id^='GalleryViewer']:has(.product__media-list--single) > .slider-buttons { display: none; }
+@media (min-width: 990px) {
+  [data-template='product'] .tg-product-design .tg-design-gallery:has(.thumbnail-slider) {
+    display: grid;
+    grid-template-columns: var(--tg-product-thumb-size, 100px) minmax(0, 1fr);
+    gap: 0 var(--tg-product-thumb-gap, 16px);
+    align-items: start;
+  }
+  [data-template='product'] .tg-product-design .tg-design-gallery [id^='GalleryViewer'] { grid-column: 2; grid-row: 1; }
+  [data-template='product'] .tg-product-design .tg-design-gallery .thumbnail-slider {
+    display: block;
+    grid-column: 1;
+    grid-row: 1;
+    width: var(--tg-product-thumb-size, 100px);
+    min-width: 0;
+    margin: 0;
+  }
+  [data-template='product'] .tg-product-design .tg-design-gallery .thumbnail-slider > .slider-button { display: none; }
+  [data-template='product'] .tg-product-design .tg-design-gallery .thumbnail-list {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    width: 100%;
+    max-height: calc(var(--tg-product-thumb-size, 100px) * 5 + var(--tg-product-thumb-gap, 16px) * 4);
+    gap: var(--tg-product-thumb-gap, 16px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin: 0;
+    padding: 0;
+    scroll-padding: 0;
+    scroll-snap-type: y proximity;
+    scrollbar-width: none;
+  }
+  [data-template='product'] .tg-product-design .tg-design-gallery .thumbnail-list::-webkit-scrollbar { display: none; }
+  [data-template='product'] .tg-product-design .tg-design-gallery .thumbnail-list__item {
+    flex: 0 0 var(--tg-product-thumb-size, 100px);
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    height: var(--tg-product-thumb-size, 100px);
+    margin: 0;
+  }
+  [data-template='product'] .tg-product-design .tg-design-gallery .thumbnail-list__item::before { display: none; }
+  [data-template='product'] .tg-product-design .tg-design-gallery .thumbnail {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    opacity: .6;
+    box-shadow: none;
+  }
+  [data-template='product'] .tg-product-design .tg-design-gallery .thumbnail[aria-current] {
+    border-color: var(--tg-product-accent, #f36352);
+    opacity: 1;
+  }
+  [data-template='product'] .tg-product-design .tg-design-gallery .thumbnail img { border-radius: 11px; }
+  [data-template='product'] .tg-product-design .tg-design-gallery > .product__xr-button { grid-column: 2; }
+}
+@media (max-width: 989px) {
+  [data-template='product'] .tg-product-design .tg-design-gallery { display: block; }
+  [data-template='product'] .tg-product-design .tg-design-gallery .thumbnail-slider,
+  [data-template='product'] .tg-product-design .tg-design-gallery [id^='GalleryViewer'] > .slider-buttons { display: none; }
+  [data-template='product'] .tg-product-design .tg-gallery-pagination:not([hidden]) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0;
+    margin: 8px 0 0;
+  }
+  .tg-product-design .tg-gallery-dot {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+  .tg-product-design .tg-gallery-dot::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #d9d9d9;
+  }
+  .tg-product-design .tg-gallery-dot[aria-current='true']::before { background: #000; }
+
+  /* TeeInBlue replaces the native gallery with a fixed-width SVG stage. Keep
+     its live preview inside the same 343px mobile column. */
+  [data-template='product'] .tg-product-design .tee-gallery-wrapper,
+  [data-template='product'] .tg-product-design #tee-gallery,
+  [data-template='product'] .tg-product-design .tee-gallery,
+  [data-template='product'] .tg-product-design .tee-mockup-artwork__wrapper,
+  [data-template='product'] .tg-product-design .tee-mockup-artwork__wrapper > svg {
+    max-width: 100%;
+    width: 100%;
+    min-width: 0;
+  }
+  [data-template='product'] .tg-product-design .tee-thumbnails--bottom {
+    max-width: 100%;
+    overflow: hidden;
+  }
+}
+
+/* TeeInBlue replaces Dawn's gallery after loading. Style its real controls so
+   its artwork, zoom and slide listeners continue to own the interaction. */
+[data-template='product'] .tg-product-design #tee-gallery {
+  width: 100%;
+  height: auto !important;
+}
+[data-template='product'] .tg-product-design #tee-gallery .tee-gallery__stage { min-width: 0; width: 100%; }
+[data-template='product'] .tg-product-design #tee-gallery .tee-slider {
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 1;
+  border-radius: var(--tg-product-media-radius, 24px);
+  overflow: hidden;
+}
+[data-template='product'] .tg-product-design #tee-gallery .tee-slider__inner { width: 100%; height: 100%; }
+[data-template='product'] .tg-product-design #tee-gallery .tee-thumbnails { margin: 0; padding: 0; }
+[data-template='product'] .tg-product-design #tee-gallery .tee-thumbnails__button { display: none; }
+[data-template='product'] .tg-product-design #tee-gallery .tee-thumbnails__track {
+  display: flex;
+  transform: none !important;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+[data-template='product'] .tg-product-design #tee-gallery .tee-thumbnail {
+  margin: 0;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+[data-template='product'] .tg-product-design #tee-gallery .tee-thumbnail:focus-visible {
+  outline: 2px solid #000;
+  outline-offset: -2px;
+}
+[data-template='product'] .tg-product-design #tee-gallery .tee-slider__button {
+  width: 46px;
+  height: 46px;
+  min-height: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 0;
+  border-radius: 50%;
+  background: rgb(254 249 239 / 80%);
+  color: #000;
+}
+[data-template='product'] .tg-product-design #tee-gallery .tee-slider__button--prev { left: 16px; }
+[data-template='product'] .tg-product-design #tee-gallery .tee-slider__button--next { right: 16px; }
+@media (min-width: 990px) {
+  [data-template='product'] .tg-product-design #tee-gallery .tee-gallery:has(.tee-thumbnails) {
+    display: grid;
+    grid-template-columns: var(--tg-product-thumb-size, 100px) minmax(0, 1fr);
+    gap: var(--tg-product-thumb-gap, 16px);
+    align-items: start;
+  }
+  [data-template='product'] .tg-product-design #tee-gallery .tee-gallery__stage { grid-column: 2; grid-row: 1; }
+  [data-template='product'] .tg-product-design #tee-gallery .tee-thumbnails {
+    grid-column: 1;
+    grid-row: 1;
+    width: var(--tg-product-thumb-size, 100px) !important;
+    height: auto !important;
+    max-height: calc(var(--tg-product-thumb-size, 100px) * 5 + var(--tg-product-thumb-gap, 16px) * 4);
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+  [data-template='product'] .tg-product-design #tee-gallery .tee-thumbnails__track { flex-direction: column; gap: var(--tg-product-thumb-gap, 16px); }
+  [data-template='product'] .tg-product-design #tee-gallery .tee-thumbnail {
+    flex: 0 0 var(--tg-product-thumb-size, 100px);
+    width: var(--tg-product-thumb-size, 100px) !important;
+    height: var(--tg-product-thumb-size, 100px) !important;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    overflow: hidden;
+    opacity: .6;
+  }
+  [data-template='product'] .tg-product-design #tee-gallery .tee-thumbnail--active { opacity: 1; border-color: #f36352; }
+}
+@media (max-width: 989px) {
+  [data-template='product'] .tg-product-design #tee-gallery .tee-gallery { display: block; }
+  [data-template='product'] .tg-product-design #tee-gallery .tee-slider__button { display: none; }
+  [data-template='product'] .tg-product-design #tee-gallery .tee-thumbnails {
+    width: 100% !important;
+    height: auto !important;
+    margin-top: 8px;
+    overflow: visible;
+  }
+  [data-template='product'] .tg-product-design #tee-gallery .tee-thumbnails__track { justify-content: center; flex-wrap: wrap; gap: 0; }
+  [data-template='product'] .tg-product-design #tee-gallery .tee-thumbnail {
+    display: grid;
+    place-items: center;
+    flex: 0 0 24px;
+    width: 24px !important;
+    height: 24px !important;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    opacity: 1;
+  }
+  [data-template='product'] .tg-product-design #tee-gallery .tee-thumbnail > * { display: none; }
+  [data-template='product'] .tg-product-design #tee-gallery .tee-thumbnail::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #d9d9d9;
+  }
+  [data-template='product'] .tg-product-design #tee-gallery .tee-thumbnail--active::before { background: #000; }
+}
+[data-template='product'] .tg-product-design #tee-gallery .tee-thumbnails[data-tg-single='true'] { display: none; }
+[data-template='product'] .tg-product-design #tee-gallery .tee-gallery:has(.tee-thumbnails[data-tg-single='true']) { display: block; }

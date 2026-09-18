@@ -1,0 +1,15 @@
+.tg-product-design variant-selects { display: block; }
+.tg-product-design variant-selects .product-form__input { margin: 0 0 20px; padding: 0; max-width: 100%; border: 0; }
+.tg-product-design variant-selects .product-form__input[hidden] { display: none !important; }
+.tg-product-design variant-selects .form__label { display: block; margin-bottom: 10px; padding: 0; font-family: inherit; font-size: 14px; font-weight: 600; line-height: 18px; letter-spacing: 0; color: var(--tg-option-text, #000); }
+.tg-product-design variant-selects .product-form__input--pill input[type='radio'] + label { display: inline-flex; justify-content: center; align-items: center; min-height: 36px; min-width: 48px; margin: 0 8px 8px 0; padding: 8px 12px; border: 1px solid var(--tg-option-border, #ccc); border-radius: var(--tg-option-radius, 8px); background: var(--tg-option-bg, #fff); color: var(--tg-option-text, #000); font-family: inherit; font-size: 14px; font-weight: 500; line-height: 18px; letter-spacing: 0; }
+.tg-product-design variant-selects .product-form__input--pill input[type='radio']:checked + label { border-color: var(--tg-option-selected-bg, #000); background: var(--tg-option-selected-bg, #000); color: var(--tg-option-selected-text, #fff); }
+.tg-product-design variant-selects .product-form__input--pill input[type='radio']:focus-visible + label { outline: 2px solid currentColor; outline-offset: 3px; }
+.tg-product-design variant-selects .product-form__input--swatch { --swatch-input--size: 32px; }
+.tg-product-design variant-selects .swatch-input__input + .swatch-input__label { --swatch-input--border-radius: 50%; margin: 4px 14px 4px 4px; outline-offset: 3px; }
+.tg-product-design variant-selects .swatch-input__input:checked + .swatch-input__label { outline: 1px solid var(--tg-option-selected-bg, #000); }
+.tg-product-design variant-selects .select { max-width: 100%; width: 100%; border: 1px solid var(--tg-option-border, #ccc); border-radius: var(--tg-option-radius, 8px); background: var(--tg-option-bg, #fff); }
+.tg-product-design variant-selects .select::before, .tg-product-design variant-selects .select::after { display: none; }
+.tg-product-design variant-selects .select__select { min-height: 36px; height: 36px; padding: 0 36px 0 12px; border: 0; border-radius: inherit; color: var(--tg-option-text, #000); font-family: inherit; font-size: 14px; font-weight: 500; letter-spacing: 0; line-height: normal; background: transparent; }
+.tg-product-design variant-selects .dropdown-swatch + .select__select { padding-left: 48px; }
+.tg-product-design variant-selects .dropdown-swatch { --swatch-input--size: 24px; top: 6px; left: 12px; }
