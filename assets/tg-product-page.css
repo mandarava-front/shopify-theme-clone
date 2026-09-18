@@ -432,6 +432,10 @@
   line-height: 1.58;
 }
 
+[data-template='product'] .tg-product-accordion .accordion__content a {
+  color: #0066cc;
+}
+
 /* The native quantity block stays the source of truth and moves into the form. */
 [data-template='product'] .tg-product__purchase-row {
   display: grid;
