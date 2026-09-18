@@ -1,0 +1,59 @@
+/* Collection cards use a compact Figma treatment while the shared card remains unchanged elsewhere. */
+.tg-collection-card {
+  --tg-price-color: #f36555;
+  --tg-compare: #979593;
+  --tg-badge-background: #f8a93e;
+  --tg-badge-text: #000;
+  --tg-card-price-size: 24px;
+  --tg-card-price-size-mobile: 18px;
+  --tg-card-price-weight: 700;
+  --tg-card-compare-size: 16px;
+  --tg-card-compare-size-mobile: 12px;
+}
+
+.tg-collection-card .card__inner {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--mcc-card-radius, 16px);
+  background: #f7f7f7;
+}
+
+.tg-collection-card .card__media,
+.tg-collection-card .media {
+  border-radius: inherit;
+}
+
+.tg-collection-card .card__content {
+  padding: 0;
+}
+
+.tg-collection-card .card__information {
+  padding: 12px 0 0;
+}
+
+.tg-collection-card .card__heading {
+  margin: 0;
+  color: #000;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.tg-collection-grid .tg-collection-card .card__heading {
+  font-size: 14px;
+}
+
+@media screen and (max-width: 749px) {
+  .tg-collection-card .card__inner {
+    border-radius: 8px;
+  }
+
+  .tg-collection-card .card__information {
+    padding-top: 8px;
+  }
+
+  .tg-collection-grid .tg-collection-card .card__heading {
+    font-size: 14px;
+  }
+
+}

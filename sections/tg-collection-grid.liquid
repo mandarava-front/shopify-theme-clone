@@ -78,56 +78,6 @@
 
           <div class="product-grid-container" id="ProductGridContainer">
             {% if collection.products.size > 0 %}
-              {% if section.settings.enable_sorting %}
-                <facet-filters-form class="tg-collection__results-header small-hide">
-                  <form class="facets-vertical-form" id="FacetSortForm">
-                    <div class="product-count-vertical" role="status">
-                      <span id="ProductCountDesktop" data-product-count="{{ collection.products_count }}">{{ 'products.facets.product_count_simple' | t: count: collection.products_count }}</span>
-                      {% render 'loading-spinner' %}
-                    </div>
-                    <div class="facet-filters sorting">
-                      <div class="facet-filters__field">
-                        <label class="visually-hidden" for="SortBy">{{ tg_collection_sort_by_label }}</label>
-                        <tg-collection-sort class="tg-collection__sort-dropdown">
-                          <details class="tg-collection__sort-disclosure">
-                            <summary
-                              class="tg-collection__sort-trigger"
-                              id="SortBy"
-                              role="button"
-                              aria-expanded="false"
-                              aria-haspopup="listbox"
-                              aria-controls="TgCollectionSortOptions-{{ section.id }}"
-                            >
-                              <span>{{ tg_collection_sort_button_label | escape }}</span>
-                              <span class="svg-wrapper" aria-hidden="true">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
-                            </summary>
-                            <ul
-                              class="tg-collection__sort-options"
-                              id="TgCollectionSortOptions-{{ section.id }}"
-                              role="listbox"
-                              aria-labelledby="SortBy"
-                            >
-                              {% for option in collection.sort_options %}
-                                <li role="none">
-                                  <button
-                                    type="button"
-                                    role="option"
-                                    data-tg-collection-sort-option="{{ option.value | escape }}"
-                                    aria-selected="{% if option.value == tg_collection_sort_by %}true{% else %}false{% endif %}"
-                                  >
-                                    {{ option.name | escape }}
-                                  </button>
-                                </li>
-                              {% endfor %}
-                            </ul>
-                          </details>
-                          <input type="hidden" name="sort_by" value="{{ tg_collection_sort_by | escape }}">
-                        </tg-collection-sort>
-                      </div>
-                    </div>
-                  </form>
-                </facet-filters-form>
-              {% endif %}
               {% render 'tg-collection-product-grid', products: collection.products, section: section %}
               {% if paginate.pages > 1 %}
                 {% render 'pagination', paginate: paginate, anchor: '' %}
@@ -195,23 +145,23 @@
     { "type": "range", "id": "columns_desktop", "label": "t:tg_collection.settings.desktop_columns", "min": 2, "max": 6, "step": 1, "default": 4 },
     { "type": "select", "id": "columns_mobile", "label": "t:tg_collection.settings.mobile_columns", "options": [{ "value": "1", "label": "t:tg_collection.options.one_column" }, { "value": "2", "label": "t:tg_collection.options.two_columns" }], "default": "2" },
     { "type": "select", "id": "image_ratio", "label": "t:tg_collection.settings.image_ratio", "options": [{ "value": "adapt", "label": "t:tg_collection.options.adapt" }, { "value": "portrait", "label": "t:tg_collection.options.portrait" }, { "value": "square", "label": "t:tg_collection.options.square" }], "default": "square" },
-    { "type": "checkbox", "id": "show_secondary_image", "label": "t:tg_collection.settings.show_secondary_image", "default": true },
+    { "type": "checkbox", "id": "show_secondary_image", "label": "t:tg_collection.settings.show_secondary_image", "default": false },
     { "type": "checkbox", "id": "show_vendor", "label": "t:tg_collection.settings.show_vendor", "default": false },
-    { "type": "checkbox", "id": "show_rating", "label": "t:tg_collection.settings.show_rating", "default": true },
+    { "type": "checkbox", "id": "show_rating", "label": "t:tg_collection.settings.show_rating", "default": false },
     { "type": "select", "id": "quick_add", "label": "t:tg_collection.settings.quick_add", "options": [{ "value": "none", "label": "t:tg_collection.options.none" }, { "value": "standard", "label": "t:tg_collection.options.standard" }], "default": "none" },
     { "type": "checkbox", "id": "enable_filtering", "label": "t:tg_collection.settings.enable_filtering", "default": true },
     { "type": "checkbox", "id": "enable_sorting", "label": "t:tg_collection.settings.enable_sorting", "default": true },
     { "type": "select", "id": "filter_type", "label": "t:tg_collection.settings.filter_type", "options": [{ "value": "vertical", "label": "t:tg_collection.options.vertical" }, { "value": "drawer", "label": "t:tg_collection.options.drawer" }, { "value": "horizontal", "label": "t:tg_collection.options.horizontal" }], "default": "vertical" },
-    { "type": "range", "id": "facet_width", "label": "t:tg_collection.settings.facet_width", "min": 180, "max": 360, "step": 5, "unit": "px", "default": 220 },
-    { "type": "range", "id": "layout_gap", "label": "t:tg_collection.settings.layout_gap", "min": 16, "max": 80, "step": 4, "unit": "px", "default": 32 },
-    { "type": "range", "id": "column_gap", "label": "t:tg_collection.settings.column_gap", "min": 8, "max": 48, "step": 4, "unit": "px", "default": 24 },
+    { "type": "range", "id": "facet_width", "label": "t:tg_collection.settings.facet_width", "min": 180, "max": 360, "step": 5, "unit": "px", "default": 300 },
+    { "type": "range", "id": "layout_gap", "label": "t:tg_collection.settings.layout_gap", "min": 16, "max": 80, "step": 4, "unit": "px", "default": 40 },
+    { "type": "range", "id": "column_gap", "label": "t:tg_collection.settings.column_gap", "min": 8, "max": 48, "step": 4, "unit": "px", "default": 20 },
     { "type": "range", "id": "row_gap", "label": "t:tg_collection.settings.row_gap", "min": 16, "max": 80, "step": 4, "unit": "px", "default": 48 },
-    { "type": "range", "id": "card_radius", "label": "t:tg_collection.settings.card_radius", "min": 0, "max": 24, "step": 2, "unit": "px", "default": 4 },
+    { "type": "range", "id": "card_radius", "label": "t:tg_collection.settings.card_radius", "min": 0, "max": 24, "step": 2, "unit": "px", "default": 16 },
     { "type": "color", "id": "background", "label": "t:tg_collection.settings.background", "default": "#ffffff" },
-    { "type": "color", "id": "text_color", "label": "t:tg_collection.settings.text_color", "default": "#18181e" },
+    { "type": "color", "id": "text_color", "label": "t:tg_collection.settings.text_color", "default": "#000000" },
     { "type": "color", "id": "muted_color", "label": "t:tg_collection.settings.muted_color", "default": "#666666" },
-    { "type": "color", "id": "accent_color", "label": "t:tg_collection.settings.accent_color", "default": "#ffb700" },
-    { "type": "color", "id": "price_color", "label": "t:tg_collection.settings.price_color", "default": "#e18a00" },
+    { "type": "color", "id": "accent_color", "label": "t:tg_collection.settings.accent_color", "default": "#F36555" },
+    { "type": "color", "id": "price_color", "label": "t:tg_collection.settings.price_color", "default": "#F36555" },
     { "type": "select", "id": "price_currency_mode", "label": "t:tg_collection.settings.price_currency_mode", "options": [{ "value": "market", "label": "t:tg_collection.options.market_currency" }, { "value": "custom", "label": "t:tg_collection.options.custom_currency" }], "default": "market" },
     { "type": "text", "id": "price_currency_label", "label": "t:tg_collection.settings.price_currency_label", "info": "t:tg_collection.info.price_currency_label" },
     { "type": "color", "id": "border_color", "label": "t:tg_collection.settings.border_color", "default": "#d9d9d9" },

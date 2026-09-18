@@ -1,9 +1,69 @@
 {{ 'tg-sections.css' | asset_url | stylesheet_tag }}
 {{ 'tg-collection.css' | asset_url | stylesheet_tag }}
+{% assign tg_collection_sort_by = collection.sort_by | default: collection.default_sort_by %}
+{% assign tg_collection_sort_button_label = tg_collection_sort_by %}
+{% assign tg_collection_sort_by_label = 'products.facets.sort_by_label' | t %}
+{% for option in collection.sort_options %}
+  {% if option.value == tg_collection_sort_by %}
+    {% assign tg_collection_sort_button_label = option.name %}
+    {% break %}
+  {% endif %}
+{% endfor %}
 <section class="tg-collection tg-collection-header" style="--mcc-background: {{ section.settings.background }}; --mcc-text: {{ section.settings.text_color }}; --mcc-muted: {{ section.settings.muted_color }}; --mcc-accent: {{ section.settings.accent_color }}; --mcc-header-top: {{ section.settings.padding_top }}px; --mcc-header-bottom: {{ section.settings.padding_bottom }}px; --mcc-title-size: {{ section.settings.title_font_size }}px; --mcc-title-size-mobile: {{ section.settings.title_font_size_mobile }}px; --mcc-title-weight: {{ section.settings.title_font_weight }}; --mcc-description-size: {{ section.settings.description_font_size }}px; --mcc-description-size-mobile: {{ section.settings.description_font_size_mobile }}px; --mcc-description-weight: {{ section.settings.description_font_weight }};" {{ section.shopify_attributes }}>
   <div class="tg-collection__width">
     {% if section.settings.show_breadcrumbs %}<nav class="tg-collection__breadcrumb" style="{% render 'tg-breadcrumb-text-style', section: section %}" aria-label="{{ 'tg_collection.a11y.breadcrumb' | t }}"><a href="{{ routes.root_url }}">{{ section.settings.home_label | escape }}</a><span aria-hidden="true">/</span><span aria-current="page">{{ collection.title | escape }}</span></nav>{% endif %}
-    <h1 class="tg-collection__title">{% if section.settings.title != blank %}{{ section.settings.title }}{% else %}{{ collection.title | escape }}{% endif %}</h1>
+    <div class="tg-collection__title-row">
+      <div class="tg-collection__title-copy">
+        <h1 class="tg-collection__title">{% if section.settings.title != blank %}{{ section.settings.title }}{% else %}{{ collection.title | escape }}{% endif %}</h1>
+        <span class="tg-collection__count">({{ 'products.facets.product_count_simple' | t: count: collection.products_count }})</span>
+      </div>
+      {% if collection.products.size > 0 and collection.sort_options.size > 0 %}
+        <facet-filters-form class="tg-collection__header-sort small-hide">
+          <form class="facets-vertical-form" id="FacetSortForm">
+            <div class="facet-filters sorting">
+              <div class="facet-filters__field">
+                <label class="visually-hidden" for="SortBy">{{ tg_collection_sort_by_label }}</label>
+                <tg-collection-sort class="tg-collection__sort-dropdown">
+                  <details class="tg-collection__sort-disclosure">
+                    <summary
+                      class="tg-collection__sort-trigger"
+                      id="SortBy"
+                      role="button"
+                      aria-expanded="false"
+                      aria-haspopup="listbox"
+                      aria-controls="TgCollectionSortOptions-{{ section.id }}"
+                    >
+                      <span>{{ tg_collection_sort_button_label | escape }}</span>
+                      <span class="svg-wrapper" aria-hidden="true">{{- 'icon-caret.svg' | inline_asset_content -}}</span>
+                    </summary>
+                    <ul
+                      class="tg-collection__sort-options"
+                      id="TgCollectionSortOptions-{{ section.id }}"
+                      role="listbox"
+                      aria-labelledby="SortBy"
+                    >
+                      {% for option in collection.sort_options %}
+                        <li role="none">
+                          <button
+                            type="button"
+                            role="option"
+                            data-tg-collection-sort-option="{{ option.value | escape }}"
+                            aria-selected="{% if option.value == tg_collection_sort_by %}true{% else %}false{% endif %}"
+                          >
+                            {{ option.name | escape }}
+                          </button>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  </details>
+                  <input type="hidden" name="sort_by" value="{{ tg_collection_sort_by | escape }}">
+                </tg-collection-sort>
+              </div>
+            </div>
+          </form>
+        </facet-filters-form>
+      {% endif %}
+    </div>
     {% if section.settings.show_description and collection.description != blank %}<div class="tg-collection__description rte">{{ collection.description }}</div>{% elsif section.settings.description != blank %}<div class="tg-collection__description rte">{{ section.settings.description }}</div>{% endif %}
   </div>
 </section>
@@ -105,7 +165,7 @@
       "max": 56,
       "step": 1,
       "unit": "px",
-      "default": 42
+      "default": 28
     },
     {
       "type": "range",
@@ -115,7 +175,7 @@
       "max": 40,
       "step": 1,
       "unit": "px",
-      "default": 26
+      "default": 20
     },
     {
       "type": "select",
@@ -206,7 +266,7 @@
       "type": "color",
       "id": "text_color",
       "label": "t:tg_collection.settings.text_color",
-      "default": "#18181e"
+      "default": "#000000"
     },
     {
       "type": "color",
@@ -218,7 +278,7 @@
       "type": "color",
       "id": "accent_color",
       "label": "t:tg_collection.settings.accent_color",
-      "default": "#ffb700"
+      "default": "#F36555"
     },
     {
       "type": "range",
@@ -228,7 +288,7 @@
       "max": 120,
       "step": 4,
       "unit": "px",
-      "default": 20
+      "default": 40
     },
     {
       "type": "range",
