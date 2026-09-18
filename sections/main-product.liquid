@@ -680,7 +680,7 @@
                       {{ block.shopify_attributes }}
                     >
                       {%- if section.settings.enable_tg_product_style -%}
-                      <details class="tg-volume-discount__details">
+                      <details class="tg-volume-discount__details"{% if block.settings.default_open %} open{% endif %}>
                         <summary class="tg-volume-discount__summary">
                           <span class="svg-wrapper" aria-hidden="true">{{ 'tg-cart-promotion.svg' | inline_asset_content }}</span>
                           <span>{{ block.settings.heading | escape }}</span>
@@ -1578,6 +1578,7 @@
       "limit": 1,
       "settings": [
         { "type": "text", "id": "heading", "label": "t:sections.tg_product.volume_discount.heading.label", "default": "BUY MORE SAVE MORE" },
+        { "type": "checkbox", "id": "default_open", "label": "默认展开", "default": false },
         { "type": "range", "id": "tier_count", "label": "t:sections.tg_product.volume_discount.tier_count.label", "min": 1, "max": 4, "step": 1, "default": 3 },
         { "type": "header", "content": "t:sections.tg_product.volume_discount.tier_1.heading" },
         { "type": "text", "id": "tier_1_quantity", "label": "t:sections.tg_product.volume_discount.quantity.label", "default": "2 ITEMS" },

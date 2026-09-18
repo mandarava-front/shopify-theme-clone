@@ -58,6 +58,7 @@
         "volume_discount": {
           "type": "volume_discount",
           "settings": {
+            "default_open": false,
             "heading": "Buy more save more",
             "tier_count": 3,
             "tier_1_quantity": "Buy 2 Get 10% OFF",
