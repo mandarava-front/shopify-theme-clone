@@ -42,7 +42,7 @@
 .tg-collection__header-sort .facet-filters__field { width: 100%; }
 .tg-collection__description { max-width: 76rem; margin: .8rem 0 0; color: var(--mcc-muted); font-size: var(--mcc-description-size, 1.4rem); font-weight: var(--mcc-description-weight, 400); line-height: 1.6; }
 
-.tg-collection-grid { min-width: 0; padding: var(--mcc-grid-top, 2rem) 0 var(--mcc-grid-bottom, 16rem); }
+.tg-collection-grid { min-width: 0; padding: var(--mcc-grid-top, 2rem) 0 var(--mcc-grid-bottom, 16rem); padding-bottom: var(--mcc-grid-bottom, 16rem); }
 .tg-collection-grid .facets-vertical { display: grid; grid-template-columns: minmax(18rem, var(--mcc-facet-width, 30rem)) minmax(0, 1fr); gap: var(--mcc-layout-gap, 4rem); align-items: start; }
 .tg-collection-grid .facets-wrapper { width: 100%; margin: 0; padding: 0; overflow: hidden; border-radius: 1.6rem; background: #f5f5f5; }
 .tg-collection-grid .facets-container { padding-top: 0; color: var(--mcc-text); font-family: inherit; }
