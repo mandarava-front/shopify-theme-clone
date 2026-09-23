@@ -5,6 +5,7 @@
     const state = {
       productId: {{ product.id | append: '' | json }},
       handle: {{ product.handle | json }},
+      tee: 'unknown',
       teeMounted: false,
       customily: 'unknown',
       optionsReady: false,
@@ -22,6 +23,15 @@
     document.addEventListener('teeinblue-event-component-injected', () => {
       if (String(window.teeinblueCampaign?.productId) !== state.productId) return;
       state.teeMounted = true;
+      notify();
+    });
+    // TeeInBlue's embed writes its campaign inline into the server HTML only for
+    // products it personalizes, and emits nothing at all for other products. A
+    // parsed document without that data is therefore TeeInBlue's negative
+    // verdict; it does not depend on the SDK loading over the network.
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.teeinblueCampaign || document.getElementById('teeinblue-product-data')) return;
+      state.tee = 'absent';
       notify();
     });
     const listen = (name, callback) => window.addEventListener(name, () => { callback(); notify(); });

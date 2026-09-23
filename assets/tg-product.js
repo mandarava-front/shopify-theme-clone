@@ -87,9 +87,16 @@ function bindTgProductAddOnForms(container = document) {
 // `teeinblue.campaign_version` metafield that main-product.liquid matched on.
 // Returns undefined while the plugin has not reported yet, which is exactly the
 // window the guard below exists to cover — callers must not read that as "no".
+// TeeInBlue publishes nothing for products it does not personalize, so for those
+// the "no" comes from tg-customization-bootstrap finding no inline campaign.
 function tgGetTeeInBlueVerdict(productRoot) {
   const campaign = window.teeinblueCampaign;
-  if (!campaign || campaign.isTeeInBlueProduct === undefined) return undefined;
+  if (!campaign) {
+    const lifecycle = window.TgCustomizationLifecycle;
+    const ownLifecycle = lifecycle && lifecycle.productId === productRoot?.dataset.productId;
+    return ownLifecycle && lifecycle.tee === 'absent' ? false : undefined;
+  }
+  if (campaign.isTeeInBlueProduct === undefined) return undefined;
   // A campaign for some other product says nothing about this one, so it stays
   // undecided rather than counting as "needs no customization".
   if (campaign.productId && productRoot?.dataset.productId) {
