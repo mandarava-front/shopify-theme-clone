@@ -158,28 +158,28 @@
         "step_K7hV4U": {
           "type": "step",
           "settings": {
-            "image": "shopify://shop_images/66ea9961-4039-4387-adf0-92ef29e767fa.png",
+            "image": "shopify://shop_images/20260922-150744.png",
             "title": "Choose & Customize Your Preview"
           }
         },
         "step_mVyk6e": {
           "type": "step",
           "settings": {
-            "image": "shopify://shop_images/d771da9a-666a-45c2-9cda-e50d1e0663b7.png",
+            "image": "shopify://shop_images/20260922-150755.png",
             "title": "Adjust Product Parameters"
           }
         },
         "step_EfQdef": {
           "type": "step",
           "settings": {
-            "image": "shopify://shop_images/2e478be1-a3f3-491c-8bca-bd43c829a0ec.png",
+            "image": "shopify://shop_images/27852102-bf38-45ca-bf65-f4751c3cc720.png",
             "title": "Final Product Packaged With Care"
           }
         },
         "step_GtXVGL": {
           "type": "step",
           "settings": {
-            "image": "shopify://shop_images/a2675730-3d7f-4bf1-ad74-934d2973b028.png",
+            "image": "shopify://shop_images/20260922-150749.png",
             "title": "Done! Wait for your gift"
           }
         },
@@ -515,7 +515,12 @@
         "image_radius": 0,
         "background": "#ffffff",
         "padding_top": 0,
-        "padding_bottom": 0
+        "padding_bottom": 0,
+        "image_max_width": 1320,
+        "image_margin_mobile": 16,
+        "image_radius_mobile": 16,
+        "desktop_aspect_ratio": "2 / 1",
+        "mobile_aspect_ratio": "343 / 400"
       }
     },
     "tg_split_promo_eDMMB3": {
@@ -523,7 +528,6 @@
       "disabled": true,
       "name": "t:tg.sections.split_promo.name",
       "settings": {
-        "desktop_image": "shopify://shop_images/2-pc.png",
         "image_position": "left",
         "eyebrow": "",
         "eyebrow_font_size": 13,

@@ -43,7 +43,7 @@
             "price_font_size": 32,
             "price_font_size_mobile": 24,
             "price_font_weight": "700",
-            "price_color": "#F36555",
+            "price_color": "#f36555",
             "price_letter_spacing": 0,
             "compare_price_font_size": 16,
             "compare_price_font_size_mobile": 14,
@@ -62,8 +62,8 @@
         "volume_discount": {
           "type": "volume_discount",
           "settings": {
-            "default_open": false,
             "heading": "Buy more save more",
+            "default_open": true,
             "tier_count": 3,
             "tier_1_quantity": "Buy 2 Get 10% OFF",
             "tier_1_discount": "",
@@ -73,12 +73,12 @@
             "tier_3_discount": "",
             "tier_4_quantity": "",
             "tier_4_discount": "",
-            "background_color": "#FCF9F5",
-            "tier_background_color": "#FFFFFF",
-            "border_color": "#E8E3DC",
+            "background_color": "#fcf9f5",
+            "tier_background_color": "#ffffff",
+            "border_color": "#e8e3dc",
             "text_color": "#000000",
-            "title_color": "#F36555",
-            "accent_color": "#F36555",
+            "title_color": "#f36555",
+            "accent_color": "#f36555",
             "corner_radius": 8,
             "title_size": 14,
             "body_size": 14,
@@ -95,25 +95,12 @@
             "hide_single_value_options": false,
             "hide_unavailable_options": false,
             "dropdown_option_names": "Title",
-            "option_background": "#FFFFFF",
+            "option_background": "#ffffff",
             "option_text": "#000000",
             "option_selected_background": "#000000",
-            "option_selected_text": "#FFFFFF",
-            "option_border": "#CCCCCC",
-            "option_radius": 8
-          }
-        },
-        "teeinblue_product_personalizer_product_app_block_pwCrLi": {
-          "type": "shopify://apps/teeinblue-product-personalizer/blocks/product-app-block/67212f31-32b0-450c-97dd-7e182a5fac7b",
-          "settings": {
-            "enable_design_mode": false,
-            "loading_background_color": "#000000",
-            "show_price": true,
-            "show_available_product": true,
-            "show_color": true,
-            "show_size": true,
-            "show_form": true,
-            "show_action_buttons": true
+            "option_selected_text": "#ffffff",
+            "option_radius": 8,
+            "option_border": "#cccccc"
           }
         },
         "quantity_selector": {
@@ -144,9 +131,9 @@
             "order_icon": "checkmark",
             "ship_icon": "truck",
             "arrival_icon": "box",
-            "icon_background_color": "#E8F0E9",
+            "icon_background_color": "#e8f0e9",
             "svg_icon_color": "#000000",
-            "icon_line_color": "#CCCCCC"
+            "icon_line_color": "#cccccc"
           }
         },
         "accordion_description": {
@@ -190,7 +177,7 @@
             "title_font_weight": "600",
             "title_color": "#000000",
             "icon": "none",
-            "content": "<p>We want you to be<strong> </strong>satisfied with the products you buy from us. </p><p>We have 24/7/365 ticket and email support. Please contact us at <a href=\"mailto:support@heartlune.com\">support@heartlune.com</a>. if you need any assistance.</p>",
+            "content": "<p>We want you to be<strong> </strong>satisfied with the products you buy from us. </p><p>We have 24/7/365 ticket and email support. Please contact us at <a href=\"mailto:support@heartlune.com\">support@lunelove.com</a>. if you need any assistance.</p>",
             "page": ""
           }
         }
@@ -203,7 +190,6 @@
         "sales_proof",
         "volume_discount",
         "variant_picker",
-        "teeinblue_product_personalizer_product_app_block_pwCrLi",
         "quantity_selector",
         "buy_buttons",
         "delivery_estimate",
@@ -213,6 +199,17 @@
       ],
       "settings": {
         "enable_tg_product_style": true,
+        "tg_product_font": "quicksand_n5",
+        "show_breadcrumbs_mobile": false,
+        "tg_product_width": 1320,
+        "tg_product_gap": 20,
+        "tg_product_gutter": 16,
+        "tg_product_thumb_size": 100,
+        "tg_product_thumb_gap": 16,
+        "tg_product_green_background": "#f5fcf6",
+        "tg_product_green_border": "#e0e9e1",
+        "tg_product_green_color": "#27a66a",
+        "tg_product_discount_background": "#f8a93e",
         "show_breadcrumbs": true,
         "breadcrumb_home_label": "Home",
         "breadcrumb_font_size": 14,
@@ -220,11 +217,11 @@
         "breadcrumb_font_weight": "500",
         "breadcrumb_text_color": "#999999",
         "breadcrumb_link_color": "#000000",
-        "breadcrumb_link_hover_color": "#F36352",
+        "breadcrumb_link_hover_color": "#f36352",
         "purchase_actions_layout": "inline",
-        "purchase_button_background": "#F36352",
+        "purchase_button_background": "#f36352",
         "purchase_button_text": "#ffffff",
-        "purchase_button_hover": "#DF5140",
+        "purchase_button_hover": "#df5140",
         "enable_sticky_info": true,
         "color_scheme": "scheme-1",
         "media_size": "small",
@@ -239,18 +236,7 @@
         "hide_variants": false,
         "enable_video_looping": false,
         "padding_top": 20,
-        "padding_bottom": 0,
-        "tg_product_font": "quicksand_n5",
-        "tg_product_width": 1320,
-        "tg_product_gap": 20,
-        "tg_product_gutter": 16,
-        "tg_product_thumb_size": 100,
-        "tg_product_thumb_gap": 16,
-        "tg_product_green_background": "#F5FCF6",
-        "tg_product_green_border": "#E0E9E1",
-        "tg_product_green_color": "#27A66A",
-        "tg_product_discount_background": "#F8A93E",
-        "show_breadcrumbs_mobile": false
+        "padding_bottom": 0
       }
     },
     "disclosures": {
@@ -292,9 +278,9 @@
         "padding_top_mobile": 40,
         "padding_bottom_mobile": 40,
         "text_color": "#000000",
-        "price_color": "#F36555",
+        "price_color": "#f36555",
         "compare_color": "#999999",
-        "badge_color": "#F8A93E"
+        "badge_color": "#f8a93e"
       }
     },
     "1788516308e48ffd5b": {

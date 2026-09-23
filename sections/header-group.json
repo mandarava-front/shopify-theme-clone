@@ -18,7 +18,7 @@
           "type": "announcement",
           "settings": {
             "content": "🔥 Buy 2 Get 10% OFF - Buy 3 Get 15% OFF -Buy 4 Get 20% OFF🔥",
-            "text": "Free shipping on orders over $69✈️",
+            "text": "",
             "highlight_text": "",
             "highlight_color": "#a50c43",
             "highlight_bold": true,
@@ -43,7 +43,7 @@
         "tg_announcement_letter_spacing": 0,
         "tg_announcement_text_transform": "none",
         "tg_announcement_height": 40,
-        "tg_announcement_scroll_direction": "none",
+        "tg_announcement_scroll_direction": "left",
         "tg_announcement_scroll_devices": "all",
         "tg_announcement_background_color": "#fef1d8",
         "tg_announcement_text_color": "#000000",
@@ -72,7 +72,7 @@
           "type": "tg_header_desktop_social",
           "settings": {
             "platform": "facebook",
-            "link": "https://www.facebook.com/profile.php?id=61593551440607",
+            "link": "https://www.facebook.com/profile.php?id=61594413191857",
             "accessibility_label": ""
           }
         },
@@ -80,7 +80,7 @@
           "type": "tg_header_desktop_social",
           "settings": {
             "platform": "instagram",
-            "link": "https://www.instagram.com/heartlune_official/",
+            "link": "https://www.instagram.com/lunelove_official/",
             "accessibility_label": ""
           }
         },
@@ -128,7 +128,6 @@
       "settings": {
         "logo_position": "middle-left",
         "mobile_logo_position": "center",
-        "tg_header_mobile_logo": "shopify://shop_images/0e44a1e857d737112dc14a2239bda79c.png",
         "tg_header_mobile_logo_width": 97,
         "enable_tg_header_mobile_menu": true,
         "menu": "",
@@ -166,8 +165,7 @@
         "mobile_track_order_link": "/pages/track-order",
         "mobile_reviews_link": "/#reviews",
         "enable_tg_header_desktop": true,
-        "tg_header_desktop_logo": "shopify://shop_images/0e44a1e857d737112dc14a2239bda79c.png",
-        "tg_header_desktop_logo_text": "Heartlune",
+        "tg_header_desktop_logo_text": "Lunelove",
         "tg_header_desktop_show_search": true,
         "tg_header_desktop_search_placeholder": "Find your perfect gift in seconds...",
         "tg_header_desktop_search_label": "Search",
