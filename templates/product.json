@@ -107,6 +107,19 @@
           "type": "quantity_selector",
           "settings": {}
         },
+        "teeinblue_product_personalizer_product_app_block_BNFcMk": {
+          "type": "shopify://apps/teeinblue-product-personalizer/blocks/product-app-block/67212f31-32b0-450c-97dd-7e182a5fac7b",
+          "settings": {
+            "enable_design_mode": false,
+            "loading_background_color": "#000000",
+            "show_price": true,
+            "show_available_product": true,
+            "show_color": true,
+            "show_size": true,
+            "show_form": true,
+            "show_action_buttons": true
+          }
+        },
         "buy_buttons": {
           "type": "buy_buttons",
           "settings": {
@@ -191,6 +204,7 @@
         "volume_discount",
         "variant_picker",
         "quantity_selector",
+        "teeinblue_product_personalizer_product_app_block_BNFcMk",
         "buy_buttons",
         "delivery_estimate",
         "accordion_description",
@@ -288,12 +302,19 @@
       "settings": {
         "include_margins": true
       }
+    },
+    "1790240218d9f3b82e": {
+      "type": "apps",
+      "settings": {
+        "include_margins": true
+      }
     }
   },
   "order": [
     "main",
     "disclosures",
     "related-products",
-    "1788516308e48ffd5b"
+    "1788516308e48ffd5b",
+    "1790240218d9f3b82e"
   ]
 }
