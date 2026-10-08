@@ -80,14 +80,59 @@ if (!customElements.get('tg-gallery-pagination')) {
 // TeeInBlue thumbnails keep their original click listeners. Expose these same
 // elements as keyboard controls when their mobile presentation becomes dots.
 (() => {
-  const galleries = new WeakSet();
+  const galleries = new Map();
   const enhance = () => {
+    galleries.forEach((cleanup, gallery) => {
+      if (!gallery.isConnected) {
+        cleanup();
+        galleries.delete(gallery);
+      }
+    });
     document.querySelectorAll('.tg-product-design #tee-gallery').forEach((gallery) => {
       if (galleries.has(gallery)) return;
-      galleries.add(gallery);
       let frame;
+      const schedule = () => {
+        if (!frame) frame = requestAnimationFrame(sync);
+      };
+      const resizeObserver = new ResizeObserver(schedule);
+      let observed = new Set();
+      const fitMockups = () => {
+        const slider = gallery.querySelector('.tee-slider');
+        const mockups = Array.from(gallery.querySelectorAll('.tee-slide .tee-mockup'));
+        const targets = new Set(slider ? [slider, ...mockups] : []);
+        observed.forEach((element) => {
+          if (!targets.has(element)) resizeObserver.unobserve(element);
+        });
+        targets.forEach((element) => {
+          if (!observed.has(element)) resizeObserver.observe(element);
+        });
+        observed = targets;
+        if (!slider) return;
+
+        // TeeInBlue sizes its positioned artwork layers from the whole gallery,
+        // including our desktop thumbnail column. Fit the complete mockup to
+        // the actual slide without changing the app's artwork coordinates.
+        const bounds = slider.getBoundingClientRect();
+        if (!bounds.width || !bounds.height) return;
+        const updates = mockups.map((mockup) => {
+          const style = getComputedStyle(mockup);
+          const width = parseFloat(style.width);
+          const height = parseFloat(style.height);
+          return { mockup, scale: width > 0 && height > 0
+            ? String(Math.min(bounds.width / width, bounds.height / height)) : null };
+        });
+        updates.forEach(({ mockup, scale }) => {
+          // Keep our value off the inline style the app replaces when a
+          // mockup loads or changes. The composition inherits it from its item.
+          const item = mockup.parentElement;
+          if (scale && item.style.getPropertyValue('--tg-mockup-scale') !== scale) {
+            item.style.setProperty('--tg-mockup-scale', scale);
+          }
+        });
+      };
       const sync = () => {
         frame = null;
+        fitMockups();
         const thumbnails = Array.from(gallery.querySelectorAll('.tee-thumbnail'));
         const container = gallery.querySelector('.tee-thumbnails');
         if (container) container.dataset.tgSingle = String(thumbnails.length < 2);
@@ -106,11 +151,17 @@ if (!customElements.get('tg-gallery-pagination')) {
           else if (rect.bottom > trackRect.bottom) container.scrollTop += rect.bottom - trackRect.bottom;
         }
       };
-      const observer = new MutationObserver(() => {
-        if (!gallery.isConnected) { observer.disconnect(); return; }
-        if (!frame) frame = requestAnimationFrame(sync);
+      const observer = new MutationObserver((mutations) => {
+        // Recheck app updates as well as resizes; ignore our own variable
+        // writes on the parent and the slider's animation styles.
+        if (mutations.some((mutation) => mutation.attributeName !== 'style' || mutation.target.matches('.tee-mockup'))) schedule();
       });
-      observer.observe(gallery, { subtree: true, childList: true, attributes: true, attributeFilter: ['class'] });
+      observer.observe(gallery, { subtree: true, childList: true, attributes: true, attributeFilter: ['class', 'style'] });
+      galleries.set(gallery, () => {
+        observer.disconnect();
+        resizeObserver.disconnect();
+        cancelAnimationFrame(frame);
+      });
       gallery.addEventListener('keydown', (event) => {
         const thumbnail = event.target.closest('.tee-thumbnail');
         if (thumbnail && (event.key === 'Enter' || event.key === ' ')) {

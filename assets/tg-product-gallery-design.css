@@ -200,6 +200,12 @@
   overflow: hidden;
 }
 [data-template='product'] .tg-product-design #tee-gallery .tee-slider__inner { width: 100%; height: 100%; }
+/* Scale the complete composition; individual print layers use app-owned pixel
+   coordinates. Keep the plugin's transform available for its zoom behavior. */
+[data-template='product'] .tg-product-design #tee-gallery .tee-slide .tee-mockup {
+  scale: var(--tg-mockup-scale, 1);
+  transform-origin: center;
+}
 [data-template='product'] .tg-product-design #tee-gallery .tee-thumbnails { margin: 0; padding: 0; }
 [data-template='product'] .tg-product-design #tee-gallery .tee-thumbnails__button { display: none; }
 [data-template='product'] .tg-product-design #tee-gallery .tee-thumbnails__track {
