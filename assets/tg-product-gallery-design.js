@@ -116,10 +116,18 @@ if (!customElements.get('tg-gallery-pagination')) {
         if (!bounds.width || !bounds.height) return;
         const updates = mockups.map((mockup) => {
           const style = getComputedStyle(mockup);
-          const width = parseFloat(style.width);
-          const height = parseFloat(style.height);
-          return { mockup, scale: width > 0 && height > 0
-            ? String(Math.min(bounds.width / width, bounds.height / height)) : null };
+          // Prefer the inline box: the app's artwork layers are positioned in
+          // its coordinates, while the platform gallery lays this frame out as
+          // a flex item that shrinks to the slide width. Scaling from the
+          // shrunk width would shrink the frame twice and crop the photo layer.
+          const width = parseFloat(mockup.style.width) || parseFloat(style.width);
+          const height = parseFloat(mockup.style.height) || parseFloat(style.height);
+          return {
+            mockup,
+            width,
+            scale: width > 0 && height > 0
+              ? String(Math.min(bounds.width / width, bounds.height / height)) : null,
+          };
         });
         updates.forEach(({ mockup, scale }) => {
           // Keep our value off the inline style the app replaces when a

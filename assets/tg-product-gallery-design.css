@@ -201,8 +201,14 @@
 }
 [data-template='product'] .tg-product-design #tee-gallery .tee-slider__inner { width: 100%; height: 100%; }
 /* Scale the complete composition; individual print layers use app-owned pixel
-   coordinates. Keep the plugin's transform available for its zoom behavior. */
+   coordinates. Keep the plugin's transform available for its zoom behavior.
+   flex-shrink keeps the app's square frame at its declared inline size: the
+   platform gallery lays the frame out as a flex item, so it would otherwise
+   shrink to the slide width (the slide is narrower than the frame — TeeInBlue
+   measures the whole gallery, including the desktop thumbnail column) and the
+   photo layer's edge would crop once the uniform scale below is applied. */
 [data-template='product'] .tg-product-design #tee-gallery .tee-slide .tee-mockup {
+  flex-shrink: 0;
   scale: var(--tg-mockup-scale, 1);
   transform-origin: center;
 }
