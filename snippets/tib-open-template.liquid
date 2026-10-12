@@ -1,0 +1,29 @@
+{%- comment -%}
+  pod-clone：tib 没有「默认模板」字段，克隆品开局要么不选模板、要么开第一个，和源站不同。
+  worker 发布后把源站开局模板写进商品 metafield pod.tib_open_template（{tib artwork id: 模板下标}），
+  这里在买家还没选（含 tib 从 localStorage 恢复的选择）时替他点开。没有 metafield 的商品不输出任何东西；
+  tib 改了表单 class 只会退回「开局不选」，不会弄坏页面。
+  安装：放进 snippets/，在 layout/theme.liquid 的 </body> 前加一行 {% render 'tib-open-template', product: product %}
+  （非商品页 product 为空、不输出；放 layout 不怕同事换商品页模板）。
+{%- endcomment -%}
+{%- assign pod_opens = product.metafields.pod.tib_open_template.value -%}
+{%- if pod_opens -%}
+<script>
+(function () {
+  var opens = {{ pod_opens | json }}, tries = 0;
+  var timer = setInterval(function () {
+    var pending = false;
+    for (var id in opens) {
+      var field = document.querySelector('.tee-field--' + id + '-template');
+      if (!field) { pending = true; continue; }
+      if (field.getAttribute('data-pod-opened')) continue;
+      var tiles = field.querySelectorAll('.tee-clipart-label');
+      if (!tiles.length) { pending = true; continue; }
+      field.setAttribute('data-pod-opened', '1');
+      if (!field.querySelector('input:checked') && tiles[opens[id]]) tiles[opens[id]].click();
+    }
+    if (!pending || ++tries > 60) clearInterval(timer);
+  }, 500);
+})();
+</script>
+{%- endif -%}
