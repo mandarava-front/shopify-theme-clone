@@ -132,8 +132,8 @@
       "type": "tg-image-banner",
       "name": "t:tg.sections.banner.name",
       "settings": {
-        "desktop_image": "shopify://shop_images/1-pc.png",
-        "mobile_image": "shopify://shop_images/1-mb.png",
+        "desktop_image": "shopify://shop_images/banner-pc-2_3d6f4d1b-d158-46e2-b343-55fd30cdd406.png",
+        "mobile_image": "shopify://shop_images/banner-mb-2_efaf9856-eb90-4110-9174-99baad96d29a.png",
         "alt": "",
         "link": "",
         "image_max_width_percent": 0,
@@ -149,7 +149,7 @@
         "image_margin_mobile": 16,
         "image_radius_mobile": 16,
         "desktop_aspect_ratio": "2 / 1",
-        "mobile_aspect_ratio": "343 / 400"
+        "mobile_aspect_ratio": "auto"
       }
     },
     "tg_process_steps_iFeHaz": {
@@ -158,28 +158,28 @@
         "step_K7hV4U": {
           "type": "step",
           "settings": {
-            "image": "shopify://shop_images/20260922-150744.png",
+            "image": "shopify://shop_images/1.png",
             "title": "Choose & Customize Your Preview"
           }
         },
         "step_mVyk6e": {
           "type": "step",
           "settings": {
-            "image": "shopify://shop_images/20260922-150755.png",
+            "image": "shopify://shop_images/2.png",
             "title": "Adjust Product Parameters"
           }
         },
         "step_EfQdef": {
           "type": "step",
           "settings": {
-            "image": "shopify://shop_images/27852102-bf38-45ca-bf65-f4751c3cc720.png",
+            "image": "shopify://shop_images/3_adead3de-f303-4ab9-a924-73d3a8a2ff8c.png",
             "title": "Final Product Packaged With Care"
           }
         },
         "step_GtXVGL": {
           "type": "step",
           "settings": {
-            "image": "shopify://shop_images/20260922-150749.png",
+            "image": "shopify://shop_images/4.png",
             "title": "Done! Wait for your gift"
           }
         },
@@ -480,8 +480,8 @@
       "type": "tg-image-banner",
       "name": "t:tg.sections.banner.name",
       "settings": {
-        "desktop_image": "shopify://shop_images/2-pc.png",
-        "mobile_image": "shopify://shop_images/2-mb.png",
+        "desktop_image": "shopify://shop_images/banner-pc-1_6568eb40-63ac-46c1-a032-fc677ae8c237.png",
+        "mobile_image": "shopify://shop_images/banner-mb-1_cf5e6270-d45d-4940-bcda-14e65b181d12.png",
         "alt": "",
         "link": "",
         "image_max_width_percent": 100,
@@ -497,7 +497,7 @@
         "image_margin_mobile": 0,
         "image_radius_mobile": 0,
         "desktop_aspect_ratio": "2 / 1",
-        "mobile_aspect_ratio": "2 / 1"
+        "mobile_aspect_ratio": "auto"
       }
     },
     "tg_image_banner_AUKqgi": {
@@ -726,7 +726,7 @@
         "benefit_NYb7bM": {
           "type": "benefit",
           "settings": {
-            "image": "shopify://shop_images/7669d3fc-44c9-4621-9c0e-168cfcd57a10.png",
+            "image": "shopify://shop_images/5.png",
             "title": "On-Time Delivery",
             "title_font_size": 20,
             "title_font_size_mobile": 16,
@@ -743,7 +743,7 @@
         "benefit_dGQAAG": {
           "type": "benefit",
           "settings": {
-            "image": "shopify://shop_images/9d449688-02dd-4172-ad9c-4c41d1548496.png",
+            "image": "shopify://shop_images/6.png",
             "title": "30-Day Refund",
             "title_font_size": 20,
             "title_font_size_mobile": 16,
@@ -760,7 +760,7 @@
         "benefit_DNJ4BR": {
           "type": "benefit",
           "settings": {
-            "image": "shopify://shop_images/810693ed-b2f2-40d9-a9bf-0389806757f6.png",
+            "image": "shopify://shop_images/7.png",
             "title": "Superior Quality",
             "title_font_size": 20,
             "title_font_size_mobile": 16,
@@ -777,7 +777,7 @@
         "benefit_mh8Dyc": {
           "type": "benefit",
           "settings": {
-            "image": "shopify://shop_images/76618020-8b7a-4338-b165-450bad059849.png",
+            "image": "shopify://shop_images/8.png",
             "title": "Holiday Support",
             "title_font_size": 20,
             "title_font_size_mobile": 16,
