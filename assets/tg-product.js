@@ -663,7 +663,6 @@ const TG_SINGLE_VALUE_CANDIDATE_SELECTORS = [
   '.customily-swatch',
   '[role="radio"]',
   'input[type="radio"]',
-  'input[type="checkbox"]',
 ];
 
 class TgSingleValueOptions {
@@ -700,6 +699,11 @@ class TgSingleValueOptions {
   }
 
   countValues(group) {
+    // A lone checkbox is an opt-in (gift wrap, add-on), not a value to pick:
+    // ticking it for the shopper would force a choice they may not want. Keep
+    // checkbox groups out entirely, even when styled as swatches.
+    if (group.querySelector('input[type="checkbox"]')) return 0;
+
     // A select keeps its values in option elements, which have no box to
     // measure. Customily prefixes its dropdowns with an empty placeholder
     // ("Choose an Option") that is not a pickable value.
@@ -731,7 +735,7 @@ class TgSingleValueOptions {
       return true;
     }
 
-    const input = group.querySelector('input[type="radio"], input[type="checkbox"]');
+    const input = group.querySelector('input[type="radio"]');
     if (!input || input.checked) return false;
 
     input.click();
