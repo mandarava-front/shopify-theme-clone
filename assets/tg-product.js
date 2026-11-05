@@ -113,6 +113,21 @@ function tgGetTeeInBlueForm(productRoot) {
   return { customizationForm, pluginButton };
 }
 
+// A Campaign by Shopify products ("platform product") renders no #teeAtcButton:
+// TeeInBlue writes its customization fields straight into the theme's product
+// form and the theme's own button adds to cart. Callers have already matched
+// the campaign to this product through tgGetTeeInBlueVerdict.
+function tgIsTeeInBluePlatformProduct() {
+  return window.teeinblueCampaign?.isPlatformProduct === true;
+}
+
+// Ready once the customization fields the cart line carries are in the theme form.
+function tgHasTeeInBluePlatformInputs(productRoot) {
+  const form = productRoot?.querySelector('form[data-type="add-to-cart-form"]');
+  if (!form || !productRoot.querySelector('#tee-artwork-form')) return false;
+  return Boolean(form.querySelector('input[name="properties[_customization_id]"]'));
+}
+
 // TeeInBlue mounts its customization controls outside Shopify's product form.
 // Its own add-to-cart action creates the customization and submits the line
 // item with the generated properties. When the plugin action area is visually
@@ -317,6 +332,7 @@ class TgCustomizationGuard {
     const teeVerdict = tgGetTeeInBlueVerdict(this.root);
     if (!state) return false;
     if (teeVerdict === true) {
+      if (tgIsTeeInBluePlatformProduct()) return state.teeMounted && tgHasTeeInBluePlatformInputs(this.root);
       const form = tgGetTeeInBlueForm(this.root);
       return Boolean(state.teeMounted && form && !form.pluginButton.disabled && !form.pluginButton.classList.contains('tee-processing'));
     }
